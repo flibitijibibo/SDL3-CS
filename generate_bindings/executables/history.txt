@@ -1,0 +1,8 @@
+win-x64
+c2cs: built from github.com/bottlenoselabs/c2cs commit b0441c1
+
+linux-x64
+c2cs: built from github.com/bottlenoselabs/c2cs commit b0441c1
+
+osx-arm64
+c2cs: built from github.com/bottlenoselabs/c2cs commit b0441c1
