@@ -46,6 +46,4 @@ sed -e "s@TEMPLATE_C2FFI_OUTPUT@${C2FFI_OUTPUT_FILEPATH}@g" -e "s@TEMPLATE_GENER
 
 $C2CS generate --config $C2CS_CONFIG
 
-cat $C2CS_CONFIG
-
-# clean up
+echo "intermediate build products at ${TMP_DIR}"
