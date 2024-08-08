@@ -2,6 +2,7 @@
   "inputFilePath": "TEMPLATE_C2FFI_OUTPUT",
   "outputFileDirectory": "TEMPLATE_GENERATE_DIR",
   "className": "SDL",
+  "targetFrameworkMoniker": "net40",
   "isEnabledLibraryImport": false,
-  "targetFrameworkMoniker": "net40"
+  "isEnabledFunctionPointers": false
 }
