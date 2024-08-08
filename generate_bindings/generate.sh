@@ -31,18 +31,21 @@ fi
 SDL_DIR=$2
 SCR_DIR="$(dirname $0)"
 ROOT_DIR="${SCR_DIR}/.."
+
 TMP_DIR="$(mktemp -d)"
+echo "building in temporary directory ${TMP_DIR}..."
+
 C2FFI_CONFIG="${TMP_DIR}/config_extract.json"
 C2FFI_OUTPUT_DIR="${TMP_DIR}/output"
+C2FFI_OUTPUT_FILEPATH="${C2FFI_OUTPUT_DIR}/cross-platform-ffi.json"
 mkdir C2FFI_OUTPUT_DIR
 
 sed -e "s@TEMPLATE_SDL_PATH@${SDL_DIR}@g" -e "s@TEMPLATE_OUTPUT_DIR@${C2FFI_OUTPUT_DIR}@g" "${SCR_DIR}/config_extract.json.template" > $C2FFI_CONFIG
 
-# run c2ffi extract
 $C2FFI extract --config $C2FFI_CONFIG
-cat $C2FFI_CONFIG
-echo $C2FFI_CONFIG
+$C2FFI merge --inputDirectoryPath $C2FFI_OUTPUT_DIR --outputFilePath $C2FFI_OUTPUT_FILEPATH
 
-# run c2ffi merge
 # run c2cs --config
+$C2CS generate $C2FFI_OUTPUT_FILEPATH
+
 # clean up
