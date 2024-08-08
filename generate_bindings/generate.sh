@@ -33,10 +33,16 @@ SCR_DIR="$(dirname $0)"
 ROOT_DIR="${SCR_DIR}/.."
 TMP_DIR="$(mktemp -d)"
 C2FFI_CONFIG="${TMP_DIR}/config_extract.json"
+C2FFI_OUTPUT_DIR="${TMP_DIR}/output"
+mkdir C2FFI_OUTPUT_DIR
 
-# rewrite the config-extract template
+sed -e "s@TEMPLATE_SDL_PATH@${SDL_DIR}@g" -e "s@TEMPLATE_OUTPUT_DIR@${C2FFI_OUTPUT_DIR}@g" "${SCR_DIR}/config_extract.json.template" > $C2FFI_CONFIG
 
 # run c2ffi extract
+$C2FFI extract --config $C2FFI_CONFIG
+cat $C2FFI_CONFIG
+echo $C2FFI_CONFIG
+
 # run c2ffi merge
 # run c2cs --config
 # clean up
