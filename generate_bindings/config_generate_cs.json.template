@@ -1,0 +1,5 @@
+{
+  "inputFilePath": "TEMPLATE_C2FFI_OUTPUT",
+  "outputFileDirectory": "TEMPLATE_GENERATE_DIR",
+  "className": "SDL"
+}

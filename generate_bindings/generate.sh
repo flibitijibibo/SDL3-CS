@@ -31,6 +31,7 @@ fi
 SDL_DIR=$2
 SCR_DIR="$(dirname $0)"
 ROOT_DIR="${SCR_DIR}/.."
+GENERATE_DIR="${ROOT_DIR}/generated"
 
 TMP_DIR="$(mktemp -d)"
 echo "building in temporary directory ${TMP_DIR}..."
@@ -46,6 +47,11 @@ $C2FFI extract --config $C2FFI_CONFIG
 $C2FFI merge --inputDirectoryPath $C2FFI_OUTPUT_DIR --outputFilePath $C2FFI_OUTPUT_FILEPATH
 
 # run c2cs --config
-$C2CS generate $C2FFI_OUTPUT_FILEPATH
+C2CS_CONFIG="${TMP_DIR}/config_generate_cs.json"
+sed -e "s@TEMPLATE_C2FFI_OUTPUT@${C2FFI_OUTPUT_FILEPATH}@g" -e "s@TEMPLATE_GENERATE_DIR@${GENERATE_DIR}@g" "${SCR_DIR}/config_generate_cs.json.template" > $C2CS_CONFIG
+
+$C2CS generate --config $C2CS_CONFIG
+
+cat $C2CS_CONFIG
 
 # clean up
