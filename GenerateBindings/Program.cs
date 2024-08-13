@@ -6,10 +6,10 @@
 // build a struct of exes at the start of the program. add a path searcher
 
 // if c2ffi output and SDL commit file are present
-    // check provided SDL dir to see whether commit file matches
-    // if no match, run c2ffi and capture SDL commit in build dir
+// check provided SDL dir to see whether commit file matches
+// if no match, run c2ffi and capture SDL commit in build dir
 // else
-    // run c2ffi and capture SDL commit in build dir
+// run c2ffi and capture SDL commit in build dir
 
 // parse c2ffi json into structured data
 // write data out via streamwriter in sane order (enums, structs, functions, alphabetical?)
@@ -17,9 +17,21 @@
 // write out to destination dir under "generated" dir
 // run dotnet fmt?
 
-var envPath = Environment.GetEnvironmentVariable("PATH");
-if (envPath != null)
-    foreach (var envPathDir in envPath.Split(Path.PathSeparator))
+namespace GenerateBindings;
+
+internal static class Program
+{
+    private static int Main(string[] args)
     {
-        Console.WriteLine(envPathDir);
+        string? envPath = Environment.GetEnvironmentVariable("PATH");
+        if (envPath != null)
+        {
+            foreach (string envPathDir in envPath.Split(Path.PathSeparator))
+            {
+                Console.WriteLine(envPathDir);
+            }
+        }
+
+        return 0;
     }
+}
