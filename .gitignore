@@ -1,4 +1,2 @@
-src/generated/*
-!src/generated/.keep
 **/obj/**
 **/bin/**
