@@ -13,6 +13,7 @@
 // run dotnet fmt?
 
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace GenerateBindings;
 
@@ -110,6 +111,20 @@ internal static class Program
                 var commit = RunProcess(gitExe, "show -s --format=\"%H\"", workingDir: sdlDir, redirectStdOut: true).StandardOutput.ReadToEnd();
                 File.WriteAllText(sdlTargetCommitFile.FullName, commit);
             }
+        }
+
+        var ffiData = JsonSerializer.Deserialize<FFIData>(File.ReadAllText(ffiJsonFile.FullName));
+        if (ffiData == null)
+        {
+            Console.WriteLine($"failed to read ffi.json file {ffiJsonFile.FullName}!!");
+            return 1;
+        }
+
+        Console.WriteLine($"keys: {ffiData.Enums.Count}");
+        Console.WriteLine($"assert state keys: {ffiData.Enums["enum SDL_AssertState"].Values.Length}");
+        foreach (var enumValue in ffiData.Enums["enum SDL_AssertState"].Values)
+        {
+            Console.WriteLine($"assert state enum entry: {enumValue.Name} value {enumValue.Value}");
         }
 
         return 0;
