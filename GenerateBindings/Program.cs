@@ -120,11 +120,11 @@ internal static class Program
             return 1;
         }
 
-        Console.WriteLine($"keys: {ffiData.Enums.Count}");
-        Console.WriteLine($"assert state keys: {ffiData.Enums["enum SDL_AssertState"].Values.Length}");
-        foreach (var enumValue in ffiData.Enums["enum SDL_AssertState"].Values)
+        Console.WriteLine($"keys: {ffiData.Functions.Count}");
+        Console.WriteLine($"scancodename count: {ffiData.Functions["SDL_SetScancodeName"].Parameters.Count()}");
+        foreach (var paramValue in ffiData.Functions["SDL_SetScancodeName"].Parameters)
         {
-            Console.WriteLine($"assert state enum entry: {enumValue.Name} value {enumValue.Value}");
+            Console.WriteLine($"locale field: {paramValue.Name} | type: {paramValue.Type.Name}");
         }
 
         return 0;
