@@ -13,6 +13,7 @@
 // run dotnet fmt?
 
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 
 namespace GenerateBindings;
@@ -23,14 +24,16 @@ internal static class Program
     {
         // PARSE INPUT
 
-        if (args.Length != 2)
+        if (args.Length != 1)
         {
-            Console.WriteLine("usage: GenerateBindings <sdl-repo-root-dir> <output-dir>");
+            Console.WriteLine("usage: GenerateBindings <sdl-repo-root-dir>");
             return 1;
         }
 
         var sdlDir = new DirectoryInfo(args[0]);
-        var outputDir = new DirectoryInfo(args[1]);
+        var sdlBindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../SDL3/"));
+        var outputDir = new FileInfo(Path.Combine(sdlBindingsDir.FullName, "generated"));
+        var sdlBindingsProjectFile = new FileInfo(Path.Combine(sdlBindingsDir.FullName, "SDL3.csproj"));
         var c2ffiConfigTemplateFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "config_extract.json.template"));
         var c2ffiConfigFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "config_extract.json"));
         var ffiJsonFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "ffi.json"));
@@ -40,20 +43,16 @@ internal static class Program
 #if WINDOWS
         var c2ffiExe = new FileInfo(Path.Combine(AppContext.BaseDirectory, path2: "c2ffi.exe"));
         var gitExe = FindInPath("git.exe");
+        var dotnetExe = FindInPath("dotnet.exe");
 #else
         var c2ffiExe = new FileInfo(Path.Combine(AppContext.BaseDirectory, "c2ffi"));
         var gitExe = FindInPath("git");
+        var dotnetExe = FindInPath("dotnet");
 #endif
 
         if (!sdlDir.Exists)
         {
             Console.WriteLine($"ERROR: specified sdl dir {sdlDir.FullName} does not exist!");
-            return 1;
-        }
-
-        if (!outputDir.Exists)
-        {
-            Console.WriteLine($"ERROR: specified target dir {outputDir.FullName} does not exist!");
             return 1;
         }
 
@@ -113,6 +112,8 @@ internal static class Program
             }
         }
 
+        // PARSE FFI.JSON
+
         var ffiData = JsonSerializer.Deserialize<FFIData>(File.ReadAllText(ffiJsonFile.FullName));
         if (ffiData == null)
         {
@@ -120,12 +121,29 @@ internal static class Program
             return 1;
         }
 
-        Console.WriteLine($"keys: {ffiData.Functions.Count}");
-        Console.WriteLine($"scancodename count: {ffiData.Functions["SDL_SetScancodeName"].Parameters.Count()}");
-        foreach (var paramValue in ffiData.Functions["SDL_SetScancodeName"].Parameters)
+        var sdlEnums = new StringBuilder();
+        foreach (var (enumName, enumData) in ffiData.Enums)
         {
-            Console.WriteLine($"locale field: {paramValue.Name} | type: {paramValue.Type.Name}");
+            sdlEnums.Append($"public {enumName}\n{{\n");
+
+            foreach (var enumValue in enumData.Values)
+            {
+                sdlEnums.Append($"{enumValue.Name} = {enumValue.Value},\n");
+            }
+
+            sdlEnums.Append("}\n\n");
         }
+
+        File.WriteAllText(
+            path: Path.Combine(outputDir.FullName, "SDL3.cs"),
+            contents: CompileBindingsCSharp(
+                enums: sdlEnums.ToString(),
+                "",
+                ""
+            )
+        );
+
+        RunProcess(dotnetExe, args: $"format {sdlBindingsProjectFile}");
 
         return 0;
     }
@@ -167,5 +185,19 @@ internal static class Program
         }
 
         return process;
+    }
+
+    private static string CompileBindingsCSharp(string enums, string structs, string functions)
+    {
+        return $@"
+namespace SDL3;
+
+public static class SDL
+{{
+    {enums}
+    {structs}
+    {functions}
+}}
+";
     }
 }
