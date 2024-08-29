@@ -22,8 +22,23 @@ internal class RawFFIEntry
     [JsonPropertyName("value")]
     public uint? Value { get; }
 
+    [JsonPropertyName("parameters")]
+    public RawFFIEntry[]? Parameters { get; }
+
+    [JsonPropertyName("return-type")]
+    public RawFFIEntry? ReturnType { get; }
+
     [JsonConstructor]
-    public RawFFIEntry(string tag, string? name, string? header, RawFFIEntry? type, RawFFIEntry[]? fields, uint? value)
+    public RawFFIEntry(
+        string tag,
+        string? name,
+        string? header,
+        RawFFIEntry? type,
+        RawFFIEntry[]? fields,
+        uint? value,
+        RawFFIEntry[]? parameters,
+        RawFFIEntry? returnType
+    )
     {
         Tag = tag;
         Name = name;
@@ -31,5 +46,7 @@ internal class RawFFIEntry
         Type = type;
         Fields = fields;
         Value = value;
+        Parameters = parameters;
+        ReturnType = returnType;
     }
 }

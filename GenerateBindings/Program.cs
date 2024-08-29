@@ -137,6 +137,7 @@ internal static class Program
 
         var sdlEnums = new StringBuilder();
         var sdlStructs = new StringBuilder();
+        var sdlFunctions = new StringBuilder();
 
         foreach (var entry in ffiData)
         {
@@ -179,6 +180,32 @@ internal static class Program
 
                 sdlStructs.Append("}\n\n");
             }
+
+            else if (entry.Tag == "function")
+            {
+                sdlFunctions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
+                var returnType = CSharpTypeFromFFI(type: entry.ReturnType!, typedefMap);
+                sdlFunctions.Append($"public static extern {returnType} {entry.Name!}(");
+
+                var initialParameter = true;
+                foreach (var parameter in entry.Parameters!)
+                {
+                    if (!initialParameter)
+                    {
+                        sdlFunctions.Append(", ");
+                    }
+                    else
+                    {
+                        initialParameter = false;
+                    }
+
+                    var type = CSharpTypeFromFFI(type: parameter.Type!, typedefMap);
+                    var name = SanitizeNames(parameter.Name!);
+                    sdlFunctions.Append($"{type} {name}");
+                }
+
+                sdlFunctions.Append(");\n\n");
+            }
         }
 
 
@@ -187,7 +214,7 @@ internal static class Program
             contents: CompileBindingsCSharp(
                 enums: sdlEnums.ToString(),
                 structs: sdlStructs.ToString(),
-                ""
+                functions: sdlFunctions.ToString()
             )
         );
 
@@ -244,6 +271,8 @@ namespace SDL3;
 
 public static class SDL
 {{
+    private const string nativeLibName = ""SDL3"";
+
     {enums}
     {structs}
     {functions}
@@ -261,19 +290,25 @@ public static class SDL
         return type.Tag switch
         {
             ":int"              => "int",
-            ":unsigned-int"     => "uint",
+            ":long"             => "long",
             ":unsigned-short"   => "ushort",
+            ":unsigned-int"     => "uint",
+            ":unsigned-long"    => "ulong",
             ":float"            => "float",
+            ":double"           => "double",
             "Uint8"             => "byte",
             "Uint16"            => "UInt16",
             "Uint32"            => "UInt32",
             "Uint64"            => "UInt64",
+            "Sint8"             => "sbyte",
             "Sint16"            => "Int16",
             "Sint32"            => "Int32",
             "Sint64"            => "Int64",
             "size_t"            => "UInt32", // TODO: i think this is platform-dependent
+            ":void"             => "void",
             ":pointer"          => "IntPtr", // TODO: "pointer to what" is available in the metadata; include in a comment
             ":function-pointer" => "IntPtr",
+            "va_list"           => "IntPtr", // TODO: almost certainly wrong
             ":enum"             => type.Name!,
             ":struct"           => type.Name!,
             ":array"            => $"{CSharpTypeFromFFI(type: type.Type!, typedefMap)}[]",
@@ -287,6 +322,12 @@ public static class SDL
         return unsanitizedName switch
         {
             "internal" => "@internal",
+            "event"    => "@event",
+            "override" => "@override",
+            "base"     => "@base",
+            "lock"     => "@lock",
+            "string"   => "@string",
+            ""         => "_",
             _          => unsanitizedName,
         };
     }
