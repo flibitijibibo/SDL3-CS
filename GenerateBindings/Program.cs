@@ -164,28 +164,23 @@ internal static class Program
 
                 foreach (var field in entry.Fields!)
                 {
-                    sdlStructs.Append($"public {CSharpTypeFromFFI(field.Type, typedefMap)} {SanitizeNames(field.Name!)};\n");
+                    var name = SanitizeNames(field.Name!);
+                    var type = CSharpTypeFromFFI(type: field.Type!, typedefMap);
+                    if (type == "UNION")
+                    {
+                        type = $"UNION_{entry.Name}_{field.Name}";
+                        sdlStructs.Append($"// public {type} {name}; // TODO: unhandled union\n");
+                    }
+                    else
+                    {
+                        sdlStructs.Append($"public {type} {name};\n");
+                    }
                 }
 
                 sdlStructs.Append("}\n\n");
             }
         }
 
-
-        // var sdlEnums = new StringBuilder();
-        // foreach (var (enumName, enumData) in ffiData.Enums)
-        // {
-        //     sdlEnums.Append($"public {enumName}\n{{\n");
-        //
-        //     foreach (var enumValue in enumData.Values)
-        //     {
-        //         sdlEnums.Append($"{enumValue.Name} = {enumValue.Value},\n");
-        //     }
-        //
-        //     sdlEnums.Append("}\n\n");
-        // }
-        //
-        // var sdlStructs = new StringBuilder();
 
         File.WriteAllText(
             path: Path.Combine(outputDir.FullName, "SDL3.cs"),
@@ -276,12 +271,13 @@ public static class SDL
             "Sint16"            => "Int16",
             "Sint32"            => "Int32",
             "Sint64"            => "Int64",
-            "size_t"            => "UInt32", // TODO: this is platform-dependent
+            "size_t"            => "UInt32", // TODO: i think this is platform-dependent
             ":pointer"          => "IntPtr", // TODO: "pointer to what" is available in the metadata; include in a comment
             ":function-pointer" => "IntPtr",
             ":enum"             => type.Name!,
             ":struct"           => type.Name!,
             ":array"            => $"{CSharpTypeFromFFI(type: type.Type!, typedefMap)}[]",
+            "union"             => "UNION",
             _                   => type.Tag,
         };
     }

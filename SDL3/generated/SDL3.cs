@@ -1722,9 +1722,9 @@ public static class SDL
     public struct SDL_GamepadBinding
     {
         public SDL_GamepadBindingType input_type;
-        public union input;
+        // public UNION_SDL_GamepadBinding_input input; // TODO: unhandled union
         public SDL_GamepadBindingType output_type;
-        public union output;
+        // public UNION_SDL_GamepadBinding_output output; // TODO: unhandled union
     }
 
     [StructLayout(LayoutKind.Sequential)]
