@@ -50,14 +50,14 @@ internal static class Program
         var dotnetExe = FindInPath("dotnet");
 #endif
 
-        if (!sdlDir.Exists)
-        {
-            Console.WriteLine($"ERROR: sdl dir `{sdlDir.FullName}` does not exist!");
-            return 1;
-        }
-
         // BUILD FFI.JSON
 
+        // if (!sdlDir.Exists)
+        // {
+        //     Console.WriteLine($"ERROR: sdl dir `{sdlDir.FullName}` does not exist!");
+        //     return 1;
+        // }
+        //
         // var isFFIJsonUpToDate = false;
         // if (gitExe.Exists && ffiJsonFile.Exists && sdlTargetCommitFile.Exists)
         // {
