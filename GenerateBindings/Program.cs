@@ -121,6 +121,20 @@ internal static class Program
             return 1;
         }
 
+        Dictionary<string, RawFFIEntry> typedefMap = new();
+        foreach (var entry in ffiData)
+        {
+            if ((entry.Header == null) || !Path.GetFileName(entry.Header).StartsWith("SDL_"))
+            {
+                continue;
+            }
+
+            if ((entry.Tag == "typedef") && entry.Name!.StartsWith("SDL_"))
+            {
+                typedefMap[entry.Name!] = entry.Type!;
+            }
+        }
+
         var sdlEnums = new StringBuilder();
         var sdlStructs = new StringBuilder();
 
@@ -133,13 +147,7 @@ internal static class Program
 
             if (entry.Tag == "enum")
             {
-                if ((entry.Name == null) || (entry.Fields == null))
-                {
-                    continue;
-                }
-
-                var enumName = entry.Name;
-                sdlEnums.Append($"public enum {enumName}\n{{\n");
+                sdlEnums.Append($"public enum {entry.Name!}\n{{\n");
 
                 foreach (var enumValue in entry.Fields!)
                 {
@@ -147,6 +155,19 @@ internal static class Program
                 }
 
                 sdlEnums.Append("}\n\n");
+            }
+
+            else if (entry.Tag == "struct")
+            {
+                sdlStructs.Append("[StructLayout(LayoutKind.Sequential)]\n");
+                sdlStructs.Append($"public struct {entry.Name!}\n{{\n");
+
+                foreach (var field in entry.Fields!)
+                {
+                    sdlStructs.Append($"public {CSharpTypeFromFFI(field.Type, typedefMap)} {SanitizeNames(field.Name!)};\n");
+                }
+
+                sdlStructs.Append("}\n\n");
             }
         }
 
@@ -165,18 +186,6 @@ internal static class Program
         // }
         //
         // var sdlStructs = new StringBuilder();
-        // foreach (var (structName, structData) in ffiData.Records)
-        // {
-        //     sdlStructs.Append("[StructLayout(LayoutKind.Sequential)]\n");
-        //     sdlStructs.Append($"public {structName}\n{{\n");
-        //
-        //     foreach (var field in structData.Fields)
-        //     {
-        //         sdlStructs.Append($"public {field.Type.Name} {field.Name};\n");
-        //     }
-        //
-        //     sdlStructs.Append("}\n\n");
-        // }
 
         File.WriteAllText(
             path: Path.Combine(outputDir.FullName, "SDL3.cs"),
@@ -245,5 +254,44 @@ public static class SDL
     {functions}
 }}
 ";
+    }
+
+    private static string CSharpTypeFromFFI(RawFFIEntry type, Dictionary<string, RawFFIEntry> typedefMap)
+    {
+        if (type.Tag.StartsWith("SDL_") && typedefMap.TryGetValue(type.Tag, value: out var value))
+        {
+            type = value;
+        }
+
+        return type.Tag switch
+        {
+            ":int"              => "int",
+            ":unsigned-int"     => "uint",
+            ":unsigned-short"   => "ushort",
+            ":float"            => "float",
+            "Uint8"             => "byte",
+            "Uint16"            => "UInt16",
+            "Uint32"            => "UInt32",
+            "Uint64"            => "UInt64",
+            "Sint16"            => "Int16",
+            "Sint32"            => "Int32",
+            "Sint64"            => "Int64",
+            "size_t"            => "UInt32", // TODO: this is platform-dependent
+            ":pointer"          => "IntPtr", // TODO: "pointer to what" is available in the metadata; include in a comment
+            ":function-pointer" => "IntPtr",
+            ":enum"             => type.Name!,
+            ":struct"           => type.Name!,
+            ":array"            => $"{CSharpTypeFromFFI(type: type.Type!, typedefMap)}[]",
+            _                   => type.Tag,
+        };
+    }
+
+    private static string SanitizeNames(string unsanitizedName)
+    {
+        return unsanitizedName switch
+        {
+            "internal" => "@internal",
+            _          => unsanitizedName,
+        };
     }
 }

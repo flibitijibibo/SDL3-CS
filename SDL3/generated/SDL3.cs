@@ -1428,6 +1428,1426 @@ public static class SDL
     }
 
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_iconv_data_t
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_AssertData
+    {
+        public int always_ignore;
+        public uint trigger_count;
+        public IntPtr condition;
+        public IntPtr filename;
+        public int linenum;
+        public IntPtr function;
+        public IntPtr next;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_AtomicInt
+    {
+        public int value;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Mutex
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_RWLock
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Semaphore
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Condition
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_IOStreamInterface
+    {
+        public IntPtr size;
+        public IntPtr seek;
+        public IntPtr read;
+        public IntPtr write;
+        public IntPtr close;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_IOStream
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Thread
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_AudioSpec
+    {
+        public SDL_AudioFormat format;
+        public int channels;
+        public int freq;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_AudioStream
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Color
+    {
+        public byte r;
+        public byte g;
+        public byte b;
+        public byte a;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_FColor
+    {
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Palette
+    {
+        public int ncolors;
+        public IntPtr colors;
+        public UInt32 version;
+        public int refcount;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_PixelFormatDetails
+    {
+        public SDL_PixelFormat format;
+        public byte bits_per_pixel;
+        public byte bytes_per_pixel;
+        public byte[] padding;
+        public UInt32 Rmask;
+        public UInt32 Gmask;
+        public UInt32 Bmask;
+        public UInt32 Amask;
+        public byte Rbits;
+        public byte Gbits;
+        public byte Bbits;
+        public byte Abits;
+        public byte Rshift;
+        public byte Gshift;
+        public byte Bshift;
+        public byte Ashift;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Point
+    {
+        public int x;
+        public int y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_FPoint
+    {
+        public float x;
+        public float y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Rect
+    {
+        public int x;
+        public int y;
+        public int w;
+        public int h;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_FRect
+    {
+        public float x;
+        public float y;
+        public float w;
+        public float h;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_SurfaceData
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Surface
+    {
+        public UInt32 flags;
+        public SDL_PixelFormat format;
+        public int w;
+        public int h;
+        public int pitch;
+        public IntPtr pixels;
+        public int refcount;
+        public IntPtr @internal;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_DisplayModeData
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_DisplayMode
+    {
+        public UInt32 displayID;
+        public SDL_PixelFormat format;
+        public int w;
+        public int h;
+        public float pixel_density;
+        public float refresh_rate;
+        public int refresh_rate_numerator;
+        public int refresh_rate_denominator;
+        public IntPtr @internal;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Window
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GLContextState
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Camera
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_CameraSpec
+    {
+        public SDL_PixelFormat format;
+        public SDL_Colorspace colorspace;
+        public int width;
+        public int height;
+        public int framerate_numerator;
+        public int framerate_denominator;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_DialogFileFilter
+    {
+        public IntPtr name;
+        public IntPtr pattern;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GUID
+    {
+        public byte[] data;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Sensor
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Joystick
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_VirtualJoystickTouchpadDesc
+    {
+        public UInt16 nfingers;
+        public UInt16[] padding;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_VirtualJoystickSensorDesc
+    {
+        public SDL_SensorType type;
+        public float rate;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_VirtualJoystickDesc
+    {
+        public UInt16 type;
+        public UInt16 padding;
+        public UInt16 vendor_id;
+        public UInt16 product_id;
+        public UInt16 naxes;
+        public UInt16 nbuttons;
+        public UInt16 nballs;
+        public UInt16 nhats;
+        public UInt16 ntouchpads;
+        public UInt16 nsensors;
+        public UInt16[] padding2;
+        public UInt32 button_mask;
+        public UInt32 axis_mask;
+        public IntPtr name;
+        public IntPtr touchpads;
+        public IntPtr sensors;
+        public IntPtr userdata;
+        public IntPtr Update;
+        public IntPtr SetPlayerIndex;
+        public IntPtr Rumble;
+        public IntPtr RumbleTriggers;
+        public IntPtr SetLED;
+        public IntPtr SendEffect;
+        public IntPtr SetSensorsEnabled;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Gamepad
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GamepadBinding
+    {
+        public SDL_GamepadBindingType input_type;
+        public union input;
+        public SDL_GamepadBindingType output_type;
+        public union output;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Cursor
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Finger
+    {
+        public UInt64 id;
+        public float x;
+        public float y;
+        public float pressure;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_CommonEvent
+    {
+        public UInt32 type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_DisplayEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 displayID;
+        public Int32 data1;
+        public Int32 data2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_WindowEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public Int32 data1;
+        public Int32 data2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_KeyboardDeviceEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_KeyboardEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+        public SDL_Scancode scancode;
+        public UInt32 key;
+        public UInt16 mod;
+        public UInt16 raw;
+        public byte state;
+        public byte repeat;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_TextEditingEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public IntPtr text;
+        public Int32 start;
+        public Int32 length;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_TextEditingCandidatesEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public IntPtr candidates;
+        public Int32 num_candidates;
+        public Int32 selected_candidate;
+        public int horizontal;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_TextInputEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public IntPtr text;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_MouseDeviceEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_MouseMotionEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+        public UInt32 state;
+        public float x;
+        public float y;
+        public float xrel;
+        public float yrel;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_MouseButtonEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+        public byte button;
+        public byte state;
+        public byte clicks;
+        public byte padding;
+        public float x;
+        public float y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_MouseWheelEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+        public float x;
+        public float y;
+        public SDL_MouseWheelDirection direction;
+        public float mouse_x;
+        public float mouse_y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyAxisEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public byte axis;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public Int16 value;
+        public UInt16 padding4;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyBallEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public byte ball;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public Int16 xrel;
+        public Int16 yrel;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyHatEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public byte hat;
+        public byte value;
+        public byte padding1;
+        public byte padding2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyButtonEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public byte button;
+        public byte state;
+        public byte padding1;
+        public byte padding2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyDeviceEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyBatteryEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public SDL_PowerState state;
+        public int percent;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GamepadAxisEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public byte axis;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public Int16 value;
+        public UInt16 padding4;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GamepadButtonEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public byte button;
+        public byte state;
+        public byte padding1;
+        public byte padding2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GamepadDeviceEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GamepadTouchpadEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public Int32 touchpad;
+        public Int32 finger;
+        public float x;
+        public float y;
+        public float pressure;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GamepadSensorEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public Int32 sensor;
+        public float[] data;
+        public UInt64 sensor_timestamp;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_AudioDeviceEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public byte recording;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_CameraDeviceEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_TouchFingerEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt64 touchID;
+        public UInt64 fingerID;
+        public float x;
+        public float y;
+        public float dx;
+        public float dy;
+        public float pressure;
+        public UInt32 windowID;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_PenProximityEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_PenMotionEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+        public UInt32 pen_state;
+        public float x;
+        public float y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_PenTouchEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+        public UInt32 pen_state;
+        public float x;
+        public float y;
+        public byte eraser;
+        public byte state;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_PenButtonEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+        public UInt32 pen_state;
+        public float x;
+        public float y;
+        public byte button;
+        public byte state;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_PenAxisEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public UInt32 which;
+        public UInt32 pen_state;
+        public float x;
+        public float y;
+        public SDL_PenAxis axis;
+        public float value;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_DropEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public float x;
+        public float y;
+        public IntPtr source;
+        public IntPtr data;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_ClipboardEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_SensorEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 which;
+        public float[] data;
+        public UInt64 sensor_timestamp;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_QuitEvent
+    {
+        public SDL_EventType type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_UserEvent
+    {
+        public UInt32 type;
+        public UInt32 reserved;
+        public UInt64 timestamp;
+        public UInt32 windowID;
+        public Int32 code;
+        public IntPtr data1;
+        public IntPtr data2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_PathInfo
+    {
+        public SDL_PathType type;
+        public UInt64 size;
+        public Int64 create_time;
+        public Int64 modify_time;
+        public Int64 access_time;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuDevice
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuBuffer
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTransferBuffer
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTexture
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuSampler
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuShader
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuComputePipeline
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuGraphicsPipeline
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuCommandBuffer
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuRenderPass
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuComputePass
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuCopyPass
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuFence
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuDepthStencilValue
+    {
+        public float depth;
+        public byte stencil;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuViewport
+    {
+        public float x;
+        public float y;
+        public float w;
+        public float h;
+        public float minDepth;
+        public float maxDepth;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTextureTransferInfo
+    {
+        public IntPtr transferBuffer;
+        public UInt32 offset;
+        public UInt32 imagePitch;
+        public UInt32 imageHeight;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTransferBufferLocation
+    {
+        public IntPtr transferBuffer;
+        public UInt32 offset;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTextureLocation
+    {
+        public IntPtr texture;
+        public UInt32 mipLevel;
+        public UInt32 layer;
+        public UInt32 x;
+        public UInt32 y;
+        public UInt32 z;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTextureRegion
+    {
+        public IntPtr texture;
+        public UInt32 mipLevel;
+        public UInt32 layer;
+        public UInt32 x;
+        public UInt32 y;
+        public UInt32 z;
+        public UInt32 w;
+        public UInt32 h;
+        public UInt32 d;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuBlitRegion
+    {
+        public IntPtr texture;
+        public UInt32 mipLevel;
+        public UInt32 layerOrDepthPlane;
+        public UInt32 x;
+        public UInt32 y;
+        public UInt32 w;
+        public UInt32 h;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuBufferLocation
+    {
+        public IntPtr buffer;
+        public UInt32 offset;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuBufferRegion
+    {
+        public IntPtr buffer;
+        public UInt32 offset;
+        public UInt32 size;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuIndirectDrawCommand
+    {
+        public UInt32 vertexCount;
+        public UInt32 instanceCount;
+        public UInt32 firstVertex;
+        public UInt32 firstInstance;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuIndexedIndirectDrawCommand
+    {
+        public UInt32 indexCount;
+        public UInt32 instanceCount;
+        public UInt32 firstIndex;
+        public UInt32 vertexOffset;
+        public UInt32 firstInstance;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuIndirectDispatchCommand
+    {
+        public UInt32 groupCountX;
+        public UInt32 groupCountY;
+        public UInt32 groupCountZ;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuSamplerCreateInfo
+    {
+        public SDL_GpuFilter minFilter;
+        public SDL_GpuFilter magFilter;
+        public SDL_GpuSamplerMipmapMode mipmapMode;
+        public SDL_GpuSamplerAddressMode addressModeU;
+        public SDL_GpuSamplerAddressMode addressModeV;
+        public SDL_GpuSamplerAddressMode addressModeW;
+        public float mipLodBias;
+        public int anisotropyEnable;
+        public float maxAnisotropy;
+        public int compareEnable;
+        public SDL_GpuCompareOp compareOp;
+        public float minLod;
+        public float maxLod;
+        public UInt32 props;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuVertexBinding
+    {
+        public UInt32 binding;
+        public UInt32 stride;
+        public SDL_GpuVertexInputRate inputRate;
+        public UInt32 instanceStepRate;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuVertexAttribute
+    {
+        public UInt32 location;
+        public UInt32 binding;
+        public SDL_GpuVertexElementFormat format;
+        public UInt32 offset;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuVertexInputState
+    {
+        public IntPtr vertexBindings;
+        public UInt32 vertexBindingCount;
+        public IntPtr vertexAttributes;
+        public UInt32 vertexAttributeCount;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuStencilOpState
+    {
+        public SDL_GpuStencilOp failOp;
+        public SDL_GpuStencilOp passOp;
+        public SDL_GpuStencilOp depthFailOp;
+        public SDL_GpuCompareOp compareOp;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuColorAttachmentBlendState
+    {
+        public int blendEnable;
+        public SDL_GpuBlendFactor srcColorBlendFactor;
+        public SDL_GpuBlendFactor dstColorBlendFactor;
+        public SDL_GpuBlendOp colorBlendOp;
+        public SDL_GpuBlendFactor srcAlphaBlendFactor;
+        public SDL_GpuBlendFactor dstAlphaBlendFactor;
+        public SDL_GpuBlendOp alphaBlendOp;
+        public byte colorWriteMask;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuShaderCreateInfo
+    {
+        public UInt32 codeSize;
+        public IntPtr code;
+        public IntPtr entryPointName;
+        public UInt32 format;
+        public SDL_GpuShaderStage stage;
+        public UInt32 samplerCount;
+        public UInt32 storageTextureCount;
+        public UInt32 storageBufferCount;
+        public UInt32 uniformBufferCount;
+        public UInt32 props;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTextureCreateInfo
+    {
+        public SDL_GpuTextureType type;
+        public SDL_GpuTextureFormat format;
+        public UInt32 usageFlags;
+        public UInt32 width;
+        public UInt32 height;
+        public UInt32 layerCountOrDepth;
+        public UInt32 levelCount;
+        public SDL_GpuSampleCount sampleCount;
+        public UInt32 props;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuBufferCreateInfo
+    {
+        public UInt32 usageFlags;
+        public UInt32 sizeInBytes;
+        public UInt32 props;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTransferBufferCreateInfo
+    {
+        public SDL_GpuTransferBufferUsage usage;
+        public UInt32 sizeInBytes;
+        public UInt32 props;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuRasterizerState
+    {
+        public SDL_GpuFillMode fillMode;
+        public SDL_GpuCullMode cullMode;
+        public SDL_GpuFrontFace frontFace;
+        public int depthBiasEnable;
+        public float depthBiasConstantFactor;
+        public float depthBiasClamp;
+        public float depthBiasSlopeFactor;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuMultisampleState
+    {
+        public SDL_GpuSampleCount sampleCount;
+        public UInt32 sampleMask;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuDepthStencilState
+    {
+        public int depthTestEnable;
+        public int depthWriteEnable;
+        public SDL_GpuCompareOp compareOp;
+        public int stencilTestEnable;
+        public SDL_GpuStencilOpState backStencilState;
+        public SDL_GpuStencilOpState frontStencilState;
+        public byte compareMask;
+        public byte writeMask;
+        public byte reference;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuColorAttachmentDescription
+    {
+        public SDL_GpuTextureFormat format;
+        public SDL_GpuColorAttachmentBlendState blendState;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuGraphicsPipelineAttachmentInfo
+    {
+        public IntPtr colorAttachmentDescriptions;
+        public UInt32 colorAttachmentCount;
+        public int hasDepthStencilAttachment;
+        public SDL_GpuTextureFormat depthStencilFormat;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuGraphicsPipelineCreateInfo
+    {
+        public IntPtr vertexShader;
+        public IntPtr fragmentShader;
+        public SDL_GpuVertexInputState vertexInputState;
+        public SDL_GpuPrimitiveType primitiveType;
+        public SDL_GpuRasterizerState rasterizerState;
+        public SDL_GpuMultisampleState multisampleState;
+        public SDL_GpuDepthStencilState depthStencilState;
+        public SDL_GpuGraphicsPipelineAttachmentInfo attachmentInfo;
+        public float[] blendConstants;
+        public UInt32 props;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuComputePipelineCreateInfo
+    {
+        public UInt32 codeSize;
+        public IntPtr code;
+        public IntPtr entryPointName;
+        public UInt32 format;
+        public UInt32 readOnlyStorageTextureCount;
+        public UInt32 readOnlyStorageBufferCount;
+        public UInt32 writeOnlyStorageTextureCount;
+        public UInt32 writeOnlyStorageBufferCount;
+        public UInt32 uniformBufferCount;
+        public UInt32 threadCountX;
+        public UInt32 threadCountY;
+        public UInt32 threadCountZ;
+        public UInt32 props;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuColorAttachmentInfo
+    {
+        public IntPtr texture;
+        public UInt32 mipLevel;
+        public UInt32 layerOrDepthPlane;
+        public SDL_FColor clearColor;
+        public SDL_GpuLoadOp loadOp;
+        public SDL_GpuStoreOp storeOp;
+        public int cycle;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuDepthStencilAttachmentInfo
+    {
+        public IntPtr texture;
+        public SDL_GpuDepthStencilValue depthStencilClearValue;
+        public SDL_GpuLoadOp loadOp;
+        public SDL_GpuStoreOp storeOp;
+        public SDL_GpuLoadOp stencilLoadOp;
+        public SDL_GpuStoreOp stencilStoreOp;
+        public int cycle;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuBufferBinding
+    {
+        public IntPtr buffer;
+        public UInt32 offset;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuTextureSamplerBinding
+    {
+        public IntPtr texture;
+        public IntPtr sampler;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuStorageBufferWriteOnlyBinding
+    {
+        public IntPtr buffer;
+        public int cycle;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GpuStorageTextureWriteOnlyBinding
+    {
+        public IntPtr texture;
+        public UInt32 mipLevel;
+        public UInt32 layer;
+        public int cycle;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Haptic
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_HapticDirection
+    {
+        public byte type;
+        public Int32[] dir;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_HapticConstant
+    {
+        public UInt16 type;
+        public SDL_HapticDirection direction;
+        public UInt32 length;
+        public UInt16 delay;
+        public UInt16 button;
+        public UInt16 interval;
+        public Int16 level;
+        public UInt16 attack_length;
+        public UInt16 attack_level;
+        public UInt16 fade_length;
+        public UInt16 fade_level;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_HapticPeriodic
+    {
+        public UInt16 type;
+        public SDL_HapticDirection direction;
+        public UInt32 length;
+        public UInt16 delay;
+        public UInt16 button;
+        public UInt16 interval;
+        public UInt16 period;
+        public Int16 magnitude;
+        public Int16 offset;
+        public UInt16 phase;
+        public UInt16 attack_length;
+        public UInt16 attack_level;
+        public UInt16 fade_length;
+        public UInt16 fade_level;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_HapticCondition
+    {
+        public UInt16 type;
+        public SDL_HapticDirection direction;
+        public UInt32 length;
+        public UInt16 delay;
+        public UInt16 button;
+        public UInt16 interval;
+        public UInt16[] right_sat;
+        public UInt16[] left_sat;
+        public Int16[] right_coeff;
+        public Int16[] left_coeff;
+        public UInt16[] deadband;
+        public Int16[] center;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_HapticRamp
+    {
+        public UInt16 type;
+        public SDL_HapticDirection direction;
+        public UInt32 length;
+        public UInt16 delay;
+        public UInt16 button;
+        public UInt16 interval;
+        public Int16 start;
+        public Int16 end;
+        public UInt16 attack_length;
+        public UInt16 attack_level;
+        public UInt16 fade_length;
+        public UInt16 fade_level;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_HapticLeftRight
+    {
+        public UInt16 type;
+        public UInt32 length;
+        public UInt16 large_magnitude;
+        public UInt16 small_magnitude;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_HapticCustom
+    {
+        public UInt16 type;
+        public SDL_HapticDirection direction;
+        public UInt32 length;
+        public UInt16 delay;
+        public UInt16 button;
+        public UInt16 interval;
+        public byte channels;
+        public UInt16 period;
+        public UInt16 samples;
+        public IntPtr data;
+        public UInt16 attack_length;
+        public UInt16 attack_level;
+        public UInt16 fade_length;
+        public UInt16 fade_level;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_hid_device
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_hid_device_info
+    {
+        public IntPtr path;
+        public ushort vendor_id;
+        public ushort product_id;
+        public IntPtr serial_number;
+        public ushort release_number;
+        public IntPtr manufacturer_string;
+        public IntPtr product_string;
+        public ushort usage_page;
+        public ushort usage;
+        public int interface_number;
+        public int interface_class;
+        public int interface_subclass;
+        public int interface_protocol;
+        public SDL_hid_bus_type bus_type;
+        public IntPtr next;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Locale
+    {
+        public IntPtr language;
+        public IntPtr country;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_MessageBoxButtonData
+    {
+        public UInt32 flags;
+        public int buttonID;
+        public IntPtr text;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_MessageBoxColor
+    {
+        public byte r;
+        public byte g;
+        public byte b;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_MessageBoxColorScheme
+    {
+        public SDL_MessageBoxColor[] colors;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_MessageBoxData
+    {
+        public UInt32 flags;
+        public IntPtr window;
+        public IntPtr title;
+        public IntPtr message;
+        public int numbuttons;
+        public IntPtr buttons;
+        public IntPtr colorScheme;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Vertex
+    {
+        public SDL_FPoint position;
+        public SDL_FColor color;
+        public SDL_FPoint tex_coord;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Renderer
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Texture
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_StorageInterface
+    {
+        public IntPtr close;
+        public IntPtr ready;
+        public IntPtr enumerate;
+        public IntPtr info;
+        public IntPtr read_file;
+        public IntPtr write_file;
+        public IntPtr mkdir;
+        public IntPtr remove;
+        public IntPtr rename;
+        public IntPtr copy;
+        public IntPtr space_remaining;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_Storage
+    {
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_DateTime
+    {
+        public int year;
+        public int month;
+        public int day;
+        public int hour;
+        public int minute;
+        public int second;
+        public int nanosecond;
+        public int day_of_week;
+        public int utc_offset;
+    }
+
 
 
 }
