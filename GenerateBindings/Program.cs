@@ -282,6 +282,8 @@ public static class SDL
 
     private static string CSharpTypeFromFFI(RawFFIEntry type, Dictionary<string, RawFFIEntry> typedefMap)
     {
+        // TODO: should annotate these results with comments.
+        // e.g. SDL_bool is a typedef of int, in a function signatures "int value" can be very misleading
         if (type.Tag.StartsWith("SDL_") && typedefMap.TryGetValue(type.Tag, value: out var value))
         {
             type = value;
