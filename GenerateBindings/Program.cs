@@ -292,10 +292,10 @@ public static class SDL
         return type.Tag switch
         {
             ":int"              => "int",
-            ":long"             => "long",
-            ":unsigned-short"   => "ushort",
+            ":long"             => "long", // TODO: platform-dependent?
+            ":unsigned-short"   => "ushort", // TODO: platform-dependent?
             ":unsigned-int"     => "uint",
-            ":unsigned-long"    => "ulong",
+            ":unsigned-long"    => "ulong", // TODO: platform-dependent?
             ":float"            => "float",
             ":double"           => "double",
             "Uint8"             => "byte",
@@ -309,11 +309,11 @@ public static class SDL
             "size_t"            => "UInt32", // TODO: i think this is platform-dependent
             ":void"             => "void",
             ":pointer"          => "IntPtr", // TODO: "pointer to what" is available in the metadata; include in a comment
-            ":function-pointer" => "IntPtr",
+            ":function-pointer" => "IntPtr", // TODO: no idea
             "va_list"           => "IntPtr", // TODO: almost certainly wrong
             ":enum"             => type.Name!,
             ":struct"           => type.Name!,
-            ":array"            => $"{CSharpTypeFromFFI(type: type.Type!, typedefMap)}[]",
+            ":array"            => $"{CSharpTypeFromFFI(type: type.Type!, typedefMap)}[]", // TODO: probably wrong
             "union"             => "UNION",
             _                   => type.Tag,
         };
