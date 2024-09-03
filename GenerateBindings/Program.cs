@@ -291,6 +291,7 @@ public static class SDL
 
         return type.Tag switch
         {
+            ":_Bool"            => "bool",
             ":int"              => "int",
             ":long"             => "long", // TODO: platform-dependent?
             ":unsigned-short"   => "ushort", // TODO: platform-dependent?

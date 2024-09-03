@@ -58,6 +58,7 @@ public static class SDL
 
     public enum SDL_AudioFormat
     {
+        SDL_AUDIO_UNKNOWN = 0,
         SDL_AUDIO_U8 = 8,
         SDL_AUDIO_S8 = 32776,
         SDL_AUDIO_S16LE = 32784,
@@ -321,7 +322,6 @@ public static class SDL
     {
         SDL_SCALEMODE_NEAREST = 0,
         SDL_SCALEMODE_LINEAR = 1,
-        SDL_SCALEMODE_BEST = 2,
     }
 
     public enum SDL_FlipMode
@@ -1031,7 +1031,7 @@ public static class SDL
         SDL_PATHTYPE_OTHER = 3,
     }
 
-    public enum SDL_GpuPrimitiveType
+    public enum SDL_GPUPrimitiveType
     {
         SDL_GPU_PRIMITIVETYPE_POINTLIST = 0,
         SDL_GPU_PRIMITIVETYPE_LINELIST = 1,
@@ -1040,78 +1040,87 @@ public static class SDL
         SDL_GPU_PRIMITIVETYPE_TRIANGLESTRIP = 4,
     }
 
-    public enum SDL_GpuLoadOp
+    public enum SDL_GPULoadOp
     {
         SDL_GPU_LOADOP_LOAD = 0,
         SDL_GPU_LOADOP_CLEAR = 1,
         SDL_GPU_LOADOP_DONT_CARE = 2,
     }
 
-    public enum SDL_GpuStoreOp
+    public enum SDL_GPUStoreOp
     {
         SDL_GPU_STOREOP_STORE = 0,
         SDL_GPU_STOREOP_DONT_CARE = 1,
     }
 
-    public enum SDL_GpuIndexElementSize
+    public enum SDL_GPUIndexElementSize
     {
         SDL_GPU_INDEXELEMENTSIZE_16BIT = 0,
         SDL_GPU_INDEXELEMENTSIZE_32BIT = 1,
     }
 
-    public enum SDL_GpuTextureFormat
+    public enum SDL_GPUTextureFormat
     {
         SDL_GPU_TEXTUREFORMAT_INVALID = -1,
-        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM = 0,
-        SDL_GPU_TEXTUREFORMAT_B8G8R8A8_UNORM = 1,
-        SDL_GPU_TEXTUREFORMAT_B5G6R5_UNORM = 2,
-        SDL_GPU_TEXTUREFORMAT_B5G5R5A1_UNORM = 3,
-        SDL_GPU_TEXTUREFORMAT_B4G4R4A4_UNORM = 4,
-        SDL_GPU_TEXTUREFORMAT_R10G10B10A2_UNORM = 5,
-        SDL_GPU_TEXTUREFORMAT_R16G16_UNORM = 6,
-        SDL_GPU_TEXTUREFORMAT_R16G16B16A16_UNORM = 7,
-        SDL_GPU_TEXTUREFORMAT_R8_UNORM = 8,
-        SDL_GPU_TEXTUREFORMAT_A8_UNORM = 9,
-        SDL_GPU_TEXTUREFORMAT_BC1_UNORM = 10,
-        SDL_GPU_TEXTUREFORMAT_BC2_UNORM = 11,
-        SDL_GPU_TEXTUREFORMAT_BC3_UNORM = 12,
-        SDL_GPU_TEXTUREFORMAT_BC7_UNORM = 13,
-        SDL_GPU_TEXTUREFORMAT_R8G8_SNORM = 14,
-        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_SNORM = 15,
-        SDL_GPU_TEXTUREFORMAT_R16_FLOAT = 16,
-        SDL_GPU_TEXTUREFORMAT_R16G16_FLOAT = 17,
-        SDL_GPU_TEXTUREFORMAT_R16G16B16A16_FLOAT = 18,
-        SDL_GPU_TEXTUREFORMAT_R32_FLOAT = 19,
-        SDL_GPU_TEXTUREFORMAT_R32G32_FLOAT = 20,
-        SDL_GPU_TEXTUREFORMAT_R32G32B32A32_FLOAT = 21,
-        SDL_GPU_TEXTUREFORMAT_R8_UINT = 22,
-        SDL_GPU_TEXTUREFORMAT_R8G8_UINT = 23,
-        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UINT = 24,
-        SDL_GPU_TEXTUREFORMAT_R16_UINT = 25,
-        SDL_GPU_TEXTUREFORMAT_R16G16_UINT = 26,
-        SDL_GPU_TEXTUREFORMAT_R16G16B16A16_UINT = 27,
-        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM_SRGB = 28,
-        SDL_GPU_TEXTUREFORMAT_B8G8R8A8_UNORM_SRGB = 29,
-        SDL_GPU_TEXTUREFORMAT_BC3_UNORM_SRGB = 30,
-        SDL_GPU_TEXTUREFORMAT_BC7_UNORM_SRGB = 31,
-        SDL_GPU_TEXTUREFORMAT_D16_UNORM = 32,
-        SDL_GPU_TEXTUREFORMAT_D24_UNORM = 33,
-        SDL_GPU_TEXTUREFORMAT_D32_FLOAT = 34,
-        SDL_GPU_TEXTUREFORMAT_D24_UNORM_S8_UINT = 35,
-        SDL_GPU_TEXTUREFORMAT_D32_FLOAT_S8_UINT = 36,
+        SDL_GPU_TEXTUREFORMAT_A8_UNORM = 0,
+        SDL_GPU_TEXTUREFORMAT_R8_UNORM = 1,
+        SDL_GPU_TEXTUREFORMAT_R8G8_UNORM = 2,
+        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM = 3,
+        SDL_GPU_TEXTUREFORMAT_R16_UNORM = 4,
+        SDL_GPU_TEXTUREFORMAT_R16G16_UNORM = 5,
+        SDL_GPU_TEXTUREFORMAT_R16G16B16A16_UNORM = 6,
+        SDL_GPU_TEXTUREFORMAT_R10G10B10A2_UNORM = 7,
+        SDL_GPU_TEXTUREFORMAT_B5G6R5_UNORM = 8,
+        SDL_GPU_TEXTUREFORMAT_B5G5R5A1_UNORM = 9,
+        SDL_GPU_TEXTUREFORMAT_B4G4R4A4_UNORM = 10,
+        SDL_GPU_TEXTUREFORMAT_B8G8R8A8_UNORM = 11,
+        SDL_GPU_TEXTUREFORMAT_BC1_RGBA_UNORM = 12,
+        SDL_GPU_TEXTUREFORMAT_BC2_RGBA_UNORM = 13,
+        SDL_GPU_TEXTUREFORMAT_BC3_RGBA_UNORM = 14,
+        SDL_GPU_TEXTUREFORMAT_BC4_R_UNORM = 15,
+        SDL_GPU_TEXTUREFORMAT_BC5_RG_UNORM = 16,
+        SDL_GPU_TEXTUREFORMAT_BC7_RGBA_UNORM = 17,
+        SDL_GPU_TEXTUREFORMAT_BC6H_RGB_FLOAT = 18,
+        SDL_GPU_TEXTUREFORMAT_BC6H_RGB_UFLOAT = 19,
+        SDL_GPU_TEXTUREFORMAT_R8_SNORM = 20,
+        SDL_GPU_TEXTUREFORMAT_R8G8_SNORM = 21,
+        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_SNORM = 22,
+        SDL_GPU_TEXTUREFORMAT_R16_SNORM = 23,
+        SDL_GPU_TEXTUREFORMAT_R16G16_SNORM = 24,
+        SDL_GPU_TEXTUREFORMAT_R16G16B16A16_SNORM = 25,
+        SDL_GPU_TEXTUREFORMAT_R16_FLOAT = 26,
+        SDL_GPU_TEXTUREFORMAT_R16G16_FLOAT = 27,
+        SDL_GPU_TEXTUREFORMAT_R16G16B16A16_FLOAT = 28,
+        SDL_GPU_TEXTUREFORMAT_R32_FLOAT = 29,
+        SDL_GPU_TEXTUREFORMAT_R32G32_FLOAT = 30,
+        SDL_GPU_TEXTUREFORMAT_R32G32B32A32_FLOAT = 31,
+        SDL_GPU_TEXTUREFORMAT_R11G11B10_UFLOAT = 32,
+        SDL_GPU_TEXTUREFORMAT_R8_UINT = 33,
+        SDL_GPU_TEXTUREFORMAT_R8G8_UINT = 34,
+        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UINT = 35,
+        SDL_GPU_TEXTUREFORMAT_R16_UINT = 36,
+        SDL_GPU_TEXTUREFORMAT_R16G16_UINT = 37,
+        SDL_GPU_TEXTUREFORMAT_R16G16B16A16_UINT = 38,
+        SDL_GPU_TEXTUREFORMAT_R8_INT = 39,
+        SDL_GPU_TEXTUREFORMAT_R8G8_INT = 40,
+        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_INT = 41,
+        SDL_GPU_TEXTUREFORMAT_R16_INT = 42,
+        SDL_GPU_TEXTUREFORMAT_R16G16_INT = 43,
+        SDL_GPU_TEXTUREFORMAT_R16G16B16A16_INT = 44,
+        SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM_SRGB = 45,
+        SDL_GPU_TEXTUREFORMAT_B8G8R8A8_UNORM_SRGB = 46,
+        SDL_GPU_TEXTUREFORMAT_BC1_RGBA_UNORM_SRGB = 47,
+        SDL_GPU_TEXTUREFORMAT_BC2_RGBA_UNORM_SRGB = 48,
+        SDL_GPU_TEXTUREFORMAT_BC3_RGBA_UNORM_SRGB = 49,
+        SDL_GPU_TEXTUREFORMAT_BC7_RGBA_UNORM_SRGB = 50,
+        SDL_GPU_TEXTUREFORMAT_D16_UNORM = 51,
+        SDL_GPU_TEXTUREFORMAT_D24_UNORM = 52,
+        SDL_GPU_TEXTUREFORMAT_D32_FLOAT = 53,
+        SDL_GPU_TEXTUREFORMAT_D24_UNORM_S8_UINT = 54,
+        SDL_GPU_TEXTUREFORMAT_D32_FLOAT_S8_UINT = 55,
     }
 
-    public enum SDL_GpuTextureUsageFlagBits
-    {
-        SDL_GPU_TEXTUREUSAGE_SAMPLER_BIT = 1,
-        SDL_GPU_TEXTUREUSAGE_COLOR_TARGET_BIT = 2,
-        SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET_BIT = 4,
-        SDL_GPU_TEXTUREUSAGE_GRAPHICS_STORAGE_READ_BIT = 8,
-        SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_READ_BIT = 32,
-        SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_WRITE_BIT = 64,
-    }
-
-    public enum SDL_GpuTextureType
+    public enum SDL_GPUTextureType
     {
         SDL_GPU_TEXTURETYPE_2D = 0,
         SDL_GPU_TEXTURETYPE_2D_ARRAY = 1,
@@ -1119,7 +1128,7 @@ public static class SDL
         SDL_GPU_TEXTURETYPE_CUBE = 3,
     }
 
-    public enum SDL_GpuSampleCount
+    public enum SDL_GPUSampleCount
     {
         SDL_GPU_SAMPLECOUNT_1 = 0,
         SDL_GPU_SAMPLECOUNT_2 = 1,
@@ -1127,7 +1136,7 @@ public static class SDL
         SDL_GPU_SAMPLECOUNT_8 = 3,
     }
 
-    public enum SDL_GpuCubeMapFace
+    public enum SDL_GPUCubeMapFace
     {
         SDL_GPU_CUBEMAPFACE_POSITIVEX = 0,
         SDL_GPU_CUBEMAPFACE_NEGATIVEX = 1,
@@ -1137,40 +1146,19 @@ public static class SDL
         SDL_GPU_CUBEMAPFACE_NEGATIVEZ = 5,
     }
 
-    public enum SDL_GpuBufferUsageFlagBits
-    {
-        SDL_GPU_BUFFERUSAGE_VERTEX_BIT = 1,
-        SDL_GPU_BUFFERUSAGE_INDEX_BIT = 2,
-        SDL_GPU_BUFFERUSAGE_INDIRECT_BIT = 4,
-        SDL_GPU_BUFFERUSAGE_GRAPHICS_STORAGE_READ_BIT = 8,
-        SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_READ_BIT = 32,
-        SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_WRITE_BIT = 64,
-    }
-
-    public enum SDL_GpuTransferBufferUsage
+    public enum SDL_GPUTransferBufferUsage
     {
         SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD = 0,
         SDL_GPU_TRANSFERBUFFERUSAGE_DOWNLOAD = 1,
     }
 
-    public enum SDL_GpuShaderStage
+    public enum SDL_GPUShaderStage
     {
         SDL_GPU_SHADERSTAGE_VERTEX = 0,
         SDL_GPU_SHADERSTAGE_FRAGMENT = 1,
     }
 
-    public enum SDL_GpuShaderFormatFlagBits
-    {
-        SDL_GPU_SHADERFORMAT_INVALID = 0,
-        SDL_GPU_SHADERFORMAT_SECRET = 1,
-        SDL_GPU_SHADERFORMAT_SPIRV = 2,
-        SDL_GPU_SHADERFORMAT_DXBC = 4,
-        SDL_GPU_SHADERFORMAT_DXIL = 8,
-        SDL_GPU_SHADERFORMAT_MSL = 16,
-        SDL_GPU_SHADERFORMAT_METALLIB = 32,
-    }
-
-    public enum SDL_GpuVertexElementFormat
+    public enum SDL_GPUVertexElementFormat
     {
         SDL_GPU_VERTEXELEMENTFORMAT_INT = 0,
         SDL_GPU_VERTEXELEMENTFORMAT_INT2 = 1,
@@ -1204,32 +1192,32 @@ public static class SDL
         SDL_GPU_VERTEXELEMENTFORMAT_HALF4 = 29,
     }
 
-    public enum SDL_GpuVertexInputRate
+    public enum SDL_GPUVertexInputRate
     {
         SDL_GPU_VERTEXINPUTRATE_VERTEX = 0,
         SDL_GPU_VERTEXINPUTRATE_INSTANCE = 1,
     }
 
-    public enum SDL_GpuFillMode
+    public enum SDL_GPUFillMode
     {
         SDL_GPU_FILLMODE_FILL = 0,
         SDL_GPU_FILLMODE_LINE = 1,
     }
 
-    public enum SDL_GpuCullMode
+    public enum SDL_GPUCullMode
     {
         SDL_GPU_CULLMODE_NONE = 0,
         SDL_GPU_CULLMODE_FRONT = 1,
         SDL_GPU_CULLMODE_BACK = 2,
     }
 
-    public enum SDL_GpuFrontFace
+    public enum SDL_GPUFrontFace
     {
         SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE = 0,
         SDL_GPU_FRONTFACE_CLOCKWISE = 1,
     }
 
-    public enum SDL_GpuCompareOp
+    public enum SDL_GPUCompareOp
     {
         SDL_GPU_COMPAREOP_NEVER = 0,
         SDL_GPU_COMPAREOP_LESS = 1,
@@ -1241,7 +1229,7 @@ public static class SDL
         SDL_GPU_COMPAREOP_ALWAYS = 7,
     }
 
-    public enum SDL_GpuStencilOp
+    public enum SDL_GPUStencilOp
     {
         SDL_GPU_STENCILOP_KEEP = 0,
         SDL_GPU_STENCILOP_ZERO = 1,
@@ -1253,7 +1241,7 @@ public static class SDL
         SDL_GPU_STENCILOP_DECREMENT_AND_WRAP = 7,
     }
 
-    public enum SDL_GpuBlendOp
+    public enum SDL_GPUBlendOp
     {
         SDL_GPU_BLENDOP_ADD = 0,
         SDL_GPU_BLENDOP_SUBTRACT = 1,
@@ -1262,7 +1250,7 @@ public static class SDL
         SDL_GPU_BLENDOP_MAX = 4,
     }
 
-    public enum SDL_GpuBlendFactor
+    public enum SDL_GPUBlendFactor
     {
         SDL_GPU_BLENDFACTOR_ZERO = 0,
         SDL_GPU_BLENDFACTOR_ONE = 1,
@@ -1279,41 +1267,33 @@ public static class SDL
         SDL_GPU_BLENDFACTOR_SRC_ALPHA_SATURATE = 12,
     }
 
-    public enum SDL_GpuColorComponentFlagBits
-    {
-        SDL_GPU_COLORCOMPONENT_R_BIT = 1,
-        SDL_GPU_COLORCOMPONENT_G_BIT = 2,
-        SDL_GPU_COLORCOMPONENT_B_BIT = 4,
-        SDL_GPU_COLORCOMPONENT_A_BIT = 8,
-    }
-
-    public enum SDL_GpuFilter
+    public enum SDL_GPUFilter
     {
         SDL_GPU_FILTER_NEAREST = 0,
         SDL_GPU_FILTER_LINEAR = 1,
     }
 
-    public enum SDL_GpuSamplerMipmapMode
+    public enum SDL_GPUSamplerMipmapMode
     {
         SDL_GPU_SAMPLERMIPMAPMODE_NEAREST = 0,
         SDL_GPU_SAMPLERMIPMAPMODE_LINEAR = 1,
     }
 
-    public enum SDL_GpuSamplerAddressMode
+    public enum SDL_GPUSamplerAddressMode
     {
         SDL_GPU_SAMPLERADDRESSMODE_REPEAT = 0,
         SDL_GPU_SAMPLERADDRESSMODE_MIRRORED_REPEAT = 1,
         SDL_GPU_SAMPLERADDRESSMODE_CLAMP_TO_EDGE = 2,
     }
 
-    public enum SDL_GpuPresentMode
+    public enum SDL_GPUPresentMode
     {
         SDL_GPU_PRESENTMODE_VSYNC = 0,
         SDL_GPU_PRESENTMODE_IMMEDIATE = 1,
         SDL_GPU_PRESENTMODE_MAILBOX = 2,
     }
 
-    public enum SDL_GpuSwapchainComposition
+    public enum SDL_GPUSwapchainComposition
     {
         SDL_GPU_SWAPCHAINCOMPOSITION_SDR = 0,
         SDL_GPU_SWAPCHAINCOMPOSITION_SDR_LINEAR = 1,
@@ -1321,10 +1301,10 @@ public static class SDL
         SDL_GPU_SWAPCHAINCOMPOSITION_HDR10_ST2048 = 3,
     }
 
-    public enum SDL_GpuDriver
+    public enum SDL_GPUDriver
     {
         SDL_GPU_DRIVER_INVALID = -1,
-        SDL_GPU_DRIVER_SECRET = 0,
+        SDL_GPU_DRIVER_PRIVATE = 0,
         SDL_GPU_DRIVER_VULKAN = 1,
         SDL_GPU_DRIVER_D3D11 = 2,
         SDL_GPU_DRIVER_D3D12 = 3,
@@ -1438,7 +1418,7 @@ public static class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_AssertData
     {
-        public int always_ignore;
+        public bool always_ignore;
         public uint trigger_count;
         public IntPtr condition;
         public IntPtr filename;
@@ -1713,6 +1693,7 @@ public static class SDL
         public IntPtr SetLED;
         public IntPtr SendEffect;
         public IntPtr SetSensorsEnabled;
+        public IntPtr Cleanup;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1820,7 +1801,7 @@ public static class SDL
         public IntPtr candidates;
         public Int32 num_candidates;
         public Int32 selected_candidate;
-        public int horizontal;
+        public bool horizontal;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -2196,79 +2177,79 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuDevice
+    public struct SDL_GPUDevice
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuBuffer
+    public struct SDL_GPUBuffer
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTransferBuffer
+    public struct SDL_GPUTransferBuffer
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTexture
+    public struct SDL_GPUTexture
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuSampler
+    public struct SDL_GPUSampler
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuShader
+    public struct SDL_GPUShader
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuComputePipeline
+    public struct SDL_GPUComputePipeline
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuGraphicsPipeline
+    public struct SDL_GPUGraphicsPipeline
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuCommandBuffer
+    public struct SDL_GPUCommandBuffer
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuRenderPass
+    public struct SDL_GPURenderPass
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuComputePass
+    public struct SDL_GPUComputePass
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuCopyPass
+    public struct SDL_GPUCopyPass
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuFence
+    public struct SDL_GPUFence
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuDepthStencilValue
+    public struct SDL_GPUDepthStencilValue
     {
         public float depth;
         public byte stencil;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuViewport
+    public struct SDL_GPUViewport
     {
         public float x;
         public float y;
@@ -2279,7 +2260,7 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTextureTransferInfo
+    public struct SDL_GPUTextureTransferInfo
     {
         public IntPtr transferBuffer;
         public UInt32 offset;
@@ -2288,14 +2269,14 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTransferBufferLocation
+    public struct SDL_GPUTransferBufferLocation
     {
         public IntPtr transferBuffer;
         public UInt32 offset;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTextureLocation
+    public struct SDL_GPUTextureLocation
     {
         public IntPtr texture;
         public UInt32 mipLevel;
@@ -2306,7 +2287,7 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTextureRegion
+    public struct SDL_GPUTextureRegion
     {
         public IntPtr texture;
         public UInt32 mipLevel;
@@ -2320,7 +2301,7 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuBlitRegion
+    public struct SDL_GPUBlitRegion
     {
         public IntPtr texture;
         public UInt32 mipLevel;
@@ -2332,14 +2313,14 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuBufferLocation
+    public struct SDL_GPUBufferLocation
     {
         public IntPtr buffer;
         public UInt32 offset;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuBufferRegion
+    public struct SDL_GPUBufferRegion
     {
         public IntPtr buffer;
         public UInt32 offset;
@@ -2347,7 +2328,7 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuIndirectDrawCommand
+    public struct SDL_GPUIndirectDrawCommand
     {
         public UInt32 vertexCount;
         public UInt32 instanceCount;
@@ -2356,17 +2337,17 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuIndexedIndirectDrawCommand
+    public struct SDL_GPUIndexedIndirectDrawCommand
     {
         public UInt32 indexCount;
         public UInt32 instanceCount;
         public UInt32 firstIndex;
-        public UInt32 vertexOffset;
+        public Int32 vertexOffset;
         public UInt32 firstInstance;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuIndirectDispatchCommand
+    public struct SDL_GPUIndirectDispatchCommand
     {
         public UInt32 groupCountX;
         public UInt32 groupCountY;
@@ -2374,44 +2355,44 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuSamplerCreateInfo
+    public struct SDL_GPUSamplerCreateInfo
     {
-        public SDL_GpuFilter minFilter;
-        public SDL_GpuFilter magFilter;
-        public SDL_GpuSamplerMipmapMode mipmapMode;
-        public SDL_GpuSamplerAddressMode addressModeU;
-        public SDL_GpuSamplerAddressMode addressModeV;
-        public SDL_GpuSamplerAddressMode addressModeW;
+        public SDL_GPUFilter minFilter;
+        public SDL_GPUFilter magFilter;
+        public SDL_GPUSamplerMipmapMode mipmapMode;
+        public SDL_GPUSamplerAddressMode addressModeU;
+        public SDL_GPUSamplerAddressMode addressModeV;
+        public SDL_GPUSamplerAddressMode addressModeW;
         public float mipLodBias;
-        public int anisotropyEnable;
+        public bool anisotropyEnable;
         public float maxAnisotropy;
-        public int compareEnable;
-        public SDL_GpuCompareOp compareOp;
+        public bool compareEnable;
+        public SDL_GPUCompareOp compareOp;
         public float minLod;
         public float maxLod;
         public UInt32 props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuVertexBinding
+    public struct SDL_GPUVertexBinding
     {
         public UInt32 binding;
         public UInt32 stride;
-        public SDL_GpuVertexInputRate inputRate;
+        public SDL_GPUVertexInputRate inputRate;
         public UInt32 instanceStepRate;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuVertexAttribute
+    public struct SDL_GPUVertexAttribute
     {
         public UInt32 location;
         public UInt32 binding;
-        public SDL_GpuVertexElementFormat format;
+        public SDL_GPUVertexElementFormat format;
         public UInt32 offset;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuVertexInputState
+    public struct SDL_GPUVertexInputState
     {
         public IntPtr vertexBindings;
         public UInt32 vertexBindingCount;
@@ -2420,35 +2401,35 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuStencilOpState
+    public struct SDL_GPUStencilOpState
     {
-        public SDL_GpuStencilOp failOp;
-        public SDL_GpuStencilOp passOp;
-        public SDL_GpuStencilOp depthFailOp;
-        public SDL_GpuCompareOp compareOp;
+        public SDL_GPUStencilOp failOp;
+        public SDL_GPUStencilOp passOp;
+        public SDL_GPUStencilOp depthFailOp;
+        public SDL_GPUCompareOp compareOp;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuColorAttachmentBlendState
+    public struct SDL_GPUColorAttachmentBlendState
     {
-        public int blendEnable;
-        public SDL_GpuBlendFactor srcColorBlendFactor;
-        public SDL_GpuBlendFactor dstColorBlendFactor;
-        public SDL_GpuBlendOp colorBlendOp;
-        public SDL_GpuBlendFactor srcAlphaBlendFactor;
-        public SDL_GpuBlendFactor dstAlphaBlendFactor;
-        public SDL_GpuBlendOp alphaBlendOp;
+        public bool blendEnable;
+        public SDL_GPUBlendFactor srcColorBlendFactor;
+        public SDL_GPUBlendFactor dstColorBlendFactor;
+        public SDL_GPUBlendOp colorBlendOp;
+        public SDL_GPUBlendFactor srcAlphaBlendFactor;
+        public SDL_GPUBlendFactor dstAlphaBlendFactor;
+        public SDL_GPUBlendOp alphaBlendOp;
         public byte colorWriteMask;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuShaderCreateInfo
+    public struct SDL_GPUShaderCreateInfo
     {
         public UInt32 codeSize;
         public IntPtr code;
         public IntPtr entryPointName;
         public UInt32 format;
-        public SDL_GpuShaderStage stage;
+        public SDL_GPUShaderStage stage;
         public UInt32 samplerCount;
         public UInt32 storageTextureCount;
         public UInt32 storageBufferCount;
@@ -2457,21 +2438,21 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTextureCreateInfo
+    public struct SDL_GPUTextureCreateInfo
     {
-        public SDL_GpuTextureType type;
-        public SDL_GpuTextureFormat format;
+        public SDL_GPUTextureType type;
+        public SDL_GPUTextureFormat format;
         public UInt32 usageFlags;
         public UInt32 width;
         public UInt32 height;
         public UInt32 layerCountOrDepth;
         public UInt32 levelCount;
-        public SDL_GpuSampleCount sampleCount;
+        public SDL_GPUSampleCount sampleCount;
         public UInt32 props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuBufferCreateInfo
+    public struct SDL_GPUBufferCreateInfo
     {
         public UInt32 usageFlags;
         public UInt32 sizeInBytes;
@@ -2479,79 +2460,79 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTransferBufferCreateInfo
+    public struct SDL_GPUTransferBufferCreateInfo
     {
-        public SDL_GpuTransferBufferUsage usage;
+        public SDL_GPUTransferBufferUsage usage;
         public UInt32 sizeInBytes;
         public UInt32 props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuRasterizerState
+    public struct SDL_GPURasterizerState
     {
-        public SDL_GpuFillMode fillMode;
-        public SDL_GpuCullMode cullMode;
-        public SDL_GpuFrontFace frontFace;
-        public int depthBiasEnable;
+        public SDL_GPUFillMode fillMode;
+        public SDL_GPUCullMode cullMode;
+        public SDL_GPUFrontFace frontFace;
+        public bool depthBiasEnable;
         public float depthBiasConstantFactor;
         public float depthBiasClamp;
         public float depthBiasSlopeFactor;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuMultisampleState
+    public struct SDL_GPUMultisampleState
     {
-        public SDL_GpuSampleCount sampleCount;
+        public SDL_GPUSampleCount sampleCount;
         public UInt32 sampleMask;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuDepthStencilState
+    public struct SDL_GPUDepthStencilState
     {
-        public int depthTestEnable;
-        public int depthWriteEnable;
-        public SDL_GpuCompareOp compareOp;
-        public int stencilTestEnable;
-        public SDL_GpuStencilOpState backStencilState;
-        public SDL_GpuStencilOpState frontStencilState;
+        public bool depthTestEnable;
+        public bool depthWriteEnable;
+        public SDL_GPUCompareOp compareOp;
+        public bool stencilTestEnable;
+        public SDL_GPUStencilOpState backStencilState;
+        public SDL_GPUStencilOpState frontStencilState;
         public byte compareMask;
         public byte writeMask;
         public byte reference;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuColorAttachmentDescription
+    public struct SDL_GPUColorAttachmentDescription
     {
-        public SDL_GpuTextureFormat format;
-        public SDL_GpuColorAttachmentBlendState blendState;
+        public SDL_GPUTextureFormat format;
+        public SDL_GPUColorAttachmentBlendState blendState;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuGraphicsPipelineAttachmentInfo
+    public struct SDL_GPUGraphicsPipelineAttachmentInfo
     {
         public IntPtr colorAttachmentDescriptions;
         public UInt32 colorAttachmentCount;
-        public int hasDepthStencilAttachment;
-        public SDL_GpuTextureFormat depthStencilFormat;
+        public bool hasDepthStencilAttachment;
+        public SDL_GPUTextureFormat depthStencilFormat;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuGraphicsPipelineCreateInfo
+    public struct SDL_GPUGraphicsPipelineCreateInfo
     {
         public IntPtr vertexShader;
         public IntPtr fragmentShader;
-        public SDL_GpuVertexInputState vertexInputState;
-        public SDL_GpuPrimitiveType primitiveType;
-        public SDL_GpuRasterizerState rasterizerState;
-        public SDL_GpuMultisampleState multisampleState;
-        public SDL_GpuDepthStencilState depthStencilState;
-        public SDL_GpuGraphicsPipelineAttachmentInfo attachmentInfo;
+        public SDL_GPUVertexInputState vertexInputState;
+        public SDL_GPUPrimitiveType primitiveType;
+        public SDL_GPURasterizerState rasterizerState;
+        public SDL_GPUMultisampleState multisampleState;
+        public SDL_GPUDepthStencilState depthStencilState;
+        public SDL_GPUGraphicsPipelineAttachmentInfo attachmentInfo;
         public float[] blendConstants;
         public UInt32 props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuComputePipelineCreateInfo
+    public struct SDL_GPUComputePipelineCreateInfo
     {
         public UInt32 codeSize;
         public IntPtr code;
@@ -2569,57 +2550,57 @@ public static class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuColorAttachmentInfo
+    public struct SDL_GPUColorAttachmentInfo
     {
         public IntPtr texture;
         public UInt32 mipLevel;
         public UInt32 layerOrDepthPlane;
         public SDL_FColor clearColor;
-        public SDL_GpuLoadOp loadOp;
-        public SDL_GpuStoreOp storeOp;
-        public int cycle;
+        public SDL_GPULoadOp loadOp;
+        public SDL_GPUStoreOp storeOp;
+        public bool cycle;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuDepthStencilAttachmentInfo
+    public struct SDL_GPUDepthStencilAttachmentInfo
     {
         public IntPtr texture;
-        public SDL_GpuDepthStencilValue depthStencilClearValue;
-        public SDL_GpuLoadOp loadOp;
-        public SDL_GpuStoreOp storeOp;
-        public SDL_GpuLoadOp stencilLoadOp;
-        public SDL_GpuStoreOp stencilStoreOp;
-        public int cycle;
+        public SDL_GPUDepthStencilValue depthStencilClearValue;
+        public SDL_GPULoadOp loadOp;
+        public SDL_GPUStoreOp storeOp;
+        public SDL_GPULoadOp stencilLoadOp;
+        public SDL_GPUStoreOp stencilStoreOp;
+        public bool cycle;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuBufferBinding
+    public struct SDL_GPUBufferBinding
     {
         public IntPtr buffer;
         public UInt32 offset;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuTextureSamplerBinding
+    public struct SDL_GPUTextureSamplerBinding
     {
         public IntPtr texture;
         public IntPtr sampler;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuStorageBufferWriteOnlyBinding
+    public struct SDL_GPUStorageBufferWriteOnlyBinding
     {
         public IntPtr buffer;
-        public int cycle;
+        public bool cycle;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GpuStorageTextureWriteOnlyBinding
+    public struct SDL_GPUStorageTextureWriteOnlyBinding
     {
         public IntPtr texture;
         public UInt32 mipLevel;
         public UInt32 layer;
-        public int cycle;
+        public bool cycle;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -2873,7 +2854,7 @@ public static class SDL
     public static extern void SDL_GetMemoryFunctions(IntPtr malloc_func, IntPtr calloc_func, IntPtr realloc_func, IntPtr free_func);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetMemoryFunctions(IntPtr malloc_func, IntPtr calloc_func, IntPtr realloc_func, IntPtr free_func);
+    public static extern bool SDL_SetMemoryFunctions(IntPtr malloc_func, IntPtr calloc_func, IntPtr realloc_func, IntPtr free_func);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_aligned_alloc(UInt32 alignment, UInt32 size);
@@ -3320,16 +3301,16 @@ public static class SDL
     public static extern IntPtr SDL_iconv_string(IntPtr tocode, IntPtr fromcode, IntPtr inbuf, UInt32 inbytesleft);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_size_mul_overflow(UInt32 a, UInt32 b, IntPtr ret);
+    public static extern bool SDL_size_mul_check_overflow(UInt32 a, UInt32 b, IntPtr ret);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_size_mul_overflow_builtin(UInt32 a, UInt32 b, IntPtr ret);
+    public static extern bool SDL_size_mul_check_overflow_builtin(UInt32 a, UInt32 b, IntPtr ret);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_size_add_overflow(UInt32 a, UInt32 b, IntPtr ret);
+    public static extern bool SDL_size_add_check_overflow(UInt32 a, UInt32 b, IntPtr ret);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_size_add_overflow_builtin(UInt32 a, UInt32 b, IntPtr ret);
+    public static extern bool SDL_size_add_check_overflow_builtin(UInt32 a, UInt32 b, IntPtr ret);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_AssertState SDL_ReportAssertion(IntPtr data, IntPtr func, IntPtr file, int line);
@@ -3350,7 +3331,7 @@ public static class SDL
     public static extern void SDL_ResetAssertionReport();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_TryLockSpinlock(IntPtr @lock);
+    public static extern bool SDL_TryLockSpinlock(IntPtr @lock);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_LockSpinlock(IntPtr @lock);
@@ -3365,7 +3346,7 @@ public static class SDL
     public static extern void SDL_MemoryBarrierAcquireFunction();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AtomicCompareAndSwap(IntPtr a, int oldval, int newval);
+    public static extern bool SDL_AtomicCompareAndSwap(IntPtr a, int oldval, int newval);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_AtomicSet(IntPtr a, int v);
@@ -3377,28 +3358,28 @@ public static class SDL
     public static extern int SDL_AtomicAdd(IntPtr a, int v);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AtomicCompareAndSwapPointer(IntPtr a, IntPtr oldval, IntPtr newval);
+    public static extern bool SDL_AtomicCompareAndSwapPointer(IntPtr a, IntPtr oldval, IntPtr newval);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_AtomicSetPtr(IntPtr a, IntPtr v);
+    public static extern IntPtr SDL_AtomicSetPointer(IntPtr a, IntPtr v);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_AtomicGetPtr(IntPtr a);
+    public static extern IntPtr SDL_AtomicGetPointer(IntPtr a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern float SDL_SwapFloat(float x);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetError(IntPtr fmt);
+    public static extern bool SDL_SetError(IntPtr fmt);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_OutOfMemory();
+    public static extern bool SDL_OutOfMemory();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetError();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ClearError();
+    public static extern bool SDL_ClearError();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateMutex();
@@ -3407,7 +3388,7 @@ public static class SDL
     public static extern void SDL_LockMutex(IntPtr mutex);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_TryLockMutex(IntPtr mutex);
+    public static extern bool SDL_TryLockMutex(IntPtr mutex);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockMutex(IntPtr mutex);
@@ -3425,10 +3406,10 @@ public static class SDL
     public static extern void SDL_LockRWLockForWriting(IntPtr rwlock);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_TryLockRWLockForReading(IntPtr rwlock);
+    public static extern bool SDL_TryLockRWLockForReading(IntPtr rwlock);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_TryLockRWLockForWriting(IntPtr rwlock);
+    public static extern bool SDL_TryLockRWLockForWriting(IntPtr rwlock);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockRWLock(IntPtr rwlock);
@@ -3443,16 +3424,16 @@ public static class SDL
     public static extern void SDL_DestroySemaphore(IntPtr sem);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WaitSemaphore(IntPtr sem);
+    public static extern void SDL_WaitSemaphore(IntPtr sem);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_TryWaitSemaphore(IntPtr sem);
+    public static extern bool SDL_TryWaitSemaphore(IntPtr sem);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WaitSemaphoreTimeout(IntPtr sem, Int32 timeoutMS);
+    public static extern bool SDL_WaitSemaphoreTimeout(IntPtr sem, Int32 timeoutMS);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SignalSemaphore(IntPtr sem);
+    public static extern void SDL_SignalSemaphore(IntPtr sem);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_GetSemaphoreValue(IntPtr sem);
@@ -3464,16 +3445,16 @@ public static class SDL
     public static extern void SDL_DestroyCondition(IntPtr cond);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SignalCondition(IntPtr cond);
+    public static extern void SDL_SignalCondition(IntPtr cond);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BroadcastCondition(IntPtr cond);
+    public static extern void SDL_BroadcastCondition(IntPtr cond);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WaitCondition(IntPtr cond, IntPtr mutex);
+    public static extern void SDL_WaitCondition(IntPtr cond, IntPtr mutex);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WaitConditionTimeout(IntPtr cond, IntPtr mutex, Int32 timeoutMS);
+    public static extern bool SDL_WaitConditionTimeout(IntPtr cond, IntPtr mutex, Int32 timeoutMS);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_GetGlobalProperties();
@@ -3482,34 +3463,34 @@ public static class SDL
     public static extern UInt32 SDL_CreateProperties();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CopyProperties(UInt32 src, UInt32 dst);
+    public static extern bool SDL_CopyProperties(UInt32 src, UInt32 dst);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_LockProperties(UInt32 props);
+    public static extern bool SDL_LockProperties(UInt32 props);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockProperties(UInt32 props);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetPointerPropertyWithCleanup(UInt32 props, IntPtr name, IntPtr value, IntPtr cleanup, IntPtr userdata);
+    public static extern bool SDL_SetPointerPropertyWithCleanup(UInt32 props, IntPtr name, IntPtr value, IntPtr cleanup, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetPointerProperty(UInt32 props, IntPtr name, IntPtr value);
+    public static extern bool SDL_SetPointerProperty(UInt32 props, IntPtr name, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetStringProperty(UInt32 props, IntPtr name, IntPtr value);
+    public static extern bool SDL_SetStringProperty(UInt32 props, IntPtr name, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetNumberProperty(UInt32 props, IntPtr name, Int64 value);
+    public static extern bool SDL_SetNumberProperty(UInt32 props, IntPtr name, Int64 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetFloatProperty(UInt32 props, IntPtr name, float value);
+    public static extern bool SDL_SetFloatProperty(UInt32 props, IntPtr name, float value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetBooleanProperty(UInt32 props, IntPtr name, int value);
+    public static extern bool SDL_SetBooleanProperty(UInt32 props, IntPtr name, bool value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasProperty(UInt32 props, IntPtr name);
+    public static extern bool SDL_HasProperty(UInt32 props, IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_PropertyType SDL_GetPropertyType(UInt32 props, IntPtr name);
@@ -3527,13 +3508,13 @@ public static class SDL
     public static extern float SDL_GetFloatProperty(UInt32 props, IntPtr name, float default_value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetBooleanProperty(UInt32 props, IntPtr name, int default_value);
+    public static extern bool SDL_GetBooleanProperty(UInt32 props, IntPtr name, bool default_value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ClearProperty(UInt32 props, IntPtr name);
+    public static extern bool SDL_ClearProperty(UInt32 props, IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_EnumerateProperties(UInt32 props, IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_EnumerateProperties(UInt32 props, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DestroyProperties(UInt32 props);
@@ -3554,7 +3535,7 @@ public static class SDL
     public static extern IntPtr SDL_OpenIO(IntPtr iface, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CloseIO(IntPtr context);
+    public static extern bool SDL_CloseIO(IntPtr context);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_GetIOProperties(IntPtr context);
@@ -3584,94 +3565,94 @@ public static class SDL
     public static extern UInt32 SDL_IOvprintf(IntPtr context, IntPtr fmt, IntPtr ap);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_LoadFile_IO(IntPtr src, IntPtr datasize, int closeio);
+    public static extern IntPtr SDL_LoadFile_IO(IntPtr src, IntPtr datasize, bool closeio);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_LoadFile(IntPtr file, IntPtr datasize);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadU8(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU8(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadS8(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS8(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadU16LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU16LE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadS16LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS16LE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadU16BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU16BE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadS16BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS16BE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadU32LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU32LE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadS32LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS32LE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadU32BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU32BE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadS32BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS32BE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadU64LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU64LE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadS64LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS64LE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadU64BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU64BE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadS64BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS64BE(IntPtr src, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteU8(IntPtr dst, byte value);
+    public static extern bool SDL_WriteU8(IntPtr dst, byte value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteS8(IntPtr dst, sbyte value);
+    public static extern bool SDL_WriteS8(IntPtr dst, sbyte value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteU16LE(IntPtr dst, UInt16 value);
+    public static extern bool SDL_WriteU16LE(IntPtr dst, UInt16 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteS16LE(IntPtr dst, Int16 value);
+    public static extern bool SDL_WriteS16LE(IntPtr dst, Int16 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteU16BE(IntPtr dst, UInt16 value);
+    public static extern bool SDL_WriteU16BE(IntPtr dst, UInt16 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteS16BE(IntPtr dst, Int16 value);
+    public static extern bool SDL_WriteS16BE(IntPtr dst, Int16 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteU32LE(IntPtr dst, UInt32 value);
+    public static extern bool SDL_WriteU32LE(IntPtr dst, UInt32 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteS32LE(IntPtr dst, Int32 value);
+    public static extern bool SDL_WriteS32LE(IntPtr dst, Int32 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteU32BE(IntPtr dst, UInt32 value);
+    public static extern bool SDL_WriteU32BE(IntPtr dst, UInt32 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteS32BE(IntPtr dst, Int32 value);
+    public static extern bool SDL_WriteS32BE(IntPtr dst, Int32 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteU64LE(IntPtr dst, UInt64 value);
+    public static extern bool SDL_WriteU64LE(IntPtr dst, UInt64 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteS64LE(IntPtr dst, Int64 value);
+    public static extern bool SDL_WriteS64LE(IntPtr dst, Int64 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteU64BE(IntPtr dst, UInt64 value);
+    public static extern bool SDL_WriteU64BE(IntPtr dst, UInt64 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteS64BE(IntPtr dst, Int64 value);
+    public static extern bool SDL_WriteS64BE(IntPtr dst, Int64 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateThreadRuntime(IntPtr fn, IntPtr name, IntPtr data, IntPtr pfnBeginThread, IntPtr pfnEndThread);
@@ -3689,7 +3670,7 @@ public static class SDL
     public static extern UInt64 SDL_GetThreadID(IntPtr thread);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetThreadPriority(SDL_ThreadPriority priority);
+    public static extern bool SDL_SetThreadPriority(SDL_ThreadPriority priority);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_WaitThread(IntPtr thread, IntPtr status);
@@ -3701,7 +3682,7 @@ public static class SDL
     public static extern IntPtr SDL_GetTLS(IntPtr id);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetTLS(IntPtr id, IntPtr value, IntPtr destructor);
+    public static extern bool SDL_SetTLS(IntPtr id, IntPtr value, IntPtr destructor);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_CleanupTLS();
@@ -3725,7 +3706,7 @@ public static class SDL
     public static extern IntPtr SDL_GetAudioDeviceName(UInt32 devid);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetAudioDeviceFormat(UInt32 devid, IntPtr spec, IntPtr sample_frames);
+    public static extern bool SDL_GetAudioDeviceFormat(UInt32 devid, IntPtr spec, IntPtr sample_frames);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAudioDeviceChannelMap(UInt32 devid, IntPtr count);
@@ -3734,28 +3715,28 @@ public static class SDL
     public static extern UInt32 SDL_OpenAudioDevice(UInt32 devid, IntPtr spec);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PauseAudioDevice(UInt32 dev);
+    public static extern bool SDL_PauseAudioDevice(UInt32 dev);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ResumeAudioDevice(UInt32 dev);
+    public static extern bool SDL_ResumeAudioDevice(UInt32 dev);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AudioDevicePaused(UInt32 dev);
+    public static extern bool SDL_AudioDevicePaused(UInt32 dev);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern float SDL_GetAudioDeviceGain(UInt32 devid);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioDeviceGain(UInt32 devid, float gain);
+    public static extern bool SDL_SetAudioDeviceGain(UInt32 devid, float gain);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_CloseAudioDevice(UInt32 devid);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BindAudioStreams(UInt32 devid, IntPtr streams, int num_streams);
+    public static extern bool SDL_BindAudioStreams(UInt32 devid, IntPtr streams, int num_streams);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BindAudioStream(UInt32 devid, IntPtr stream);
+    public static extern bool SDL_BindAudioStream(UInt32 devid, IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnbindAudioStreams(IntPtr streams, int num_streams);
@@ -3773,22 +3754,22 @@ public static class SDL
     public static extern UInt32 SDL_GetAudioStreamProperties(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetAudioStreamFormat(IntPtr stream, IntPtr src_spec, IntPtr dst_spec);
+    public static extern bool SDL_GetAudioStreamFormat(IntPtr stream, IntPtr src_spec, IntPtr dst_spec);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioStreamFormat(IntPtr stream, IntPtr src_spec, IntPtr dst_spec);
+    public static extern bool SDL_SetAudioStreamFormat(IntPtr stream, IntPtr src_spec, IntPtr dst_spec);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern float SDL_GetAudioStreamFrequencyRatio(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioStreamFrequencyRatio(IntPtr stream, float ratio);
+    public static extern bool SDL_SetAudioStreamFrequencyRatio(IntPtr stream, float ratio);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern float SDL_GetAudioStreamGain(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioStreamGain(IntPtr stream, float gain);
+    public static extern bool SDL_SetAudioStreamGain(IntPtr stream, float gain);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAudioStreamInputChannelMap(IntPtr stream, IntPtr count);
@@ -3797,13 +3778,13 @@ public static class SDL
     public static extern IntPtr SDL_GetAudioStreamOutputChannelMap(IntPtr stream, IntPtr count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioStreamInputChannelMap(IntPtr stream, IntPtr chmap, int count);
+    public static extern bool SDL_SetAudioStreamInputChannelMap(IntPtr stream, IntPtr chmap, int count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioStreamOutputChannelMap(IntPtr stream, IntPtr chmap, int count);
+    public static extern bool SDL_SetAudioStreamOutputChannelMap(IntPtr stream, IntPtr chmap, int count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PutAudioStreamData(IntPtr stream, IntPtr buf, int len);
+    public static extern bool SDL_PutAudioStreamData(IntPtr stream, IntPtr buf, int len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetAudioStreamData(IntPtr stream, IntPtr buf, int len);
@@ -3815,28 +3796,28 @@ public static class SDL
     public static extern int SDL_GetAudioStreamQueued(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_FlushAudioStream(IntPtr stream);
+    public static extern bool SDL_FlushAudioStream(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ClearAudioStream(IntPtr stream);
+    public static extern bool SDL_ClearAudioStream(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PauseAudioStreamDevice(IntPtr stream);
+    public static extern bool SDL_PauseAudioStreamDevice(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ResumeAudioStreamDevice(IntPtr stream);
+    public static extern bool SDL_ResumeAudioStreamDevice(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_LockAudioStream(IntPtr stream);
+    public static extern bool SDL_LockAudioStream(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_UnlockAudioStream(IntPtr stream);
+    public static extern bool SDL_UnlockAudioStream(IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioStreamGetCallback(IntPtr stream, IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_SetAudioStreamGetCallback(IntPtr stream, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioStreamPutCallback(IntPtr stream, IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_SetAudioStreamPutCallback(IntPtr stream, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DestroyAudioStream(IntPtr stream);
@@ -3845,19 +3826,19 @@ public static class SDL
     public static extern IntPtr SDL_OpenAudioDeviceStream(UInt32 devid, IntPtr spec, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAudioPostmixCallback(UInt32 devid, IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_SetAudioPostmixCallback(UInt32 devid, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_LoadWAV_IO(IntPtr src, int closeio, IntPtr spec, IntPtr audio_buf, IntPtr audio_len);
+    public static extern bool SDL_LoadWAV_IO(IntPtr src, bool closeio, IntPtr spec, IntPtr audio_buf, IntPtr audio_len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_LoadWAV(IntPtr path, IntPtr spec, IntPtr audio_buf, IntPtr audio_len);
+    public static extern bool SDL_LoadWAV(IntPtr path, IntPtr spec, IntPtr audio_buf, IntPtr audio_len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_MixAudio(IntPtr dst, IntPtr src, SDL_AudioFormat format, UInt32 len, float volume);
+    public static extern bool SDL_MixAudio(IntPtr dst, IntPtr src, SDL_AudioFormat format, UInt32 len, float volume);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ConvertAudioSamples(IntPtr src_spec, IntPtr src_data, int src_len, IntPtr dst_spec, IntPtr dst_data, IntPtr dst_len);
+    public static extern bool SDL_ConvertAudioSamples(IntPtr src_spec, IntPtr src_data, int src_len, IntPtr dst_spec, IntPtr dst_data, IntPtr dst_len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAudioFormatName(SDL_AudioFormat format);
@@ -3869,7 +3850,7 @@ public static class SDL
     public static extern int SDL_MostSignificantBitIndex32(UInt32 x);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasExactlyOneBitSet32(UInt32 x);
+    public static extern bool SDL_HasExactlyOneBitSet32(UInt32 x);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_ComposeCustomBlendMode(SDL_BlendFactor srcColorFactor, SDL_BlendFactor dstColorFactor, SDL_BlendOperation colorOperation, SDL_BlendFactor srcAlphaFactor, SDL_BlendFactor dstAlphaFactor, SDL_BlendOperation alphaOperation);
@@ -3878,7 +3859,7 @@ public static class SDL
     public static extern IntPtr SDL_GetPixelFormatName(SDL_PixelFormat format);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetMasksForPixelFormat(SDL_PixelFormat format, IntPtr bpp, IntPtr Rmask, IntPtr Gmask, IntPtr Bmask, IntPtr Amask);
+    public static extern bool SDL_GetMasksForPixelFormat(SDL_PixelFormat format, IntPtr bpp, IntPtr Rmask, IntPtr Gmask, IntPtr Bmask, IntPtr Amask);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_PixelFormat SDL_GetPixelFormatForMasks(int bpp, UInt32 Rmask, UInt32 Gmask, UInt32 Bmask, UInt32 Amask);
@@ -3890,7 +3871,7 @@ public static class SDL
     public static extern IntPtr SDL_CreatePalette(int ncolors);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetPaletteColors(IntPtr palette, IntPtr colors, int firstcolor, int ncolors);
+    public static extern bool SDL_SetPaletteColors(IntPtr palette, IntPtr colors, int firstcolor, int ncolors);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DestroyPalette(IntPtr palette);
@@ -3911,55 +3892,55 @@ public static class SDL
     public static extern void SDL_RectToFRect(IntPtr rect, IntPtr frect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PointInRect(IntPtr p, IntPtr r);
+    public static extern bool SDL_PointInRect(IntPtr p, IntPtr r);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RectEmpty(IntPtr r);
+    public static extern bool SDL_RectEmpty(IntPtr r);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RectsEqual(IntPtr a, IntPtr b);
+    public static extern bool SDL_RectsEqual(IntPtr a, IntPtr b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasRectIntersection(IntPtr A, IntPtr B);
+    public static extern bool SDL_HasRectIntersection(IntPtr A, IntPtr B);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRectIntersection(IntPtr A, IntPtr B, IntPtr result);
+    public static extern bool SDL_GetRectIntersection(IntPtr A, IntPtr B, IntPtr result);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRectUnion(IntPtr A, IntPtr B, IntPtr result);
+    public static extern bool SDL_GetRectUnion(IntPtr A, IntPtr B, IntPtr result);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRectEnclosingPoints(IntPtr points, int count, IntPtr clip, IntPtr result);
+    public static extern bool SDL_GetRectEnclosingPoints(IntPtr points, int count, IntPtr clip, IntPtr result);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRectAndLineIntersection(IntPtr rect, IntPtr X1, IntPtr Y1, IntPtr X2, IntPtr Y2);
+    public static extern bool SDL_GetRectAndLineIntersection(IntPtr rect, IntPtr X1, IntPtr Y1, IntPtr X2, IntPtr Y2);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PointInRectFloat(IntPtr p, IntPtr r);
+    public static extern bool SDL_PointInRectFloat(IntPtr p, IntPtr r);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RectEmptyFloat(IntPtr r);
+    public static extern bool SDL_RectEmptyFloat(IntPtr r);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RectsEqualEpsilon(IntPtr a, IntPtr b, float epsilon);
+    public static extern bool SDL_RectsEqualEpsilon(IntPtr a, IntPtr b, float epsilon);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RectsEqualFloat(IntPtr a, IntPtr b);
+    public static extern bool SDL_RectsEqualFloat(IntPtr a, IntPtr b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasRectIntersectionFloat(IntPtr A, IntPtr B);
+    public static extern bool SDL_HasRectIntersectionFloat(IntPtr A, IntPtr B);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRectIntersectionFloat(IntPtr A, IntPtr B, IntPtr result);
+    public static extern bool SDL_GetRectIntersectionFloat(IntPtr A, IntPtr B, IntPtr result);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRectUnionFloat(IntPtr A, IntPtr B, IntPtr result);
+    public static extern bool SDL_GetRectUnionFloat(IntPtr A, IntPtr B, IntPtr result);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRectEnclosingPointsFloat(IntPtr points, int count, IntPtr clip, IntPtr result);
+    public static extern bool SDL_GetRectEnclosingPointsFloat(IntPtr points, int count, IntPtr clip, IntPtr result);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRectAndLineIntersectionFloat(IntPtr rect, IntPtr X1, IntPtr Y1, IntPtr X2, IntPtr Y2);
+    public static extern bool SDL_GetRectAndLineIntersectionFloat(IntPtr rect, IntPtr X1, IntPtr Y1, IntPtr X2, IntPtr Y2);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateSurface(int width, int height, SDL_PixelFormat format);
@@ -3974,7 +3955,7 @@ public static class SDL
     public static extern UInt32 SDL_GetSurfaceProperties(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetSurfaceColorspace(IntPtr surface, SDL_Colorspace colorspace);
+    public static extern bool SDL_SetSurfaceColorspace(IntPtr surface, SDL_Colorspace colorspace);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_Colorspace SDL_GetSurfaceColorspace(IntPtr surface);
@@ -3983,16 +3964,16 @@ public static class SDL
     public static extern IntPtr SDL_CreateSurfacePalette(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetSurfacePalette(IntPtr surface, IntPtr palette);
+    public static extern bool SDL_SetSurfacePalette(IntPtr surface, IntPtr palette);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetSurfacePalette(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AddSurfaceAlternateImage(IntPtr surface, IntPtr image);
+    public static extern bool SDL_AddSurfaceAlternateImage(IntPtr surface, IntPtr image);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SurfaceHasAlternateImages(IntPtr surface);
+    public static extern bool SDL_SurfaceHasAlternateImages(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetSurfaceImages(IntPtr surface, IntPtr count);
@@ -4001,64 +3982,64 @@ public static class SDL
     public static extern void SDL_RemoveSurfaceAlternateImages(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_LockSurface(IntPtr surface);
+    public static extern bool SDL_LockSurface(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockSurface(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_LoadBMP_IO(IntPtr src, int closeio);
+    public static extern IntPtr SDL_LoadBMP_IO(IntPtr src, bool closeio);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_LoadBMP(IntPtr file);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SaveBMP_IO(IntPtr surface, IntPtr dst, int closeio);
+    public static extern bool SDL_SaveBMP_IO(IntPtr surface, IntPtr dst, bool closeio);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SaveBMP(IntPtr surface, IntPtr file);
+    public static extern bool SDL_SaveBMP(IntPtr surface, IntPtr file);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetSurfaceRLE(IntPtr surface, int enabled);
+    public static extern bool SDL_SetSurfaceRLE(IntPtr surface, bool enabled);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SurfaceHasRLE(IntPtr surface);
+    public static extern bool SDL_SurfaceHasRLE(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetSurfaceColorKey(IntPtr surface, int enabled, UInt32 key);
+    public static extern bool SDL_SetSurfaceColorKey(IntPtr surface, bool enabled, UInt32 key);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SurfaceHasColorKey(IntPtr surface);
+    public static extern bool SDL_SurfaceHasColorKey(IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetSurfaceColorKey(IntPtr surface, IntPtr key);
+    public static extern bool SDL_GetSurfaceColorKey(IntPtr surface, IntPtr key);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetSurfaceColorMod(IntPtr surface, byte r, byte g, byte b);
+    public static extern bool SDL_SetSurfaceColorMod(IntPtr surface, byte r, byte g, byte b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetSurfaceColorMod(IntPtr surface, IntPtr r, IntPtr g, IntPtr b);
+    public static extern bool SDL_GetSurfaceColorMod(IntPtr surface, IntPtr r, IntPtr g, IntPtr b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetSurfaceAlphaMod(IntPtr surface, byte alpha);
+    public static extern bool SDL_SetSurfaceAlphaMod(IntPtr surface, byte alpha);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetSurfaceAlphaMod(IntPtr surface, IntPtr alpha);
+    public static extern bool SDL_GetSurfaceAlphaMod(IntPtr surface, IntPtr alpha);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetSurfaceBlendMode(IntPtr surface, UInt32 blendMode);
+    public static extern bool SDL_SetSurfaceBlendMode(IntPtr surface, UInt32 blendMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetSurfaceBlendMode(IntPtr surface, IntPtr blendMode);
+    public static extern bool SDL_GetSurfaceBlendMode(IntPtr surface, IntPtr blendMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetSurfaceClipRect(IntPtr surface, IntPtr rect);
+    public static extern bool SDL_SetSurfaceClipRect(IntPtr surface, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetSurfaceClipRect(IntPtr surface, IntPtr rect);
+    public static extern bool SDL_GetSurfaceClipRect(IntPtr surface, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_FlipSurface(IntPtr surface, SDL_FlipMode flip);
+    public static extern bool SDL_FlipSurface(IntPtr surface, SDL_FlipMode flip);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_DuplicateSurface(IntPtr surface);
@@ -4073,46 +4054,46 @@ public static class SDL
     public static extern IntPtr SDL_ConvertSurfaceAndColorspace(IntPtr surface, SDL_PixelFormat format, IntPtr palette, SDL_Colorspace colorspace, UInt32 props);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ConvertPixels(int width, int height, SDL_PixelFormat src_format, IntPtr src, int src_pitch, SDL_PixelFormat dst_format, IntPtr dst, int dst_pitch);
+    public static extern bool SDL_ConvertPixels(int width, int height, SDL_PixelFormat src_format, IntPtr src, int src_pitch, SDL_PixelFormat dst_format, IntPtr dst, int dst_pitch);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ConvertPixelsAndColorspace(int width, int height, SDL_PixelFormat src_format, SDL_Colorspace src_colorspace, UInt32 src_properties, IntPtr src, int src_pitch, SDL_PixelFormat dst_format, SDL_Colorspace dst_colorspace, UInt32 dst_properties, IntPtr dst, int dst_pitch);
+    public static extern bool SDL_ConvertPixelsAndColorspace(int width, int height, SDL_PixelFormat src_format, SDL_Colorspace src_colorspace, UInt32 src_properties, IntPtr src, int src_pitch, SDL_PixelFormat dst_format, SDL_Colorspace dst_colorspace, UInt32 dst_properties, IntPtr dst, int dst_pitch);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PremultiplyAlpha(int width, int height, SDL_PixelFormat src_format, IntPtr src, int src_pitch, SDL_PixelFormat dst_format, IntPtr dst, int dst_pitch, int linear);
+    public static extern bool SDL_PremultiplyAlpha(int width, int height, SDL_PixelFormat src_format, IntPtr src, int src_pitch, SDL_PixelFormat dst_format, IntPtr dst, int dst_pitch, bool linear);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PremultiplySurfaceAlpha(IntPtr surface, int linear);
+    public static extern bool SDL_PremultiplySurfaceAlpha(IntPtr surface, bool linear);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ClearSurface(IntPtr surface, float r, float g, float b, float a);
+    public static extern bool SDL_ClearSurface(IntPtr surface, float r, float g, float b, float a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_FillSurfaceRect(IntPtr dst, IntPtr rect, UInt32 color);
+    public static extern bool SDL_FillSurfaceRect(IntPtr dst, IntPtr rect, UInt32 color);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_FillSurfaceRects(IntPtr dst, IntPtr rects, int count, UInt32 color);
+    public static extern bool SDL_FillSurfaceRects(IntPtr dst, IntPtr rects, int count, UInt32 color);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BlitSurface(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect);
+    public static extern bool SDL_BlitSurface(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BlitSurfaceUnchecked(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect);
+    public static extern bool SDL_BlitSurfaceUnchecked(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BlitSurfaceScaled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect, SDL_ScaleMode scaleMode);
+    public static extern bool SDL_BlitSurfaceScaled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect, SDL_ScaleMode scaleMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BlitSurfaceUncheckedScaled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect, SDL_ScaleMode scaleMode);
+    public static extern bool SDL_BlitSurfaceUncheckedScaled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect, SDL_ScaleMode scaleMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BlitSurfaceTiled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect);
+    public static extern bool SDL_BlitSurfaceTiled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BlitSurfaceTiledWithScale(IntPtr src, IntPtr srcrect, float scale, SDL_ScaleMode scaleMode, IntPtr dst, IntPtr dstrect);
+    public static extern bool SDL_BlitSurfaceTiledWithScale(IntPtr src, IntPtr srcrect, float scale, SDL_ScaleMode scaleMode, IntPtr dst, IntPtr dstrect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_BlitSurface9Grid(IntPtr src, IntPtr srcrect, int left_width, int right_width, int top_height, int bottom_height, float scale, SDL_ScaleMode scaleMode, IntPtr dst, IntPtr dstrect);
+    public static extern bool SDL_BlitSurface9Grid(IntPtr src, IntPtr srcrect, int left_width, int right_width, int top_height, int bottom_height, float scale, SDL_ScaleMode scaleMode, IntPtr dst, IntPtr dstrect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_MapSurfaceRGB(IntPtr surface, byte r, byte g, byte b);
@@ -4121,16 +4102,16 @@ public static class SDL
     public static extern UInt32 SDL_MapSurfaceRGBA(IntPtr surface, byte r, byte g, byte b, byte a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadSurfacePixel(IntPtr surface, int x, int y, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
+    public static extern bool SDL_ReadSurfacePixel(IntPtr surface, int x, int y, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadSurfacePixelFloat(IntPtr surface, int x, int y, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
+    public static extern bool SDL_ReadSurfacePixelFloat(IntPtr surface, int x, int y, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteSurfacePixel(IntPtr surface, int x, int y, byte r, byte g, byte b, byte a);
+    public static extern bool SDL_WriteSurfacePixel(IntPtr surface, int x, int y, byte r, byte g, byte b, byte a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteSurfacePixelFloat(IntPtr surface, int x, int y, float r, float g, float b, float a);
+    public static extern bool SDL_WriteSurfacePixelFloat(IntPtr surface, int x, int y, float r, float g, float b, float a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetNumVideoDrivers();
@@ -4157,10 +4138,10 @@ public static class SDL
     public static extern IntPtr SDL_GetDisplayName(UInt32 displayID);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetDisplayBounds(UInt32 displayID, IntPtr rect);
+    public static extern bool SDL_GetDisplayBounds(UInt32 displayID, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetDisplayUsableBounds(UInt32 displayID, IntPtr rect);
+    public static extern bool SDL_GetDisplayUsableBounds(UInt32 displayID, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_DisplayOrientation SDL_GetNaturalDisplayOrientation(UInt32 displayID);
@@ -4175,7 +4156,7 @@ public static class SDL
     public static extern IntPtr SDL_GetFullscreenDisplayModes(UInt32 displayID, IntPtr count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetClosestFullscreenDisplayMode(UInt32 displayID, int w, int h, float refresh_rate, int include_high_density_modes, IntPtr mode);
+    public static extern bool SDL_GetClosestFullscreenDisplayMode(UInt32 displayID, int w, int h, float refresh_rate, bool include_high_density_modes, IntPtr mode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetDesktopDisplayMode(UInt32 displayID);
@@ -4199,7 +4180,7 @@ public static class SDL
     public static extern float SDL_GetWindowDisplayScale(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowFullscreenMode(IntPtr window, IntPtr mode);
+    public static extern bool SDL_SetWindowFullscreenMode(IntPtr window, IntPtr mode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetWindowFullscreenMode(IntPtr window);
@@ -4238,166 +4219,166 @@ public static class SDL
     public static extern UInt64 SDL_GetWindowFlags(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowTitle(IntPtr window, IntPtr title);
+    public static extern bool SDL_SetWindowTitle(IntPtr window, IntPtr title);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetWindowTitle(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowIcon(IntPtr window, IntPtr icon);
+    public static extern bool SDL_SetWindowIcon(IntPtr window, IntPtr icon);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowPosition(IntPtr window, int x, int y);
+    public static extern bool SDL_SetWindowPosition(IntPtr window, int x, int y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowPosition(IntPtr window, IntPtr x, IntPtr y);
+    public static extern bool SDL_GetWindowPosition(IntPtr window, IntPtr x, IntPtr y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowSize(IntPtr window, int w, int h);
+    public static extern bool SDL_SetWindowSize(IntPtr window, int w, int h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowSize(IntPtr window, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetWindowSize(IntPtr window, IntPtr w, IntPtr h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowSafeArea(IntPtr window, IntPtr rect);
+    public static extern bool SDL_GetWindowSafeArea(IntPtr window, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowAspectRatio(IntPtr window, float min_aspect, float max_aspect);
+    public static extern bool SDL_SetWindowAspectRatio(IntPtr window, float min_aspect, float max_aspect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowAspectRatio(IntPtr window, IntPtr min_aspect, IntPtr max_aspect);
+    public static extern bool SDL_GetWindowAspectRatio(IntPtr window, IntPtr min_aspect, IntPtr max_aspect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowBordersSize(IntPtr window, IntPtr top, IntPtr left, IntPtr bottom, IntPtr right);
+    public static extern bool SDL_GetWindowBordersSize(IntPtr window, IntPtr top, IntPtr left, IntPtr bottom, IntPtr right);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowSizeInPixels(IntPtr window, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetWindowSizeInPixels(IntPtr window, IntPtr w, IntPtr h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowMinimumSize(IntPtr window, int min_w, int min_h);
+    public static extern bool SDL_SetWindowMinimumSize(IntPtr window, int min_w, int min_h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowMinimumSize(IntPtr window, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetWindowMinimumSize(IntPtr window, IntPtr w, IntPtr h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowMaximumSize(IntPtr window, int max_w, int max_h);
+    public static extern bool SDL_SetWindowMaximumSize(IntPtr window, int max_w, int max_h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowMaximumSize(IntPtr window, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetWindowMaximumSize(IntPtr window, IntPtr w, IntPtr h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowBordered(IntPtr window, int bordered);
+    public static extern bool SDL_SetWindowBordered(IntPtr window, bool bordered);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowResizable(IntPtr window, int resizable);
+    public static extern bool SDL_SetWindowResizable(IntPtr window, bool resizable);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowAlwaysOnTop(IntPtr window, int on_top);
+    public static extern bool SDL_SetWindowAlwaysOnTop(IntPtr window, bool on_top);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ShowWindow(IntPtr window);
+    public static extern bool SDL_ShowWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HideWindow(IntPtr window);
+    public static extern bool SDL_HideWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RaiseWindow(IntPtr window);
+    public static extern bool SDL_RaiseWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_MaximizeWindow(IntPtr window);
+    public static extern bool SDL_MaximizeWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_MinimizeWindow(IntPtr window);
+    public static extern bool SDL_MinimizeWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RestoreWindow(IntPtr window);
+    public static extern bool SDL_RestoreWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowFullscreen(IntPtr window, int fullscreen);
+    public static extern bool SDL_SetWindowFullscreen(IntPtr window, bool fullscreen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SyncWindow(IntPtr window);
+    public static extern bool SDL_SyncWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WindowHasSurface(IntPtr window);
+    public static extern bool SDL_WindowHasSurface(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetWindowSurface(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowSurfaceVSync(IntPtr window, int vsync);
+    public static extern bool SDL_SetWindowSurfaceVSync(IntPtr window, int vsync);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowSurfaceVSync(IntPtr window, IntPtr vsync);
+    public static extern bool SDL_GetWindowSurfaceVSync(IntPtr window, IntPtr vsync);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_UpdateWindowSurface(IntPtr window);
+    public static extern bool SDL_UpdateWindowSurface(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_UpdateWindowSurfaceRects(IntPtr window, IntPtr rects, int numrects);
+    public static extern bool SDL_UpdateWindowSurfaceRects(IntPtr window, IntPtr rects, int numrects);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_DestroyWindowSurface(IntPtr window);
+    public static extern bool SDL_DestroyWindowSurface(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowKeyboardGrab(IntPtr window, int grabbed);
+    public static extern bool SDL_SetWindowKeyboardGrab(IntPtr window, bool grabbed);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowMouseGrab(IntPtr window, int grabbed);
+    public static extern bool SDL_SetWindowMouseGrab(IntPtr window, bool grabbed);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowKeyboardGrab(IntPtr window);
+    public static extern bool SDL_GetWindowKeyboardGrab(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowMouseGrab(IntPtr window);
+    public static extern bool SDL_GetWindowMouseGrab(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGrabbedWindow();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowMouseRect(IntPtr window, IntPtr rect);
+    public static extern bool SDL_SetWindowMouseRect(IntPtr window, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetWindowMouseRect(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowOpacity(IntPtr window, float opacity);
+    public static extern bool SDL_SetWindowOpacity(IntPtr window, float opacity);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern float SDL_GetWindowOpacity(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowModalFor(IntPtr modal_window, IntPtr parent_window);
+    public static extern bool SDL_SetWindowModalFor(IntPtr modal_window, IntPtr parent_window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowFocusable(IntPtr window, int focusable);
+    public static extern bool SDL_SetWindowFocusable(IntPtr window, bool focusable);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ShowWindowSystemMenu(IntPtr window, int x, int y);
+    public static extern bool SDL_ShowWindowSystemMenu(IntPtr window, int x, int y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowHitTest(IntPtr window, IntPtr callback, IntPtr callback_data);
+    public static extern bool SDL_SetWindowHitTest(IntPtr window, IntPtr callback, IntPtr callback_data);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowShape(IntPtr window, IntPtr shape);
+    public static extern bool SDL_SetWindowShape(IntPtr window, IntPtr shape);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_FlashWindow(IntPtr window, SDL_FlashOperation operation);
+    public static extern bool SDL_FlashWindow(IntPtr window, SDL_FlashOperation operation);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DestroyWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ScreenSaverEnabled();
+    public static extern bool SDL_ScreenSaverEnabled();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_EnableScreenSaver();
+    public static extern bool SDL_EnableScreenSaver();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_DisableScreenSaver();
+    public static extern bool SDL_DisableScreenSaver();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_LoadLibrary(IntPtr path);
+    public static extern bool SDL_GL_LoadLibrary(IntPtr path);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GL_GetProcAddress(IntPtr proc);
@@ -4409,22 +4390,22 @@ public static class SDL
     public static extern void SDL_GL_UnloadLibrary();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_ExtensionSupported(IntPtr extension);
+    public static extern bool SDL_GL_ExtensionSupported(IntPtr extension);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GL_ResetAttributes();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_SetAttribute(SDL_GLattr attr, int value);
+    public static extern bool SDL_GL_SetAttribute(SDL_GLattr attr, int value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_GetAttribute(SDL_GLattr attr, IntPtr value);
+    public static extern bool SDL_GL_GetAttribute(SDL_GLattr attr, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GL_CreateContext(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_MakeCurrent(IntPtr window, IntPtr context);
+    public static extern bool SDL_GL_MakeCurrent(IntPtr window, IntPtr context);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GL_GetCurrentWindow();
@@ -4445,16 +4426,16 @@ public static class SDL
     public static extern void SDL_EGL_SetAttributeCallbacks(IntPtr platformAttribCallback, IntPtr surfaceAttribCallback, IntPtr contextAttribCallback);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_SetSwapInterval(int interval);
+    public static extern bool SDL_GL_SetSwapInterval(int interval);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_GetSwapInterval(IntPtr interval);
+    public static extern bool SDL_GL_GetSwapInterval(IntPtr interval);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_SwapWindow(IntPtr window);
+    public static extern bool SDL_GL_SwapWindow(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GL_DestroyContext(IntPtr context);
+    public static extern bool SDL_GL_DestroyContext(IntPtr context);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetNumCameraDrivers();
@@ -4490,46 +4471,46 @@ public static class SDL
     public static extern UInt32 SDL_GetCameraProperties(IntPtr camera);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetCameraFormat(IntPtr camera, IntPtr spec);
+    public static extern bool SDL_GetCameraFormat(IntPtr camera, IntPtr spec);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_AcquireCameraFrame(IntPtr camera, IntPtr timestampNS);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReleaseCameraFrame(IntPtr camera, IntPtr frame);
+    public static extern void SDL_ReleaseCameraFrame(IntPtr camera, IntPtr frame);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_CloseCamera(IntPtr camera);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetClipboardText(IntPtr text);
+    public static extern bool SDL_SetClipboardText(IntPtr text);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetClipboardText();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasClipboardText();
+    public static extern bool SDL_HasClipboardText();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetPrimarySelectionText(IntPtr text);
+    public static extern bool SDL_SetPrimarySelectionText(IntPtr text);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetPrimarySelectionText();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasPrimarySelectionText();
+    public static extern bool SDL_HasPrimarySelectionText();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetClipboardData(IntPtr callback, IntPtr cleanup, IntPtr userdata, IntPtr mime_types, UInt32 num_mime_types);
+    public static extern bool SDL_SetClipboardData(IntPtr callback, IntPtr cleanup, IntPtr userdata, IntPtr mime_types, UInt32 num_mime_types);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ClearClipboardData();
+    public static extern bool SDL_ClearClipboardData();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetClipboardData(IntPtr mime_type, IntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasClipboardData(IntPtr mime_type);
+    public static extern bool SDL_HasClipboardData(IntPtr mime_type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetCPUCount();
@@ -4538,46 +4519,46 @@ public static class SDL
     public static extern int SDL_GetCPUCacheLineSize();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasAltiVec();
+    public static extern bool SDL_HasAltiVec();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasMMX();
+    public static extern bool SDL_HasMMX();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasSSE();
+    public static extern bool SDL_HasSSE();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasSSE2();
+    public static extern bool SDL_HasSSE2();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasSSE3();
+    public static extern bool SDL_HasSSE3();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasSSE41();
+    public static extern bool SDL_HasSSE41();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasSSE42();
+    public static extern bool SDL_HasSSE42();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasAVX();
+    public static extern bool SDL_HasAVX();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasAVX2();
+    public static extern bool SDL_HasAVX2();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasAVX512F();
+    public static extern bool SDL_HasAVX512F();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasARMSIMD();
+    public static extern bool SDL_HasARMSIMD();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasNEON();
+    public static extern bool SDL_HasNEON();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasLSX();
+    public static extern bool SDL_HasLSX();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasLASX();
+    public static extern bool SDL_HasLASX();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetSystemRAM();
@@ -4586,13 +4567,13 @@ public static class SDL
     public static extern UInt32 SDL_GetSIMDAlignment();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ShowOpenFileDialog(IntPtr callback, IntPtr userdata, IntPtr window, IntPtr filters, int nfilters, IntPtr default_location, int allow_many);
+    public static extern void SDL_ShowOpenFileDialog(IntPtr callback, IntPtr userdata, IntPtr window, IntPtr filters, int nfilters, IntPtr default_location, bool allow_many);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ShowSaveFileDialog(IntPtr callback, IntPtr userdata, IntPtr window, IntPtr filters, int nfilters, IntPtr default_location);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ShowOpenFolderDialog(IntPtr callback, IntPtr userdata, IntPtr window, IntPtr default_location, int allow_many);
+    public static extern void SDL_ShowOpenFolderDialog(IntPtr callback, IntPtr userdata, IntPtr window, IntPtr default_location, bool allow_many);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GUIDToString(SDL_GUID guid, IntPtr pszGUID, int cbGUID);
@@ -4637,7 +4618,7 @@ public static class SDL
     public static extern UInt32 SDL_GetSensorID(IntPtr sensor);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetSensorData(IntPtr sensor, IntPtr data, int num_values);
+    public static extern bool SDL_GetSensorData(IntPtr sensor, IntPtr data, int num_values);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_CloseSensor(IntPtr sensor);
@@ -4652,7 +4633,7 @@ public static class SDL
     public static extern void SDL_UnlockJoysticks();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasJoystick();
+    public static extern bool SDL_HasJoystick();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetJoysticks(IntPtr count);
@@ -4694,28 +4675,28 @@ public static class SDL
     public static extern UInt32 SDL_AttachVirtualJoystick(IntPtr desc);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_DetachVirtualJoystick(UInt32 instance_id);
+    public static extern bool SDL_DetachVirtualJoystick(UInt32 instance_id);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_IsJoystickVirtual(UInt32 instance_id);
+    public static extern bool SDL_IsJoystickVirtual(UInt32 instance_id);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetJoystickVirtualAxis(IntPtr joystick, int axis, Int16 value);
+    public static extern bool SDL_SetJoystickVirtualAxis(IntPtr joystick, int axis, Int16 value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetJoystickVirtualBall(IntPtr joystick, int ball, Int16 xrel, Int16 yrel);
+    public static extern bool SDL_SetJoystickVirtualBall(IntPtr joystick, int ball, Int16 xrel, Int16 yrel);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetJoystickVirtualButton(IntPtr joystick, int button, byte value);
+    public static extern bool SDL_SetJoystickVirtualButton(IntPtr joystick, int button, byte value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetJoystickVirtualHat(IntPtr joystick, int hat, byte value);
+    public static extern bool SDL_SetJoystickVirtualHat(IntPtr joystick, int hat, byte value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetJoystickVirtualTouchpad(IntPtr joystick, int touchpad, int finger, byte state, float x, float y, float pressure);
+    public static extern bool SDL_SetJoystickVirtualTouchpad(IntPtr joystick, int touchpad, int finger, byte state, float x, float y, float pressure);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, UInt64 sensor_timestamp, IntPtr data, int num_values);
+    public static extern bool SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, UInt64 sensor_timestamp, IntPtr data, int num_values);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_GetJoystickProperties(IntPtr joystick);
@@ -4730,7 +4711,7 @@ public static class SDL
     public static extern int SDL_GetJoystickPlayerIndex(IntPtr joystick);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetJoystickPlayerIndex(IntPtr joystick, int player_index);
+    public static extern bool SDL_SetJoystickPlayerIndex(IntPtr joystick, int player_index);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_GUID SDL_GetJoystickGUID(IntPtr joystick);
@@ -4757,7 +4738,7 @@ public static class SDL
     public static extern void SDL_GetJoystickGUIDInfo(SDL_GUID guid, IntPtr vendor, IntPtr product, IntPtr version, IntPtr crc16);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_JoystickConnected(IntPtr joystick);
+    public static extern bool SDL_JoystickConnected(IntPtr joystick);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_GetJoystickID(IntPtr joystick);
@@ -4775,10 +4756,10 @@ public static class SDL
     public static extern int SDL_GetNumJoystickButtons(IntPtr joystick);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_SetJoystickEventsEnabled(int enabled);
+    public static extern void SDL_SetJoystickEventsEnabled(bool enabled);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_JoystickEventsEnabled();
+    public static extern bool SDL_JoystickEventsEnabled();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UpdateJoysticks();
@@ -4787,10 +4768,10 @@ public static class SDL
     public static extern Int16 SDL_GetJoystickAxis(IntPtr joystick, int axis);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetJoystickAxisInitialState(IntPtr joystick, int axis, IntPtr state);
+    public static extern bool SDL_GetJoystickAxisInitialState(IntPtr joystick, int axis, IntPtr state);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetJoystickBall(IntPtr joystick, int ball, IntPtr dx, IntPtr dy);
+    public static extern bool SDL_GetJoystickBall(IntPtr joystick, int ball, IntPtr dx, IntPtr dy);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern byte SDL_GetJoystickHat(IntPtr joystick, int hat);
@@ -4799,16 +4780,16 @@ public static class SDL
     public static extern byte SDL_GetJoystickButton(IntPtr joystick, int button);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RumbleJoystick(IntPtr joystick, UInt16 low_frequency_rumble, UInt16 high_frequency_rumble, UInt32 duration_ms);
+    public static extern bool SDL_RumbleJoystick(IntPtr joystick, UInt16 low_frequency_rumble, UInt16 high_frequency_rumble, UInt32 duration_ms);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RumbleJoystickTriggers(IntPtr joystick, UInt16 left_rumble, UInt16 right_rumble, UInt32 duration_ms);
+    public static extern bool SDL_RumbleJoystickTriggers(IntPtr joystick, UInt16 left_rumble, UInt16 right_rumble, UInt32 duration_ms);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetJoystickLED(IntPtr joystick, byte red, byte green, byte blue);
+    public static extern bool SDL_SetJoystickLED(IntPtr joystick, byte red, byte green, byte blue);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SendJoystickEffect(IntPtr joystick, IntPtr data, int size);
+    public static extern bool SDL_SendJoystickEffect(IntPtr joystick, IntPtr data, int size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_CloseJoystick(IntPtr joystick);
@@ -4823,13 +4804,13 @@ public static class SDL
     public static extern int SDL_AddGamepadMapping(IntPtr mapping);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AddGamepadMappingsFromIO(IntPtr src, int closeio);
+    public static extern int SDL_AddGamepadMappingsFromIO(IntPtr src, bool closeio);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_AddGamepadMappingsFromFile(IntPtr file);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReloadGamepadMappings();
+    public static extern bool SDL_ReloadGamepadMappings();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadMappings(IntPtr count);
@@ -4841,16 +4822,16 @@ public static class SDL
     public static extern IntPtr SDL_GetGamepadMapping(IntPtr gamepad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetGamepadMapping(UInt32 instance_id, IntPtr mapping);
+    public static extern bool SDL_SetGamepadMapping(UInt32 instance_id, IntPtr mapping);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasGamepad();
+    public static extern bool SDL_HasGamepad();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepads(IntPtr count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_IsGamepad(UInt32 instance_id);
+    public static extern bool SDL_IsGamepad(UInt32 instance_id);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadNameForID(UInt32 instance_id);
@@ -4913,7 +4894,7 @@ public static class SDL
     public static extern int SDL_GetGamepadPlayerIndex(IntPtr gamepad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetGamepadPlayerIndex(IntPtr gamepad, int player_index);
+    public static extern bool SDL_SetGamepadPlayerIndex(IntPtr gamepad, int player_index);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt16 SDL_GetGamepadVendor(IntPtr gamepad);
@@ -4940,16 +4921,16 @@ public static class SDL
     public static extern SDL_PowerState SDL_GetGamepadPowerInfo(IntPtr gamepad, IntPtr percent);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GamepadConnected(IntPtr gamepad);
+    public static extern bool SDL_GamepadConnected(IntPtr gamepad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadJoystick(IntPtr gamepad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_SetGamepadEventsEnabled(int enabled);
+    public static extern void SDL_SetGamepadEventsEnabled(bool enabled);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GamepadEventsEnabled();
+    public static extern bool SDL_GamepadEventsEnabled();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadBindings(IntPtr gamepad, IntPtr count);
@@ -4970,7 +4951,7 @@ public static class SDL
     public static extern IntPtr SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GamepadHasAxis(IntPtr gamepad, SDL_GamepadAxis axis);
+    public static extern bool SDL_GamepadHasAxis(IntPtr gamepad, SDL_GamepadAxis axis);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern Int16 SDL_GetGamepadAxis(IntPtr gamepad, SDL_GamepadAxis axis);
@@ -4982,7 +4963,7 @@ public static class SDL
     public static extern IntPtr SDL_GetGamepadStringForButton(SDL_GamepadButton button);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GamepadHasButton(IntPtr gamepad, SDL_GamepadButton button);
+    public static extern bool SDL_GamepadHasButton(IntPtr gamepad, SDL_GamepadButton button);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern byte SDL_GetGamepadButton(IntPtr gamepad, SDL_GamepadButton button);
@@ -5000,34 +4981,34 @@ public static class SDL
     public static extern int SDL_GetNumGamepadTouchpadFingers(IntPtr gamepad, int touchpad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, IntPtr state, IntPtr x, IntPtr y, IntPtr pressure);
+    public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, IntPtr state, IntPtr x, IntPtr y, IntPtr pressure);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GamepadHasSensor(IntPtr gamepad, SDL_SensorType type);
+    public static extern bool SDL_GamepadHasSensor(IntPtr gamepad, SDL_SensorType type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetGamepadSensorEnabled(IntPtr gamepad, SDL_SensorType type, int enabled);
+    public static extern bool SDL_SetGamepadSensorEnabled(IntPtr gamepad, SDL_SensorType type, bool enabled);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GamepadSensorEnabled(IntPtr gamepad, SDL_SensorType type);
+    public static extern bool SDL_GamepadSensorEnabled(IntPtr gamepad, SDL_SensorType type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern float SDL_GetGamepadSensorDataRate(IntPtr gamepad, SDL_SensorType type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, IntPtr data, int num_values);
+    public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, IntPtr data, int num_values);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RumbleGamepad(IntPtr gamepad, UInt16 low_frequency_rumble, UInt16 high_frequency_rumble, UInt32 duration_ms);
+    public static extern bool SDL_RumbleGamepad(IntPtr gamepad, UInt16 low_frequency_rumble, UInt16 high_frequency_rumble, UInt32 duration_ms);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RumbleGamepadTriggers(IntPtr gamepad, UInt16 left_rumble, UInt16 right_rumble, UInt32 duration_ms);
+    public static extern bool SDL_RumbleGamepadTriggers(IntPtr gamepad, UInt16 left_rumble, UInt16 right_rumble, UInt32 duration_ms);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetGamepadLED(IntPtr gamepad, byte red, byte green, byte blue);
+    public static extern bool SDL_SetGamepadLED(IntPtr gamepad, byte red, byte green, byte blue);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SendGamepadEffect(IntPtr gamepad, IntPtr data, int size);
+    public static extern bool SDL_SendGamepadEffect(IntPtr gamepad, IntPtr data, int size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_CloseGamepad(IntPtr gamepad);
@@ -5039,7 +5020,7 @@ public static class SDL
     public static extern IntPtr SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasKeyboard();
+    public static extern bool SDL_HasKeyboard();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetKeyboards(IntPtr count);
@@ -5063,13 +5044,13 @@ public static class SDL
     public static extern void SDL_SetModState(UInt16 modstate);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_GetKeyFromScancode(SDL_Scancode scancode, UInt16 modstate, int key_event);
+    public static extern UInt32 SDL_GetKeyFromScancode(SDL_Scancode scancode, UInt16 modstate, bool key_event);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_Scancode SDL_GetScancodeFromKey(UInt32 key, IntPtr modstate);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetScancodeName(SDL_Scancode scancode, IntPtr name);
+    public static extern bool SDL_SetScancodeName(SDL_Scancode scancode, IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetScancodeName(SDL_Scancode scancode);
@@ -5084,34 +5065,34 @@ public static class SDL
     public static extern UInt32 SDL_GetKeyFromName(IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_StartTextInput(IntPtr window);
+    public static extern bool SDL_StartTextInput(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_StartTextInputWithProperties(IntPtr window, UInt32 props);
+    public static extern bool SDL_StartTextInputWithProperties(IntPtr window, UInt32 props);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_TextInputActive(IntPtr window);
+    public static extern bool SDL_TextInputActive(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_StopTextInput(IntPtr window);
+    public static extern bool SDL_StopTextInput(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ClearComposition(IntPtr window);
+    public static extern bool SDL_ClearComposition(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetTextInputArea(IntPtr window, IntPtr rect, int cursor);
+    public static extern bool SDL_SetTextInputArea(IntPtr window, IntPtr rect, int cursor);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetTextInputArea(IntPtr window, IntPtr rect, IntPtr cursor);
+    public static extern bool SDL_GetTextInputArea(IntPtr window, IntPtr rect, IntPtr cursor);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasScreenKeyboardSupport();
+    public static extern bool SDL_HasScreenKeyboardSupport();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ScreenKeyboardShown(IntPtr window);
+    public static extern bool SDL_ScreenKeyboardShown(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasMouse();
+    public static extern bool SDL_HasMouse();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetMice(IntPtr count);
@@ -5135,16 +5116,16 @@ public static class SDL
     public static extern void SDL_WarpMouseInWindow(IntPtr window, float x, float y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WarpMouseGlobal(float x, float y);
+    public static extern bool SDL_WarpMouseGlobal(float x, float y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetWindowRelativeMouseMode(IntPtr window, int enabled);
+    public static extern bool SDL_SetWindowRelativeMouseMode(IntPtr window, bool enabled);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetWindowRelativeMouseMode(IntPtr window);
+    public static extern bool SDL_GetWindowRelativeMouseMode(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CaptureMouse(int enabled);
+    public static extern bool SDL_CaptureMouse(bool enabled);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateCursor(IntPtr data, IntPtr mask, int w, int h, int hot_x, int hot_y);
@@ -5156,7 +5137,7 @@ public static class SDL
     public static extern IntPtr SDL_CreateSystemCursor(SDL_SystemCursor id);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetCursor(IntPtr cursor);
+    public static extern bool SDL_SetCursor(IntPtr cursor);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetCursor();
@@ -5168,13 +5149,13 @@ public static class SDL
     public static extern void SDL_DestroyCursor(IntPtr cursor);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ShowCursor();
+    public static extern bool SDL_ShowCursor();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HideCursor();
+    public static extern bool SDL_HideCursor();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CursorVisible();
+    public static extern bool SDL_CursorVisible();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetTouchDevices(IntPtr count);
@@ -5195,10 +5176,10 @@ public static class SDL
     public static extern int SDL_PeepEvents(IntPtr events, int numevents, SDL_EventAction action, UInt32 minType, UInt32 maxType);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasEvent(UInt32 type);
+    public static extern bool SDL_HasEvent(UInt32 type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HasEvents(UInt32 minType, UInt32 maxType);
+    public static extern bool SDL_HasEvents(UInt32 minType, UInt32 maxType);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_FlushEvent(UInt32 type);
@@ -5207,37 +5188,37 @@ public static class SDL
     public static extern void SDL_FlushEvents(UInt32 minType, UInt32 maxType);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PollEvent(IntPtr @event);
+    public static extern bool SDL_PollEvent(IntPtr @event);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WaitEvent(IntPtr @event);
+    public static extern bool SDL_WaitEvent(IntPtr @event);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WaitEventTimeout(IntPtr @event, Int32 timeoutMS);
+    public static extern bool SDL_WaitEventTimeout(IntPtr @event, Int32 timeoutMS);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PushEvent(IntPtr @event);
+    public static extern bool SDL_PushEvent(IntPtr @event);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetEventFilter(IntPtr filter, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetEventFilter(IntPtr filter, IntPtr userdata);
+    public static extern bool SDL_GetEventFilter(IntPtr filter, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AddEventWatch(IntPtr filter, IntPtr userdata);
+    public static extern bool SDL_AddEventWatch(IntPtr filter, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DelEventWatch(IntPtr filter, IntPtr userdata);
+    public static extern void SDL_RemoveEventWatch(IntPtr filter, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_FilterEvents(IntPtr filter, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_SetEventEnabled(UInt32 type, int enabled);
+    public static extern void SDL_SetEventEnabled(UInt32 type, bool enabled);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_EventEnabled(UInt32 type);
+    public static extern bool SDL_EventEnabled(UInt32 type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_RegisterEvents(int numevents);
@@ -5255,262 +5236,262 @@ public static class SDL
     public static extern IntPtr SDL_GetUserFolder(SDL_Folder folder);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CreateDirectory(IntPtr path);
+    public static extern bool SDL_CreateDirectory(IntPtr path);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_EnumerateDirectory(IntPtr path, IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_EnumerateDirectory(IntPtr path, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RemovePath(IntPtr path);
+    public static extern bool SDL_RemovePath(IntPtr path);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenamePath(IntPtr oldpath, IntPtr newpath);
+    public static extern bool SDL_RenamePath(IntPtr oldpath, IntPtr newpath);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CopyFile(IntPtr oldpath, IntPtr newpath);
+    public static extern bool SDL_CopyFile(IntPtr oldpath, IntPtr newpath);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetPathInfo(IntPtr path, IntPtr info);
+    public static extern bool SDL_GetPathInfo(IntPtr path, IntPtr info);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GlobDirectory(IntPtr path, IntPtr pattern, UInt32 flags, IntPtr count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateDevice(UInt32 formatFlags, int debugMode, int preferLowPower, IntPtr name);
+    public static extern IntPtr SDL_CreateGPUDevice(UInt32 formatFlags, bool debugMode, IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateDeviceWithProperties(UInt32 props);
+    public static extern IntPtr SDL_CreateGPUDeviceWithProperties(UInt32 props);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDestroyDevice(IntPtr device);
+    public static extern void SDL_DestroyGPUDevice(IntPtr device);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_GpuDriver SDL_GpuGetDriver(IntPtr device);
+    public static extern SDL_GPUDriver SDL_GetGPUDriver(IntPtr device);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateComputePipeline(IntPtr device, IntPtr computePipelineCreateInfo);
+    public static extern IntPtr SDL_CreateGPUComputePipeline(IntPtr device, IntPtr computePipelineCreateInfo);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateGraphicsPipeline(IntPtr device, IntPtr pipelineCreateInfo);
+    public static extern IntPtr SDL_CreateGPUGraphicsPipeline(IntPtr device, IntPtr pipelineCreateInfo);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateSampler(IntPtr device, IntPtr samplerCreateInfo);
+    public static extern IntPtr SDL_CreateGPUSampler(IntPtr device, IntPtr samplerCreateInfo);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateShader(IntPtr device, IntPtr shaderCreateInfo);
+    public static extern IntPtr SDL_CreateGPUShader(IntPtr device, IntPtr shaderCreateInfo);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateTexture(IntPtr device, IntPtr textureCreateInfo);
+    public static extern IntPtr SDL_CreateGPUTexture(IntPtr device, IntPtr textureCreateInfo);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateBuffer(IntPtr device, IntPtr bufferCreateInfo);
+    public static extern IntPtr SDL_CreateGPUBuffer(IntPtr device, IntPtr bufferCreateInfo);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuCreateTransferBuffer(IntPtr device, IntPtr transferBufferCreateInfo);
+    public static extern IntPtr SDL_CreateGPUTransferBuffer(IntPtr device, IntPtr transferBufferCreateInfo);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuSetBufferName(IntPtr device, IntPtr buffer, IntPtr text);
+    public static extern void SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, IntPtr text);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuSetTextureName(IntPtr device, IntPtr texture, IntPtr text);
+    public static extern void SDL_SetGPUTextureName(IntPtr device, IntPtr texture, IntPtr text);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuInsertDebugLabel(IntPtr commandBuffer, IntPtr text);
+    public static extern void SDL_InsertGPUDebugLabel(IntPtr commandBuffer, IntPtr text);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuPushDebugGroup(IntPtr commandBuffer, IntPtr name);
+    public static extern void SDL_PushGPUDebugGroup(IntPtr commandBuffer, IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuPopDebugGroup(IntPtr commandBuffer);
+    public static extern void SDL_PopGPUDebugGroup(IntPtr commandBuffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuReleaseTexture(IntPtr device, IntPtr texture);
+    public static extern void SDL_ReleaseGPUTexture(IntPtr device, IntPtr texture);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuReleaseSampler(IntPtr device, IntPtr sampler);
+    public static extern void SDL_ReleaseGPUSampler(IntPtr device, IntPtr sampler);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuReleaseBuffer(IntPtr device, IntPtr buffer);
+    public static extern void SDL_ReleaseGPUBuffer(IntPtr device, IntPtr buffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuReleaseTransferBuffer(IntPtr device, IntPtr transferBuffer);
+    public static extern void SDL_ReleaseGPUTransferBuffer(IntPtr device, IntPtr transferBuffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuReleaseComputePipeline(IntPtr device, IntPtr computePipeline);
+    public static extern void SDL_ReleaseGPUComputePipeline(IntPtr device, IntPtr computePipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuReleaseShader(IntPtr device, IntPtr shader);
+    public static extern void SDL_ReleaseGPUShader(IntPtr device, IntPtr shader);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuReleaseGraphicsPipeline(IntPtr device, IntPtr graphicsPipeline);
+    public static extern void SDL_ReleaseGPUGraphicsPipeline(IntPtr device, IntPtr graphicsPipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuAcquireCommandBuffer(IntPtr device);
+    public static extern IntPtr SDL_AcquireGPUCommandBuffer(IntPtr device);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuPushVertexUniformData(IntPtr commandBuffer, UInt32 slotIndex, IntPtr data, UInt32 dataLengthInBytes);
+    public static extern void SDL_PushGPUVertexUniformData(IntPtr commandBuffer, UInt32 slotIndex, IntPtr data, UInt32 dataLengthInBytes);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuPushFragmentUniformData(IntPtr commandBuffer, UInt32 slotIndex, IntPtr data, UInt32 dataLengthInBytes);
+    public static extern void SDL_PushGPUFragmentUniformData(IntPtr commandBuffer, UInt32 slotIndex, IntPtr data, UInt32 dataLengthInBytes);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuPushComputeUniformData(IntPtr commandBuffer, UInt32 slotIndex, IntPtr data, UInt32 dataLengthInBytes);
+    public static extern void SDL_PushGPUComputeUniformData(IntPtr commandBuffer, UInt32 slotIndex, IntPtr data, UInt32 dataLengthInBytes);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuBeginRenderPass(IntPtr commandBuffer, IntPtr colorAttachmentInfos, UInt32 colorAttachmentCount, IntPtr depthStencilAttachmentInfo);
+    public static extern IntPtr SDL_BeginGPURenderPass(IntPtr commandBuffer, IntPtr colorAttachmentInfos, UInt32 colorAttachmentCount, IntPtr depthStencilAttachmentInfo);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindGraphicsPipeline(IntPtr renderPass, IntPtr graphicsPipeline);
+    public static extern void SDL_BindGPUGraphicsPipeline(IntPtr renderPass, IntPtr graphicsPipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuSetViewport(IntPtr renderPass, IntPtr viewport);
+    public static extern void SDL_SetGPUViewport(IntPtr renderPass, IntPtr viewport);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuSetScissor(IntPtr renderPass, IntPtr scissor);
+    public static extern void SDL_SetGPUScissor(IntPtr renderPass, IntPtr scissor);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindVertexBuffers(IntPtr renderPass, UInt32 firstBinding, IntPtr pBindings, UInt32 bindingCount);
+    public static extern void SDL_BindGPUVertexBuffers(IntPtr renderPass, UInt32 firstBinding, IntPtr pBindings, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindIndexBuffer(IntPtr renderPass, IntPtr pBinding, SDL_GpuIndexElementSize indexElementSize);
+    public static extern void SDL_BindGPUIndexBuffer(IntPtr renderPass, IntPtr pBinding, SDL_GPUIndexElementSize indexElementSize);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindVertexSamplers(IntPtr renderPass, UInt32 firstSlot, IntPtr textureSamplerBindings, UInt32 bindingCount);
+    public static extern void SDL_BindGPUVertexSamplers(IntPtr renderPass, UInt32 firstSlot, IntPtr textureSamplerBindings, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindVertexStorageTextures(IntPtr renderPass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
+    public static extern void SDL_BindGPUVertexStorageTextures(IntPtr renderPass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindVertexStorageBuffers(IntPtr renderPass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
+    public static extern void SDL_BindGPUVertexStorageBuffers(IntPtr renderPass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindFragmentSamplers(IntPtr renderPass, UInt32 firstSlot, IntPtr textureSamplerBindings, UInt32 bindingCount);
+    public static extern void SDL_BindGPUFragmentSamplers(IntPtr renderPass, UInt32 firstSlot, IntPtr textureSamplerBindings, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindFragmentStorageTextures(IntPtr renderPass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
+    public static extern void SDL_BindGPUFragmentStorageTextures(IntPtr renderPass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindFragmentStorageBuffers(IntPtr renderPass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
+    public static extern void SDL_BindGPUFragmentStorageBuffers(IntPtr renderPass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDrawIndexedPrimitives(IntPtr renderPass, UInt32 baseVertex, UInt32 startIndex, UInt32 vertexCount, UInt32 instanceCount, UInt32 baseInstance);
+    public static extern void SDL_DrawGPUIndexedPrimitives(IntPtr renderPass, UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDrawPrimitives(IntPtr renderPass, UInt32 vertexStart, UInt32 vertexCount, UInt32 instanceCount, UInt32 baseInstance);
+    public static extern void SDL_DrawGPUPrimitives(IntPtr renderPass, UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDrawPrimitivesIndirect(IntPtr renderPass, IntPtr buffer, UInt32 offsetInBytes, UInt32 drawCount, UInt32 stride);
+    public static extern void SDL_DrawGPUPrimitivesIndirect(IntPtr renderPass, IntPtr buffer, UInt32 offsetInBytes, UInt32 drawCount, UInt32 stride);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDrawIndexedPrimitivesIndirect(IntPtr renderPass, IntPtr buffer, UInt32 offsetInBytes, UInt32 drawCount, UInt32 stride);
+    public static extern void SDL_DrawGPUIndexedPrimitivesIndirect(IntPtr renderPass, IntPtr buffer, UInt32 offsetInBytes, UInt32 drawCount, UInt32 stride);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuEndRenderPass(IntPtr renderPass);
+    public static extern void SDL_EndGPURenderPass(IntPtr renderPass);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuBeginComputePass(IntPtr commandBuffer, IntPtr storageTextureBindings, UInt32 storageTextureBindingCount, IntPtr storageBufferBindings, UInt32 storageBufferBindingCount);
+    public static extern IntPtr SDL_BeginGPUComputePass(IntPtr commandBuffer, IntPtr storageTextureBindings, UInt32 storageTextureBindingCount, IntPtr storageBufferBindings, UInt32 storageBufferBindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindComputePipeline(IntPtr computePass, IntPtr computePipeline);
+    public static extern void SDL_BindGPUComputePipeline(IntPtr computePass, IntPtr computePipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindComputeStorageTextures(IntPtr computePass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
+    public static extern void SDL_BindGPUComputeStorageTextures(IntPtr computePass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBindComputeStorageBuffers(IntPtr computePass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
+    public static extern void SDL_BindGPUComputeStorageBuffers(IntPtr computePass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDispatchCompute(IntPtr computePass, UInt32 groupCountX, UInt32 groupCountY, UInt32 groupCountZ);
+    public static extern void SDL_DispatchGPUCompute(IntPtr computePass, UInt32 groupCountX, UInt32 groupCountY, UInt32 groupCountZ);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDispatchComputeIndirect(IntPtr computePass, IntPtr buffer, UInt32 offsetInBytes);
+    public static extern void SDL_DispatchGPUComputeIndirect(IntPtr computePass, IntPtr buffer, UInt32 offsetInBytes);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuEndComputePass(IntPtr computePass);
+    public static extern void SDL_EndGPUComputePass(IntPtr computePass);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuMapTransferBuffer(IntPtr device, IntPtr transferBuffer, int cycle);
+    public static extern IntPtr SDL_MapGPUTransferBuffer(IntPtr device, IntPtr transferBuffer, bool cycle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuUnmapTransferBuffer(IntPtr device, IntPtr transferBuffer);
+    public static extern void SDL_UnmapGPUTransferBuffer(IntPtr device, IntPtr transferBuffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuBeginCopyPass(IntPtr commandBuffer);
+    public static extern IntPtr SDL_BeginGPUCopyPass(IntPtr commandBuffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuUploadToTexture(IntPtr copyPass, IntPtr source, IntPtr destination, int cycle);
+    public static extern void SDL_UploadToGPUTexture(IntPtr copyPass, IntPtr source, IntPtr destination, bool cycle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuUploadToBuffer(IntPtr copyPass, IntPtr source, IntPtr destination, int cycle);
+    public static extern void SDL_UploadToGPUBuffer(IntPtr copyPass, IntPtr source, IntPtr destination, bool cycle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuCopyTextureToTexture(IntPtr copyPass, IntPtr source, IntPtr destination, UInt32 w, UInt32 h, UInt32 d, int cycle);
+    public static extern void SDL_CopyGPUTextureToTexture(IntPtr copyPass, IntPtr source, IntPtr destination, UInt32 w, UInt32 h, UInt32 d, bool cycle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuCopyBufferToBuffer(IntPtr copyPass, IntPtr source, IntPtr destination, UInt32 size, int cycle);
+    public static extern void SDL_CopyGPUBufferToBuffer(IntPtr copyPass, IntPtr source, IntPtr destination, UInt32 size, bool cycle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDownloadFromTexture(IntPtr copyPass, IntPtr source, IntPtr destination);
+    public static extern void SDL_DownloadFromGPUTexture(IntPtr copyPass, IntPtr source, IntPtr destination);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuDownloadFromBuffer(IntPtr copyPass, IntPtr source, IntPtr destination);
+    public static extern void SDL_DownloadFromGPUBuffer(IntPtr copyPass, IntPtr source, IntPtr destination);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuEndCopyPass(IntPtr copyPass);
+    public static extern void SDL_EndGPUCopyPass(IntPtr copyPass);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuGenerateMipmaps(IntPtr commandBuffer, IntPtr texture);
+    public static extern void SDL_GenerateMipmapsForGPUTexture(IntPtr commandBuffer, IntPtr texture);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuBlit(IntPtr commandBuffer, IntPtr source, IntPtr destination, SDL_FlipMode flipMode, SDL_GpuFilter filterMode, int cycle);
+    public static extern void SDL_BlitGPUTexture(IntPtr commandBuffer, IntPtr source, IntPtr destination, SDL_FlipMode flipMode, SDL_GPUFilter filterMode, bool cycle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GpuSupportsSwapchainComposition(IntPtr device, IntPtr window, SDL_GpuSwapchainComposition swapchainComposition);
+    public static extern bool SDL_WindowSupportsGPUSwapchainComposition(IntPtr device, IntPtr window, SDL_GPUSwapchainComposition swapchainComposition);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GpuSupportsPresentMode(IntPtr device, IntPtr window, SDL_GpuPresentMode presentMode);
+    public static extern bool SDL_WindowSupportsGPUPresentMode(IntPtr device, IntPtr window, SDL_GPUPresentMode presentMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GpuClaimWindow(IntPtr device, IntPtr window);
+    public static extern bool SDL_ClaimWindowForGPUDevice(IntPtr device, IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuUnclaimWindow(IntPtr device, IntPtr window);
+    public static extern void SDL_ReleaseWindowFromGPUDevice(IntPtr device, IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GpuSetSwapchainParameters(IntPtr device, IntPtr window, SDL_GpuSwapchainComposition swapchainComposition, SDL_GpuPresentMode presentMode);
+    public static extern bool SDL_SetGPUSwapchainParameters(IntPtr device, IntPtr window, SDL_GPUSwapchainComposition swapchainComposition, SDL_GPUPresentMode presentMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_GpuTextureFormat SDL_GpuGetSwapchainTextureFormat(IntPtr device, IntPtr window);
+    public static extern SDL_GPUTextureFormat SDL_GetGPUSwapchainTextureFormat(IntPtr device, IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuAcquireSwapchainTexture(IntPtr commandBuffer, IntPtr window, IntPtr pWidth, IntPtr pHeight);
+    public static extern IntPtr SDL_AcquireGPUSwapchainTexture(IntPtr commandBuffer, IntPtr window, IntPtr pWidth, IntPtr pHeight);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuSubmit(IntPtr commandBuffer);
+    public static extern void SDL_SubmitGPUCommandBuffer(IntPtr commandBuffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GpuSubmitAndAcquireFence(IntPtr commandBuffer);
+    public static extern IntPtr SDL_SubmitGPUCommandBufferAndAcquireFence(IntPtr commandBuffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuWait(IntPtr device);
+    public static extern void SDL_WaitForGPUIdle(IntPtr device);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuWaitForFences(IntPtr device, int waitAll, IntPtr pFences, UInt32 fenceCount);
+    public static extern void SDL_WaitForGPUFences(IntPtr device, bool waitAll, IntPtr pFences, UInt32 fenceCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GpuQueryFence(IntPtr device, IntPtr fence);
+    public static extern bool SDL_QueryGPUFence(IntPtr device, IntPtr fence);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GpuReleaseFence(IntPtr device, IntPtr fence);
+    public static extern void SDL_ReleaseGPUFence(IntPtr device, IntPtr fence);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_GpuTextureFormatTexelBlockSize(SDL_GpuTextureFormat textureFormat);
+    public static extern UInt32 SDL_GPUTextureFormatTexelBlockSize(SDL_GPUTextureFormat textureFormat);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GpuSupportsTextureFormat(IntPtr device, SDL_GpuTextureFormat format, SDL_GpuTextureType type, UInt32 usage);
+    public static extern bool SDL_GPUTextureSupportsFormat(IntPtr device, SDL_GPUTextureFormat format, SDL_GPUTextureType type, UInt32 usage);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GpuSupportsSampleCount(IntPtr device, SDL_GpuTextureFormat format, SDL_GpuSampleCount sampleCount);
+    public static extern bool SDL_GPUTextureSupportsSampleCount(IntPtr device, SDL_GPUTextureFormat format, SDL_GPUSampleCount sampleCount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetHaptics(IntPtr count);
@@ -5531,13 +5512,13 @@ public static class SDL
     public static extern IntPtr SDL_GetHapticName(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_IsMouseHaptic();
+    public static extern bool SDL_IsMouseHaptic();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenHapticFromMouse();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_IsJoystickHaptic(IntPtr joystick);
+    public static extern bool SDL_IsJoystickHaptic(IntPtr joystick);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenHapticFromJoystick(IntPtr joystick);
@@ -5558,52 +5539,52 @@ public static class SDL
     public static extern int SDL_GetNumHapticAxes(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HapticEffectSupported(IntPtr haptic, IntPtr effect);
+    public static extern bool SDL_HapticEffectSupported(IntPtr haptic, IntPtr effect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_CreateHapticEffect(IntPtr haptic, IntPtr effect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_UpdateHapticEffect(IntPtr haptic, int effect, IntPtr data);
+    public static extern bool SDL_UpdateHapticEffect(IntPtr haptic, int effect, IntPtr data);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RunHapticEffect(IntPtr haptic, int effect, UInt32 iterations);
+    public static extern bool SDL_RunHapticEffect(IntPtr haptic, int effect, UInt32 iterations);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_StopHapticEffect(IntPtr haptic, int effect);
+    public static extern bool SDL_StopHapticEffect(IntPtr haptic, int effect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DestroyHapticEffect(IntPtr haptic, int effect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetHapticEffectStatus(IntPtr haptic, int effect);
+    public static extern bool SDL_GetHapticEffectStatus(IntPtr haptic, int effect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetHapticGain(IntPtr haptic, int gain);
+    public static extern bool SDL_SetHapticGain(IntPtr haptic, int gain);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetHapticAutocenter(IntPtr haptic, int autocenter);
+    public static extern bool SDL_SetHapticAutocenter(IntPtr haptic, int autocenter);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PauseHaptic(IntPtr haptic);
+    public static extern bool SDL_PauseHaptic(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ResumeHaptic(IntPtr haptic);
+    public static extern bool SDL_ResumeHaptic(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_StopHapticEffects(IntPtr haptic);
+    public static extern bool SDL_StopHapticEffects(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_HapticRumbleSupported(IntPtr haptic);
+    public static extern bool SDL_HapticRumbleSupported(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_InitHapticRumble(IntPtr haptic);
+    public static extern bool SDL_InitHapticRumble(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PlayHapticRumble(IntPtr haptic, float strength, UInt32 length);
+    public static extern bool SDL_PlayHapticRumble(IntPtr haptic, float strength, UInt32 length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_StopHapticRumble(IntPtr haptic);
+    public static extern bool SDL_StopHapticRumble(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_hid_init();
@@ -5669,16 +5650,16 @@ public static class SDL
     public static extern int SDL_hid_get_report_descriptor(IntPtr dev, IntPtr buf, UInt32 buf_size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_hid_ble_scan(int active);
+    public static extern void SDL_hid_ble_scan(bool active);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetHintWithPriority(IntPtr name, IntPtr value, SDL_HintPriority priority);
+    public static extern bool SDL_SetHintWithPriority(IntPtr name, IntPtr value, SDL_HintPriority priority);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetHint(IntPtr name, IntPtr value);
+    public static extern bool SDL_SetHint(IntPtr name, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ResetHint(IntPtr name);
+    public static extern bool SDL_ResetHint(IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ResetHints();
@@ -5687,19 +5668,19 @@ public static class SDL
     public static extern IntPtr SDL_GetHint(IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetHintBoolean(IntPtr name, int default_value);
+    public static extern bool SDL_GetHintBoolean(IntPtr name, bool default_value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AddHintCallback(IntPtr name, IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_AddHintCallback(IntPtr name, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DelHintCallback(IntPtr name, IntPtr callback, IntPtr userdata);
+    public static extern void SDL_RemoveHintCallback(IntPtr name, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_Init(UInt32 flags);
+    public static extern bool SDL_Init(UInt32 flags);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_InitSubSystem(UInt32 flags);
+    public static extern bool SDL_InitSubSystem(UInt32 flags);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_QuitSubSystem(UInt32 flags);
@@ -5711,10 +5692,10 @@ public static class SDL
     public static extern void SDL_Quit();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAppMetadata(IntPtr appname, IntPtr appversion, IntPtr appidentifier);
+    public static extern bool SDL_SetAppMetadata(IntPtr appname, IntPtr appversion, IntPtr appidentifier);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetAppMetadataProperty(IntPtr name, IntPtr value);
+    public static extern bool SDL_SetAppMetadataProperty(IntPtr name, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAppMetadataProperty(IntPtr name);
@@ -5744,7 +5725,7 @@ public static class SDL
     public static extern void SDL_ResetLogPriorities();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetLogPriorityPrefix(SDL_LogPriority priority, IntPtr prefix);
+    public static extern bool SDL_SetLogPriorityPrefix(SDL_LogPriority priority, IntPtr prefix);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_Log(IntPtr fmt);
@@ -5780,10 +5761,10 @@ public static class SDL
     public static extern void SDL_SetLogOutputFunction(IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ShowMessageBox(IntPtr messageboxdata, IntPtr buttonid);
+    public static extern bool SDL_ShowMessageBox(IntPtr messageboxdata, IntPtr buttonid);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ShowSimpleMessageBox(UInt32 flags, IntPtr title, IntPtr message, IntPtr window);
+    public static extern bool SDL_ShowSimpleMessageBox(UInt32 flags, IntPtr title, IntPtr message, IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_Metal_CreateView(IntPtr window);
@@ -5795,7 +5776,7 @@ public static class SDL
     public static extern IntPtr SDL_Metal_GetLayer(IntPtr view);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_OpenURL(IntPtr url);
+    public static extern bool SDL_OpenURL(IntPtr url);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetPlatform();
@@ -5807,7 +5788,7 @@ public static class SDL
     public static extern IntPtr SDL_GetRenderDriver(int index);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CreateWindowAndRenderer(IntPtr title, int width, int height, UInt64 window_flags, IntPtr window, IntPtr renderer);
+    public static extern bool SDL_CreateWindowAndRenderer(IntPtr title, int width, int height, UInt64 window_flags, IntPtr window, IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateRenderer(IntPtr window, IntPtr name);
@@ -5831,10 +5812,10 @@ public static class SDL
     public static extern UInt32 SDL_GetRendererProperties(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderOutputSize(IntPtr renderer, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetRenderOutputSize(IntPtr renderer, IntPtr w, IntPtr h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetCurrentRenderOutputSize(IntPtr renderer, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetCurrentRenderOutputSize(IntPtr renderer, IntPtr w, IntPtr h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateTexture(IntPtr renderer, SDL_PixelFormat format, SDL_TextureAccess access, int w, int h);
@@ -5852,187 +5833,187 @@ public static class SDL
     public static extern IntPtr SDL_GetRendererFromTexture(IntPtr texture);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetTextureSize(IntPtr texture, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetTextureSize(IntPtr texture, IntPtr w, IntPtr h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetTextureColorMod(IntPtr texture, byte r, byte g, byte b);
+    public static extern bool SDL_SetTextureColorMod(IntPtr texture, byte r, byte g, byte b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetTextureColorModFloat(IntPtr texture, float r, float g, float b);
+    public static extern bool SDL_SetTextureColorModFloat(IntPtr texture, float r, float g, float b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetTextureColorMod(IntPtr texture, IntPtr r, IntPtr g, IntPtr b);
+    public static extern bool SDL_GetTextureColorMod(IntPtr texture, IntPtr r, IntPtr g, IntPtr b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetTextureColorModFloat(IntPtr texture, IntPtr r, IntPtr g, IntPtr b);
+    public static extern bool SDL_GetTextureColorModFloat(IntPtr texture, IntPtr r, IntPtr g, IntPtr b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetTextureAlphaMod(IntPtr texture, byte alpha);
+    public static extern bool SDL_SetTextureAlphaMod(IntPtr texture, byte alpha);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetTextureAlphaModFloat(IntPtr texture, float alpha);
+    public static extern bool SDL_SetTextureAlphaModFloat(IntPtr texture, float alpha);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetTextureAlphaMod(IntPtr texture, IntPtr alpha);
+    public static extern bool SDL_GetTextureAlphaMod(IntPtr texture, IntPtr alpha);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetTextureAlphaModFloat(IntPtr texture, IntPtr alpha);
+    public static extern bool SDL_GetTextureAlphaModFloat(IntPtr texture, IntPtr alpha);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetTextureBlendMode(IntPtr texture, UInt32 blendMode);
+    public static extern bool SDL_SetTextureBlendMode(IntPtr texture, UInt32 blendMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetTextureBlendMode(IntPtr texture, IntPtr blendMode);
+    public static extern bool SDL_GetTextureBlendMode(IntPtr texture, IntPtr blendMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetTextureScaleMode(IntPtr texture, SDL_ScaleMode scaleMode);
+    public static extern bool SDL_SetTextureScaleMode(IntPtr texture, SDL_ScaleMode scaleMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetTextureScaleMode(IntPtr texture, IntPtr scaleMode);
+    public static extern bool SDL_GetTextureScaleMode(IntPtr texture, IntPtr scaleMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_UpdateTexture(IntPtr texture, IntPtr rect, IntPtr pixels, int pitch);
+    public static extern bool SDL_UpdateTexture(IntPtr texture, IntPtr rect, IntPtr pixels, int pitch);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_UpdateYUVTexture(IntPtr texture, IntPtr rect, IntPtr Yplane, int Ypitch, IntPtr Uplane, int Upitch, IntPtr Vplane, int Vpitch);
+    public static extern bool SDL_UpdateYUVTexture(IntPtr texture, IntPtr rect, IntPtr Yplane, int Ypitch, IntPtr Uplane, int Upitch, IntPtr Vplane, int Vpitch);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_UpdateNVTexture(IntPtr texture, IntPtr rect, IntPtr Yplane, int Ypitch, IntPtr UVplane, int UVpitch);
+    public static extern bool SDL_UpdateNVTexture(IntPtr texture, IntPtr rect, IntPtr Yplane, int Ypitch, IntPtr UVplane, int UVpitch);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_LockTexture(IntPtr texture, IntPtr rect, IntPtr pixels, IntPtr pitch);
+    public static extern bool SDL_LockTexture(IntPtr texture, IntPtr rect, IntPtr pixels, IntPtr pitch);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_LockTextureToSurface(IntPtr texture, IntPtr rect, IntPtr surface);
+    public static extern bool SDL_LockTextureToSurface(IntPtr texture, IntPtr rect, IntPtr surface);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockTexture(IntPtr texture);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderTarget(IntPtr renderer, IntPtr texture);
+    public static extern bool SDL_SetRenderTarget(IntPtr renderer, IntPtr texture);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderLogicalPresentation(IntPtr renderer, int w, int h, SDL_RendererLogicalPresentation mode, SDL_ScaleMode scale_mode);
+    public static extern bool SDL_SetRenderLogicalPresentation(IntPtr renderer, int w, int h, SDL_RendererLogicalPresentation mode, SDL_ScaleMode scale_mode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderLogicalPresentation(IntPtr renderer, IntPtr w, IntPtr h, IntPtr mode, IntPtr scale_mode);
+    public static extern bool SDL_GetRenderLogicalPresentation(IntPtr renderer, IntPtr w, IntPtr h, IntPtr mode, IntPtr scale_mode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderLogicalPresentationRect(IntPtr renderer, IntPtr rect);
+    public static extern bool SDL_GetRenderLogicalPresentationRect(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderCoordinatesFromWindow(IntPtr renderer, float window_x, float window_y, IntPtr x, IntPtr y);
+    public static extern bool SDL_RenderCoordinatesFromWindow(IntPtr renderer, float window_x, float window_y, IntPtr x, IntPtr y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderCoordinatesToWindow(IntPtr renderer, float x, float y, IntPtr window_x, IntPtr window_y);
+    public static extern bool SDL_RenderCoordinatesToWindow(IntPtr renderer, float x, float y, IntPtr window_x, IntPtr window_y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ConvertEventToRenderCoordinates(IntPtr renderer, IntPtr @event);
+    public static extern bool SDL_ConvertEventToRenderCoordinates(IntPtr renderer, IntPtr @event);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderViewport(IntPtr renderer, IntPtr rect);
+    public static extern bool SDL_SetRenderViewport(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderViewport(IntPtr renderer, IntPtr rect);
+    public static extern bool SDL_GetRenderViewport(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderViewportSet(IntPtr renderer);
+    public static extern bool SDL_RenderViewportSet(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderSafeArea(IntPtr renderer, IntPtr rect);
+    public static extern bool SDL_GetRenderSafeArea(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderClipRect(IntPtr renderer, IntPtr rect);
+    public static extern bool SDL_SetRenderClipRect(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderClipRect(IntPtr renderer, IntPtr rect);
+    public static extern bool SDL_GetRenderClipRect(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderClipEnabled(IntPtr renderer);
+    public static extern bool SDL_RenderClipEnabled(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderScale(IntPtr renderer, float scaleX, float scaleY);
+    public static extern bool SDL_SetRenderScale(IntPtr renderer, float scaleX, float scaleY);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderScale(IntPtr renderer, IntPtr scaleX, IntPtr scaleY);
+    public static extern bool SDL_GetRenderScale(IntPtr renderer, IntPtr scaleX, IntPtr scaleY);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderDrawColor(IntPtr renderer, byte r, byte g, byte b, byte a);
+    public static extern bool SDL_SetRenderDrawColor(IntPtr renderer, byte r, byte g, byte b, byte a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderDrawColorFloat(IntPtr renderer, float r, float g, float b, float a);
+    public static extern bool SDL_SetRenderDrawColorFloat(IntPtr renderer, float r, float g, float b, float a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderDrawColor(IntPtr renderer, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
+    public static extern bool SDL_GetRenderDrawColor(IntPtr renderer, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderDrawColorFloat(IntPtr renderer, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
+    public static extern bool SDL_GetRenderDrawColorFloat(IntPtr renderer, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderColorScale(IntPtr renderer, float scale);
+    public static extern bool SDL_SetRenderColorScale(IntPtr renderer, float scale);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderColorScale(IntPtr renderer, IntPtr scale);
+    public static extern bool SDL_GetRenderColorScale(IntPtr renderer, IntPtr scale);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderDrawBlendMode(IntPtr renderer, UInt32 blendMode);
+    public static extern bool SDL_SetRenderDrawBlendMode(IntPtr renderer, UInt32 blendMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderDrawBlendMode(IntPtr renderer, IntPtr blendMode);
+    public static extern bool SDL_GetRenderDrawBlendMode(IntPtr renderer, IntPtr blendMode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderClear(IntPtr renderer);
+    public static extern bool SDL_RenderClear(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderPoint(IntPtr renderer, float x, float y);
+    public static extern bool SDL_RenderPoint(IntPtr renderer, float x, float y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderPoints(IntPtr renderer, IntPtr points, int count);
+    public static extern bool SDL_RenderPoints(IntPtr renderer, IntPtr points, int count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderLine(IntPtr renderer, float x1, float y1, float x2, float y2);
+    public static extern bool SDL_RenderLine(IntPtr renderer, float x1, float y1, float x2, float y2);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderLines(IntPtr renderer, IntPtr points, int count);
+    public static extern bool SDL_RenderLines(IntPtr renderer, IntPtr points, int count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderRect(IntPtr renderer, IntPtr rect);
+    public static extern bool SDL_RenderRect(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderRects(IntPtr renderer, IntPtr rects, int count);
+    public static extern bool SDL_RenderRects(IntPtr renderer, IntPtr rects, int count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderFillRect(IntPtr renderer, IntPtr rect);
+    public static extern bool SDL_RenderFillRect(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderFillRects(IntPtr renderer, IntPtr rects, int count);
+    public static extern bool SDL_RenderFillRects(IntPtr renderer, IntPtr rects, int count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderTexture(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect);
+    public static extern bool SDL_RenderTexture(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderTextureRotated(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect, double angle, IntPtr center, SDL_FlipMode flip);
+    public static extern bool SDL_RenderTextureRotated(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect, double angle, IntPtr center, SDL_FlipMode flip);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderTextureTiled(IntPtr renderer, IntPtr texture, IntPtr srcrect, float scale, IntPtr dstrect);
+    public static extern bool SDL_RenderTextureTiled(IntPtr renderer, IntPtr texture, IntPtr srcrect, float scale, IntPtr dstrect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderTexture9Grid(IntPtr renderer, IntPtr texture, IntPtr srcrect, float left_width, float right_width, float top_height, float bottom_height, float scale, IntPtr dstrect);
+    public static extern bool SDL_RenderTexture9Grid(IntPtr renderer, IntPtr texture, IntPtr srcrect, float left_width, float right_width, float top_height, float bottom_height, float scale, IntPtr dstrect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderGeometry(IntPtr renderer, IntPtr texture, IntPtr vertices, int num_vertices, IntPtr indices, int num_indices);
+    public static extern bool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, IntPtr vertices, int num_vertices, IntPtr indices, int num_indices);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderGeometryRaw(IntPtr renderer, IntPtr texture, IntPtr xy, int xy_stride, IntPtr color, int color_stride, IntPtr uv, int uv_stride, int num_vertices, IntPtr indices, int num_indices, int size_indices);
+    public static extern bool SDL_RenderGeometryRaw(IntPtr renderer, IntPtr texture, IntPtr xy, int xy_stride, IntPtr color, int color_stride, IntPtr uv, int uv_stride, int num_vertices, IntPtr indices, int num_indices, int size_indices);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_RenderReadPixels(IntPtr renderer, IntPtr rect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenderPresent(IntPtr renderer);
+    public static extern bool SDL_RenderPresent(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DestroyTexture(IntPtr texture);
@@ -6041,7 +6022,7 @@ public static class SDL
     public static extern void SDL_DestroyRenderer(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_FlushRenderer(IntPtr renderer);
+    public static extern bool SDL_FlushRenderer(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetRenderMetalLayer(IntPtr renderer);
@@ -6050,13 +6031,13 @@ public static class SDL
     public static extern IntPtr SDL_GetRenderMetalCommandEncoder(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AddVulkanRenderSemaphores(IntPtr renderer, UInt32 wait_stage_mask, Int64 wait_semaphore, Int64 signal_semaphore);
+    public static extern bool SDL_AddVulkanRenderSemaphores(IntPtr renderer, UInt32 wait_stage_mask, Int64 wait_semaphore, Int64 signal_semaphore);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetRenderVSync(IntPtr renderer, int vsync);
+    public static extern bool SDL_SetRenderVSync(IntPtr renderer, int vsync);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetRenderVSync(IntPtr renderer, IntPtr vsync);
+    public static extern bool SDL_GetRenderVSync(IntPtr renderer, IntPtr vsync);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenTitleStorage(IntPtr @override, UInt32 props);
@@ -6071,37 +6052,37 @@ public static class SDL
     public static extern IntPtr SDL_OpenStorage(IntPtr iface, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CloseStorage(IntPtr storage);
+    public static extern bool SDL_CloseStorage(IntPtr storage);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_StorageReady(IntPtr storage);
+    public static extern bool SDL_StorageReady(IntPtr storage);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetStorageFileSize(IntPtr storage, IntPtr path, IntPtr length);
+    public static extern bool SDL_GetStorageFileSize(IntPtr storage, IntPtr path, IntPtr length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_ReadStorageFile(IntPtr storage, IntPtr path, IntPtr destination, UInt64 length);
+    public static extern bool SDL_ReadStorageFile(IntPtr storage, IntPtr path, IntPtr destination, UInt64 length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_WriteStorageFile(IntPtr storage, IntPtr path, IntPtr source, UInt64 length);
+    public static extern bool SDL_WriteStorageFile(IntPtr storage, IntPtr path, IntPtr source, UInt64 length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CreateStorageDirectory(IntPtr storage, IntPtr path);
+    public static extern bool SDL_CreateStorageDirectory(IntPtr storage, IntPtr path);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_EnumerateStorageDirectory(IntPtr storage, IntPtr path, IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_EnumerateStorageDirectory(IntPtr storage, IntPtr path, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RemoveStoragePath(IntPtr storage, IntPtr path);
+    public static extern bool SDL_RemoveStoragePath(IntPtr storage, IntPtr path);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RenameStoragePath(IntPtr storage, IntPtr oldpath, IntPtr newpath);
+    public static extern bool SDL_RenameStoragePath(IntPtr storage, IntPtr oldpath, IntPtr newpath);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CopyStorageFile(IntPtr storage, IntPtr oldpath, IntPtr newpath);
+    public static extern bool SDL_CopyStorageFile(IntPtr storage, IntPtr oldpath, IntPtr newpath);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetStoragePathInfo(IntPtr storage, IntPtr path, IntPtr info);
+    public static extern bool SDL_GetStoragePathInfo(IntPtr storage, IntPtr path, IntPtr info);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt64 SDL_GetStorageSpaceRemaining(IntPtr storage);
@@ -6113,13 +6094,13 @@ public static class SDL
     public static extern void SDL_SetX11EventHook(IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetLinuxThreadPriority(Int64 threadID, int priority);
+    public static extern bool SDL_SetLinuxThreadPriority(Int64 threadID, int priority);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_SetLinuxThreadPriorityAndPolicy(Int64 threadID, int sdlPriority, int schedPolicy);
+    public static extern bool SDL_SetLinuxThreadPriorityAndPolicy(Int64 threadID, int sdlPriority, int schedPolicy);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_IsTablet();
+    public static extern bool SDL_IsTablet();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_OnApplicationWillTerminate();
@@ -6140,16 +6121,16 @@ public static class SDL
     public static extern void SDL_OnApplicationDidEnterForeground();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetDateTimeLocalePreferences(IntPtr dateFormat, IntPtr timeFormat);
+    public static extern bool SDL_GetDateTimeLocalePreferences(IntPtr dateFormat, IntPtr timeFormat);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetCurrentTime(IntPtr ticks);
+    public static extern bool SDL_GetCurrentTime(IntPtr ticks);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_TimeToDateTime(Int64 ticks, IntPtr dt, int localTime);
+    public static extern bool SDL_TimeToDateTime(Int64 ticks, IntPtr dt, bool localTime);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_DateTimeToTime(IntPtr dt, IntPtr ticks);
+    public static extern bool SDL_DateTimeToTime(IntPtr dt, IntPtr ticks);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_TimeToWindows(Int64 ticks, IntPtr dwLowDateTime, IntPtr dwHighDateTime);
@@ -6191,7 +6172,7 @@ public static class SDL
     public static extern UInt32 SDL_AddTimerNS(UInt64 interval, IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_RemoveTimer(UInt32 id);
+    public static extern bool SDL_RemoveTimer(UInt32 id);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetVersion();
