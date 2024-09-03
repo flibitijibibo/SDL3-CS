@@ -307,7 +307,7 @@ public static class SDL
             "Sint16"            => "Int16",
             "Sint32"            => "Int32",
             "Sint64"            => "Int64",
-            "size_t"            => "UInt32", // TODO: i think this is platform-dependent
+            "size_t"            => "UIntPtr",
             ":void"             => "void",
             ":pointer"          => "IntPtr", // TODO: "pointer to what" is available in the metadata; include in a comment
             ":function-pointer" => "IntPtr", // TODO: no idea

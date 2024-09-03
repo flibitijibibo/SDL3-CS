@@ -2425,7 +2425,7 @@ public static class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUShaderCreateInfo
     {
-        public UInt32 codeSize;
+        public UIntPtr codeSize;
         public IntPtr code;
         public IntPtr entryPointName;
         public UInt32 format;
@@ -2534,7 +2534,7 @@ public static class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUComputePipelineCreateInfo
     {
-        public UInt32 codeSize;
+        public UIntPtr codeSize;
         public IntPtr code;
         public IntPtr entryPointName;
         public UInt32 format;
@@ -2833,16 +2833,16 @@ public static class SDL
 
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr alloca(UInt32 _);
+    public static extern IntPtr alloca(UIntPtr _);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_malloc(UInt32 size);
+    public static extern IntPtr SDL_malloc(UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_calloc(UInt32 nmemb, UInt32 size);
+    public static extern IntPtr SDL_calloc(UIntPtr nmemb, UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_realloc(IntPtr mem, UInt32 size);
+    public static extern IntPtr SDL_realloc(IntPtr mem, UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_free(IntPtr mem);
@@ -2857,7 +2857,7 @@ public static class SDL
     public static extern bool SDL_SetMemoryFunctions(IntPtr malloc_func, IntPtr calloc_func, IntPtr realloc_func, IntPtr free_func);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_aligned_alloc(UInt32 alignment, UInt32 size);
+    public static extern IntPtr SDL_aligned_alloc(UIntPtr alignment, UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_aligned_free(IntPtr mem);
@@ -2875,16 +2875,16 @@ public static class SDL
     public static extern int SDL_unsetenv(IntPtr name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_qsort(IntPtr @base, UInt32 nmemb, UInt32 size, IntPtr compare);
+    public static extern void SDL_qsort(IntPtr @base, UIntPtr nmemb, UIntPtr size, IntPtr compare);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_bsearch(IntPtr key, IntPtr @base, UInt32 nmemb, UInt32 size, IntPtr compare);
+    public static extern IntPtr SDL_bsearch(IntPtr key, IntPtr @base, UIntPtr nmemb, UIntPtr size, IntPtr compare);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_qsort_r(IntPtr @base, UInt32 nmemb, UInt32 size, IntPtr compare, IntPtr userdata);
+    public static extern void SDL_qsort_r(IntPtr @base, UIntPtr nmemb, UIntPtr size, IntPtr compare, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_bsearch_r(IntPtr key, IntPtr @base, UInt32 nmemb, UInt32 size, IntPtr compare, IntPtr userdata);
+    public static extern IntPtr SDL_bsearch_r(IntPtr key, IntPtr @base, UIntPtr nmemb, UIntPtr size, IntPtr compare, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_abs(int x);
@@ -2932,37 +2932,37 @@ public static class SDL
     public static extern int SDL_tolower(int x);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt16 SDL_crc16(UInt16 crc, IntPtr data, UInt32 len);
+    public static extern UInt16 SDL_crc16(UInt16 crc, IntPtr data, UIntPtr len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_crc32(UInt32 crc, IntPtr data, UInt32 len);
+    public static extern UInt32 SDL_crc32(UInt32 crc, IntPtr data, UIntPtr len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_memcpy(IntPtr dst, IntPtr src, UInt32 len);
+    public static extern IntPtr SDL_memcpy(IntPtr dst, IntPtr src, UIntPtr len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_memmove(IntPtr dst, IntPtr src, UInt32 len);
+    public static extern IntPtr SDL_memmove(IntPtr dst, IntPtr src, UIntPtr len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_memset(IntPtr dst, int c, UInt32 len);
+    public static extern IntPtr SDL_memset(IntPtr dst, int c, UIntPtr len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_memset4(IntPtr dst, UInt32 val, UInt32 dwords);
+    public static extern IntPtr SDL_memset4(IntPtr dst, UInt32 val, UIntPtr dwords);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_memcmp(IntPtr s1, IntPtr s2, UInt32 len);
+    public static extern int SDL_memcmp(IntPtr s1, IntPtr s2, UIntPtr len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_wcslen(IntPtr wstr);
+    public static extern UIntPtr SDL_wcslen(IntPtr wstr);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_wcsnlen(IntPtr wstr, UInt32 maxlen);
+    public static extern UIntPtr SDL_wcsnlen(IntPtr wstr, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_wcslcpy(IntPtr dst, IntPtr src, UInt32 maxlen);
+    public static extern UIntPtr SDL_wcslcpy(IntPtr dst, IntPtr src, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_wcslcat(IntPtr dst, IntPtr src, UInt32 maxlen);
+    public static extern UIntPtr SDL_wcslcat(IntPtr dst, IntPtr src, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_wcsdup(IntPtr wstr);
@@ -2971,43 +2971,43 @@ public static class SDL
     public static extern IntPtr SDL_wcsstr(IntPtr haystack, IntPtr needle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_wcsnstr(IntPtr haystack, IntPtr needle, UInt32 maxlen);
+    public static extern IntPtr SDL_wcsnstr(IntPtr haystack, IntPtr needle, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_wcscmp(IntPtr str1, IntPtr str2);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_wcsncmp(IntPtr str1, IntPtr str2, UInt32 maxlen);
+    public static extern int SDL_wcsncmp(IntPtr str1, IntPtr str2, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_wcscasecmp(IntPtr str1, IntPtr str2);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_wcsncasecmp(IntPtr str1, IntPtr str2, UInt32 maxlen);
+    public static extern int SDL_wcsncasecmp(IntPtr str1, IntPtr str2, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern long SDL_wcstol(IntPtr str, IntPtr endp, int @base);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_strlen(IntPtr str);
+    public static extern UIntPtr SDL_strlen(IntPtr str);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_strnlen(IntPtr str, UInt32 maxlen);
+    public static extern UIntPtr SDL_strnlen(IntPtr str, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_strlcpy(IntPtr dst, IntPtr src, UInt32 maxlen);
+    public static extern UIntPtr SDL_strlcpy(IntPtr dst, IntPtr src, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_utf8strlcpy(IntPtr dst, IntPtr src, UInt32 dst_bytes);
+    public static extern UIntPtr SDL_utf8strlcpy(IntPtr dst, IntPtr src, UIntPtr dst_bytes);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_strlcat(IntPtr dst, IntPtr src, UInt32 maxlen);
+    public static extern UIntPtr SDL_strlcat(IntPtr dst, IntPtr src, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_strdup(IntPtr str);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strndup(IntPtr str, UInt32 maxlen);
+    public static extern IntPtr SDL_strndup(IntPtr str, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_strrev(IntPtr str);
@@ -3028,7 +3028,7 @@ public static class SDL
     public static extern IntPtr SDL_strstr(IntPtr haystack, IntPtr needle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strnstr(IntPtr haystack, IntPtr needle, UInt32 maxlen);
+    public static extern IntPtr SDL_strnstr(IntPtr haystack, IntPtr needle, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_strcasestr(IntPtr haystack, IntPtr needle);
@@ -3037,10 +3037,10 @@ public static class SDL
     public static extern IntPtr SDL_strtok_r(IntPtr s1, IntPtr s2, IntPtr saveptr);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_utf8strlen(IntPtr str);
+    public static extern UIntPtr SDL_utf8strlen(IntPtr str);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_utf8strnlen(IntPtr str, UInt32 bytes);
+    public static extern UIntPtr SDL_utf8strnlen(IntPtr str, UIntPtr bytes);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_itoa(int value, IntPtr str, int radix);
@@ -3085,13 +3085,13 @@ public static class SDL
     public static extern int SDL_strcmp(IntPtr str1, IntPtr str2);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_strncmp(IntPtr str1, IntPtr str2, UInt32 maxlen);
+    public static extern int SDL_strncmp(IntPtr str1, IntPtr str2, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_strcasecmp(IntPtr str1, IntPtr str2);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_strncasecmp(IntPtr str1, IntPtr str2, UInt32 maxlen);
+    public static extern int SDL_strncasecmp(IntPtr str1, IntPtr str2, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_StepUTF8(IntPtr pstr, IntPtr pslen);
@@ -3106,16 +3106,16 @@ public static class SDL
     public static extern int SDL_vsscanf(IntPtr text, IntPtr fmt, IntPtr ap);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_snprintf(IntPtr text, UInt32 maxlen, IntPtr fmt);
+    public static extern int SDL_snprintf(IntPtr text, UIntPtr maxlen, IntPtr fmt);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_swprintf(IntPtr text, UInt32 maxlen, IntPtr fmt);
+    public static extern int SDL_swprintf(IntPtr text, UIntPtr maxlen, IntPtr fmt);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_vsnprintf(IntPtr text, UInt32 maxlen, IntPtr fmt, IntPtr ap);
+    public static extern int SDL_vsnprintf(IntPtr text, UIntPtr maxlen, IntPtr fmt, IntPtr ap);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_vswprintf(IntPtr text, UInt32 maxlen, IntPtr fmt, IntPtr ap);
+    public static extern int SDL_vswprintf(IntPtr text, UIntPtr maxlen, IntPtr fmt, IntPtr ap);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_asprintf(IntPtr strp, IntPtr fmt);
@@ -3295,22 +3295,22 @@ public static class SDL
     public static extern int SDL_iconv_close(IntPtr cd);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_iconv(IntPtr cd, IntPtr inbuf, IntPtr inbytesleft, IntPtr outbuf, IntPtr outbytesleft);
+    public static extern UIntPtr SDL_iconv(IntPtr cd, IntPtr inbuf, IntPtr inbytesleft, IntPtr outbuf, IntPtr outbytesleft);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_iconv_string(IntPtr tocode, IntPtr fromcode, IntPtr inbuf, UInt32 inbytesleft);
+    public static extern IntPtr SDL_iconv_string(IntPtr tocode, IntPtr fromcode, IntPtr inbuf, UIntPtr inbytesleft);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_size_mul_check_overflow(UInt32 a, UInt32 b, IntPtr ret);
+    public static extern bool SDL_size_mul_check_overflow(UIntPtr a, UIntPtr b, IntPtr ret);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_size_mul_check_overflow_builtin(UInt32 a, UInt32 b, IntPtr ret);
+    public static extern bool SDL_size_mul_check_overflow_builtin(UIntPtr a, UIntPtr b, IntPtr ret);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_size_add_check_overflow(UInt32 a, UInt32 b, IntPtr ret);
+    public static extern bool SDL_size_add_check_overflow(UIntPtr a, UIntPtr b, IntPtr ret);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_size_add_check_overflow_builtin(UInt32 a, UInt32 b, IntPtr ret);
+    public static extern bool SDL_size_add_check_overflow_builtin(UIntPtr a, UIntPtr b, IntPtr ret);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_AssertState SDL_ReportAssertion(IntPtr data, IntPtr func, IntPtr file, int line);
@@ -3523,10 +3523,10 @@ public static class SDL
     public static extern IntPtr SDL_IOFromFile(IntPtr file, IntPtr mode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_IOFromMem(IntPtr mem, UInt32 size);
+    public static extern IntPtr SDL_IOFromMem(IntPtr mem, UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_IOFromConstMem(IntPtr mem, UInt32 size);
+    public static extern IntPtr SDL_IOFromConstMem(IntPtr mem, UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_IOFromDynamicMem();
@@ -3553,16 +3553,16 @@ public static class SDL
     public static extern Int64 SDL_TellIO(IntPtr context);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_ReadIO(IntPtr context, IntPtr ptr, UInt32 size);
+    public static extern UIntPtr SDL_ReadIO(IntPtr context, IntPtr ptr, UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_WriteIO(IntPtr context, IntPtr ptr, UInt32 size);
+    public static extern UIntPtr SDL_WriteIO(IntPtr context, IntPtr ptr, UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_IOprintf(IntPtr context, IntPtr fmt);
+    public static extern UIntPtr SDL_IOprintf(IntPtr context, IntPtr fmt);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_IOvprintf(IntPtr context, IntPtr fmt, IntPtr ap);
+    public static extern UIntPtr SDL_IOvprintf(IntPtr context, IntPtr fmt, IntPtr ap);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_LoadFile_IO(IntPtr src, IntPtr datasize, bool closeio);
@@ -4501,7 +4501,7 @@ public static class SDL
     public static extern bool SDL_HasPrimarySelectionText();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetClipboardData(IntPtr callback, IntPtr cleanup, IntPtr userdata, IntPtr mime_types, UInt32 num_mime_types);
+    public static extern bool SDL_SetClipboardData(IntPtr callback, IntPtr cleanup, IntPtr userdata, IntPtr mime_types, UIntPtr num_mime_types);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ClearClipboardData();
@@ -4564,7 +4564,7 @@ public static class SDL
     public static extern int SDL_GetSystemRAM();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_GetSIMDAlignment();
+    public static extern UIntPtr SDL_GetSIMDAlignment();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ShowOpenFileDialog(IntPtr callback, IntPtr userdata, IntPtr window, IntPtr filters, int nfilters, IntPtr default_location, bool allow_many);
@@ -5608,46 +5608,46 @@ public static class SDL
     public static extern IntPtr SDL_hid_open_path(IntPtr path);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_write(IntPtr dev, IntPtr data, UInt32 length);
+    public static extern int SDL_hid_write(IntPtr dev, IntPtr data, UIntPtr length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_read_timeout(IntPtr dev, IntPtr data, UInt32 length, int milliseconds);
+    public static extern int SDL_hid_read_timeout(IntPtr dev, IntPtr data, UIntPtr length, int milliseconds);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_read(IntPtr dev, IntPtr data, UInt32 length);
+    public static extern int SDL_hid_read(IntPtr dev, IntPtr data, UIntPtr length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_hid_set_nonblocking(IntPtr dev, int nonblock);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_send_feature_report(IntPtr dev, IntPtr data, UInt32 length);
+    public static extern int SDL_hid_send_feature_report(IntPtr dev, IntPtr data, UIntPtr length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_feature_report(IntPtr dev, IntPtr data, UInt32 length);
+    public static extern int SDL_hid_get_feature_report(IntPtr dev, IntPtr data, UIntPtr length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_input_report(IntPtr dev, IntPtr data, UInt32 length);
+    public static extern int SDL_hid_get_input_report(IntPtr dev, IntPtr data, UIntPtr length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_hid_close(IntPtr dev);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_manufacturer_string(IntPtr dev, IntPtr @string, UInt32 maxlen);
+    public static extern int SDL_hid_get_manufacturer_string(IntPtr dev, IntPtr @string, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_product_string(IntPtr dev, IntPtr @string, UInt32 maxlen);
+    public static extern int SDL_hid_get_product_string(IntPtr dev, IntPtr @string, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_serial_number_string(IntPtr dev, IntPtr @string, UInt32 maxlen);
+    public static extern int SDL_hid_get_serial_number_string(IntPtr dev, IntPtr @string, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_indexed_string(IntPtr dev, int string_index, IntPtr @string, UInt32 maxlen);
+    public static extern int SDL_hid_get_indexed_string(IntPtr dev, int string_index, IntPtr @string, UIntPtr maxlen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_hid_get_device_info(IntPtr dev);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_report_descriptor(IntPtr dev, IntPtr buf, UInt32 buf_size);
+    public static extern int SDL_hid_get_report_descriptor(IntPtr dev, IntPtr buf, UIntPtr buf_size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_hid_ble_scan(bool active);
