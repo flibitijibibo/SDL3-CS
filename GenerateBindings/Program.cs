@@ -400,7 +400,6 @@ internal static class Program
 
         var definitions = new StringBuilder();
         var unknownPointerParameters = new StringBuilder();
-        unknownPointerParameters.Append("new pointer parameters:\n\n");
         var currentSourceFile = "";
         var definedTypes = new List<string>();
 
@@ -421,6 +420,14 @@ internal static class Program
             {
                 definitions.Append($"// {headerFile}\n\n");
                 currentSourceFile = headerFile;
+            }
+
+            if (entry.Tag == "typedef")
+            {
+                if (entry.Type!.Tag == ":function-pointer")
+                {
+                    definitions.Append($"// public static delegate RETURN {entry.Name}(ARGS)\t// WARN_UNDEFINED_FUNCTION_POINTER\n\n");
+                }
             }
 
             if (entry.Tag == "enum")
@@ -452,10 +459,31 @@ internal static class Program
                     var name = SanitizeNames(field.Name!);
                     var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
                     var type = CSharpTypeFromFFI(fieldTypedef, definedTypes, TypeContext.StructField);
-                    if (type == "UNION")
+
+                    if (type == "INLINE_ARRAY")
+                    {
+                        var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, definedTypes, TypeContext.StructField);
+                        for (var i = 0; i < fieldTypedef.Size; i++) definitions.Append($"public {elementType} {name}{i};\n");
+                    }
+                    else if (type == "UNION")
                     {
                         type = $"UNION_{entry.Name}_{field.Name}";
-                        definitions.Append($"// public {type} {name}; // TODO: unhandled union\n");
+                        definitions.Append($"// public {type} {name}; // WARN_UNHANDLED_UNION\n");
+                    }
+                    else if (type == "FUNCTION_POINTER")
+                    {
+                        type = "IntPtr";
+                        definitions.Append($"public {type} {name};");
+                        if (field.Type!.Tag == ":function-pointer")
+                        {
+                            definitions.Append("\t// WARN_ANONYMOUS_FUNCTION_POINTER");
+                        }
+                        else
+                        {
+                            definitions.Append($"\t// {field.Type!.Tag}");
+                        }
+
+                        definitions.Append('\n');
                     }
                     else
                     {
@@ -468,9 +496,29 @@ internal static class Program
 
             else if (entry.Tag == "function")
             {
+                var hasVarArgs = false;
+                foreach (var parameter in entry.Parameters!)
+                {
+                    if (parameter.Type!.Tag == "va_list")
+                    {
+                        hasVarArgs = true;
+                        break;
+                    }
+                }
+
+                if (hasVarArgs)
+                {
+                    continue;
+                }
+
                 definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
                 var returnTypedef = GetTypeFromTypedefMap(type: entry.ReturnType!, typedefMap);
                 var returnType = CSharpTypeFromFFI(returnTypedef, definedTypes, TypeContext.Return);
+                if (returnType == "FUNCTION_POINTER")
+                {
+                    returnType = "IntPtr";
+                }
+
                 definitions.Append($"public static extern {returnType} {entry.Name!}(");
 
                 var initialParameter = true;
@@ -514,6 +562,10 @@ internal static class Program
                     else
                     {
                         type = CSharpTypeFromFFI(parameterTypedef, definedTypes, TypeContext.Parameter);
+                        if (type == "FUNCTION_POINTER")
+                        {
+                            type = $"/* {parameter.Type!.Tag} */ IntPtr";
+                        }
                     }
 
                     var name = SanitizeNames(parameter.Name!);
@@ -523,13 +575,12 @@ internal static class Program
                 definitions.Append(");\t");
                 if (containsUnknownRef)
                 {
-                    definitions.Append("// SDL_POINTER: check for array usage");
+                    definitions.Append("// WARN_UNKNOWN_POINTER_PARAMETER: check for array usage");
                 }
 
                 definitions.Append("\n\n");
             }
         }
-
 
         File.WriteAllText(
             path: Path.Combine(outputDir.FullName, "SDL3.cs"),
@@ -537,7 +588,10 @@ internal static class Program
         );
 
         RunProcess(dotnetExe, args: $"format {sdlBindingsProjectFile}");
-        Console.Write(unknownPointerParameters.ToString());
+        if (unknownPointerParameters.Length > 0)
+        {
+            Console.Write($"new pointer parameters:\n\n{unknownPointerParameters}");
+        }
 
         return 0;
     }
@@ -626,10 +680,10 @@ public static unsafe class SDL
         {
             ":_Bool"            => "bool",
             ":int"              => "int",
-            ":long"             => "long", // TODO: platform-dependent?
-            ":unsigned-short"   => "ushort", // TODO: platform-dependent?
+            ":long"             => "long",
+            ":unsigned-short"   => "ushort",
             ":unsigned-int"     => "uint",
-            ":unsigned-long"    => "ulong", // TODO: platform-dependent?
+            ":unsigned-long"    => "ulong",
             ":float"            => "float",
             ":double"           => "double",
             "Uint8"             => "byte",
@@ -643,11 +697,10 @@ public static unsafe class SDL
             "size_t"            => "UIntPtr",
             ":void"             => "void",
             ":pointer"          => "IntPtr",
-            ":function-pointer" => "IntPtr", // TODO: no idea
-            "va_list"           => "IntPtr", // TODO: almost certainly wrong
+            ":function-pointer" => "FUNCTION_POINTER",
             ":enum"             => type.Name!,
             ":struct"           => type.Name!,
-            ":array"            => $"{CSharpTypeFromFFI(type: type.Type!, definedTypes, context)}[]", // TODO: probably wrong
+            ":array"            => "INLINE_ARRAY",
             "union"             => "UNION",
             _                   => type.Tag,
         };
