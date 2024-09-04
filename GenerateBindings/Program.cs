@@ -426,7 +426,7 @@ internal static class Program
             {
                 if (entry.Type!.Tag == ":function-pointer")
                 {
-                    definitions.Append($"// public static delegate RETURN {entry.Name}(ARGS)\t// WARN_UNDEFINED_FUNCTION_POINTER\n\n");
+                    definitions.Append($"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER\n\n");
                 }
             }
 
@@ -464,8 +464,6 @@ internal static class Program
 
                 if (hasUnionFields)
                 {
-                    continue; // TODO: work in progress
-
                     var internalStructs = new Dictionary<string, RawFFIEntry>();
 
                     definitions.Append("[StructLayout(LayoutKind.Explicit)]\n");
@@ -492,7 +490,7 @@ internal static class Program
                                 }
 
                                 definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
-                                definitions.Append($"public {unionFieldTypeName} {unionFieldName};\n\n");
+                                definitions.Append($"public {unionFieldTypeName} {fieldName}_{unionFieldName};\n\n");
                             }
                         }
                         else if (fieldTypeName == "INLINE_ARRAY")
@@ -523,49 +521,69 @@ internal static class Program
                             definitions.Append($"public {fieldTypeName} {fieldName};\n");
                         }
                     }
-                }
 
-                definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
-                definitions.Append($"public struct {entry.Name!}\n{{\n");
+                    definitions.Append("}\n\n");
 
-                foreach (var field in entry.Fields!)
-                {
-                    var name = SanitizeNames(field.Name!);
-                    var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
-                    var type = CSharpTypeFromFFI(fieldTypedef, definedTypes, TypeContext.StructField);
+                    foreach (var (name, structDef) in internalStructs)
+                    {
+                        definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
+                        definitions.Append($"public struct {name}\n{{\n");
 
-                    if (type == "INLINE_ARRAY")
-                    {
-                        var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, definedTypes, TypeContext.StructField);
-                        for (var i = 0; i < fieldTypedef.Size; i++) definitions.Append($"public {elementType} {name}{i};\n");
-                    }
-                    else if (type == "UNION")
-                    {
-                        type = $"UNION_{entry.Name}_{field.Name}";
-                        definitions.Append($"// public {type} {name}; // WARN_UNHANDLED_UNION\n");
-                    }
-                    else if (type == "FUNCTION_POINTER")
-                    {
-                        type = "IntPtr";
-                        definitions.Append($"public {type} {name};");
-                        if (field.Type!.Tag == ":function-pointer")
+                        foreach (var field in structDef.Fields!)
                         {
-                            definitions.Append("\t// WARN_ANONYMOUS_FUNCTION_POINTER");
+                            var fieldName = SanitizeNames(field.Name!);
+                            var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
+                            var type = CSharpTypeFromFFI(fieldTypedef, definedTypes, TypeContext.StructField);
+                            definitions.Append($"public {type} {fieldName};\n");
+                        }
+
+                        definitions.Append("}\n\n");
+                    }
+                }
+                else
+                {
+                    definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
+                    definitions.Append($"public struct {entry.Name!}\n{{\n");
+
+                    foreach (var field in entry.Fields!)
+                    {
+                        var name = SanitizeNames(field.Name!);
+                        var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
+                        var type = CSharpTypeFromFFI(fieldTypedef, definedTypes, TypeContext.StructField);
+
+                        if (type == "INLINE_ARRAY")
+                        {
+                            var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, definedTypes, TypeContext.StructField);
+                            for (var i = 0; i < fieldTypedef.Size; i++) definitions.Append($"public {elementType} {name}{i};\n");
+                        }
+                        else if (type == "UNION")
+                        {
+                            type = $"UNION_{entry.Name}_{field.Name}";
+                            definitions.Append($"// public {type} {name}; // WARN_UNHANDLED_UNION\n");
+                        }
+                        else if (type == "FUNCTION_POINTER")
+                        {
+                            type = "IntPtr";
+                            definitions.Append($"public {type} {name};");
+                            if (field.Type!.Tag == ":function-pointer")
+                            {
+                                definitions.Append("\t// WARN_ANONYMOUS_FUNCTION_POINTER");
+                            }
+                            else
+                            {
+                                definitions.Append($"\t// {field.Type!.Tag}");
+                            }
+
+                            definitions.Append('\n');
                         }
                         else
                         {
-                            definitions.Append($"\t// {field.Type!.Tag}");
+                            definitions.Append($"public {type} {name};\n");
                         }
+                    }
 
-                        definitions.Append('\n');
-                    }
-                    else
-                    {
-                        definitions.Append($"public {type} {name};\n");
-                    }
+                    definitions.Append("}\n\n");
                 }
-
-                definitions.Append("}\n\n");
             }
 
             else if (entry.Tag == "function")
@@ -630,7 +648,9 @@ internal static class Program
                         {
                             type = $"ref {parameter.Type!.Type!.Tag}";
                             containsUnknownRef = true;
-                            unknownPointerParameters.Append($"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }},\n");
+                            unknownPointerParameters.Append(
+                                $"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }},\n"
+                            );
                         }
                     }
                     else
