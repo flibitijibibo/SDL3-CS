@@ -829,7 +829,7 @@ internal static class Program
 
         var sdlDir = new DirectoryInfo(Environment.GetEnvironmentVariable("SDL3_CS_SDL_REPO_ROOT") ?? "MISSING_ENV_VAR");
         var sdlBindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../SDL3/"));
-        var outputDir = new FileInfo(Path.Combine(sdlBindingsDir.FullName, "generated"));
+        var outputDir = sdlBindingsDir;
         var sdlBindingsProjectFile = new FileInfo(Path.Combine(sdlBindingsDir.FullName, "SDL3.csproj"));
         var c2ffiConfigTemplateFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "config_extract.json.template"));
         var c2ffiConfigFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "config_extract.json"));
@@ -1187,7 +1187,9 @@ internal static class Program
 
     private static string CompileBindingsCSharp(string definitions)
     {
-        return $@"
+        return $@"// NOTE: This file is auto-generated.
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace SDL3;

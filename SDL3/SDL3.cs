@@ -1,4 +1,6 @@
+// NOTE: This file is auto-generated.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace SDL3;
