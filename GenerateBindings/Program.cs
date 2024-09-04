@@ -31,6 +31,7 @@ internal static class Program
     {
         Unknown,
         Ref,
+        Out,
         Array,
     }
 
@@ -278,7 +279,9 @@ internal static class Program
         { ("SDL_DateTimeToTime", "dt"), PointerParameterIntent.Unknown },
     };
 
-    private static readonly string[] DENIED_TYPES =
+    private static readonly List<string> DefinedTypes = new();
+
+    private static readonly string[] DeniedTypes =
     [
         "alloca",
     ];
@@ -401,11 +404,10 @@ internal static class Program
         var definitions = new StringBuilder();
         var unknownPointerParameters = new StringBuilder();
         var currentSourceFile = "";
-        var definedTypes = new List<string>();
 
         foreach (var entry in ffiData)
         {
-            if (DENIED_TYPES.Contains(entry.Name))
+            if (DeniedTypes.Contains(entry.Name))
             {
                 continue;
             }
@@ -433,7 +435,7 @@ internal static class Program
             if (entry.Tag == "enum")
             {
                 definitions.Append($"public enum {entry.Name!}\n{{\n");
-                definedTypes.Add(entry.Name!);
+                DefinedTypes.Add(entry.Name!);
 
                 foreach (var enumValue in entry.Fields!)
                 {
@@ -450,7 +452,7 @@ internal static class Program
                     continue;
                 }
 
-                definedTypes.Add(entry.Name!);
+                DefinedTypes.Add(entry.Name!);
 
                 var hasUnionFields = false;
                 foreach (var field in entry.Fields!)
@@ -473,7 +475,7 @@ internal static class Program
                     {
                         var fieldName = SanitizeNames(field.Name!);
                         var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
-                        var fieldTypeName = CSharpTypeFromFFI(fieldTypedef, definedTypes, TypeContext.StructField);
+                        var fieldTypeName = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
 
                         if (fieldTypeName == "UNION")
                         {
@@ -481,7 +483,7 @@ internal static class Program
                             {
                                 var unionFieldName = SanitizeNames(unionField.Name!);
                                 var unionFieldTypedef = GetTypeFromTypedefMap(type: unionField.Type!, typedefMap);
-                                var unionFieldTypeName = CSharpTypeFromFFI(unionFieldTypedef, definedTypes, TypeContext.StructField);
+                                var unionFieldTypeName = CSharpTypeFromFFI(unionFieldTypedef, TypeContext.StructField);
 
                                 if ((unionFieldTypeName == "") && (unionFieldTypedef.Tag == "struct"))
                                 {
@@ -490,13 +492,13 @@ internal static class Program
                                 }
 
                                 definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
-                                definitions.Append($"public {unionFieldTypeName} {fieldName}_{unionFieldName};\n\n");
+                                definitions.Append($"public {unionFieldTypeName} {fieldName}_{unionFieldName};\n");
                             }
                         }
                         else if (fieldTypeName == "INLINE_ARRAY")
                         {
                             definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
-                            var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, definedTypes, TypeContext.StructField);
+                            var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, TypeContext.StructField);
                             for (var i = 0; i < fieldTypedef.Size; i++) definitions.Append($"public {elementType} {fieldName}{i};\n");
                         }
                         else if (fieldTypeName == "FUNCTION_POINTER")
@@ -533,7 +535,7 @@ internal static class Program
                         {
                             var fieldName = SanitizeNames(field.Name!);
                             var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
-                            var type = CSharpTypeFromFFI(fieldTypedef, definedTypes, TypeContext.StructField);
+                            var type = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
                             definitions.Append($"public {type} {fieldName};\n");
                         }
 
@@ -549,11 +551,11 @@ internal static class Program
                     {
                         var name = SanitizeNames(field.Name!);
                         var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
-                        var type = CSharpTypeFromFFI(fieldTypedef, definedTypes, TypeContext.StructField);
+                        var type = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
 
                         if (type == "INLINE_ARRAY")
                         {
-                            var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, definedTypes, TypeContext.StructField);
+                            var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, TypeContext.StructField);
                             for (var i = 0; i < fieldTypedef.Size; i++) definitions.Append($"public {elementType} {name}{i};\n");
                         }
                         else if (type == "UNION")
@@ -605,7 +607,7 @@ internal static class Program
 
                 definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
                 var returnTypedef = GetTypeFromTypedefMap(type: entry.ReturnType!, typedefMap);
-                var returnType = CSharpTypeFromFFI(returnTypedef, definedTypes, TypeContext.Return);
+                var returnType = CSharpTypeFromFFI(returnTypedef, TypeContext.Return);
                 if (returnType == "FUNCTION_POINTER")
                 {
                     returnType = "IntPtr";
@@ -629,13 +631,14 @@ internal static class Program
                     var parameterTypedef = GetTypeFromTypedefMap(type: parameter.Type!, typedefMap);
 
                     string type;
-                    if ((parameter.Type!.Tag == ":pointer") && definedTypes.Contains(parameter.Type!.Type!.Tag))
+                    if ((parameter.Type!.Tag == ":pointer") && DefinedTypes.Contains(parameter.Type!.Type!.Tag))
                     {
                         if (ParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
                         {
                             type = intent switch
                             {
                                 PointerParameterIntent.Ref   => $"ref {parameter.Type!.Type!.Tag}",
+                                PointerParameterIntent.Out   => $"out {parameter.Type!.Type!.Tag}",
                                 PointerParameterIntent.Array => $"{parameter.Type!.Type!.Tag}*",
                                 _                            => $"ref {parameter.Type!.Type!.Tag}",
                             };
@@ -655,7 +658,7 @@ internal static class Program
                     }
                     else
                     {
-                        type = CSharpTypeFromFFI(parameterTypedef, definedTypes, TypeContext.Parameter);
+                        type = CSharpTypeFromFFI(parameterTypedef, TypeContext.Parameter);
                         if (type == "FUNCTION_POINTER")
                         {
                             type = $"/* {parameter.Type!.Tag} */ IntPtr";
@@ -755,9 +758,9 @@ public static unsafe class SDL
         return type;
     }
 
-    private static string CSharpTypeFromFFI(RawFFIEntry type, List<string> definedTypes, TypeContext context)
+    private static string CSharpTypeFromFFI(RawFFIEntry type, TypeContext context)
     {
-        if ((type.Tag == ":pointer") && definedTypes.Contains(type.Type!.Tag))
+        if ((type.Tag == ":pointer") && DefinedTypes.Contains(type.Type!.Tag))
         {
             return context switch
             {

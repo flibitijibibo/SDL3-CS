@@ -2836,21 +2836,16 @@ public static unsafe class SDL
         public SDL_GamepadBindingType input_type;
         [FieldOffset(4)]
         public int input_button;
-
         [FieldOffset(4)]
         public INTERNAL_SDL_GamepadBinding_input_axis input_axis;
-
         [FieldOffset(4)]
         public INTERNAL_SDL_GamepadBinding_input_hat input_hat;
-
         [FieldOffset(16)]
         public SDL_GamepadBindingType output_type;
         [FieldOffset(20)]
         public SDL_GamepadButton output_button;
-
         [FieldOffset(20)]
         public INTERNAL_SDL_GamepadBinding_output_axis output_axis;
-
     }
 
     [StructLayout(LayoutKind.Sequential)]
