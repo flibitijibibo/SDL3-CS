@@ -26,13 +26,13 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_free(IntPtr mem);
 
-    // public static delegate RETURN SDL_malloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:539:25
+    // public delegate WARN_PLACEHOLDER SDL_malloc_func();
 
-    // public static delegate RETURN SDL_calloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:540:25
+    // public delegate WARN_PLACEHOLDER SDL_calloc_func();
 
-    // public static delegate RETURN SDL_realloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:541:25
+    // public delegate WARN_PLACEHOLDER SDL_realloc_func();
 
-    // public static delegate RETURN SDL_free_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:542:24
+    // public delegate WARN_PLACEHOLDER SDL_free_func();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GetOriginalMemoryFunctions(IntPtr malloc_func, IntPtr calloc_func, IntPtr realloc_func, IntPtr free_func);
@@ -61,7 +61,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_unsetenv(ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_CompareCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:674:23
+    // public delegate WARN_PLACEHOLDER SDL_CompareCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_qsort(IntPtr @base, UIntPtr nmemb, UIntPtr size, /* SDL_CompareCallback */ IntPtr compare);
@@ -69,7 +69,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_bsearch(IntPtr key, IntPtr @base, UIntPtr nmemb, UIntPtr size, /* SDL_CompareCallback */ IntPtr compare);
 
-    // public static delegate RETURN SDL_CompareCallback_r(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:678:23
+    // public delegate WARN_PLACEHOLDER SDL_CompareCallback_r();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_qsort_r(IntPtr @base, UIntPtr nmemb, UIntPtr size, /* SDL_CompareCallback_r */ IntPtr compare, IntPtr userdata);
@@ -491,7 +491,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_size_add_check_overflow_builtin(UIntPtr a, UIntPtr b, ref UIntPtr ret);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_FunctionPointer(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:3165:16
+    // public delegate WARN_PLACEHOLDER SDL_FunctionPointer();
 
     // ./include/SDL3/SDL_assert.h
 
@@ -519,7 +519,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_AssertState SDL_ReportAssertion(ref SDL_AssertData data, ref char func, ref char file, int line);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_AssertionHandler(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_assert.h:423:35
+    // public delegate WARN_PLACEHOLDER SDL_AssertionHandler();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetAssertionHandler(/* SDL_AssertionHandler */ IntPtr handler, IntPtr userdata);
@@ -703,7 +703,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockProperties(UInt32 props);
 
-    // public static delegate RETURN SDL_CleanupPropertyCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_properties.h:187:24
+    // public delegate WARN_PLACEHOLDER SDL_CleanupPropertyCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetPointerPropertyWithCleanup(UInt32 props, ref char name, IntPtr value, /* SDL_CleanupPropertyCallback */ IntPtr cleanup, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -927,7 +927,7 @@ public static unsafe class SDL
         SDL_THREAD_PRIORITY_TIME_CRITICAL = 3,
     }
 
-    // public static delegate RETURN SDL_ThreadFunction(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_thread.h:114:24
+    // public delegate WARN_PLACEHOLDER SDL_ThreadFunction();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, ref char name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -956,7 +956,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetTLS(IntPtr id);
 
-    // public static delegate RETURN SDL_TLSDestructorCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_thread.h:488:24
+    // public delegate WARN_PLACEHOLDER SDL_TLSDestructorCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetTLS(IntPtr id, IntPtr value, /* SDL_TLSDestructorCallback */ IntPtr destructor);
@@ -1113,7 +1113,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_UnlockAudioStream(IntPtr stream);
 
-    // public static delegate RETURN SDL_AudioStreamCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_audio.h:1527:24
+    // public delegate WARN_PLACEHOLDER SDL_AudioStreamCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetAudioStreamGetCallback(IntPtr stream, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);
@@ -1127,7 +1127,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenAudioDeviceStream(UInt32 devid, ref SDL_AudioSpec spec, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_AudioPostmixCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_audio.h:1744:24
+    // public delegate WARN_PLACEHOLDER SDL_AudioPostmixCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetAudioPostmixCallback(UInt32 devid, /* SDL_AudioPostmixCallback */ IntPtr callback, IntPtr userdata);
@@ -1822,9 +1822,9 @@ public static unsafe class SDL
         SDL_FLASH_UNTIL_FOCUSED = 2,
     }
 
-    // public static delegate RETURN SDL_EGLAttribArrayCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_video.h:246:34
+    // public delegate WARN_PLACEHOLDER SDL_EGLAttribArrayCallback();
 
-    // public static delegate RETURN SDL_EGLIntArrayCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_video.h:247:31
+    // public delegate WARN_PLACEHOLDER SDL_EGLIntArrayCallback();
 
     public enum SDL_GLattr
     {
@@ -2142,7 +2142,7 @@ public static unsafe class SDL
         SDL_HITTEST_RESIZE_LEFT = 9,
     }
 
-    // public static delegate RETURN SDL_HitTest(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_video.h:2313:37
+    // public delegate WARN_PLACEHOLDER SDL_HitTest();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowHitTest(IntPtr window, /* SDL_HitTest */ IntPtr callback, IntPtr callback_data);
@@ -2310,9 +2310,9 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasPrimarySelectionText();
 
-    // public static delegate RETURN SDL_ClipboardDataCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_clipboard.h:155:31
+    // public delegate WARN_PLACEHOLDER SDL_ClipboardDataCallback();
 
-    // public static delegate RETURN SDL_ClipboardCleanupCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_clipboard.h:167:24
+    // public delegate WARN_PLACEHOLDER SDL_ClipboardCleanupCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, ref IntPtr mime_types, UIntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -2391,7 +2391,7 @@ public static unsafe class SDL
         public char* pattern;
     }
 
-    // public static delegate RETURN SDL_DialogFileCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_dialog.h:96:24
+    // public delegate WARN_PLACEHOLDER SDL_DialogFileCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, ref char default_location, bool allow_many); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -4154,6 +4154,341 @@ public static unsafe class SDL
         public IntPtr data2;
     }
 
+    [StructLayout(LayoutKind.Explicit)]
+    public struct SDL_Event
+    {
+        [FieldOffset(0)]
+        public UInt32 type;
+        [FieldOffset(0)]
+        public SDL_CommonEvent common;
+        [FieldOffset(0)]
+        public SDL_DisplayEvent display;
+        [FieldOffset(0)]
+        public SDL_WindowEvent window;
+        [FieldOffset(0)]
+        public SDL_KeyboardDeviceEvent kdevice;
+        [FieldOffset(0)]
+        public SDL_KeyboardEvent key;
+        [FieldOffset(0)]
+        public SDL_TextEditingEvent edit;
+        [FieldOffset(0)]
+        public SDL_TextEditingCandidatesEvent edit_candidates;
+        [FieldOffset(0)]
+        public SDL_TextInputEvent text;
+        [FieldOffset(0)]
+        public SDL_MouseDeviceEvent mdevice;
+        [FieldOffset(0)]
+        public SDL_MouseMotionEvent motion;
+        [FieldOffset(0)]
+        public SDL_MouseButtonEvent button;
+        [FieldOffset(0)]
+        public SDL_MouseWheelEvent wheel;
+        [FieldOffset(0)]
+        public SDL_JoyDeviceEvent jdevice;
+        [FieldOffset(0)]
+        public SDL_JoyAxisEvent jaxis;
+        [FieldOffset(0)]
+        public SDL_JoyBallEvent jball;
+        [FieldOffset(0)]
+        public SDL_JoyHatEvent jhat;
+        [FieldOffset(0)]
+        public SDL_JoyButtonEvent jbutton;
+        [FieldOffset(0)]
+        public SDL_JoyBatteryEvent jbattery;
+        [FieldOffset(0)]
+        public SDL_GamepadDeviceEvent gdevice;
+        [FieldOffset(0)]
+        public SDL_GamepadAxisEvent gaxis;
+        [FieldOffset(0)]
+        public SDL_GamepadButtonEvent gbutton;
+        [FieldOffset(0)]
+        public SDL_GamepadTouchpadEvent gtouchpad;
+        [FieldOffset(0)]
+        public SDL_GamepadSensorEvent gsensor;
+        [FieldOffset(0)]
+        public SDL_AudioDeviceEvent adevice;
+        [FieldOffset(0)]
+        public SDL_CameraDeviceEvent cdevice;
+        [FieldOffset(0)]
+        public SDL_SensorEvent sensor;
+        [FieldOffset(0)]
+        public SDL_QuitEvent quit;
+        [FieldOffset(0)]
+        public SDL_UserEvent user;
+        [FieldOffset(0)]
+        public SDL_TouchFingerEvent tfinger;
+        [FieldOffset(0)]
+        public SDL_PenProximityEvent pproximity;
+        [FieldOffset(0)]
+        public SDL_PenTouchEvent ptouch;
+        [FieldOffset(0)]
+        public SDL_PenMotionEvent pmotion;
+        [FieldOffset(0)]
+        public SDL_PenButtonEvent pbutton;
+        [FieldOffset(0)]
+        public SDL_PenAxisEvent paxis;
+        [FieldOffset(0)]
+        public SDL_DropEvent drop;
+        [FieldOffset(0)]
+        public SDL_ClipboardEvent clipboard;
+        [FieldOffset(0)]
+        public byte padding0;
+        [FieldOffset(0)]
+        public byte padding1;
+        [FieldOffset(0)]
+        public byte padding2;
+        [FieldOffset(0)]
+        public byte padding3;
+        [FieldOffset(0)]
+        public byte padding4;
+        [FieldOffset(0)]
+        public byte padding5;
+        [FieldOffset(0)]
+        public byte padding6;
+        [FieldOffset(0)]
+        public byte padding7;
+        [FieldOffset(0)]
+        public byte padding8;
+        [FieldOffset(0)]
+        public byte padding9;
+        [FieldOffset(0)]
+        public byte padding10;
+        [FieldOffset(0)]
+        public byte padding11;
+        [FieldOffset(0)]
+        public byte padding12;
+        [FieldOffset(0)]
+        public byte padding13;
+        [FieldOffset(0)]
+        public byte padding14;
+        [FieldOffset(0)]
+        public byte padding15;
+        [FieldOffset(0)]
+        public byte padding16;
+        [FieldOffset(0)]
+        public byte padding17;
+        [FieldOffset(0)]
+        public byte padding18;
+        [FieldOffset(0)]
+        public byte padding19;
+        [FieldOffset(0)]
+        public byte padding20;
+        [FieldOffset(0)]
+        public byte padding21;
+        [FieldOffset(0)]
+        public byte padding22;
+        [FieldOffset(0)]
+        public byte padding23;
+        [FieldOffset(0)]
+        public byte padding24;
+        [FieldOffset(0)]
+        public byte padding25;
+        [FieldOffset(0)]
+        public byte padding26;
+        [FieldOffset(0)]
+        public byte padding27;
+        [FieldOffset(0)]
+        public byte padding28;
+        [FieldOffset(0)]
+        public byte padding29;
+        [FieldOffset(0)]
+        public byte padding30;
+        [FieldOffset(0)]
+        public byte padding31;
+        [FieldOffset(0)]
+        public byte padding32;
+        [FieldOffset(0)]
+        public byte padding33;
+        [FieldOffset(0)]
+        public byte padding34;
+        [FieldOffset(0)]
+        public byte padding35;
+        [FieldOffset(0)]
+        public byte padding36;
+        [FieldOffset(0)]
+        public byte padding37;
+        [FieldOffset(0)]
+        public byte padding38;
+        [FieldOffset(0)]
+        public byte padding39;
+        [FieldOffset(0)]
+        public byte padding40;
+        [FieldOffset(0)]
+        public byte padding41;
+        [FieldOffset(0)]
+        public byte padding42;
+        [FieldOffset(0)]
+        public byte padding43;
+        [FieldOffset(0)]
+        public byte padding44;
+        [FieldOffset(0)]
+        public byte padding45;
+        [FieldOffset(0)]
+        public byte padding46;
+        [FieldOffset(0)]
+        public byte padding47;
+        [FieldOffset(0)]
+        public byte padding48;
+        [FieldOffset(0)]
+        public byte padding49;
+        [FieldOffset(0)]
+        public byte padding50;
+        [FieldOffset(0)]
+        public byte padding51;
+        [FieldOffset(0)]
+        public byte padding52;
+        [FieldOffset(0)]
+        public byte padding53;
+        [FieldOffset(0)]
+        public byte padding54;
+        [FieldOffset(0)]
+        public byte padding55;
+        [FieldOffset(0)]
+        public byte padding56;
+        [FieldOffset(0)]
+        public byte padding57;
+        [FieldOffset(0)]
+        public byte padding58;
+        [FieldOffset(0)]
+        public byte padding59;
+        [FieldOffset(0)]
+        public byte padding60;
+        [FieldOffset(0)]
+        public byte padding61;
+        [FieldOffset(0)]
+        public byte padding62;
+        [FieldOffset(0)]
+        public byte padding63;
+        [FieldOffset(0)]
+        public byte padding64;
+        [FieldOffset(0)]
+        public byte padding65;
+        [FieldOffset(0)]
+        public byte padding66;
+        [FieldOffset(0)]
+        public byte padding67;
+        [FieldOffset(0)]
+        public byte padding68;
+        [FieldOffset(0)]
+        public byte padding69;
+        [FieldOffset(0)]
+        public byte padding70;
+        [FieldOffset(0)]
+        public byte padding71;
+        [FieldOffset(0)]
+        public byte padding72;
+        [FieldOffset(0)]
+        public byte padding73;
+        [FieldOffset(0)]
+        public byte padding74;
+        [FieldOffset(0)]
+        public byte padding75;
+        [FieldOffset(0)]
+        public byte padding76;
+        [FieldOffset(0)]
+        public byte padding77;
+        [FieldOffset(0)]
+        public byte padding78;
+        [FieldOffset(0)]
+        public byte padding79;
+        [FieldOffset(0)]
+        public byte padding80;
+        [FieldOffset(0)]
+        public byte padding81;
+        [FieldOffset(0)]
+        public byte padding82;
+        [FieldOffset(0)]
+        public byte padding83;
+        [FieldOffset(0)]
+        public byte padding84;
+        [FieldOffset(0)]
+        public byte padding85;
+        [FieldOffset(0)]
+        public byte padding86;
+        [FieldOffset(0)]
+        public byte padding87;
+        [FieldOffset(0)]
+        public byte padding88;
+        [FieldOffset(0)]
+        public byte padding89;
+        [FieldOffset(0)]
+        public byte padding90;
+        [FieldOffset(0)]
+        public byte padding91;
+        [FieldOffset(0)]
+        public byte padding92;
+        [FieldOffset(0)]
+        public byte padding93;
+        [FieldOffset(0)]
+        public byte padding94;
+        [FieldOffset(0)]
+        public byte padding95;
+        [FieldOffset(0)]
+        public byte padding96;
+        [FieldOffset(0)]
+        public byte padding97;
+        [FieldOffset(0)]
+        public byte padding98;
+        [FieldOffset(0)]
+        public byte padding99;
+        [FieldOffset(0)]
+        public byte padding100;
+        [FieldOffset(0)]
+        public byte padding101;
+        [FieldOffset(0)]
+        public byte padding102;
+        [FieldOffset(0)]
+        public byte padding103;
+        [FieldOffset(0)]
+        public byte padding104;
+        [FieldOffset(0)]
+        public byte padding105;
+        [FieldOffset(0)]
+        public byte padding106;
+        [FieldOffset(0)]
+        public byte padding107;
+        [FieldOffset(0)]
+        public byte padding108;
+        [FieldOffset(0)]
+        public byte padding109;
+        [FieldOffset(0)]
+        public byte padding110;
+        [FieldOffset(0)]
+        public byte padding111;
+        [FieldOffset(0)]
+        public byte padding112;
+        [FieldOffset(0)]
+        public byte padding113;
+        [FieldOffset(0)]
+        public byte padding114;
+        [FieldOffset(0)]
+        public byte padding115;
+        [FieldOffset(0)]
+        public byte padding116;
+        [FieldOffset(0)]
+        public byte padding117;
+        [FieldOffset(0)]
+        public byte padding118;
+        [FieldOffset(0)]
+        public byte padding119;
+        [FieldOffset(0)]
+        public byte padding120;
+        [FieldOffset(0)]
+        public byte padding121;
+        [FieldOffset(0)]
+        public byte padding122;
+        [FieldOffset(0)]
+        public byte padding123;
+        [FieldOffset(0)]
+        public byte padding124;
+        [FieldOffset(0)]
+        public byte padding125;
+        [FieldOffset(0)]
+        public byte padding126;
+        [FieldOffset(0)]
+        public byte padding127;
+    }
+
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_PumpEvents();
 
@@ -4165,7 +4500,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PeepEvents(IntPtr events, int numevents, SDL_EventAction action, UInt32 minType, UInt32 maxType);
+    public static extern int SDL_PeepEvents(ref SDL_Event events, int numevents, SDL_EventAction action, UInt32 minType, UInt32 maxType);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasEvent(UInt32 type);
@@ -4180,18 +4515,18 @@ public static unsafe class SDL
     public static extern void SDL_FlushEvents(UInt32 minType, UInt32 maxType);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_PollEvent(IntPtr @event);
+    public static extern bool SDL_PollEvent(ref SDL_Event @event);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_WaitEvent(IntPtr @event);
+    public static extern bool SDL_WaitEvent(ref SDL_Event @event);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_WaitEventTimeout(IntPtr @event, Int32 timeoutMS);
+    public static extern bool SDL_WaitEventTimeout(ref SDL_Event @event, Int32 timeoutMS);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_PushEvent(IntPtr @event);
+    public static extern bool SDL_PushEvent(ref SDL_Event @event);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_EventFilter(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_events.h:1288:28
+    // public delegate WARN_PLACEHOLDER SDL_EventFilter();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetEventFilter(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
@@ -4218,7 +4553,7 @@ public static unsafe class SDL
     public static extern UInt32 SDL_RegisterEvents(int numevents);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetWindowFromEvent(IntPtr @event);
+    public static extern IntPtr SDL_GetWindowFromEvent(ref SDL_Event @event);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_filesystem.h
 
@@ -4268,7 +4603,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_CreateDirectory(ref char path);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_EnumerateDirectoryCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_filesystem.h:280:23
+    // public delegate WARN_PLACEHOLDER SDL_EnumerateDirectoryCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_EnumerateDirectory(ref char path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -5292,6 +5627,25 @@ public static unsafe class SDL
         public UInt16 fade_level;
     }
 
+    [StructLayout(LayoutKind.Explicit)]
+    public struct SDL_HapticEffect
+    {
+        [FieldOffset(0)]
+        public UInt16 type;
+        [FieldOffset(0)]
+        public SDL_HapticConstant constant;
+        [FieldOffset(0)]
+        public SDL_HapticPeriodic periodic;
+        [FieldOffset(0)]
+        public SDL_HapticCondition condition;
+        [FieldOffset(0)]
+        public SDL_HapticRamp ramp;
+        [FieldOffset(0)]
+        public SDL_HapticLeftRight leftright;
+        [FieldOffset(0)]
+        public SDL_HapticCustom custom;
+    }
+
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetHaptics(ref int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
@@ -5338,13 +5692,13 @@ public static unsafe class SDL
     public static extern int SDL_GetNumHapticAxes(IntPtr haptic);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HapticEffectSupported(IntPtr haptic, IntPtr effect);
+    public static extern bool SDL_HapticEffectSupported(IntPtr haptic, ref SDL_HapticEffect effect);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_CreateHapticEffect(IntPtr haptic, IntPtr effect);
+    public static extern int SDL_CreateHapticEffect(IntPtr haptic, ref SDL_HapticEffect effect);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_UpdateHapticEffect(IntPtr haptic, int effect, IntPtr data);
+    public static extern bool SDL_UpdateHapticEffect(IntPtr haptic, int effect, ref SDL_HapticEffect data); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_RunHapticEffect(IntPtr haptic, int effect, UInt32 iterations);
@@ -5509,7 +5863,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetHintBoolean(ref char name, bool default_value);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_HintCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_hints.h:4291:23
+    // public delegate WARN_PLACEHOLDER SDL_HintCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_AddHintCallback(ref char name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -5526,13 +5880,13 @@ public static unsafe class SDL
         SDL_APP_FAILURE = 2,
     }
 
-    // public static delegate RETURN SDL_AppInit_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_init.h:97:33
+    // public delegate WARN_PLACEHOLDER SDL_AppInit_func();
 
-    // public static delegate RETURN SDL_AppIterate_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_init.h:98:33
+    // public delegate WARN_PLACEHOLDER SDL_AppIterate_func();
 
-    // public static delegate RETURN SDL_AppEvent_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_init.h:99:33
+    // public delegate WARN_PLACEHOLDER SDL_AppEvent_func();
 
-    // public static delegate RETURN SDL_AppQuit_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_init.h:100:24
+    // public delegate WARN_PLACEHOLDER SDL_AppQuit_func();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_Init(UInt32 flags);
@@ -5658,7 +6012,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_LogMessage(int category, SDL_LogPriority priority, ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_LogOutputFunction(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_log.h:411:24
+    // public delegate WARN_PLACEHOLDER SDL_LogOutputFunction();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GetLogOutputFunction(IntPtr callback, ref IntPtr userdata);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -5899,7 +6253,7 @@ public static unsafe class SDL
     public static extern bool SDL_RenderCoordinatesToWindow(IntPtr renderer, float x, float y, ref float window_x, ref float window_y); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ConvertEventToRenderCoordinates(IntPtr renderer, IntPtr @event);
+    public static extern bool SDL_ConvertEventToRenderCoordinates(IntPtr renderer, ref SDL_Event @event);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetRenderViewport(IntPtr renderer, ref SDL_Rect rect);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -6098,7 +6452,7 @@ public static unsafe class SDL
 
     // ./include/SDL3/SDL_system.h
 
-    // public static delegate RETURN SDL_X11EventHook(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_system.h:139:28
+    // public delegate WARN_PLACEHOLDER SDL_X11EventHook();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetX11EventHook(/* SDL_X11EventHook */ IntPtr callback, IntPtr userdata);
@@ -6206,12 +6560,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DelayNS(UInt64 ns);
 
-    // public static delegate RETURN SDL_TimerCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_timer.h:158:26
+    // public delegate WARN_PLACEHOLDER SDL_TimerCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_AddTimer(UInt32 interval, /* SDL_TimerCallback */ IntPtr callback, IntPtr userdata);
 
-    // public static delegate RETURN SDL_NSTimerCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_timer.h:222:26
+    // public delegate WARN_PLACEHOLDER SDL_NSTimerCallback();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_AddTimerNS(UInt64 interval, /* SDL_NSTimerCallback */ IntPtr callback, IntPtr userdata);

@@ -41,6 +41,20 @@ internal static class Program
         public (string, string)[] Parameters { get; set; }
     }
 
+    private class StructDefinitionType
+    {
+        public bool ContainsUnion { get; set; }
+        public List<(uint, string)> OffsetFields { get; } = new();
+        public Dictionary<string, RawFFIEntry> InternalStructs { get; } = new();
+
+        public void Reset()
+        {
+            ContainsUnion = false;
+            OffsetFields.Clear();
+            InternalStructs.Clear();
+        }
+    }
+
     private static readonly Dictionary<(string, string), PointerParameterIntent> PointerParametersIntents = new()
     {
         { ("SDL_getenv", "name"), PointerParameterIntent.Unknown },
@@ -721,6 +735,16 @@ internal static class Program
         { ("SDL_GetDateTimeLocalePreferences", "timeFormat"), PointerParameterIntent.Unknown },
         { ("SDL_TimeToDateTime", "dt"), PointerParameterIntent.Unknown },
         { ("SDL_DateTimeToTime", "dt"), PointerParameterIntent.Unknown },
+        { ("SDL_PeepEvents", "events"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_PollEvent", "event"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_WaitEvent", "event"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_WaitEventTimeout", "event"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_PushEvent", "event"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_GetWindowFromEvent", "event"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_HapticEffectSupported", "effect"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_CreateHapticEffect", "effect"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_UpdateHapticEffect", "data"), PointerParameterIntent.Unknown }, // TODO: set me
+        { ("SDL_ConvertEventToRenderCoordinates", "event"), PointerParameterIntent.Unknown }, // TODO: set me
     };
 
     private static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
@@ -784,13 +808,14 @@ internal static class Program
         { "SDL_NSTimerCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_timer.h:222:2
     };
 
-    private static readonly List<string> DefinedTypes = new();
-    private static readonly Dictionary<string, RawFFIEntry> TypedefMap = new();
-
     private static readonly string[] DeniedTypes =
     [
         "alloca",
     ];
+
+    private static readonly List<string> DefinedTypes = new();
+    private static readonly Dictionary<string, RawFFIEntry> TypedefMap = new();
+    private static readonly StructDefinitionType StructDefinition = new();
 
     private static int Main(string[] args)
     {
@@ -989,7 +1014,7 @@ internal static class Program
                 }
             }
 
-            else if (entry.Tag == "struct")
+            else if ((entry.Tag == "struct") || (entry.Tag == "union"))
             {
                 if (entry.Fields!.Length == 0)
                 {
@@ -997,138 +1022,15 @@ internal static class Program
                 }
 
                 DefinedTypes.Add(entry.Name!);
+                ConstructStruct(structName: entry.Name!, entry, definitions);
 
-                var hasUnionFields = false;
-                foreach (var field in entry.Fields!)
+                while (StructDefinition.InternalStructs.Count > 0)
                 {
-                    if (field.Type!.Tag == "union")
+                    var internalStructs = new Dictionary<string, RawFFIEntry>(StructDefinition.InternalStructs);
+                    foreach (var (internalStructName, internalStructEntry) in internalStructs)
                     {
-                        hasUnionFields = true;
-                        break;
+                        ConstructStruct(internalStructName, internalStructEntry, definitions);
                     }
-                }
-
-                if (hasUnionFields)
-                {
-                    var internalStructs = new Dictionary<string, RawFFIEntry>();
-
-                    definitions.Append("[StructLayout(LayoutKind.Explicit)]\n");
-                    definitions.Append($"public struct {entry.Name!}\n{{\n");
-
-                    foreach (var field in entry.Fields!)
-                    {
-                        var fieldName = SanitizeNames(field.Name!);
-                        var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!);
-                        var fieldTypeName = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
-
-                        if (fieldTypeName == "UNION")
-                        {
-                            foreach (var unionField in fieldTypedef.Fields!)
-                            {
-                                var unionFieldName = SanitizeNames(unionField.Name!);
-                                var unionFieldTypedef = GetTypeFromTypedefMap(type: unionField.Type!);
-                                var unionFieldTypeName = CSharpTypeFromFFI(unionFieldTypedef, TypeContext.StructField);
-
-                                if ((unionFieldTypeName == "") && (unionFieldTypedef.Tag == "struct"))
-                                {
-                                    unionFieldTypeName = $"INTERNAL_{entry.Name!}_{fieldName}_{unionFieldName}";
-                                    internalStructs.Add(unionFieldTypeName, unionFieldTypedef);
-                                }
-
-                                definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
-                                definitions.Append($"public {unionFieldTypeName} {fieldName}_{unionFieldName};\n");
-                            }
-                        }
-                        else if (fieldTypeName == "INLINE_ARRAY")
-                        {
-                            definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
-                            var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, TypeContext.StructField);
-                            for (var i = 0; i < fieldTypedef.Size; i++) definitions.Append($"public {elementType} {fieldName}{i};\n");
-                        }
-                        else if (fieldTypeName == "FUNCTION_POINTER")
-                        {
-                            definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
-                            fieldTypeName = "IntPtr";
-                            definitions.Append($"public {fieldTypeName} {fieldName};");
-                            if (field.Type!.Tag == "function-pointer")
-                            {
-                                definitions.Append("\t// WARN_ANONYMOUS_FUNCTION_POINTER");
-                            }
-                            else
-                            {
-                                definitions.Append($"\t// {field.Type!.Tag}");
-                            }
-
-                            definitions.Append('\n');
-                        }
-                        else
-                        {
-                            definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
-                            definitions.Append($"public {fieldTypeName} {fieldName};\n");
-                        }
-                    }
-
-                    definitions.Append("}\n\n");
-
-                    foreach (var (name, structDef) in internalStructs)
-                    {
-                        definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
-                        definitions.Append($"public struct {name}\n{{\n");
-
-                        foreach (var field in structDef.Fields!)
-                        {
-                            var fieldName = SanitizeNames(field.Name!);
-                            var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!);
-                            var type = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
-                            definitions.Append($"public {type} {fieldName};\n");
-                        }
-
-                        definitions.Append("}\n\n");
-                    }
-                }
-                else
-                {
-                    definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
-                    definitions.Append($"public struct {entry.Name!}\n{{\n");
-
-                    foreach (var field in entry.Fields!)
-                    {
-                        var name = SanitizeNames(field.Name!);
-                        var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!);
-                        var type = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
-
-                        if (type == "INLINE_ARRAY")
-                        {
-                            var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, TypeContext.StructField);
-                            for (var i = 0; i < fieldTypedef.Size; i++) definitions.Append($"public {elementType} {name}{i};\n");
-                        }
-                        else if (type == "UNION")
-                        {
-                            type = $"UNION_{entry.Name}_{field.Name}";
-                            definitions.Append($"// public {type} {name}; // WARN_UNHANDLED_UNION\n");
-                        }
-                        else if (type == "FUNCTION_POINTER")
-                        {
-                            type = "IntPtr";
-                            definitions.Append($"public {type} {name};");
-                            if (field.Type!.Tag == "function-pointer")
-                            {
-                                definitions.Append("\t// WARN_ANONYMOUS_FUNCTION_POINTER");
-                            }
-                            else
-                            {
-                                definitions.Append($"\t// {field.Type!.Tag}");
-                            }
-
-                            definitions.Append('\n');
-                        }
-                        else
-                        {
-                            definitions.Append($"public {type} {name};\n");
-                        }
-                    }
-
-                    definitions.Append("}\n\n");
                 }
             }
 
@@ -1211,7 +1113,7 @@ internal static class Program
                         }
                     }
 
-                    var name = SanitizeNames(parameter.Name!);
+                    var name = SanitizeName(parameter.Name!);
                     definitions.Append($"{typeName} {name}");
                 }
 
@@ -1233,7 +1135,7 @@ internal static class Program
         RunProcess(dotnetExe, args: $"format {sdlBindingsProjectFile}");
         if (unknownPointerParameters.Length > 0)
         {
-            Console.Write($"new pointer parameters (add these to `ParametersIntents` dictionary:\n\n{unknownPointerParameters}");
+            Console.Write($"new pointer parameters (add these to `PointerParametersIntents` dictionary:\n\n{unknownPointerParameters}");
         }
 
         if (undefinedFunctionPointers.Length > 0)
@@ -1350,12 +1252,12 @@ public static unsafe class SDL
             "enum"             => type.Name!,
             "struct"           => type.Name!,
             "array"            => "INLINE_ARRAY",
-            "union"            => "UNION",
+            "union"            => type.Name!,
             _                  => type.Tag,
         };
     }
 
-    private static string SanitizeNames(string unsanitizedName)
+    private static string SanitizeName(string unsanitizedName)
     {
         return unsanitizedName switch
         {
@@ -1377,5 +1279,118 @@ public static unsafe class SDL
                 !typeName.StartsWith("SDL_") // assume no SDL prefix == std library or primitive typename
                 || DefinedTypes.Contains(typeName)
             );
+    }
+
+    private static void ConstructStruct(string structName, RawFFIEntry entry, StringBuilder definitions)
+    {
+        StructDefinition.Reset();
+        ConstructStructFields(entry, typePrefix: $"{structName}_");
+
+        if (StructDefinition.ContainsUnion)
+        {
+            definitions.Append("[StructLayout(LayoutKind.Explicit)]\n");
+            definitions.Append($"public struct {structName}\n{{\n");
+
+            foreach (var (offset, field) in StructDefinition.OffsetFields)
+            {
+                definitions.Append($"[FieldOffset({offset})]\n");
+                definitions.Append($"{field}\n");
+            }
+
+            definitions.Append("}\n\n");
+        }
+        else
+        {
+            definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
+            definitions.Append($"public struct {structName}\n{{\n");
+
+            foreach (var (offset, field) in StructDefinition.OffsetFields)
+            {
+                definitions.Append($"{field}\n");
+            }
+
+            definitions.Append("}\n\n");
+        }
+    }
+
+    private static void ConstructStructFields(
+        RawFFIEntry entry,
+        uint byteOffset = 0,
+        string typePrefix = "",
+        string namePrefix = ""
+    )
+    {
+        if (entry.Tag == "union")
+        {
+            StructDefinition.ContainsUnion = true;
+        }
+
+        foreach (var field in entry.Fields!)
+        {
+            var fieldName = SanitizeName($"{namePrefix}{field.Name!}");
+            var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!);
+            var fieldTypeName = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
+            if ((fieldTypeName == "") && (fieldTypedef.Tag == "union"))
+            {
+                ConstructStructFields(
+                    fieldTypedef,
+                    byteOffset: byteOffset + (uint) field.BitOffset! / 8,
+                    typePrefix,
+                    namePrefix: $"{fieldName}_"
+                );
+            }
+            else if ((fieldTypeName == "") && (fieldTypedef.Tag == "struct"))
+            {
+                var internalStructName = $"INTERNAL_{typePrefix}{fieldName}";
+                StructDefinition.InternalStructs.Add(internalStructName, fieldTypedef);
+                StructDefinition.OffsetFields.Add(
+                    (
+                        byteOffset + (uint) field.BitOffset! / 8,
+                        $"public {internalStructName} {fieldName};"
+                    )
+                );
+            }
+            else if (fieldTypeName == "INLINE_ARRAY")
+            {
+                var elementTypeName = CSharpTypeFromFFI(type: fieldTypedef.Type!, TypeContext.StructField);
+                for (var i = 0; i < fieldTypedef.Size; i++)
+                {
+                    StructDefinition.OffsetFields.Add(
+                        (
+                            byteOffset + (uint) field.BitOffset! / 8, // TODO: maybe use MarshalAs thing
+                            $"public {elementTypeName} {fieldName}{i};"
+                        )
+                    );
+                }
+            }
+            else if (fieldTypeName == "FUNCTION_POINTER")
+            {
+                string context;
+                if (field.Type!.Tag == "function-pointer")
+                {
+                    context = "WARN_ANONYMOUS_FUNCTION_POINTER";
+                }
+                else
+                {
+                    context = $"{field.Type!.Tag}";
+                }
+
+                StructDefinition.OffsetFields.Add(
+                    (
+                        byteOffset + (uint) field.BitOffset! / 8,
+                        $"public IntPtr {fieldName};\t// {context}"
+                    )
+                );
+            }
+            else
+            {
+                StructDefinition.OffsetFields.Add(
+                    (
+                        byteOffset + (uint) field.BitOffset! / 8,
+                        $"public {fieldTypeName} {fieldName};"
+                    )
+                );
+            }
+        }
     }
 }
