@@ -35,6 +35,12 @@ internal static class Program
         Array,
     }
 
+    private struct DelegateDefinition
+    {
+        public string ReturnType { get; set; }
+        public (string, string)[] Parameters { get; set; }
+    }
+
     private static readonly Dictionary<(string, string), PointerParameterIntent> PointerParametersIntents = new()
     {
         { ("SDL_getenv", "name"), PointerParameterIntent.Unknown },
@@ -717,6 +723,11 @@ internal static class Program
         { ("SDL_DateTimeToTime", "dt"), PointerParameterIntent.Unknown },
     };
 
+    private static Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
+    {
+        { "SDL_EnumeratePropertiesCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } },
+    };
+
     private static readonly List<string> DefinedTypes = new();
     private static readonly Dictionary<string, RawFFIEntry> TypedefMap = new();
 
@@ -866,7 +877,9 @@ internal static class Program
             {
                 if (entry.Type!.Tag == "function-pointer")
                 {
-                    definitions.Append($"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER\n\n");
+                    definitions.Append(
+                        $"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
+                    );
                 }
             }
 

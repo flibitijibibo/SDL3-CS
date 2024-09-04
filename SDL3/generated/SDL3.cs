@@ -26,13 +26,13 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_free(IntPtr mem);
 
-    // public static delegate RETURN SDL_malloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_malloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:539:25
 
-    // public static delegate RETURN SDL_calloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_calloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:540:25
 
-    // public static delegate RETURN SDL_realloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_realloc_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:541:25
 
-    // public static delegate RETURN SDL_free_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_free_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:542:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GetOriginalMemoryFunctions(IntPtr malloc_func, IntPtr calloc_func, IntPtr realloc_func, IntPtr free_func);
@@ -61,7 +61,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_unsetenv(ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_CompareCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_CompareCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:674:23
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_qsort(IntPtr @base, UIntPtr nmemb, UIntPtr size, /* SDL_CompareCallback */ IntPtr compare);
@@ -69,7 +69,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_bsearch(IntPtr key, IntPtr @base, UIntPtr nmemb, UIntPtr size, /* SDL_CompareCallback */ IntPtr compare);
 
-    // public static delegate RETURN SDL_CompareCallback_r(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_CompareCallback_r(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:678:23
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_qsort_r(IntPtr @base, UIntPtr nmemb, UIntPtr size, /* SDL_CompareCallback_r */ IntPtr compare, IntPtr userdata);
@@ -491,7 +491,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_size_add_check_overflow_builtin(UIntPtr a, UIntPtr b, ref UIntPtr ret);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_FunctionPointer(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_FunctionPointer(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_stdinc.h:3165:16
 
     // ./include/SDL3/SDL_assert.h
 
@@ -519,7 +519,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_AssertState SDL_ReportAssertion(ref SDL_AssertData data, ref char func, ref char file, int line);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_AssertionHandler(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_AssertionHandler(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_assert.h:423:35
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetAssertionHandler(/* SDL_AssertionHandler */ IntPtr handler, IntPtr userdata);
@@ -703,7 +703,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockProperties(UInt32 props);
 
-    // public static delegate RETURN SDL_CleanupPropertyCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_CleanupPropertyCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_properties.h:187:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetPointerPropertyWithCleanup(UInt32 props, ref char name, IntPtr value, /* SDL_CleanupPropertyCallback */ IntPtr cleanup, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -747,7 +747,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ClearProperty(UInt32 props, ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_EnumeratePropertiesCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_EnumeratePropertiesCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_properties.h:499:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_EnumerateProperties(UInt32 props, /* SDL_EnumeratePropertiesCallback */ IntPtr callback, IntPtr userdata);
@@ -926,7 +926,7 @@ public static unsafe class SDL
         SDL_THREAD_PRIORITY_TIME_CRITICAL = 3,
     }
 
-    // public static delegate RETURN SDL_ThreadFunction(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_ThreadFunction(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_thread.h:114:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, ref char name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -955,7 +955,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetTLS(IntPtr id);
 
-    // public static delegate RETURN SDL_TLSDestructorCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_TLSDestructorCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_thread.h:488:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetTLS(IntPtr id, IntPtr value, /* SDL_TLSDestructorCallback */ IntPtr destructor);
@@ -1112,7 +1112,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_UnlockAudioStream(IntPtr stream);
 
-    // public static delegate RETURN SDL_AudioStreamCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_AudioStreamCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_audio.h:1527:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetAudioStreamGetCallback(IntPtr stream, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);
@@ -1126,7 +1126,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenAudioDeviceStream(UInt32 devid, ref SDL_AudioSpec spec, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_AudioPostmixCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_AudioPostmixCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_audio.h:1744:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetAudioPostmixCallback(UInt32 devid, /* SDL_AudioPostmixCallback */ IntPtr callback, IntPtr userdata);
@@ -1821,9 +1821,9 @@ public static unsafe class SDL
         SDL_FLASH_UNTIL_FOCUSED = 2,
     }
 
-    // public static delegate RETURN SDL_EGLAttribArrayCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_EGLAttribArrayCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_video.h:246:34
 
-    // public static delegate RETURN SDL_EGLIntArrayCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_EGLIntArrayCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_video.h:247:31
 
     public enum SDL_GLattr
     {
@@ -2141,7 +2141,7 @@ public static unsafe class SDL
         SDL_HITTEST_RESIZE_LEFT = 9,
     }
 
-    // public static delegate RETURN SDL_HitTest(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_HitTest(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_video.h:2313:37
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowHitTest(IntPtr window, /* SDL_HitTest */ IntPtr callback, IntPtr callback_data);
@@ -2309,9 +2309,9 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasPrimarySelectionText();
 
-    // public static delegate RETURN SDL_ClipboardDataCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_ClipboardDataCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_clipboard.h:155:31
 
-    // public static delegate RETURN SDL_ClipboardCleanupCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_ClipboardCleanupCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_clipboard.h:167:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, ref IntPtr mime_types, UIntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -2390,7 +2390,7 @@ public static unsafe class SDL
         public char* pattern;
     }
 
-    // public static delegate RETURN SDL_DialogFileCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_DialogFileCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_dialog.h:96:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, ref char default_location, bool allow_many); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -4190,7 +4190,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_PushEvent(IntPtr @event);
 
-    // public static delegate RETURN SDL_EventFilter(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_EventFilter(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_events.h:1288:28
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetEventFilter(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
@@ -4267,7 +4267,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_CreateDirectory(ref char path);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_EnumerateDirectoryCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_EnumerateDirectoryCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_filesystem.h:280:23
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_EnumerateDirectory(ref char path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -5508,7 +5508,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetHintBoolean(ref char name, bool default_value);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_HintCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_HintCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_hints.h:4291:23
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_AddHintCallback(ref char name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -5525,13 +5525,13 @@ public static unsafe class SDL
         SDL_APP_FAILURE = 2,
     }
 
-    // public static delegate RETURN SDL_AppInit_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_AppInit_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_init.h:97:33
 
-    // public static delegate RETURN SDL_AppIterate_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_AppIterate_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_init.h:98:33
 
-    // public static delegate RETURN SDL_AppEvent_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_AppEvent_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_init.h:99:33
 
-    // public static delegate RETURN SDL_AppQuit_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_AppQuit_func(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_init.h:100:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_Init(UInt32 flags);
@@ -5657,7 +5657,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_LogMessage(int category, SDL_LogPriority priority, ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_LogOutputFunction(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_LogOutputFunction(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_log.h:411:24
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GetLogOutputFunction(IntPtr callback, ref IntPtr userdata);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -6097,7 +6097,7 @@ public static unsafe class SDL
 
     // ./include/SDL3/SDL_system.h
 
-    // public static delegate RETURN SDL_X11EventHook(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_X11EventHook(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_system.h:139:28
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetX11EventHook(/* SDL_X11EventHook */ IntPtr callback, IntPtr userdata);
@@ -6205,12 +6205,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DelayNS(UInt64 ns);
 
-    // public static delegate RETURN SDL_TimerCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_TimerCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_timer.h:158:26
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_AddTimer(UInt32 interval, /* SDL_TimerCallback */ IntPtr callback, IntPtr userdata);
 
-    // public static delegate RETURN SDL_NSTimerCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
+    // public static delegate RETURN SDL_NSTimerCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_timer.h:222:26
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_AddTimerNS(UInt64 interval, /* SDL_NSTimerCallback */ IntPtr callback, IntPtr userdata);
