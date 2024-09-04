@@ -723,9 +723,12 @@ internal static class Program
         { ("SDL_DateTimeToTime", "dt"), PointerParameterIntent.Unknown },
     };
 
-    private static Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
+    private static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
     {
-        { "SDL_EnumeratePropertiesCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } },
+        {
+            "SDL_EnumeratePropertiesCallback",
+            new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "props"), ("char*", "name")] }
+        },
     };
 
     private static readonly List<string> DefinedTypes = new();
@@ -877,9 +880,34 @@ internal static class Program
             {
                 if (entry.Type!.Tag == "function-pointer")
                 {
-                    definitions.Append(
-                        $"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
-                    );
+                    if (DelegateDefinitions.TryGetValue(key: entry.Name!, value: out var delegateDefinition))
+                    {
+                        definitions.Append("[UnmanagedFunctionPointer(CallingConvention.Cdecl)]\n");
+                        definitions.Append($"public delegate {delegateDefinition.ReturnType} {entry.Name} (");
+
+                        var initialParam = true;
+                        foreach (var (paramType, paramName) in delegateDefinition.Parameters)
+                        {
+                            if (initialParam == false)
+                            {
+                                definitions.Append(", ");
+                            }
+                            else
+                            {
+                                initialParam = false;
+                            }
+
+                            definitions.Append($"{paramType} {paramName}");
+                        }
+
+                        definitions.Append(");\n\n");
+                    }
+                    else
+                    {
+                        definitions.Append(
+                            $"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
+                        );
+                    }
                 }
             }
 

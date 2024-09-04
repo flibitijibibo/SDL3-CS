@@ -747,7 +747,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ClearProperty(UInt32 props, ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public static delegate RETURN SDL_EnumeratePropertiesCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER: ./include/SDL3/SDL_properties.h:499:24
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_EnumeratePropertiesCallback(IntPtr userdata, IntPtr props, char* name);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_EnumerateProperties(UInt32 props, /* SDL_EnumeratePropertiesCallback */ IntPtr callback, IntPtr userdata);
