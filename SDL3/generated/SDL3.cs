@@ -53,13 +53,13 @@ public static unsafe class SDL
     public static extern int SDL_GetNumAllocations();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_getenv(IntPtr name);
+    public static extern IntPtr SDL_getenv(ref char name);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_setenv(IntPtr name, IntPtr value, int overwrite);
+    public static extern int SDL_setenv(ref char name, ref char value, int overwrite);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_unsetenv(IntPtr name);
+    public static extern int SDL_unsetenv(ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // public static delegate RETURN SDL_CompareCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
@@ -144,163 +144,163 @@ public static unsafe class SDL
     public static extern int SDL_memcmp(IntPtr s1, IntPtr s2, UIntPtr len);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_wcslen(IntPtr wstr);
+    public static extern UIntPtr SDL_wcslen(ref char wstr); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_wcsnlen(IntPtr wstr, UIntPtr maxlen);
+    public static extern UIntPtr SDL_wcsnlen(ref char wstr, UIntPtr maxlen);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_wcslcpy(IntPtr dst, IntPtr src, UIntPtr maxlen);
+    public static extern UIntPtr SDL_wcslcpy(ref char dst, ref char src, UIntPtr maxlen);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_wcslcat(IntPtr dst, IntPtr src, UIntPtr maxlen);
+    public static extern UIntPtr SDL_wcslcat(ref char dst, ref char src, UIntPtr maxlen);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_wcsdup(IntPtr wstr);
+    public static extern IntPtr SDL_wcsdup(ref char wstr);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_wcsstr(IntPtr haystack, IntPtr needle);
+    public static extern IntPtr SDL_wcsstr(ref char haystack, ref char needle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_wcsnstr(IntPtr haystack, IntPtr needle, UIntPtr maxlen);
+    public static extern IntPtr SDL_wcsnstr(ref char haystack, ref char needle, UIntPtr maxlen);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_wcscmp(IntPtr str1, IntPtr str2);
+    public static extern int SDL_wcscmp(ref char str1, ref char str2);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_wcsncmp(IntPtr str1, IntPtr str2, UIntPtr maxlen);
+    public static extern int SDL_wcsncmp(ref char str1, ref char str2, UIntPtr maxlen); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_wcscasecmp(IntPtr str1, IntPtr str2);
+    public static extern int SDL_wcscasecmp(ref char str1, ref char str2);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_wcsncasecmp(IntPtr str1, IntPtr str2, UIntPtr maxlen);
+    public static extern int SDL_wcsncasecmp(ref char str1, ref char str2, UIntPtr maxlen); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern long SDL_wcstol(IntPtr str, IntPtr endp, int @base);
+    public static extern long SDL_wcstol(ref char str, ref IntPtr endp, int @base); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_strlen(IntPtr str);
+    public static extern UIntPtr SDL_strlen(ref char str);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_strnlen(IntPtr str, UIntPtr maxlen);
+    public static extern UIntPtr SDL_strnlen(ref char str, UIntPtr maxlen); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_strlcpy(IntPtr dst, IntPtr src, UIntPtr maxlen);
+    public static extern UIntPtr SDL_strlcpy(ref char dst, ref char src, UIntPtr maxlen);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_utf8strlcpy(IntPtr dst, IntPtr src, UIntPtr dst_bytes);
+    public static extern UIntPtr SDL_utf8strlcpy(ref char dst, ref char src, UIntPtr dst_bytes);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_strlcat(IntPtr dst, IntPtr src, UIntPtr maxlen);
+    public static extern UIntPtr SDL_strlcat(ref char dst, ref char src, UIntPtr maxlen);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strdup(IntPtr str);
+    public static extern IntPtr SDL_strdup(ref char str);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strndup(IntPtr str, UIntPtr maxlen);
+    public static extern IntPtr SDL_strndup(ref char str, UIntPtr maxlen);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strrev(IntPtr str);
+    public static extern IntPtr SDL_strrev(ref char str);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strupr(IntPtr str);
+    public static extern IntPtr SDL_strupr(ref char str);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strlwr(IntPtr str);
+    public static extern IntPtr SDL_strlwr(ref char str);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strchr(IntPtr str, int c);
+    public static extern IntPtr SDL_strchr(ref char str, int c);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strrchr(IntPtr str, int c);
+    public static extern IntPtr SDL_strrchr(ref char str, int c);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strstr(IntPtr haystack, IntPtr needle);
+    public static extern IntPtr SDL_strstr(ref char haystack, ref char needle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strnstr(IntPtr haystack, IntPtr needle, UIntPtr maxlen);
+    public static extern IntPtr SDL_strnstr(ref char haystack, ref char needle, UIntPtr maxlen);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strcasestr(IntPtr haystack, IntPtr needle);
+    public static extern IntPtr SDL_strcasestr(ref char haystack, ref char needle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_strtok_r(IntPtr s1, IntPtr s2, IntPtr saveptr);
+    public static extern IntPtr SDL_strtok_r(ref char s1, ref char s2, ref IntPtr saveptr); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_utf8strlen(IntPtr str);
+    public static extern UIntPtr SDL_utf8strlen(ref char str);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_utf8strnlen(IntPtr str, UIntPtr bytes);
+    public static extern UIntPtr SDL_utf8strnlen(ref char str, UIntPtr bytes);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_itoa(int value, IntPtr str, int radix);
+    public static extern IntPtr SDL_itoa(int value, ref char str, int radix);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_uitoa(uint value, IntPtr str, int radix);
+    public static extern IntPtr SDL_uitoa(uint value, ref char str, int radix); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_ltoa(long value, IntPtr str, int radix);
+    public static extern IntPtr SDL_ltoa(long value, ref char str, int radix);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_ultoa(ulong value, IntPtr str, int radix);
+    public static extern IntPtr SDL_ultoa(ulong value, ref char str, int radix);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_lltoa(Int64 value, IntPtr str, int radix);
+    public static extern IntPtr SDL_lltoa(Int64 value, ref char str, int radix);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_ulltoa(UInt64 value, IntPtr str, int radix);
+    public static extern IntPtr SDL_ulltoa(UInt64 value, ref char str, int radix);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_atoi(IntPtr str);
+    public static extern int SDL_atoi(ref char str);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double SDL_atof(IntPtr str);
+    public static extern double SDL_atof(ref char str); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern long SDL_strtol(IntPtr str, IntPtr endp, int @base);
+    public static extern long SDL_strtol(ref char str, ref IntPtr endp, int @base); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern ulong SDL_strtoul(IntPtr str, IntPtr endp, int @base);
+    public static extern ulong SDL_strtoul(ref char str, ref IntPtr endp, int @base);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Int64 SDL_strtoll(IntPtr str, IntPtr endp, int @base);
+    public static extern Int64 SDL_strtoll(ref char str, ref IntPtr endp, int @base);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt64 SDL_strtoull(IntPtr str, IntPtr endp, int @base);
+    public static extern UInt64 SDL_strtoull(ref char str, ref IntPtr endp, int @base); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double SDL_strtod(IntPtr str, IntPtr endp);
+    public static extern double SDL_strtod(ref char str, ref IntPtr endp);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_strcmp(IntPtr str1, IntPtr str2);
+    public static extern int SDL_strcmp(ref char str1, ref char str2);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_strncmp(IntPtr str1, IntPtr str2, UIntPtr maxlen);
+    public static extern int SDL_strncmp(ref char str1, ref char str2, UIntPtr maxlen); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_strcasecmp(IntPtr str1, IntPtr str2);
+    public static extern int SDL_strcasecmp(ref char str1, ref char str2);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_strncasecmp(IntPtr str1, IntPtr str2, UIntPtr maxlen);
+    public static extern int SDL_strncasecmp(ref char str1, ref char str2, UIntPtr maxlen); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_StepUTF8(IntPtr pstr, IntPtr pslen);
+    public static extern UInt32 SDL_StepUTF8(ref IntPtr pstr, ref UIntPtr pslen);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_UCS4ToUTF8(UInt32 codepoint, IntPtr dst);
+    public static extern IntPtr SDL_UCS4ToUTF8(UInt32 codepoint, ref char dst); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_sscanf(IntPtr text, IntPtr fmt);
+    public static extern int SDL_sscanf(ref char text, ref char fmt);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_snprintf(IntPtr text, UIntPtr maxlen, IntPtr fmt);
+    public static extern int SDL_snprintf(ref char text, UIntPtr maxlen, ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_swprintf(IntPtr text, UIntPtr maxlen, IntPtr fmt);
+    public static extern int SDL_swprintf(ref char text, UIntPtr maxlen, ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_asprintf(IntPtr strp, IntPtr fmt);
+    public static extern int SDL_asprintf(ref IntPtr strp, ref char fmt);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_srand(UInt64 seed);
@@ -315,13 +315,13 @@ public static unsafe class SDL
     public static extern UInt32 SDL_rand_bits();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Int32 SDL_rand_r(IntPtr state, Int32 n);
+    public static extern Int32 SDL_rand_r(ref UInt64 state, Int32 n);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern float SDL_randf_r(IntPtr state);
+    public static extern float SDL_randf_r(ref UInt64 state);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_rand_bits_r(IntPtr state);
+    public static extern UInt32 SDL_rand_bits_r(ref UInt64 state);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern double SDL_acos(double x);
@@ -420,10 +420,10 @@ public static unsafe class SDL
     public static extern float SDL_log10f(float x);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double SDL_modf(double x, IntPtr y);
+    public static extern double SDL_modf(double x, ref double y);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern float SDL_modff(float x, IntPtr y);
+    public static extern float SDL_modff(float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern double SDL_pow(double x, double y);
@@ -468,28 +468,28 @@ public static unsafe class SDL
     public static extern float SDL_tanf(float x);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_iconv_open(IntPtr tocode, IntPtr fromcode);
+    public static extern IntPtr SDL_iconv_open(ref char tocode, ref char fromcode); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_iconv_close(IntPtr cd);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_iconv(IntPtr cd, IntPtr inbuf, IntPtr inbytesleft, IntPtr outbuf, IntPtr outbytesleft);
+    public static extern UIntPtr SDL_iconv(IntPtr cd, ref IntPtr inbuf, ref UIntPtr inbytesleft, ref IntPtr outbuf, ref UIntPtr outbytesleft);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_iconv_string(IntPtr tocode, IntPtr fromcode, IntPtr inbuf, UIntPtr inbytesleft);
+    public static extern IntPtr SDL_iconv_string(ref char tocode, ref char fromcode, ref char inbuf, UIntPtr inbytesleft);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_size_mul_check_overflow(UIntPtr a, UIntPtr b, IntPtr ret);
+    public static extern bool SDL_size_mul_check_overflow(UIntPtr a, UIntPtr b, ref UIntPtr ret);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_size_mul_check_overflow_builtin(UIntPtr a, UIntPtr b, IntPtr ret);
+    public static extern bool SDL_size_mul_check_overflow_builtin(UIntPtr a, UIntPtr b, ref UIntPtr ret);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_size_add_check_overflow(UIntPtr a, UIntPtr b, IntPtr ret);
+    public static extern bool SDL_size_add_check_overflow(UIntPtr a, UIntPtr b, ref UIntPtr ret);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_size_add_check_overflow_builtin(UIntPtr a, UIntPtr b, IntPtr ret);
+    public static extern bool SDL_size_add_check_overflow_builtin(UIntPtr a, UIntPtr b, ref UIntPtr ret);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // public static delegate RETURN SDL_FunctionPointer(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
@@ -509,15 +509,15 @@ public static unsafe class SDL
     {
         public bool always_ignore;
         public uint trigger_count;
-        public IntPtr condition;
-        public IntPtr filename;
+        public char* condition;
+        public char* filename;
         public int linenum;
-        public IntPtr function;
-        public IntPtr next;
+        public char* function;
+        public SDL_AssertData* next;
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_AssertState SDL_ReportAssertion(ref SDL_AssertData data, IntPtr func, IntPtr file, int line);
+    public static extern SDL_AssertState SDL_ReportAssertion(ref SDL_AssertData data, ref char func, ref char file, int line);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // public static delegate RETURN SDL_AssertionHandler(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
@@ -528,7 +528,7 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetDefaultAssertionHandler();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetAssertionHandler(IntPtr puserdata);
+    public static extern IntPtr SDL_GetAssertionHandler(ref IntPtr puserdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAssertionReport();
@@ -572,13 +572,13 @@ public static unsafe class SDL
     public static extern int SDL_AtomicAdd(ref SDL_AtomicInt a, int v); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_AtomicCompareAndSwapPointer(IntPtr a, IntPtr oldval, IntPtr newval);
+    public static extern bool SDL_AtomicCompareAndSwapPointer(ref IntPtr a, IntPtr oldval, IntPtr newval);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_AtomicSetPointer(IntPtr a, IntPtr v);
+    public static extern IntPtr SDL_AtomicSetPointer(ref IntPtr a, IntPtr v);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_AtomicGetPointer(IntPtr a);
+    public static extern IntPtr SDL_AtomicGetPointer(ref IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_endian.h
 
@@ -588,7 +588,7 @@ public static unsafe class SDL
     // ./include/SDL3/SDL_error.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetError(IntPtr fmt);
+    public static extern bool SDL_SetError(ref char fmt);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_OutOfMemory();
@@ -706,46 +706,46 @@ public static unsafe class SDL
     // public static delegate RETURN SDL_CleanupPropertyCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetPointerPropertyWithCleanup(UInt32 props, IntPtr name, IntPtr value, /* SDL_CleanupPropertyCallback */ IntPtr cleanup, IntPtr userdata);
+    public static extern bool SDL_SetPointerPropertyWithCleanup(UInt32 props, ref char name, IntPtr value, /* SDL_CleanupPropertyCallback */ IntPtr cleanup, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetPointerProperty(UInt32 props, IntPtr name, IntPtr value);
+    public static extern bool SDL_SetPointerProperty(UInt32 props, ref char name, IntPtr value);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetStringProperty(UInt32 props, IntPtr name, IntPtr value);
+    public static extern bool SDL_SetStringProperty(UInt32 props, ref char name, ref char value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetNumberProperty(UInt32 props, IntPtr name, Int64 value);
+    public static extern bool SDL_SetNumberProperty(UInt32 props, ref char name, Int64 value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetFloatProperty(UInt32 props, IntPtr name, float value);
+    public static extern bool SDL_SetFloatProperty(UInt32 props, ref char name, float value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetBooleanProperty(UInt32 props, IntPtr name, bool value);
+    public static extern bool SDL_SetBooleanProperty(UInt32 props, ref char name, bool value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasProperty(UInt32 props, IntPtr name);
+    public static extern bool SDL_HasProperty(UInt32 props, ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_PropertyType SDL_GetPropertyType(UInt32 props, IntPtr name);
+    public static extern SDL_PropertyType SDL_GetPropertyType(UInt32 props, ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetPointerProperty(UInt32 props, IntPtr name, IntPtr default_value);
+    public static extern IntPtr SDL_GetPointerProperty(UInt32 props, ref char name, IntPtr default_value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetStringProperty(UInt32 props, IntPtr name, IntPtr default_value);
+    public static extern IntPtr SDL_GetStringProperty(UInt32 props, ref char name, ref char default_value); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Int64 SDL_GetNumberProperty(UInt32 props, IntPtr name, Int64 default_value);
+    public static extern Int64 SDL_GetNumberProperty(UInt32 props, ref char name, Int64 default_value); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern float SDL_GetFloatProperty(UInt32 props, IntPtr name, float default_value);
+    public static extern float SDL_GetFloatProperty(UInt32 props, ref char name, float default_value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetBooleanProperty(UInt32 props, IntPtr name, bool default_value);
+    public static extern bool SDL_GetBooleanProperty(UInt32 props, ref char name, bool default_value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ClearProperty(UInt32 props, IntPtr name);
+    public static extern bool SDL_ClearProperty(UInt32 props, ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // public static delegate RETURN SDL_EnumeratePropertiesCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
@@ -785,7 +785,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_IOFromFile(IntPtr file, IntPtr mode);
+    public static extern IntPtr SDL_IOFromFile(ref char file, ref char mode);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_IOFromMem(IntPtr mem, UIntPtr size);
@@ -824,55 +824,55 @@ public static unsafe class SDL
     public static extern UIntPtr SDL_WriteIO(IntPtr context, IntPtr ptr, UIntPtr size);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_IOprintf(IntPtr context, IntPtr fmt);
+    public static extern UIntPtr SDL_IOprintf(IntPtr context, ref char fmt);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_LoadFile_IO(IntPtr src, IntPtr datasize, bool closeio);
+    public static extern IntPtr SDL_LoadFile_IO(IntPtr src, ref UIntPtr datasize, bool closeio);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_LoadFile(IntPtr file, IntPtr datasize);
+    public static extern IntPtr SDL_LoadFile(ref char file, ref UIntPtr datasize);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadU8(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU8(IntPtr src, ref byte value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadS8(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS8(IntPtr src, ref sbyte value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadU16LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU16LE(IntPtr src, ref UInt16 value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadS16LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS16LE(IntPtr src, ref Int16 value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadU16BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU16BE(IntPtr src, ref UInt16 value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadS16BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS16BE(IntPtr src, ref Int16 value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadU32LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU32LE(IntPtr src, ref UInt32 value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadS32LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS32LE(IntPtr src, ref Int32 value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadU32BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU32BE(IntPtr src, ref UInt32 value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadS32BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS32BE(IntPtr src, ref Int32 value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadU64LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU64LE(IntPtr src, ref UInt64 value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadS64LE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS64LE(IntPtr src, ref Int64 value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadU64BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadU64BE(IntPtr src, ref UInt64 value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadS64BE(IntPtr src, IntPtr value);
+    public static extern bool SDL_ReadS64BE(IntPtr src, ref Int64 value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_WriteU8(IntPtr dst, byte value);
@@ -929,7 +929,7 @@ public static unsafe class SDL
     // public static delegate RETURN SDL_ThreadFunction(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, IntPtr name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);
+    public static extern IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, ref char name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateThreadWithPropertiesRuntime(UInt32 props, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);
@@ -947,7 +947,7 @@ public static unsafe class SDL
     public static extern bool SDL_SetThreadPriority(SDL_ThreadPriority priority);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_WaitThread(IntPtr thread, IntPtr status);
+    public static extern void SDL_WaitThread(IntPtr thread, ref int status);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DetachThread(IntPtr thread);
@@ -996,19 +996,19 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetCurrentAudioDriver();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetAudioPlaybackDevices(IntPtr count);
+    public static extern IntPtr SDL_GetAudioPlaybackDevices(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetAudioRecordingDevices(IntPtr count);
+    public static extern IntPtr SDL_GetAudioRecordingDevices(ref int count);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAudioDeviceName(UInt32 devid);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetAudioDeviceFormat(UInt32 devid, ref SDL_AudioSpec spec, IntPtr sample_frames); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetAudioDeviceFormat(UInt32 devid, ref SDL_AudioSpec spec, ref int sample_frames);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetAudioDeviceChannelMap(UInt32 devid, IntPtr count);
+    public static extern IntPtr SDL_GetAudioDeviceChannelMap(UInt32 devid, ref int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_OpenAudioDevice(UInt32 devid, ref SDL_AudioSpec spec);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -1032,13 +1032,13 @@ public static unsafe class SDL
     public static extern void SDL_CloseAudioDevice(UInt32 devid);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_BindAudioStreams(UInt32 devid, IntPtr streams, int num_streams);
+    public static extern bool SDL_BindAudioStreams(UInt32 devid, ref IntPtr streams, int num_streams);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_BindAudioStream(UInt32 devid, IntPtr stream);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_UnbindAudioStreams(IntPtr streams, int num_streams);
+    public static extern void SDL_UnbindAudioStreams(ref IntPtr streams, int num_streams);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnbindAudioStream(IntPtr stream);
@@ -1071,16 +1071,16 @@ public static unsafe class SDL
     public static extern bool SDL_SetAudioStreamGain(IntPtr stream, float gain);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetAudioStreamInputChannelMap(IntPtr stream, IntPtr count);
+    public static extern IntPtr SDL_GetAudioStreamInputChannelMap(IntPtr stream, ref int count);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetAudioStreamOutputChannelMap(IntPtr stream, IntPtr count);
+    public static extern IntPtr SDL_GetAudioStreamOutputChannelMap(IntPtr stream, ref int count);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetAudioStreamInputChannelMap(IntPtr stream, IntPtr chmap, int count);
+    public static extern bool SDL_SetAudioStreamInputChannelMap(IntPtr stream, ref int chmap, int count);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetAudioStreamOutputChannelMap(IntPtr stream, IntPtr chmap, int count);
+    public static extern bool SDL_SetAudioStreamOutputChannelMap(IntPtr stream, ref int chmap, int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_PutAudioStreamData(IntPtr stream, IntPtr buf, int len);
@@ -1132,16 +1132,16 @@ public static unsafe class SDL
     public static extern bool SDL_SetAudioPostmixCallback(UInt32 devid, /* SDL_AudioPostmixCallback */ IntPtr callback, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_LoadWAV_IO(IntPtr src, bool closeio, ref SDL_AudioSpec spec, IntPtr audio_buf, IntPtr audio_len); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_LoadWAV_IO(IntPtr src, bool closeio, ref SDL_AudioSpec spec, ref IntPtr audio_buf, ref UInt32 audio_len); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_LoadWAV(IntPtr path, ref SDL_AudioSpec spec, IntPtr audio_buf, IntPtr audio_len); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_LoadWAV(ref char path, ref SDL_AudioSpec spec, ref IntPtr audio_buf, ref UInt32 audio_len);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_MixAudio(IntPtr dst, IntPtr src, SDL_AudioFormat format, UInt32 len, float volume);
+    public static extern bool SDL_MixAudio(ref byte dst, ref byte src, SDL_AudioFormat format, UInt32 len, float volume);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ConvertAudioSamples(ref SDL_AudioSpec src_spec, IntPtr src_data, int src_len, ref SDL_AudioSpec dst_spec, IntPtr dst_data, IntPtr dst_len);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_ConvertAudioSamples(ref SDL_AudioSpec src_spec, ref byte src_data, int src_len, ref SDL_AudioSpec dst_spec, ref IntPtr dst_data, ref int dst_len);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAudioFormatName(SDL_AudioFormat format);
@@ -1466,7 +1466,7 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetPixelFormatName(SDL_PixelFormat format);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetMasksForPixelFormat(SDL_PixelFormat format, IntPtr bpp, IntPtr Rmask, IntPtr Gmask, IntPtr Bmask, IntPtr Amask);
+    public static extern bool SDL_GetMasksForPixelFormat(SDL_PixelFormat format, ref int bpp, ref UInt32 Rmask, ref UInt32 Gmask, ref UInt32 Bmask, ref UInt32 Amask);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_PixelFormat SDL_GetPixelFormatForMasks(int bpp, UInt32 Rmask, UInt32 Gmask, UInt32 Bmask, UInt32 Amask);
@@ -1490,10 +1490,10 @@ public static unsafe class SDL
     public static extern UInt32 SDL_MapRGBA(ref SDL_PixelFormatDetails format, ref SDL_Palette palette, byte r, byte g, byte b, byte a);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GetRGB(UInt32 pixel, ref SDL_PixelFormatDetails format, ref SDL_Palette palette, IntPtr r, IntPtr g, IntPtr b);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_GetRGB(UInt32 pixel, ref SDL_PixelFormatDetails format, ref SDL_Palette palette, ref byte r, ref byte g, ref byte b); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GetRGBA(UInt32 pixel, ref SDL_PixelFormatDetails format, ref SDL_Palette palette, IntPtr r, IntPtr g, IntPtr b, IntPtr a);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_GetRGBA(UInt32 pixel, ref SDL_PixelFormatDetails format, ref SDL_Palette palette, ref byte r, ref byte g, ref byte b, ref byte a);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_rect.h
 
@@ -1554,7 +1554,7 @@ public static unsafe class SDL
     public static extern bool SDL_GetRectEnclosingPoints(ref SDL_Point points, int count, ref SDL_Rect clip, ref SDL_Rect result);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRectAndLineIntersection(ref SDL_Rect rect, IntPtr X1, IntPtr Y1, IntPtr X2, IntPtr Y2);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetRectAndLineIntersection(ref SDL_Rect rect, ref int X1, ref int Y1, ref int X2, ref int Y2);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_PointInRectFloat(ref SDL_FPoint p, ref SDL_FRect r);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -1581,7 +1581,7 @@ public static unsafe class SDL
     public static extern bool SDL_GetRectEnclosingPointsFloat(ref SDL_FPoint points, int count, ref SDL_FRect clip, ref SDL_FRect result);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRectAndLineIntersectionFloat(ref SDL_FRect rect, IntPtr X1, IntPtr Y1, IntPtr X2, IntPtr Y2);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetRectAndLineIntersectionFloat(ref SDL_FRect rect, ref float X1, ref float Y1, ref float X2, ref float Y2);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_surface.h
 
@@ -1645,7 +1645,7 @@ public static unsafe class SDL
     public static extern bool SDL_SurfaceHasAlternateImages(ref SDL_Surface surface);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetSurfaceImages(ref SDL_Surface surface, IntPtr count);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_GetSurfaceImages(ref SDL_Surface surface, ref int count);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_RemoveSurfaceAlternateImages(ref SDL_Surface surface);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -1660,13 +1660,13 @@ public static unsafe class SDL
     public static extern IntPtr SDL_LoadBMP_IO(IntPtr src, bool closeio);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_LoadBMP(IntPtr file);
+    public static extern IntPtr SDL_LoadBMP(ref char file); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SaveBMP_IO(ref SDL_Surface surface, IntPtr dst, bool closeio);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SaveBMP(ref SDL_Surface surface, IntPtr file);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_SaveBMP(ref SDL_Surface surface, ref char file);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetSurfaceRLE(ref SDL_Surface surface, bool enabled); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -1681,19 +1681,19 @@ public static unsafe class SDL
     public static extern bool SDL_SurfaceHasColorKey(ref SDL_Surface surface);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetSurfaceColorKey(ref SDL_Surface surface, IntPtr key);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetSurfaceColorKey(ref SDL_Surface surface, ref UInt32 key);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetSurfaceColorMod(ref SDL_Surface surface, byte r, byte g, byte b);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetSurfaceColorMod(ref SDL_Surface surface, IntPtr r, IntPtr g, IntPtr b);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetSurfaceColorMod(ref SDL_Surface surface, ref byte r, ref byte g, ref byte b);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetSurfaceAlphaMod(ref SDL_Surface surface, byte alpha);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetSurfaceAlphaMod(ref SDL_Surface surface, IntPtr alpha);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetSurfaceAlphaMod(ref SDL_Surface surface, ref byte alpha);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetSurfaceBlendMode(ref SDL_Surface surface, UInt32 blendMode);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -1771,10 +1771,10 @@ public static unsafe class SDL
     public static extern UInt32 SDL_MapSurfaceRGBA(ref SDL_Surface surface, byte r, byte g, byte b, byte a);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadSurfacePixel(ref SDL_Surface surface, int x, int y, IntPtr r, IntPtr g, IntPtr b, IntPtr a);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_ReadSurfacePixel(ref SDL_Surface surface, int x, int y, ref byte r, ref byte g, ref byte b, ref byte a);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadSurfacePixelFloat(ref SDL_Surface surface, int x, int y, IntPtr r, IntPtr g, IntPtr b, IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_ReadSurfacePixelFloat(ref SDL_Surface surface, int x, int y, ref float r, ref float g, ref float b, ref float a); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_WriteSurfacePixel(ref SDL_Surface surface, int x, int y, byte r, byte g, byte b, byte a); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -1897,7 +1897,7 @@ public static unsafe class SDL
     public static extern SDL_SystemTheme SDL_GetSystemTheme();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetDisplays(IntPtr count);
+    public static extern IntPtr SDL_GetDisplays(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_GetPrimaryDisplay();
@@ -1924,7 +1924,7 @@ public static unsafe class SDL
     public static extern float SDL_GetDisplayContentScale(UInt32 displayID);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetFullscreenDisplayModes(UInt32 displayID, IntPtr count);
+    public static extern IntPtr SDL_GetFullscreenDisplayModes(UInt32 displayID, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetClosestFullscreenDisplayMode(UInt32 displayID, int w, int h, float refresh_rate, bool include_high_density_modes, ref SDL_DisplayMode mode);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -1957,16 +1957,16 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetWindowFullscreenMode(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetWindowICCProfile(IntPtr window, IntPtr size);
+    public static extern IntPtr SDL_GetWindowICCProfile(IntPtr window, ref UIntPtr size);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_PixelFormat SDL_GetWindowPixelFormat(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetWindows(IntPtr count);
+    public static extern IntPtr SDL_GetWindows(ref int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateWindow(IntPtr title, int w, int h, UInt64 flags);
+    public static extern IntPtr SDL_CreateWindow(ref char title, int w, int h, UInt64 flags);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreatePopupWindow(IntPtr parent, int offset_x, int offset_y, int w, int h, UInt64 flags);
@@ -1990,7 +1990,7 @@ public static unsafe class SDL
     public static extern UInt64 SDL_GetWindowFlags(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetWindowTitle(IntPtr window, IntPtr title);
+    public static extern bool SDL_SetWindowTitle(IntPtr window, ref char title);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetWindowTitle(IntPtr window);
@@ -2002,13 +2002,13 @@ public static unsafe class SDL
     public static extern bool SDL_SetWindowPosition(IntPtr window, int x, int y);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetWindowPosition(IntPtr window, IntPtr x, IntPtr y);
+    public static extern bool SDL_GetWindowPosition(IntPtr window, ref int x, ref int y);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowSize(IntPtr window, int w, int h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetWindowSize(IntPtr window, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetWindowSize(IntPtr window, ref int w, ref int h);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetWindowSafeArea(IntPtr window, ref SDL_Rect rect);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -2017,25 +2017,25 @@ public static unsafe class SDL
     public static extern bool SDL_SetWindowAspectRatio(IntPtr window, float min_aspect, float max_aspect);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetWindowAspectRatio(IntPtr window, IntPtr min_aspect, IntPtr max_aspect);
+    public static extern bool SDL_GetWindowAspectRatio(IntPtr window, ref float min_aspect, ref float max_aspect);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetWindowBordersSize(IntPtr window, IntPtr top, IntPtr left, IntPtr bottom, IntPtr right);
+    public static extern bool SDL_GetWindowBordersSize(IntPtr window, ref int top, ref int left, ref int bottom, ref int right);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetWindowSizeInPixels(IntPtr window, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetWindowSizeInPixels(IntPtr window, ref int w, ref int h);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowMinimumSize(IntPtr window, int min_w, int min_h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetWindowMinimumSize(IntPtr window, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetWindowMinimumSize(IntPtr window, ref int w, ref int h);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowMaximumSize(IntPtr window, int max_w, int max_h);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetWindowMaximumSize(IntPtr window, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetWindowMaximumSize(IntPtr window, ref int w, ref int h);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowBordered(IntPtr window, bool bordered);
@@ -2080,7 +2080,7 @@ public static unsafe class SDL
     public static extern bool SDL_SetWindowSurfaceVSync(IntPtr window, int vsync);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetWindowSurfaceVSync(IntPtr window, IntPtr vsync);
+    public static extern bool SDL_GetWindowSurfaceVSync(IntPtr window, ref int vsync);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_UpdateWindowSurface(IntPtr window);
@@ -2165,19 +2165,19 @@ public static unsafe class SDL
     public static extern bool SDL_DisableScreenSaver();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GL_LoadLibrary(IntPtr path);
+    public static extern bool SDL_GL_LoadLibrary(ref char path);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GL_GetProcAddress(IntPtr proc);
+    public static extern IntPtr SDL_GL_GetProcAddress(ref char proc);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_EGL_GetProcAddress(IntPtr proc);
+    public static extern IntPtr SDL_EGL_GetProcAddress(ref char proc);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GL_UnloadLibrary();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GL_ExtensionSupported(IntPtr extension);
+    public static extern bool SDL_GL_ExtensionSupported(ref char extension);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GL_ResetAttributes();
@@ -2186,7 +2186,7 @@ public static unsafe class SDL
     public static extern bool SDL_GL_SetAttribute(SDL_GLattr attr, int value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GL_GetAttribute(SDL_GLattr attr, IntPtr value);
+    public static extern bool SDL_GL_GetAttribute(SDL_GLattr attr, ref int value);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GL_CreateContext(IntPtr window);
@@ -2216,7 +2216,7 @@ public static unsafe class SDL
     public static extern bool SDL_GL_SetSwapInterval(int interval);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GL_GetSwapInterval(IntPtr interval);
+    public static extern bool SDL_GL_GetSwapInterval(ref int interval); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GL_SwapWindow(IntPtr window);
@@ -2254,10 +2254,10 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetCurrentCameraDriver();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetCameras(IntPtr count);
+    public static extern IntPtr SDL_GetCameras(ref int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetCameraSupportedFormats(UInt32 devid, IntPtr count);
+    public static extern IntPtr SDL_GetCameraSupportedFormats(UInt32 devid, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetCameraName(UInt32 instance_id);
@@ -2281,7 +2281,7 @@ public static unsafe class SDL
     public static extern bool SDL_GetCameraFormat(IntPtr camera, ref SDL_CameraSpec spec);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_AcquireCameraFrame(IntPtr camera, IntPtr timestampNS);
+    public static extern IntPtr SDL_AcquireCameraFrame(IntPtr camera, ref UInt64 timestampNS);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ReleaseCameraFrame(IntPtr camera, ref SDL_Surface frame); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -2292,7 +2292,7 @@ public static unsafe class SDL
     // ./include/SDL3/SDL_clipboard.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetClipboardText(IntPtr text);
+    public static extern bool SDL_SetClipboardText(ref char text);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetClipboardText();
@@ -2301,7 +2301,7 @@ public static unsafe class SDL
     public static extern bool SDL_HasClipboardText();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetPrimarySelectionText(IntPtr text);
+    public static extern bool SDL_SetPrimarySelectionText(ref char text);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetPrimarySelectionText();
@@ -2314,16 +2314,16 @@ public static unsafe class SDL
     // public static delegate RETURN SDL_ClipboardCleanupCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, IntPtr mime_types, UIntPtr num_mime_types);
+    public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, ref IntPtr mime_types, UIntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ClearClipboardData();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetClipboardData(IntPtr mime_type, IntPtr size);
+    public static extern IntPtr SDL_GetClipboardData(ref char mime_type, ref UIntPtr size); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasClipboardData(IntPtr mime_type);
+    public static extern bool SDL_HasClipboardData(ref char mime_type); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_cpuinfo.h
 
@@ -2386,20 +2386,20 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_DialogFileFilter
     {
-        public IntPtr name;
-        public IntPtr pattern;
+        public char* name;
+        public char* pattern;
     }
 
     // public static delegate RETURN SDL_DialogFileCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, IntPtr default_location, bool allow_many);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, ref char default_location, bool allow_many); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, IntPtr default_location);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, ref char default_location);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ShowOpenFolderDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, IntPtr default_location, bool allow_many);
+    public static extern void SDL_ShowOpenFolderDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref char default_location, bool allow_many);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_guid.h
 
@@ -2425,10 +2425,10 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GUIDToString(SDL_GUID guid, IntPtr pszGUID, int cbGUID);
+    public static extern void SDL_GUIDToString(SDL_GUID guid, ref char pszGUID, int cbGUID);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_GUID SDL_StringToGUID(IntPtr pchGUID);
+    public static extern SDL_GUID SDL_StringToGUID(ref char pchGUID);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_power.h
 
@@ -2443,7 +2443,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_PowerState SDL_GetPowerInfo(IntPtr seconds, IntPtr percent);
+    public static extern SDL_PowerState SDL_GetPowerInfo(ref int seconds, ref int percent); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_sensor.h
 
@@ -2460,7 +2460,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetSensors(IntPtr count);
+    public static extern IntPtr SDL_GetSensors(ref int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetSensorNameForID(UInt32 instance_id);
@@ -2493,7 +2493,7 @@ public static unsafe class SDL
     public static extern UInt32 SDL_GetSensorID(IntPtr sensor);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetSensorData(IntPtr sensor, IntPtr data, int num_values);
+    public static extern bool SDL_GetSensorData(IntPtr sensor, ref float data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_CloseSensor(IntPtr sensor);
@@ -2535,7 +2535,7 @@ public static unsafe class SDL
     public static extern bool SDL_HasJoystick();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetJoysticks(IntPtr count);
+    public static extern IntPtr SDL_GetJoysticks(ref int count);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetJoystickNameForID(UInt32 instance_id);
@@ -2603,7 +2603,7 @@ public static unsafe class SDL
         public UInt16 padding21;
         public UInt32 button_mask;
         public UInt32 axis_mask;
-        public IntPtr name;
+        public char* name;
         public SDL_VirtualJoystickTouchpadDesc* touchpads;
         public SDL_VirtualJoystickSensorDesc* sensors;
         public IntPtr userdata;
@@ -2642,7 +2642,7 @@ public static unsafe class SDL
     public static extern bool SDL_SetJoystickVirtualTouchpad(IntPtr joystick, int touchpad, int finger, byte state, float x, float y, float pressure);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, UInt64 sensor_timestamp, IntPtr data, int num_values);
+    public static extern bool SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, UInt64 sensor_timestamp, ref float data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt32 SDL_GetJoystickProperties(IntPtr joystick);
@@ -2681,7 +2681,7 @@ public static unsafe class SDL
     public static extern SDL_JoystickType SDL_GetJoystickType(IntPtr joystick);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GetJoystickGUIDInfo(SDL_GUID guid, IntPtr vendor, IntPtr product, IntPtr version, IntPtr crc16);
+    public static extern void SDL_GetJoystickGUIDInfo(SDL_GUID guid, ref UInt16 vendor, ref UInt16 product, ref UInt16 version, ref UInt16 crc16);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_JoystickConnected(IntPtr joystick);
@@ -2714,10 +2714,10 @@ public static unsafe class SDL
     public static extern Int16 SDL_GetJoystickAxis(IntPtr joystick, int axis);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetJoystickAxisInitialState(IntPtr joystick, int axis, IntPtr state);
+    public static extern bool SDL_GetJoystickAxisInitialState(IntPtr joystick, int axis, ref Int16 state);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetJoystickBall(IntPtr joystick, int ball, IntPtr dx, IntPtr dy);
+    public static extern bool SDL_GetJoystickBall(IntPtr joystick, int ball, ref int dx, ref int dy);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern byte SDL_GetJoystickHat(IntPtr joystick, int hat);
@@ -2744,7 +2744,7 @@ public static unsafe class SDL
     public static extern SDL_JoystickConnectionState SDL_GetJoystickConnectionState(IntPtr joystick);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_PowerState SDL_GetJoystickPowerInfo(IntPtr joystick, IntPtr percent);
+    public static extern SDL_PowerState SDL_GetJoystickPowerInfo(IntPtr joystick, ref int percent); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_gamepad.h
 
@@ -2872,19 +2872,19 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AddGamepadMapping(IntPtr mapping);
+    public static extern int SDL_AddGamepadMapping(ref char mapping);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_AddGamepadMappingsFromIO(IntPtr src, bool closeio);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_AddGamepadMappingsFromFile(IntPtr file);
+    public static extern int SDL_AddGamepadMappingsFromFile(ref char file); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ReloadGamepadMappings();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetGamepadMappings(IntPtr count);
+    public static extern IntPtr SDL_GetGamepadMappings(ref int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadMappingForGUID(SDL_GUID guid);
@@ -2893,13 +2893,13 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetGamepadMapping(IntPtr gamepad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetGamepadMapping(UInt32 instance_id, IntPtr mapping);
+    public static extern bool SDL_SetGamepadMapping(UInt32 instance_id, ref char mapping);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasGamepad();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetGamepads(IntPtr count);
+    public static extern IntPtr SDL_GetGamepads(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_IsGamepad(UInt32 instance_id);
@@ -2989,7 +2989,7 @@ public static unsafe class SDL
     public static extern SDL_JoystickConnectionState SDL_GetGamepadConnectionState(IntPtr gamepad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_PowerState SDL_GetGamepadPowerInfo(IntPtr gamepad, IntPtr percent);
+    public static extern SDL_PowerState SDL_GetGamepadPowerInfo(IntPtr gamepad, ref int percent);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GamepadConnected(IntPtr gamepad);
@@ -3004,19 +3004,19 @@ public static unsafe class SDL
     public static extern bool SDL_GamepadEventsEnabled();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetGamepadBindings(IntPtr gamepad, IntPtr count);
+    public static extern IntPtr SDL_GetGamepadBindings(IntPtr gamepad, ref int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UpdateGamepads();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_GamepadType SDL_GetGamepadTypeFromString(IntPtr str);
+    public static extern SDL_GamepadType SDL_GetGamepadTypeFromString(ref char str);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadStringForType(SDL_GamepadType type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_GamepadAxis SDL_GetGamepadAxisFromString(IntPtr str);
+    public static extern SDL_GamepadAxis SDL_GetGamepadAxisFromString(ref char str);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis);
@@ -3028,7 +3028,7 @@ public static unsafe class SDL
     public static extern Int16 SDL_GetGamepadAxis(IntPtr gamepad, SDL_GamepadAxis axis);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_GamepadButton SDL_GetGamepadButtonFromString(IntPtr str);
+    public static extern SDL_GamepadButton SDL_GetGamepadButtonFromString(ref char str);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadStringForButton(SDL_GamepadButton button);
@@ -3052,7 +3052,7 @@ public static unsafe class SDL
     public static extern int SDL_GetNumGamepadTouchpadFingers(IntPtr gamepad, int touchpad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, IntPtr state, IntPtr x, IntPtr y, IntPtr pressure);
+    public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, ref byte state, ref float x, ref float y, ref float pressure); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GamepadHasSensor(IntPtr gamepad, SDL_SensorType type);
@@ -3067,7 +3067,7 @@ public static unsafe class SDL
     public static extern float SDL_GetGamepadSensorDataRate(IntPtr gamepad, SDL_SensorType type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, IntPtr data, int num_values);
+    public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, ref float data, int num_values);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_RumbleGamepad(IntPtr gamepad, UInt16 low_frequency_rumble, UInt16 high_frequency_rumble, UInt32 duration_ms);
@@ -3353,7 +3353,7 @@ public static unsafe class SDL
     public static extern bool SDL_HasKeyboard();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetKeyboards(IntPtr count);
+    public static extern IntPtr SDL_GetKeyboards(ref int count);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetKeyboardNameForID(UInt32 instance_id);
@@ -3362,7 +3362,7 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetKeyboardFocus();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetKeyboardState(IntPtr numkeys);
+    public static extern IntPtr SDL_GetKeyboardState(ref int numkeys);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ResetKeyboard();
@@ -3380,19 +3380,19 @@ public static unsafe class SDL
     public static extern SDL_Scancode SDL_GetScancodeFromKey(UInt32 key, IntPtr modstate);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetScancodeName(SDL_Scancode scancode, IntPtr name);
+    public static extern bool SDL_SetScancodeName(SDL_Scancode scancode, ref char name);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetScancodeName(SDL_Scancode scancode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_Scancode SDL_GetScancodeFromName(IntPtr name);
+    public static extern SDL_Scancode SDL_GetScancodeFromName(ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetKeyName(UInt32 key);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_GetKeyFromName(IntPtr name);
+    public static extern UInt32 SDL_GetKeyFromName(ref char name);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_StartTextInput(IntPtr window);
@@ -3434,7 +3434,7 @@ public static unsafe class SDL
     public static extern bool SDL_SetTextInputArea(IntPtr window, ref SDL_Rect rect, int cursor);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetTextInputArea(IntPtr window, ref SDL_Rect rect, IntPtr cursor);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetTextInputArea(IntPtr window, ref SDL_Rect rect, ref int cursor);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasScreenKeyboardSupport();
@@ -3479,7 +3479,7 @@ public static unsafe class SDL
     public static extern bool SDL_HasMouse();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetMice(IntPtr count);
+    public static extern IntPtr SDL_GetMice(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetMouseNameForID(UInt32 instance_id);
@@ -3488,13 +3488,13 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetMouseFocus();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_GetMouseState(IntPtr x, IntPtr y);
+    public static extern UInt32 SDL_GetMouseState(ref float x, ref float y);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, IntPtr y);
+    public static extern UInt32 SDL_GetGlobalMouseState(ref float x, ref float y);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt32 SDL_GetRelativeMouseState(IntPtr x, IntPtr y);
+    public static extern UInt32 SDL_GetRelativeMouseState(ref float x, ref float y);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_WarpMouseInWindow(IntPtr window, float x, float y);
@@ -3512,7 +3512,7 @@ public static unsafe class SDL
     public static extern bool SDL_CaptureMouse(bool enabled);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateCursor(IntPtr data, IntPtr mask, int w, int h, int hot_x, int hot_y);
+    public static extern IntPtr SDL_CreateCursor(ref byte data, ref byte mask, int w, int h, int hot_x, int hot_y); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateColorCursor(ref SDL_Surface surface, int hot_x, int hot_y);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -3575,7 +3575,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetTouchDevices(IntPtr count);
+    public static extern IntPtr SDL_GetTouchDevices(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetTouchDeviceName(UInt64 touchID);
@@ -3584,7 +3584,7 @@ public static unsafe class SDL
     public static extern SDL_TouchDeviceType SDL_GetTouchDeviceType(UInt64 touchID);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetTouchFingers(UInt64 touchID, IntPtr count);
+    public static extern IntPtr SDL_GetTouchFingers(UInt64 touchID, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_events.h
 
@@ -3766,7 +3766,7 @@ public static unsafe class SDL
         public UInt32 reserved;
         public UInt64 timestamp;
         public UInt32 windowID;
-        public IntPtr text;
+        public char* text;
         public Int32 start;
         public Int32 length;
     }
@@ -3778,7 +3778,7 @@ public static unsafe class SDL
         public UInt32 reserved;
         public UInt64 timestamp;
         public UInt32 windowID;
-        public IntPtr candidates;
+        public char** candidates;
         public Int32 num_candidates;
         public Int32 selected_candidate;
         public bool horizontal;
@@ -3791,7 +3791,7 @@ public static unsafe class SDL
         public UInt32 reserved;
         public UInt64 timestamp;
         public UInt32 windowID;
-        public IntPtr text;
+        public char* text;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -4105,8 +4105,8 @@ public static unsafe class SDL
         public UInt32 windowID;
         public float x;
         public float y;
-        public IntPtr source;
-        public IntPtr data;
+        public char* source;
+        public char* data;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -4196,7 +4196,7 @@ public static unsafe class SDL
     public static extern void SDL_SetEventFilter(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetEventFilter(IntPtr filter, IntPtr userdata);
+    public static extern bool SDL_GetEventFilter(IntPtr filter, ref IntPtr userdata);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_AddEventWatch(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
@@ -4225,7 +4225,7 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetBasePath();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetPrefPath(IntPtr org, IntPtr app);
+    public static extern IntPtr SDL_GetPrefPath(ref char org, ref char app);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     public enum SDL_Folder
     {
@@ -4265,27 +4265,27 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_CreateDirectory(IntPtr path);
+    public static extern bool SDL_CreateDirectory(ref char path);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // public static delegate RETURN SDL_EnumerateDirectoryCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_EnumerateDirectory(IntPtr path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_EnumerateDirectory(ref char path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_RemovePath(IntPtr path);
+    public static extern bool SDL_RemovePath(ref char path);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_RenamePath(IntPtr oldpath, IntPtr newpath);
+    public static extern bool SDL_RenamePath(ref char oldpath, ref char newpath);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_CopyFile(IntPtr oldpath, IntPtr newpath);
+    public static extern bool SDL_CopyFile(ref char oldpath, ref char newpath); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetPathInfo(IntPtr path, ref SDL_PathInfo info);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetPathInfo(ref char path, ref SDL_PathInfo info);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GlobDirectory(IntPtr path, IntPtr pattern, UInt32 flags, IntPtr count);
+    public static extern IntPtr SDL_GlobDirectory(ref char path, ref char pattern, UInt32 flags, ref int count);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_gpu.h
 
@@ -4754,8 +4754,8 @@ public static unsafe class SDL
     public struct SDL_GPUShaderCreateInfo
     {
         public UIntPtr codeSize;
-        public IntPtr code;
-        public IntPtr entryPointName;
+        public byte* code;
+        public char* entryPointName;
         public UInt32 format;
         public SDL_GPUShaderStage stage;
         public UInt32 samplerCount;
@@ -4866,8 +4866,8 @@ public static unsafe class SDL
     public struct SDL_GPUComputePipelineCreateInfo
     {
         public UIntPtr codeSize;
-        public IntPtr code;
-        public IntPtr entryPointName;
+        public byte* code;
+        public char* entryPointName;
         public UInt32 format;
         public UInt32 readOnlyStorageTextureCount;
         public UInt32 readOnlyStorageBufferCount;
@@ -4935,7 +4935,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUDevice(UInt32 formatFlags, bool debugMode, IntPtr name);
+    public static extern IntPtr SDL_CreateGPUDevice(UInt32 formatFlags, bool debugMode, ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateGPUDeviceWithProperties(UInt32 props);
@@ -4968,16 +4968,16 @@ public static unsafe class SDL
     public static extern IntPtr SDL_CreateGPUTransferBuffer(IntPtr device, ref SDL_GPUTransferBufferCreateInfo transferBufferCreateInfo);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, IntPtr text);
+    public static extern void SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, ref char text);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_SetGPUTextureName(IntPtr device, IntPtr texture, IntPtr text);
+    public static extern void SDL_SetGPUTextureName(IntPtr device, IntPtr texture, ref char text);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_InsertGPUDebugLabel(IntPtr commandBuffer, IntPtr text);
+    public static extern void SDL_InsertGPUDebugLabel(IntPtr commandBuffer, ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_PushGPUDebugGroup(IntPtr commandBuffer, IntPtr name);
+    public static extern void SDL_PushGPUDebugGroup(IntPtr commandBuffer, ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_PopGPUDebugGroup(IntPtr commandBuffer);
@@ -5037,19 +5037,19 @@ public static unsafe class SDL
     public static extern void SDL_BindGPUVertexSamplers(IntPtr renderPass, UInt32 firstSlot, ref SDL_GPUTextureSamplerBinding textureSamplerBindings, UInt32 bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUVertexStorageTextures(IntPtr renderPass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
+    public static extern void SDL_BindGPUVertexStorageTextures(IntPtr renderPass, UInt32 firstSlot, ref IntPtr storageTextures, UInt32 bindingCount);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUVertexStorageBuffers(IntPtr renderPass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
+    public static extern void SDL_BindGPUVertexStorageBuffers(IntPtr renderPass, UInt32 firstSlot, ref IntPtr storageBuffers, UInt32 bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_BindGPUFragmentSamplers(IntPtr renderPass, UInt32 firstSlot, ref SDL_GPUTextureSamplerBinding textureSamplerBindings, UInt32 bindingCount);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUFragmentStorageTextures(IntPtr renderPass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
+    public static extern void SDL_BindGPUFragmentStorageTextures(IntPtr renderPass, UInt32 firstSlot, ref IntPtr storageTextures, UInt32 bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUFragmentStorageBuffers(IntPtr renderPass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
+    public static extern void SDL_BindGPUFragmentStorageBuffers(IntPtr renderPass, UInt32 firstSlot, ref IntPtr storageBuffers, UInt32 bindingCount);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DrawGPUIndexedPrimitives(IntPtr renderPass, UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance);
@@ -5073,10 +5073,10 @@ public static unsafe class SDL
     public static extern void SDL_BindGPUComputePipeline(IntPtr computePass, IntPtr computePipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUComputeStorageTextures(IntPtr computePass, UInt32 firstSlot, IntPtr storageTextures, UInt32 bindingCount);
+    public static extern void SDL_BindGPUComputeStorageTextures(IntPtr computePass, UInt32 firstSlot, ref IntPtr storageTextures, UInt32 bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUComputeStorageBuffers(IntPtr computePass, UInt32 firstSlot, IntPtr storageBuffers, UInt32 bindingCount);
+    public static extern void SDL_BindGPUComputeStorageBuffers(IntPtr computePass, UInt32 firstSlot, ref IntPtr storageBuffers, UInt32 bindingCount);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DispatchGPUCompute(IntPtr computePass, UInt32 groupCountX, UInt32 groupCountY, UInt32 groupCountZ);
@@ -5142,7 +5142,7 @@ public static unsafe class SDL
     public static extern SDL_GPUTextureFormat SDL_GetGPUSwapchainTextureFormat(IntPtr device, IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_AcquireGPUSwapchainTexture(IntPtr commandBuffer, IntPtr window, IntPtr pWidth, IntPtr pHeight);
+    public static extern IntPtr SDL_AcquireGPUSwapchainTexture(IntPtr commandBuffer, IntPtr window, ref UInt32 pWidth, ref UInt32 pHeight); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SubmitGPUCommandBuffer(IntPtr commandBuffer);
@@ -5154,7 +5154,7 @@ public static unsafe class SDL
     public static extern void SDL_WaitForGPUIdle(IntPtr device);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_WaitForGPUFences(IntPtr device, bool waitAll, IntPtr pFences, UInt32 fenceCount);
+    public static extern void SDL_WaitForGPUFences(IntPtr device, bool waitAll, ref IntPtr pFences, UInt32 fenceCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_QueryGPUFence(IntPtr device, IntPtr fence);
@@ -5284,7 +5284,7 @@ public static unsafe class SDL
         public byte channels;
         public UInt16 period;
         public UInt16 samples;
-        public IntPtr data;
+        public UInt16* data;
         public UInt16 attack_length;
         public UInt16 attack_level;
         public UInt16 fade_length;
@@ -5292,7 +5292,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetHaptics(IntPtr count);
+    public static extern IntPtr SDL_GetHaptics(ref int count);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetHapticNameForID(UInt32 instance_id);
@@ -5398,13 +5398,13 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_hid_device_info
     {
-        public IntPtr path;
+        public char* path;
         public ushort vendor_id;
         public ushort product_id;
-        public IntPtr serial_number;
+        public char* serial_number;
         public ushort release_number;
-        public IntPtr manufacturer_string;
-        public IntPtr product_string;
+        public char* manufacturer_string;
+        public char* product_string;
         public ushort usage_page;
         public ushort usage;
         public int interface_number;
@@ -5412,7 +5412,7 @@ public static unsafe class SDL
         public int interface_subclass;
         public int interface_protocol;
         public SDL_hid_bus_type bus_type;
-        public IntPtr next;
+        public SDL_hid_device_info* next;
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5431,52 +5431,52 @@ public static unsafe class SDL
     public static extern void SDL_hid_free_enumeration(ref SDL_hid_device_info devs);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_hid_open(ushort vendor_id, ushort product_id, IntPtr serial_number);
+    public static extern IntPtr SDL_hid_open(ushort vendor_id, ushort product_id, ref char serial_number);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_hid_open_path(IntPtr path);
+    public static extern IntPtr SDL_hid_open_path(ref char path);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_write(IntPtr dev, IntPtr data, UIntPtr length);
+    public static extern int SDL_hid_write(IntPtr dev, ref byte data, UIntPtr length);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_read_timeout(IntPtr dev, IntPtr data, UIntPtr length, int milliseconds);
+    public static extern int SDL_hid_read_timeout(IntPtr dev, ref byte data, UIntPtr length, int milliseconds); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_read(IntPtr dev, IntPtr data, UIntPtr length);
+    public static extern int SDL_hid_read(IntPtr dev, ref byte data, UIntPtr length);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_hid_set_nonblocking(IntPtr dev, int nonblock);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_send_feature_report(IntPtr dev, IntPtr data, UIntPtr length);
+    public static extern int SDL_hid_send_feature_report(IntPtr dev, ref byte data, UIntPtr length);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_feature_report(IntPtr dev, IntPtr data, UIntPtr length);
+    public static extern int SDL_hid_get_feature_report(IntPtr dev, ref byte data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_input_report(IntPtr dev, IntPtr data, UIntPtr length);
+    public static extern int SDL_hid_get_input_report(IntPtr dev, ref byte data, UIntPtr length);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_hid_close(IntPtr dev);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_manufacturer_string(IntPtr dev, IntPtr @string, UIntPtr maxlen);
+    public static extern int SDL_hid_get_manufacturer_string(IntPtr dev, ref char @string, UIntPtr maxlen); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_product_string(IntPtr dev, IntPtr @string, UIntPtr maxlen);
+    public static extern int SDL_hid_get_product_string(IntPtr dev, ref char @string, UIntPtr maxlen);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_serial_number_string(IntPtr dev, IntPtr @string, UIntPtr maxlen);
+    public static extern int SDL_hid_get_serial_number_string(IntPtr dev, ref char @string, UIntPtr maxlen);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_indexed_string(IntPtr dev, int string_index, IntPtr @string, UIntPtr maxlen);
+    public static extern int SDL_hid_get_indexed_string(IntPtr dev, int string_index, ref char @string, UIntPtr maxlen);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_hid_get_device_info(IntPtr dev);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_hid_get_report_descriptor(IntPtr dev, IntPtr buf, UIntPtr buf_size);
+    public static extern int SDL_hid_get_report_descriptor(IntPtr dev, ref byte buf, UIntPtr buf_size); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_hid_ble_scan(bool active);
@@ -5491,30 +5491,30 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetHintWithPriority(IntPtr name, IntPtr value, SDL_HintPriority priority);
+    public static extern bool SDL_SetHintWithPriority(ref char name, ref char value, SDL_HintPriority priority);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetHint(IntPtr name, IntPtr value);
+    public static extern bool SDL_SetHint(ref char name, ref char value);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ResetHint(IntPtr name);
+    public static extern bool SDL_ResetHint(ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ResetHints();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetHint(IntPtr name);
+    public static extern IntPtr SDL_GetHint(ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetHintBoolean(IntPtr name, bool default_value);
+    public static extern bool SDL_GetHintBoolean(ref char name, bool default_value);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // public static delegate RETURN SDL_HintCallback(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_AddHintCallback(IntPtr name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_AddHintCallback(ref char name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_RemoveHintCallback(IntPtr name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);
+    public static extern void SDL_RemoveHintCallback(ref char name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_init.h
 
@@ -5549,21 +5549,21 @@ public static unsafe class SDL
     public static extern void SDL_Quit();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetAppMetadata(IntPtr appname, IntPtr appversion, IntPtr appidentifier);
+    public static extern bool SDL_SetAppMetadata(ref char appname, ref char appversion, ref char appidentifier);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetAppMetadataProperty(IntPtr name, IntPtr value);
+    public static extern bool SDL_SetAppMetadataProperty(ref char name, ref char value);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetAppMetadataProperty(IntPtr name);
+    public static extern IntPtr SDL_GetAppMetadataProperty(ref char name);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_loadso.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_LoadObject(IntPtr sofile);
+    public static extern IntPtr SDL_LoadObject(ref char sofile);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_LoadFunction(IntPtr handle, IntPtr name);
+    public static extern IntPtr SDL_LoadFunction(IntPtr handle, ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnloadObject(IntPtr handle);
@@ -5573,12 +5573,12 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_Locale
     {
-        public IntPtr language;
-        public IntPtr country;
+        public char* language;
+        public char* country;
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetPreferredLocales(IntPtr count);
+    public static extern IntPtr SDL_GetPreferredLocales(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_log.h
 
@@ -5631,36 +5631,36 @@ public static unsafe class SDL
     public static extern void SDL_ResetLogPriorities();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetLogPriorityPrefix(SDL_LogPriority priority, IntPtr prefix);
+    public static extern bool SDL_SetLogPriorityPrefix(SDL_LogPriority priority, ref char prefix);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_Log(IntPtr fmt);
+    public static extern void SDL_Log(ref char fmt);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_LogVerbose(int category, IntPtr fmt);
+    public static extern void SDL_LogVerbose(int category, ref char fmt);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_LogDebug(int category, IntPtr fmt);
+    public static extern void SDL_LogDebug(int category, ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_LogInfo(int category, IntPtr fmt);
+    public static extern void SDL_LogInfo(int category, ref char fmt);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_LogWarn(int category, IntPtr fmt);
+    public static extern void SDL_LogWarn(int category, ref char fmt);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_LogError(int category, IntPtr fmt);
+    public static extern void SDL_LogError(int category, ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_LogCritical(int category, IntPtr fmt);
+    public static extern void SDL_LogCritical(int category, ref char fmt);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_LogMessage(int category, SDL_LogPriority priority, IntPtr fmt);
+    public static extern void SDL_LogMessage(int category, SDL_LogPriority priority, ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // public static delegate RETURN SDL_LogOutputFunction(PARAMS)	// WARN_UNDEFINED_FUNCTION_POINTER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GetLogOutputFunction(IntPtr callback, IntPtr userdata);
+    public static extern void SDL_GetLogOutputFunction(IntPtr callback, ref IntPtr userdata);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetLogOutputFunction(/* SDL_LogOutputFunction */ IntPtr callback, IntPtr userdata);
@@ -5672,7 +5672,7 @@ public static unsafe class SDL
     {
         public UInt32 flags;
         public int buttonID;
-        public IntPtr text;
+        public char* text;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -5708,18 +5708,18 @@ public static unsafe class SDL
     {
         public UInt32 flags;
         public IntPtr window;
-        public IntPtr title;
-        public IntPtr message;
+        public char* title;
+        public char* message;
         public int numbuttons;
         public SDL_MessageBoxButtonData* buttons;
         public SDL_MessageBoxColorScheme* colorScheme;
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ShowMessageBox(ref SDL_MessageBoxData messageboxdata, IntPtr buttonid);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_ShowMessageBox(ref SDL_MessageBoxData messageboxdata, ref int buttonid);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ShowSimpleMessageBox(UInt32 flags, IntPtr title, IntPtr message, IntPtr window);
+    public static extern bool SDL_ShowSimpleMessageBox(UInt32 flags, ref char title, ref char message, IntPtr window);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_metal.h
 
@@ -5735,7 +5735,7 @@ public static unsafe class SDL
     // ./include/SDL3/SDL_misc.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_OpenURL(IntPtr url);
+    public static extern bool SDL_OpenURL(ref char url);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_platform.h
 
@@ -5775,10 +5775,10 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetRenderDriver(int index);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_CreateWindowAndRenderer(IntPtr title, int width, int height, UInt64 window_flags, IntPtr window, IntPtr renderer);
+    public static extern bool SDL_CreateWindowAndRenderer(ref char title, int width, int height, UInt64 window_flags, ref IntPtr window, ref IntPtr renderer);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateRenderer(IntPtr window, IntPtr name);
+    public static extern IntPtr SDL_CreateRenderer(IntPtr window, ref char name);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateRendererWithProperties(UInt32 props);
@@ -5799,10 +5799,10 @@ public static unsafe class SDL
     public static extern UInt32 SDL_GetRendererProperties(IntPtr renderer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRenderOutputSize(IntPtr renderer, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetRenderOutputSize(IntPtr renderer, ref int w, ref int h);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetCurrentRenderOutputSize(IntPtr renderer, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetCurrentRenderOutputSize(IntPtr renderer, ref int w, ref int h);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateTexture(IntPtr renderer, SDL_PixelFormat format, SDL_TextureAccess access, int w, int h);
@@ -5820,7 +5820,7 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetRendererFromTexture(IntPtr texture);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetTextureSize(IntPtr texture, IntPtr w, IntPtr h);
+    public static extern bool SDL_GetTextureSize(IntPtr texture, ref float w, ref float h); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetTextureColorMod(IntPtr texture, byte r, byte g, byte b);
@@ -5829,10 +5829,10 @@ public static unsafe class SDL
     public static extern bool SDL_SetTextureColorModFloat(IntPtr texture, float r, float g, float b);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetTextureColorMod(IntPtr texture, IntPtr r, IntPtr g, IntPtr b);
+    public static extern bool SDL_GetTextureColorMod(IntPtr texture, ref byte r, ref byte g, ref byte b);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetTextureColorModFloat(IntPtr texture, IntPtr r, IntPtr g, IntPtr b);
+    public static extern bool SDL_GetTextureColorModFloat(IntPtr texture, ref float r, ref float g, ref float b);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetTextureAlphaMod(IntPtr texture, byte alpha);
@@ -5841,10 +5841,10 @@ public static unsafe class SDL
     public static extern bool SDL_SetTextureAlphaModFloat(IntPtr texture, float alpha);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetTextureAlphaMod(IntPtr texture, IntPtr alpha);
+    public static extern bool SDL_GetTextureAlphaMod(IntPtr texture, ref byte alpha);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetTextureAlphaModFloat(IntPtr texture, IntPtr alpha);
+    public static extern bool SDL_GetTextureAlphaModFloat(IntPtr texture, ref float alpha); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetTextureBlendMode(IntPtr texture, UInt32 blendMode);
@@ -5862,16 +5862,16 @@ public static unsafe class SDL
     public static extern bool SDL_UpdateTexture(IntPtr texture, ref SDL_Rect rect, IntPtr pixels, int pitch);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_UpdateYUVTexture(IntPtr texture, ref SDL_Rect rect, IntPtr Yplane, int Ypitch, IntPtr Uplane, int Upitch, IntPtr Vplane, int Vpitch); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_UpdateYUVTexture(IntPtr texture, ref SDL_Rect rect, ref byte Yplane, int Ypitch, ref byte Uplane, int Upitch, ref byte Vplane, int Vpitch);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_UpdateNVTexture(IntPtr texture, ref SDL_Rect rect, IntPtr Yplane, int Ypitch, IntPtr UVplane, int UVpitch);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_UpdateNVTexture(IntPtr texture, ref SDL_Rect rect, ref byte Yplane, int Ypitch, ref byte UVplane, int UVpitch);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_LockTexture(IntPtr texture, ref SDL_Rect rect, IntPtr pixels, IntPtr pitch);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_LockTexture(IntPtr texture, ref SDL_Rect rect, ref IntPtr pixels, ref int pitch); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_LockTextureToSurface(IntPtr texture, ref SDL_Rect rect, IntPtr surface);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_LockTextureToSurface(IntPtr texture, ref SDL_Rect rect, ref IntPtr surface);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockTexture(IntPtr texture);
@@ -5886,16 +5886,16 @@ public static unsafe class SDL
     public static extern bool SDL_SetRenderLogicalPresentation(IntPtr renderer, int w, int h, SDL_RendererLogicalPresentation mode, SDL_ScaleMode scale_mode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRenderLogicalPresentation(IntPtr renderer, IntPtr w, IntPtr h, ref SDL_RendererLogicalPresentation mode, ref SDL_ScaleMode scale_mode);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetRenderLogicalPresentation(IntPtr renderer, ref int w, ref int h, ref SDL_RendererLogicalPresentation mode, ref SDL_ScaleMode scale_mode);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetRenderLogicalPresentationRect(IntPtr renderer, ref SDL_FRect rect);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_RenderCoordinatesFromWindow(IntPtr renderer, float window_x, float window_y, IntPtr x, IntPtr y);
+    public static extern bool SDL_RenderCoordinatesFromWindow(IntPtr renderer, float window_x, float window_y, ref float x, ref float y);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_RenderCoordinatesToWindow(IntPtr renderer, float x, float y, IntPtr window_x, IntPtr window_y);
+    public static extern bool SDL_RenderCoordinatesToWindow(IntPtr renderer, float x, float y, ref float window_x, ref float window_y); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ConvertEventToRenderCoordinates(IntPtr renderer, IntPtr @event);
@@ -5925,7 +5925,7 @@ public static unsafe class SDL
     public static extern bool SDL_SetRenderScale(IntPtr renderer, float scaleX, float scaleY);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRenderScale(IntPtr renderer, IntPtr scaleX, IntPtr scaleY);
+    public static extern bool SDL_GetRenderScale(IntPtr renderer, ref float scaleX, ref float scaleY);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetRenderDrawColor(IntPtr renderer, byte r, byte g, byte b, byte a);
@@ -5934,16 +5934,16 @@ public static unsafe class SDL
     public static extern bool SDL_SetRenderDrawColorFloat(IntPtr renderer, float r, float g, float b, float a);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRenderDrawColor(IntPtr renderer, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
+    public static extern bool SDL_GetRenderDrawColor(IntPtr renderer, ref byte r, ref byte g, ref byte b, ref byte a);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRenderDrawColorFloat(IntPtr renderer, IntPtr r, IntPtr g, IntPtr b, IntPtr a);
+    public static extern bool SDL_GetRenderDrawColorFloat(IntPtr renderer, ref float r, ref float g, ref float b, ref float a); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetRenderColorScale(IntPtr renderer, float scale);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRenderColorScale(IntPtr renderer, IntPtr scale);
+    public static extern bool SDL_GetRenderColorScale(IntPtr renderer, ref float scale);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetRenderDrawBlendMode(IntPtr renderer, UInt32 blendMode);
@@ -5991,10 +5991,10 @@ public static unsafe class SDL
     public static extern bool SDL_RenderTexture9Grid(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float left_width, float right_width, float top_height, float bottom_height, float scale, ref SDL_FRect dstrect);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, ref SDL_Vertex vertices, int num_vertices, IntPtr indices, int num_indices);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, ref SDL_Vertex vertices, int num_vertices, ref int indices, int num_indices); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_RenderGeometryRaw(IntPtr renderer, IntPtr texture, IntPtr xy, int xy_stride, ref SDL_FColor color, int color_stride, IntPtr uv, int uv_stride, int num_vertices, IntPtr indices, int num_indices, int size_indices);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_RenderGeometryRaw(IntPtr renderer, IntPtr texture, ref float xy, int xy_stride, ref SDL_FColor color, int color_stride, ref float uv, int uv_stride, int num_vertices, IntPtr indices, int num_indices, int size_indices);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_RenderReadPixels(IntPtr renderer, ref SDL_Rect rect);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -6024,7 +6024,7 @@ public static unsafe class SDL
     public static extern bool SDL_SetRenderVSync(IntPtr renderer, int vsync);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetRenderVSync(IntPtr renderer, IntPtr vsync);
+    public static extern bool SDL_GetRenderVSync(IntPtr renderer, ref int vsync);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_storage.h
 
@@ -6045,13 +6045,13 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_OpenTitleStorage(IntPtr @override, UInt32 props);
+    public static extern IntPtr SDL_OpenTitleStorage(ref char @override, UInt32 props); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_OpenUserStorage(IntPtr org, IntPtr app, UInt32 props);
+    public static extern IntPtr SDL_OpenUserStorage(ref char org, ref char app, UInt32 props);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_OpenFileStorage(IntPtr path);
+    public static extern IntPtr SDL_OpenFileStorage(ref char path); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenStorage(ref SDL_StorageInterface iface, IntPtr userdata);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -6063,37 +6063,37 @@ public static unsafe class SDL
     public static extern bool SDL_StorageReady(IntPtr storage);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetStorageFileSize(IntPtr storage, IntPtr path, IntPtr length);
+    public static extern bool SDL_GetStorageFileSize(IntPtr storage, ref char path, ref UInt64 length); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ReadStorageFile(IntPtr storage, IntPtr path, IntPtr destination, UInt64 length);
+    public static extern bool SDL_ReadStorageFile(IntPtr storage, ref char path, IntPtr destination, UInt64 length);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_WriteStorageFile(IntPtr storage, IntPtr path, IntPtr source, UInt64 length);
+    public static extern bool SDL_WriteStorageFile(IntPtr storage, ref char path, IntPtr source, UInt64 length);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_CreateStorageDirectory(IntPtr storage, IntPtr path);
+    public static extern bool SDL_CreateStorageDirectory(IntPtr storage, ref char path);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_EnumerateStorageDirectory(IntPtr storage, IntPtr path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata);
+    public static extern bool SDL_EnumerateStorageDirectory(IntPtr storage, ref char path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_RemoveStoragePath(IntPtr storage, IntPtr path);
+    public static extern bool SDL_RemoveStoragePath(IntPtr storage, ref char path); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_RenameStoragePath(IntPtr storage, IntPtr oldpath, IntPtr newpath);
+    public static extern bool SDL_RenameStoragePath(IntPtr storage, ref char oldpath, ref char newpath);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_CopyStorageFile(IntPtr storage, IntPtr oldpath, IntPtr newpath);
+    public static extern bool SDL_CopyStorageFile(IntPtr storage, ref char oldpath, ref char newpath);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetStoragePathInfo(IntPtr storage, IntPtr path, ref SDL_PathInfo info);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetStoragePathInfo(IntPtr storage, ref char path, ref SDL_PathInfo info); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern UInt64 SDL_GetStorageSpaceRemaining(IntPtr storage);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GlobStorageDirectory(IntPtr storage, IntPtr path, IntPtr pattern, UInt32 flags, IntPtr count);
+    public static extern IntPtr SDL_GlobStorageDirectory(IntPtr storage, ref char path, ref char pattern, UInt32 flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     // ./include/SDL3/SDL_system.h
 
@@ -6171,7 +6171,7 @@ public static unsafe class SDL
     public static extern bool SDL_DateTimeToTime(ref SDL_DateTime dt, IntPtr ticks);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_TimeToWindows(Int64 ticks, IntPtr dwLowDateTime, IntPtr dwHighDateTime);
+    public static extern void SDL_TimeToWindows(Int64 ticks, ref UInt32 dwLowDateTime, ref UInt32 dwHighDateTime);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern Int64 SDL_TimeFromWindows(UInt32 dwLowDateTime, UInt32 dwHighDateTime);

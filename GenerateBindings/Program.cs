@@ -35,8 +35,446 @@ internal static class Program
         Array,
     }
 
-    private static readonly Dictionary<(string, string), PointerParameterIntent> ParametersIntents = new()
+    private static readonly Dictionary<(string, string), PointerParameterIntent> PointerParametersIntents = new()
     {
+        { ("SDL_getenv", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_setenv", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_setenv", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_unsetenv", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_wcslen", "wstr"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsnlen", "wstr"), PointerParameterIntent.Unknown },
+        { ("SDL_wcslcpy", "dst"), PointerParameterIntent.Unknown },
+        { ("SDL_wcslcpy", "src"), PointerParameterIntent.Unknown },
+        { ("SDL_wcslcat", "dst"), PointerParameterIntent.Unknown },
+        { ("SDL_wcslcat", "src"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsdup", "wstr"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsstr", "haystack"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsstr", "needle"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsnstr", "haystack"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsnstr", "needle"), PointerParameterIntent.Unknown },
+        { ("SDL_wcscmp", "str1"), PointerParameterIntent.Unknown },
+        { ("SDL_wcscmp", "str2"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsncmp", "str1"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsncmp", "str2"), PointerParameterIntent.Unknown },
+        { ("SDL_wcscasecmp", "str1"), PointerParameterIntent.Unknown },
+        { ("SDL_wcscasecmp", "str2"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsncasecmp", "str1"), PointerParameterIntent.Unknown },
+        { ("SDL_wcsncasecmp", "str2"), PointerParameterIntent.Unknown },
+        { ("SDL_wcstol", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_wcstol", "endp"), PointerParameterIntent.Unknown },
+        { ("SDL_strlen", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strnlen", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strlcpy", "dst"), PointerParameterIntent.Unknown },
+        { ("SDL_strlcpy", "src"), PointerParameterIntent.Unknown },
+        { ("SDL_utf8strlcpy", "dst"), PointerParameterIntent.Unknown },
+        { ("SDL_utf8strlcpy", "src"), PointerParameterIntent.Unknown },
+        { ("SDL_strlcat", "dst"), PointerParameterIntent.Unknown },
+        { ("SDL_strlcat", "src"), PointerParameterIntent.Unknown },
+        { ("SDL_strdup", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strndup", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strrev", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strupr", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strlwr", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strchr", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strrchr", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strstr", "haystack"), PointerParameterIntent.Unknown },
+        { ("SDL_strstr", "needle"), PointerParameterIntent.Unknown },
+        { ("SDL_strnstr", "haystack"), PointerParameterIntent.Unknown },
+        { ("SDL_strnstr", "needle"), PointerParameterIntent.Unknown },
+        { ("SDL_strcasestr", "haystack"), PointerParameterIntent.Unknown },
+        { ("SDL_strcasestr", "needle"), PointerParameterIntent.Unknown },
+        { ("SDL_strtok_r", "s1"), PointerParameterIntent.Unknown },
+        { ("SDL_strtok_r", "s2"), PointerParameterIntent.Unknown },
+        { ("SDL_strtok_r", "saveptr"), PointerParameterIntent.Unknown },
+        { ("SDL_utf8strlen", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_utf8strnlen", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_itoa", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_uitoa", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_ltoa", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_ultoa", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_lltoa", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_ulltoa", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_atoi", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_atof", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strtol", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strtol", "endp"), PointerParameterIntent.Unknown },
+        { ("SDL_strtoul", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strtoul", "endp"), PointerParameterIntent.Unknown },
+        { ("SDL_strtoll", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strtoll", "endp"), PointerParameterIntent.Unknown },
+        { ("SDL_strtoull", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strtoull", "endp"), PointerParameterIntent.Unknown },
+        { ("SDL_strtod", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_strtod", "endp"), PointerParameterIntent.Unknown },
+        { ("SDL_strcmp", "str1"), PointerParameterIntent.Unknown },
+        { ("SDL_strcmp", "str2"), PointerParameterIntent.Unknown },
+        { ("SDL_strncmp", "str1"), PointerParameterIntent.Unknown },
+        { ("SDL_strncmp", "str2"), PointerParameterIntent.Unknown },
+        { ("SDL_strcasecmp", "str1"), PointerParameterIntent.Unknown },
+        { ("SDL_strcasecmp", "str2"), PointerParameterIntent.Unknown },
+        { ("SDL_strncasecmp", "str1"), PointerParameterIntent.Unknown },
+        { ("SDL_strncasecmp", "str2"), PointerParameterIntent.Unknown },
+        { ("SDL_StepUTF8", "pstr"), PointerParameterIntent.Unknown },
+        { ("SDL_StepUTF8", "pslen"), PointerParameterIntent.Unknown },
+        { ("SDL_UCS4ToUTF8", "dst"), PointerParameterIntent.Unknown },
+        { ("SDL_sscanf", "text"), PointerParameterIntent.Unknown },
+        { ("SDL_sscanf", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_snprintf", "text"), PointerParameterIntent.Unknown },
+        { ("SDL_snprintf", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_swprintf", "text"), PointerParameterIntent.Unknown },
+        { ("SDL_swprintf", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_asprintf", "strp"), PointerParameterIntent.Unknown },
+        { ("SDL_asprintf", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_rand_r", "state"), PointerParameterIntent.Unknown },
+        { ("SDL_randf_r", "state"), PointerParameterIntent.Unknown },
+        { ("SDL_rand_bits_r", "state"), PointerParameterIntent.Unknown },
+        { ("SDL_modf", "y"), PointerParameterIntent.Unknown },
+        { ("SDL_modff", "y"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv_open", "tocode"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv_open", "fromcode"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv", "inbuf"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv", "inbytesleft"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv", "outbuf"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv", "outbytesleft"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv_string", "tocode"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv_string", "fromcode"), PointerParameterIntent.Unknown },
+        { ("SDL_iconv_string", "inbuf"), PointerParameterIntent.Unknown },
+        { ("SDL_size_mul_check_overflow", "ret"), PointerParameterIntent.Unknown },
+        { ("SDL_size_mul_check_overflow_builtin", "ret"), PointerParameterIntent.Unknown },
+        { ("SDL_size_add_check_overflow", "ret"), PointerParameterIntent.Unknown },
+        { ("SDL_size_add_check_overflow_builtin", "ret"), PointerParameterIntent.Unknown },
+        { ("SDL_ReportAssertion", "func"), PointerParameterIntent.Unknown },
+        { ("SDL_ReportAssertion", "file"), PointerParameterIntent.Unknown },
+        { ("SDL_GetAssertionHandler", "puserdata"), PointerParameterIntent.Unknown },
+        { ("SDL_AtomicCompareAndSwapPointer", "a"), PointerParameterIntent.Unknown },
+        { ("SDL_AtomicSetPointer", "a"), PointerParameterIntent.Unknown },
+        { ("SDL_AtomicGetPointer", "a"), PointerParameterIntent.Unknown },
+        { ("SDL_SetError", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_SetPointerPropertyWithCleanup", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetPointerProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetStringProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetStringProperty", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_SetNumberProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetFloatProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetBooleanProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_HasProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetPropertyType", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetPointerProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetStringProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetStringProperty", "default_value"), PointerParameterIntent.Unknown },
+        { ("SDL_GetNumberProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetFloatProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetBooleanProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_ClearProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_IOFromFile", "file"), PointerParameterIntent.Unknown },
+        { ("SDL_IOFromFile", "mode"), PointerParameterIntent.Unknown },
+        { ("SDL_IOprintf", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadFile_IO", "datasize"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadFile", "file"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadFile", "datasize"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadU8", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadS8", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadU16LE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadS16LE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadU16BE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadS16BE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadU32LE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadS32LE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadU32BE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadS32BE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadU64LE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadS64LE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadU64BE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadS64BE", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateThreadRuntime", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_WaitThread", "status"), PointerParameterIntent.Unknown },
+        { ("SDL_GetAudioPlaybackDevices", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetAudioRecordingDevices", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetAudioDeviceFormat", "sample_frames"), PointerParameterIntent.Unknown },
+        { ("SDL_GetAudioDeviceChannelMap", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_BindAudioStreams", "streams"), PointerParameterIntent.Unknown },
+        { ("SDL_UnbindAudioStreams", "streams"), PointerParameterIntent.Unknown },
+        { ("SDL_GetAudioStreamInputChannelMap", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetAudioStreamOutputChannelMap", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_SetAudioStreamInputChannelMap", "chmap"), PointerParameterIntent.Unknown },
+        { ("SDL_SetAudioStreamOutputChannelMap", "chmap"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadWAV_IO", "audio_buf"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadWAV_IO", "audio_len"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadWAV", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadWAV", "audio_buf"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadWAV", "audio_len"), PointerParameterIntent.Unknown },
+        { ("SDL_MixAudio", "dst"), PointerParameterIntent.Unknown },
+        { ("SDL_MixAudio", "src"), PointerParameterIntent.Unknown },
+        { ("SDL_ConvertAudioSamples", "src_data"), PointerParameterIntent.Unknown },
+        { ("SDL_ConvertAudioSamples", "dst_data"), PointerParameterIntent.Unknown },
+        { ("SDL_ConvertAudioSamples", "dst_len"), PointerParameterIntent.Unknown },
+        { ("SDL_GetMasksForPixelFormat", "bpp"), PointerParameterIntent.Unknown },
+        { ("SDL_GetMasksForPixelFormat", "Rmask"), PointerParameterIntent.Unknown },
+        { ("SDL_GetMasksForPixelFormat", "Gmask"), PointerParameterIntent.Unknown },
+        { ("SDL_GetMasksForPixelFormat", "Bmask"), PointerParameterIntent.Unknown },
+        { ("SDL_GetMasksForPixelFormat", "Amask"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRGB", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRGB", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRGB", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRGBA", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRGBA", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRGBA", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRGBA", "a"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRectAndLineIntersection", "X1"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRectAndLineIntersection", "Y1"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRectAndLineIntersection", "X2"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRectAndLineIntersection", "Y2"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRectAndLineIntersectionFloat", "X1"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRectAndLineIntersectionFloat", "Y1"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRectAndLineIntersectionFloat", "X2"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRectAndLineIntersectionFloat", "Y2"), PointerParameterIntent.Unknown },
+        { ("SDL_GetSurfaceImages", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadBMP", "file"), PointerParameterIntent.Unknown },
+        { ("SDL_SaveBMP", "file"), PointerParameterIntent.Unknown },
+        { ("SDL_GetSurfaceColorKey", "key"), PointerParameterIntent.Unknown },
+        { ("SDL_GetSurfaceColorMod", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_GetSurfaceColorMod", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_GetSurfaceColorMod", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_GetSurfaceAlphaMod", "alpha"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadSurfacePixel", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadSurfacePixel", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadSurfacePixel", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadSurfacePixel", "a"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadSurfacePixelFloat", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadSurfacePixelFloat", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadSurfacePixelFloat", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadSurfacePixelFloat", "a"), PointerParameterIntent.Unknown },
+        { ("SDL_GetDisplays", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetFullscreenDisplayModes", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowICCProfile", "size"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindows", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateWindow", "title"), PointerParameterIntent.Unknown },
+        { ("SDL_SetWindowTitle", "title"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowPosition", "x"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowPosition", "y"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowSize", "w"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowSize", "h"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowAspectRatio", "min_aspect"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowAspectRatio", "max_aspect"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowBordersSize", "top"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowBordersSize", "left"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowBordersSize", "bottom"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowBordersSize", "right"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowSizeInPixels", "w"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowSizeInPixels", "h"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowMinimumSize", "w"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowMinimumSize", "h"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowMaximumSize", "w"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowMaximumSize", "h"), PointerParameterIntent.Unknown },
+        { ("SDL_GetWindowSurfaceVSync", "vsync"), PointerParameterIntent.Unknown },
+        { ("SDL_GL_LoadLibrary", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_GL_GetProcAddress", "proc"), PointerParameterIntent.Unknown },
+        { ("SDL_EGL_GetProcAddress", "proc"), PointerParameterIntent.Unknown },
+        { ("SDL_GL_ExtensionSupported", "extension"), PointerParameterIntent.Unknown },
+        { ("SDL_GL_GetAttribute", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_GL_GetSwapInterval", "interval"), PointerParameterIntent.Unknown },
+        { ("SDL_GetCameras", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetCameraSupportedFormats", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_AcquireCameraFrame", "timestampNS"), PointerParameterIntent.Unknown },
+        { ("SDL_SetClipboardText", "text"), PointerParameterIntent.Unknown },
+        { ("SDL_SetPrimarySelectionText", "text"), PointerParameterIntent.Unknown },
+        { ("SDL_SetClipboardData", "mime_types"), PointerParameterIntent.Unknown },
+        { ("SDL_GetClipboardData", "mime_type"), PointerParameterIntent.Unknown },
+        { ("SDL_GetClipboardData", "size"), PointerParameterIntent.Unknown },
+        { ("SDL_HasClipboardData", "mime_type"), PointerParameterIntent.Unknown },
+        { ("SDL_ShowOpenFileDialog", "default_location"), PointerParameterIntent.Unknown },
+        { ("SDL_ShowSaveFileDialog", "default_location"), PointerParameterIntent.Unknown },
+        { ("SDL_ShowOpenFolderDialog", "default_location"), PointerParameterIntent.Unknown },
+        { ("SDL_GUIDToString", "pszGUID"), PointerParameterIntent.Unknown },
+        { ("SDL_StringToGUID", "pchGUID"), PointerParameterIntent.Unknown },
+        { ("SDL_GetPowerInfo", "seconds"), PointerParameterIntent.Unknown },
+        { ("SDL_GetPowerInfo", "percent"), PointerParameterIntent.Unknown },
+        { ("SDL_GetSensors", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetSensorData", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoysticks", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_SendJoystickVirtualSensorData", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoystickGUIDInfo", "vendor"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoystickGUIDInfo", "product"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoystickGUIDInfo", "version"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoystickGUIDInfo", "crc16"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoystickAxisInitialState", "state"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoystickBall", "dx"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoystickBall", "dy"), PointerParameterIntent.Unknown },
+        { ("SDL_GetJoystickPowerInfo", "percent"), PointerParameterIntent.Unknown },
+        { ("SDL_AddGamepadMapping", "mapping"), PointerParameterIntent.Unknown },
+        { ("SDL_AddGamepadMappingsFromFile", "file"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadMappings", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_SetGamepadMapping", "mapping"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepads", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadPowerInfo", "percent"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadBindings", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadTypeFromString", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadAxisFromString", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadButtonFromString", "str"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadTouchpadFinger", "state"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadTouchpadFinger", "x"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadTouchpadFinger", "y"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadTouchpadFinger", "pressure"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGamepadSensorData", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_GetKeyboards", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetKeyboardState", "numkeys"), PointerParameterIntent.Unknown },
+        { ("SDL_SetScancodeName", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetScancodeFromName", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetKeyFromName", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextInputArea", "cursor"), PointerParameterIntent.Unknown },
+        { ("SDL_GetMice", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetMouseState", "x"), PointerParameterIntent.Unknown },
+        { ("SDL_GetMouseState", "y"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGlobalMouseState", "x"), PointerParameterIntent.Unknown },
+        { ("SDL_GetGlobalMouseState", "y"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRelativeMouseState", "x"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRelativeMouseState", "y"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateCursor", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateCursor", "mask"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTouchDevices", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTouchFingers", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_GetEventFilter", "userdata"), PointerParameterIntent.Unknown },
+        { ("SDL_GetPrefPath", "org"), PointerParameterIntent.Unknown },
+        { ("SDL_GetPrefPath", "app"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateDirectory", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_EnumerateDirectory", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_RemovePath", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_RenamePath", "oldpath"), PointerParameterIntent.Unknown },
+        { ("SDL_RenamePath", "newpath"), PointerParameterIntent.Unknown },
+        { ("SDL_CopyFile", "oldpath"), PointerParameterIntent.Unknown },
+        { ("SDL_CopyFile", "newpath"), PointerParameterIntent.Unknown },
+        { ("SDL_GetPathInfo", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_GlobDirectory", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_GlobDirectory", "pattern"), PointerParameterIntent.Unknown },
+        { ("SDL_GlobDirectory", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateGPUDevice", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetGPUBufferName", "text"), PointerParameterIntent.Unknown },
+        { ("SDL_SetGPUTextureName", "text"), PointerParameterIntent.Unknown },
+        { ("SDL_InsertGPUDebugLabel", "text"), PointerParameterIntent.Unknown },
+        { ("SDL_PushGPUDebugGroup", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_BindGPUVertexStorageTextures", "storageTextures"), PointerParameterIntent.Unknown },
+        { ("SDL_BindGPUVertexStorageBuffers", "storageBuffers"), PointerParameterIntent.Unknown },
+        { ("SDL_BindGPUFragmentStorageTextures", "storageTextures"), PointerParameterIntent.Unknown },
+        { ("SDL_BindGPUFragmentStorageBuffers", "storageBuffers"), PointerParameterIntent.Unknown },
+        { ("SDL_BindGPUComputeStorageTextures", "storageTextures"), PointerParameterIntent.Unknown },
+        { ("SDL_BindGPUComputeStorageBuffers", "storageBuffers"), PointerParameterIntent.Unknown },
+        { ("SDL_AcquireGPUSwapchainTexture", "pWidth"), PointerParameterIntent.Unknown },
+        { ("SDL_AcquireGPUSwapchainTexture", "pHeight"), PointerParameterIntent.Unknown },
+        { ("SDL_WaitForGPUFences", "pFences"), PointerParameterIntent.Unknown },
+        { ("SDL_GetHaptics", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_open", "serial_number"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_open_path", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_write", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_read_timeout", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_read", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_send_feature_report", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_get_feature_report", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_get_input_report", "data"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_get_manufacturer_string", "string"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_get_product_string", "string"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_get_serial_number_string", "string"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_get_indexed_string", "string"), PointerParameterIntent.Unknown },
+        { ("SDL_hid_get_report_descriptor", "buf"), PointerParameterIntent.Unknown },
+        { ("SDL_SetHintWithPriority", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetHintWithPriority", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_SetHint", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetHint", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_ResetHint", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetHint", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetHintBoolean", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_AddHintCallback", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_RemoveHintCallback", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetAppMetadata", "appname"), PointerParameterIntent.Unknown },
+        { ("SDL_SetAppMetadata", "appversion"), PointerParameterIntent.Unknown },
+        { ("SDL_SetAppMetadata", "appidentifier"), PointerParameterIntent.Unknown },
+        { ("SDL_SetAppMetadataProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_SetAppMetadataProperty", "value"), PointerParameterIntent.Unknown },
+        { ("SDL_GetAppMetadataProperty", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadObject", "sofile"), PointerParameterIntent.Unknown },
+        { ("SDL_LoadFunction", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetPreferredLocales", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_SetLogPriorityPrefix", "prefix"), PointerParameterIntent.Unknown },
+        { ("SDL_Log", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_LogVerbose", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_LogDebug", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_LogInfo", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_LogWarn", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_LogError", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_LogCritical", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_LogMessage", "fmt"), PointerParameterIntent.Unknown },
+        { ("SDL_GetLogOutputFunction", "userdata"), PointerParameterIntent.Unknown },
+        { ("SDL_ShowMessageBox", "buttonid"), PointerParameterIntent.Unknown },
+        { ("SDL_ShowSimpleMessageBox", "title"), PointerParameterIntent.Unknown },
+        { ("SDL_ShowSimpleMessageBox", "message"), PointerParameterIntent.Unknown },
+        { ("SDL_OpenURL", "url"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateWindowAndRenderer", "title"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateWindowAndRenderer", "window"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateWindowAndRenderer", "renderer"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateRenderer", "name"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderOutputSize", "w"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderOutputSize", "h"), PointerParameterIntent.Unknown },
+        { ("SDL_GetCurrentRenderOutputSize", "w"), PointerParameterIntent.Unknown },
+        { ("SDL_GetCurrentRenderOutputSize", "h"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureSize", "w"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureSize", "h"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureColorMod", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureColorMod", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureColorMod", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureColorModFloat", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureColorModFloat", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureColorModFloat", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureAlphaMod", "alpha"), PointerParameterIntent.Unknown },
+        { ("SDL_GetTextureAlphaModFloat", "alpha"), PointerParameterIntent.Unknown },
+        { ("SDL_UpdateYUVTexture", "Yplane"), PointerParameterIntent.Unknown },
+        { ("SDL_UpdateYUVTexture", "Uplane"), PointerParameterIntent.Unknown },
+        { ("SDL_UpdateYUVTexture", "Vplane"), PointerParameterIntent.Unknown },
+        { ("SDL_UpdateNVTexture", "Yplane"), PointerParameterIntent.Unknown },
+        { ("SDL_UpdateNVTexture", "UVplane"), PointerParameterIntent.Unknown },
+        { ("SDL_LockTexture", "pixels"), PointerParameterIntent.Unknown },
+        { ("SDL_LockTexture", "pitch"), PointerParameterIntent.Unknown },
+        { ("SDL_LockTextureToSurface", "surface"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderLogicalPresentation", "w"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderLogicalPresentation", "h"), PointerParameterIntent.Unknown },
+        { ("SDL_RenderCoordinatesFromWindow", "x"), PointerParameterIntent.Unknown },
+        { ("SDL_RenderCoordinatesFromWindow", "y"), PointerParameterIntent.Unknown },
+        { ("SDL_RenderCoordinatesToWindow", "window_x"), PointerParameterIntent.Unknown },
+        { ("SDL_RenderCoordinatesToWindow", "window_y"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderScale", "scaleX"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderScale", "scaleY"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderDrawColor", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderDrawColor", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderDrawColor", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderDrawColor", "a"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderDrawColorFloat", "r"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderDrawColorFloat", "g"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderDrawColorFloat", "b"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderDrawColorFloat", "a"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderColorScale", "scale"), PointerParameterIntent.Unknown },
+        { ("SDL_RenderGeometry", "indices"), PointerParameterIntent.Unknown },
+        { ("SDL_RenderGeometryRaw", "xy"), PointerParameterIntent.Unknown },
+        { ("SDL_RenderGeometryRaw", "uv"), PointerParameterIntent.Unknown },
+        { ("SDL_GetRenderVSync", "vsync"), PointerParameterIntent.Unknown },
+        { ("SDL_OpenTitleStorage", "override"), PointerParameterIntent.Unknown },
+        { ("SDL_OpenUserStorage", "org"), PointerParameterIntent.Unknown },
+        { ("SDL_OpenUserStorage", "app"), PointerParameterIntent.Unknown },
+        { ("SDL_OpenFileStorage", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_GetStorageFileSize", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_GetStorageFileSize", "length"), PointerParameterIntent.Unknown },
+        { ("SDL_ReadStorageFile", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_WriteStorageFile", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_CreateStorageDirectory", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_EnumerateStorageDirectory", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_RemoveStoragePath", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_RenameStoragePath", "oldpath"), PointerParameterIntent.Unknown },
+        { ("SDL_RenameStoragePath", "newpath"), PointerParameterIntent.Unknown },
+        { ("SDL_CopyStorageFile", "oldpath"), PointerParameterIntent.Unknown },
+        { ("SDL_CopyStorageFile", "newpath"), PointerParameterIntent.Unknown },
+        { ("SDL_GetStoragePathInfo", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_GlobStorageDirectory", "path"), PointerParameterIntent.Unknown },
+        { ("SDL_GlobStorageDirectory", "pattern"), PointerParameterIntent.Unknown },
+        { ("SDL_GlobStorageDirectory", "count"), PointerParameterIntent.Unknown },
+        { ("SDL_TimeToWindows", "dwLowDateTime"), PointerParameterIntent.Unknown },
+        { ("SDL_TimeToWindows", "dwHighDateTime"), PointerParameterIntent.Unknown },
         { ("SDL_ReportAssertion", "data"), PointerParameterIntent.Ref },
         { ("SDL_AtomicCompareAndSwap", "a"), PointerParameterIntent.Unknown },
         { ("SDL_AtomicSet", "a"), PointerParameterIntent.Unknown },
@@ -280,6 +718,7 @@ internal static class Program
     };
 
     private static readonly List<string> DefinedTypes = new();
+    private static readonly Dictionary<string, RawFFIEntry> TypedefMap = new();
 
     private static readonly string[] DeniedTypes =
     [
@@ -387,7 +826,6 @@ internal static class Program
             return 1;
         }
 
-        Dictionary<string, RawFFIEntry> typedefMap = new();
         foreach (var entry in ffiData)
         {
             if ((entry.Header == null) || !Path.GetFileName(entry.Header).StartsWith("SDL_"))
@@ -397,7 +835,7 @@ internal static class Program
 
             if ((entry.Tag == "typedef") && entry.Name!.StartsWith("SDL_"))
             {
-                typedefMap[entry.Name!] = entry.Type!;
+                TypedefMap[entry.Name!] = entry.Type!;
             }
         }
 
@@ -474,7 +912,7 @@ internal static class Program
                     foreach (var field in entry.Fields!)
                     {
                         var fieldName = SanitizeNames(field.Name!);
-                        var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
+                        var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!);
                         var fieldTypeName = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
 
                         if (fieldTypeName == "UNION")
@@ -482,7 +920,7 @@ internal static class Program
                             foreach (var unionField in fieldTypedef.Fields!)
                             {
                                 var unionFieldName = SanitizeNames(unionField.Name!);
-                                var unionFieldTypedef = GetTypeFromTypedefMap(type: unionField.Type!, typedefMap);
+                                var unionFieldTypedef = GetTypeFromTypedefMap(type: unionField.Type!);
                                 var unionFieldTypeName = CSharpTypeFromFFI(unionFieldTypedef, TypeContext.StructField);
 
                                 if ((unionFieldTypeName == "") && (unionFieldTypedef.Tag == "struct"))
@@ -534,7 +972,7 @@ internal static class Program
                         foreach (var field in structDef.Fields!)
                         {
                             var fieldName = SanitizeNames(field.Name!);
-                            var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
+                            var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!);
                             var type = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
                             definitions.Append($"public {type} {fieldName};\n");
                         }
@@ -550,7 +988,7 @@ internal static class Program
                     foreach (var field in entry.Fields!)
                     {
                         var name = SanitizeNames(field.Name!);
-                        var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
+                        var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!);
                         var type = CSharpTypeFromFFI(fieldTypedef, TypeContext.StructField);
 
                         if (type == "INLINE_ARRAY")
@@ -606,7 +1044,7 @@ internal static class Program
                 }
 
                 definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
-                var returnTypedef = GetTypeFromTypedefMap(type: entry.ReturnType!, typedefMap);
+                var returnTypedef = GetTypeFromTypedefMap(type: entry.ReturnType!);
                 var returnType = CSharpTypeFromFFI(returnTypedef, TypeContext.Return);
                 if (returnType == "FUNCTION_POINTER")
                 {
@@ -628,19 +1066,21 @@ internal static class Program
                         initialParameter = false;
                     }
 
-                    var parameterTypedef = GetTypeFromTypedefMap(type: parameter.Type!, typedefMap);
+                    var parameterTypedef = GetTypeFromTypedefMap(type: parameter.Type!);
 
-                    string type;
-                    if ((parameter.Type!.Tag == "pointer") && DefinedTypes.Contains(parameter.Type!.Type!.Tag))
+                    string typeName;
+                    if ((parameter.Type!.Tag == "pointer") && IsDefinedType(parameter.Type!.Type!.Tag))
                     {
-                        if (ParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
+                        var subtype = GetTypeFromTypedefMap(type: parameter.Type!.Type!);
+                        var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.Parameter);
+                        if (PointerParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
                         {
-                            type = intent switch
+                            typeName = intent switch
                             {
-                                PointerParameterIntent.Ref   => $"ref {parameter.Type!.Type!.Tag}",
-                                PointerParameterIntent.Out   => $"out {parameter.Type!.Type!.Tag}",
-                                PointerParameterIntent.Array => $"{parameter.Type!.Type!.Tag}*",
-                                _                            => $"ref {parameter.Type!.Type!.Tag}",
+                                PointerParameterIntent.Ref   => $"ref {subtypeName}",
+                                PointerParameterIntent.Out   => $"out {subtypeName}",
+                                PointerParameterIntent.Array => $"{subtypeName}*",
+                                _                            => $"ref {subtypeName}",
                             };
                             if (intent == PointerParameterIntent.Unknown)
                             {
@@ -649,7 +1089,7 @@ internal static class Program
                         }
                         else
                         {
-                            type = $"ref {parameter.Type!.Type!.Tag}";
+                            typeName = $"ref {subtypeName}";
                             containsUnknownRef = true;
                             unknownPointerParameters.Append(
                                 $"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }},\n"
@@ -658,15 +1098,15 @@ internal static class Program
                     }
                     else
                     {
-                        type = CSharpTypeFromFFI(parameterTypedef, TypeContext.Parameter);
-                        if (type == "FUNCTION_POINTER")
+                        typeName = CSharpTypeFromFFI(parameterTypedef, TypeContext.Parameter);
+                        if (typeName == "FUNCTION_POINTER")
                         {
-                            type = $"/* {parameter.Type!.Tag} */ IntPtr";
+                            typeName = $"/* {parameter.Type!.Tag} */ IntPtr";
                         }
                     }
 
                     var name = SanitizeNames(parameter.Name!);
-                    definitions.Append($"{type} {name}");
+                    definitions.Append($"{typeName} {name}");
                 }
 
                 definitions.Append(");\t");
@@ -687,7 +1127,7 @@ internal static class Program
         RunProcess(dotnetExe, args: $"format {sdlBindingsProjectFile}");
         if (unknownPointerParameters.Length > 0)
         {
-            Console.Write($"new pointer parameters:\n\n{unknownPointerParameters}");
+            Console.Write($"new pointer parameters (add these to `ParametersIntents` dictionary:\n\n{unknownPointerParameters}");
         }
 
         return 0;
@@ -748,9 +1188,9 @@ public static unsafe class SDL
 ";
     }
 
-    private static RawFFIEntry GetTypeFromTypedefMap(RawFFIEntry type, Dictionary<string, RawFFIEntry> typedefMap)
+    private static RawFFIEntry GetTypeFromTypedefMap(RawFFIEntry type)
     {
-        if (type.Tag.StartsWith("SDL_") && typedefMap.TryGetValue(type.Tag, value: out var value))
+        if (type.Tag.StartsWith("SDL_") && TypedefMap.TryGetValue(type.Tag, value: out var value))
         {
             return value;
         }
@@ -760,19 +1200,18 @@ public static unsafe class SDL
 
     private static string CSharpTypeFromFFI(RawFFIEntry type, TypeContext context)
     {
-        if ((type.Tag == "pointer") && DefinedTypes.Contains(type.Type!.Tag))
+        if ((type.Tag == "pointer") && IsDefinedType(type.Type!.Tag))
         {
+            var subtype = GetTypeFromTypedefMap(type.Type!);
+            var subtypeName = CSharpTypeFromFFI(subtype, context);
+
             return context switch
             {
-                TypeContext.Parameter   => $"ref {type.Type!.Tag}",
-                TypeContext.StructField => $"{type.Type!.Tag}*",
-                TypeContext.Return      => "IntPtr",
+                TypeContext.StructField => $"{subtypeName}*",
                 _                       => "IntPtr",
             };
         }
 
-        // TODO: should annotate these results with comments.
-        // e.g. SDL_bool is a typedef of int, in a function signatures "int value" can be very misleading
         return type.Tag switch
         {
             "_Bool"            => "bool",
@@ -792,6 +1231,8 @@ public static unsafe class SDL
             "Sint32"           => "Int32",
             "Sint64"           => "Int64",
             "size_t"           => "UIntPtr",
+            "wchar_t"          => "char", // TODO: doubt it's this easy (stdinc + sdl_hidapi)
+            "unsigned-char"    => "byte", // TODO: confirm this (sdl_hidapi)
             "void"             => "void",
             "pointer"          => "IntPtr",
             "function-pointer" => "FUNCTION_POINTER",
@@ -816,5 +1257,14 @@ public static unsafe class SDL
             ""         => "_",
             _          => unsanitizedName,
         };
+    }
+
+    private static bool IsDefinedType(string typeName)
+    {
+        return
+            (typeName != "void") && (
+                !typeName.StartsWith("SDL_") // assume no SDL prefix == std library or primitive typename
+                || DefinedTypes.Contains(typeName)
+            );
     }
 }
