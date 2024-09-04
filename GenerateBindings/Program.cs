@@ -729,36 +729,59 @@ internal static class Program
             "SDL_EnumeratePropertiesCallback",
             new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "props"), ("char*", "name")] }
         },
-        { "SDL_malloc_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_calloc_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_realloc_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_free_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_CompareCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_CompareCallback_r", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_FunctionPointer", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_AssertionHandler", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_CleanupPropertyCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_ThreadFunction", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_TLSDestructorCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_AudioStreamCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_AudioPostmixCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_EGLAttribArrayCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_EGLIntArrayCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_HitTest", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_ClipboardDataCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_ClipboardCleanupCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_DialogFileCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_EventFilter", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_EnumerateDirectoryCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_HintCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_AppInit_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_AppIterate_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_AppEvent_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_AppQuit_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_LogOutputFunction", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_X11EventHook", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_TimerCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
-        { "SDL_NSTimerCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+
+        { "SDL_malloc_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:539:25
+        { "SDL_calloc_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:540:25
+        { "SDL_realloc_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:541:25
+        { "SDL_free_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:542:24
+        { "SDL_CompareCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:674:23
+        {
+            "SDL_CompareCallback_r", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_stdinc.h:678:23
+        { "SDL_FunctionPointer", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:3165:16
+        { "SDL_AssertionHandler", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_assert.h:423:35
+        {
+            "SDL_CleanupPropertyCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_properties.h:187:24
+        { "SDL_ThreadFunction", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_thread.h:114:24
+        {
+            "SDL_TLSDestructorCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_thread.h:488:24
+        {
+            "SDL_AudioStreamCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_audio.h:1527:24
+        {
+            "SDL_AudioPostmixCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_audio.h:1744:24
+        {
+            "SDL_EGLAttribArrayCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_video.h:246:34
+        {
+            "SDL_EGLIntArrayCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_video.h:247:31
+        { "SDL_HitTest", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_video.h:2313:37
+        {
+            "SDL_ClipboardDataCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_clipboard.h:155:31
+        {
+            "SDL_ClipboardCleanupCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_clipboard.h:167:24
+        {
+            "SDL_DialogFileCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_dialog.h:96:24
+        { "SDL_EventFilter", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_events.h:1288:28
+        {
+            "SDL_EnumerateDirectoryCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+        }, // ./include/SDL3/SDL_filesystem.h:280:23
+        { "SDL_HintCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_hints.h:4291:23
+        { "SDL_AppInit_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_init.h:97:33
+        { "SDL_AppIterate_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_init.h:98:33
+        { "SDL_AppEvent_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_init.h:99:33
+        { "SDL_AppQuit_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_init.h:100:24
+        { "SDL_LogOutputFunction", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_log.h:411:24
+        { "SDL_X11EventHook", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_system.h:139:28
+        { "SDL_TimerCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_timer.h:158:26
+        { "SDL_NSTimerCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_timer.h:222:2
     };
 
     private static readonly List<string> DefinedTypes = new();
@@ -907,14 +930,35 @@ internal static class Program
                 currentSourceFile = headerFile;
             }
 
-            if (entry.Tag == "typedef")
+            if (entry.Tag == "enum")
+            {
+                definitions.Append($"public enum {entry.Name!}\n{{\n");
+                DefinedTypes.Add(entry.Name!);
+
+                foreach (var enumValue in entry.Fields!)
+                {
+                    definitions.Append($"{enumValue.Name} = {(int) enumValue.Value!},\n");
+                }
+
+                definitions.Append("}\n\n");
+            }
+
+            else if (entry.Tag == "typedef")
             {
                 if (entry.Type!.Tag == "function-pointer")
                 {
                     if (DelegateDefinitions.TryGetValue(key: entry.Name!, value: out var delegateDefinition))
                     {
-                        definitions.Append("[UnmanagedFunctionPointer(CallingConvention.Cdecl)]\n");
-                        definitions.Append($"public delegate {delegateDefinition.ReturnType} {entry.Name} (");
+                        if (delegateDefinition.ReturnType == "WARN_PLACEHOLDER")
+                        {
+                            definitions.Append("// ");
+                        }
+                        else
+                        {
+                            definitions.Append("[UnmanagedFunctionPointer(CallingConvention.Cdecl)]\n");
+                        }
+
+                        definitions.Append($"public delegate {delegateDefinition.ReturnType} {entry.Name}(");
 
                         var initialParam = true;
                         foreach (var (paramType, paramName) in delegateDefinition.Parameters)
@@ -939,23 +983,10 @@ internal static class Program
                             $"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
                         );
                         undefinedFunctionPointers.Append(
-                            $"{{ \"{entry.Name}\", new DelegateDefinition {{ ReturnType = \"void\", Parameters = [] }} }},\t// TODO: define me\n"
+                            $"{{ \"{entry.Name}\", new DelegateDefinition {{ ReturnType = \"WARN_PLACEHOLDER\", Parameters = [] }} }},\t// {entry.Header}\n"
                         );
                     }
                 }
-            }
-
-            if (entry.Tag == "enum")
-            {
-                definitions.Append($"public enum {entry.Name!}\n{{\n");
-                DefinedTypes.Add(entry.Name!);
-
-                foreach (var enumValue in entry.Fields!)
-                {
-                    definitions.Append($"{enumValue.Name} = {(int) enumValue.Value!},\n");
-                }
-
-                definitions.Append("}\n\n");
             }
 
             else if (entry.Tag == "struct")
