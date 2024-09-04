@@ -426,7 +426,7 @@ internal static class Program
 
             if (entry.Tag == "typedef")
             {
-                if (entry.Type!.Tag == ":function-pointer")
+                if (entry.Type!.Tag == "function-pointer")
                 {
                     definitions.Append($"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER\n\n");
                 }
@@ -506,7 +506,7 @@ internal static class Program
                             definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
                             fieldTypeName = "IntPtr";
                             definitions.Append($"public {fieldTypeName} {fieldName};");
-                            if (field.Type!.Tag == ":function-pointer")
+                            if (field.Type!.Tag == "function-pointer")
                             {
                                 definitions.Append("\t// WARN_ANONYMOUS_FUNCTION_POINTER");
                             }
@@ -567,7 +567,7 @@ internal static class Program
                         {
                             type = "IntPtr";
                             definitions.Append($"public {type} {name};");
-                            if (field.Type!.Tag == ":function-pointer")
+                            if (field.Type!.Tag == "function-pointer")
                             {
                                 definitions.Append("\t// WARN_ANONYMOUS_FUNCTION_POINTER");
                             }
@@ -631,7 +631,7 @@ internal static class Program
                     var parameterTypedef = GetTypeFromTypedefMap(type: parameter.Type!, typedefMap);
 
                     string type;
-                    if ((parameter.Type!.Tag == ":pointer") && DefinedTypes.Contains(parameter.Type!.Type!.Tag))
+                    if ((parameter.Type!.Tag == "pointer") && DefinedTypes.Contains(parameter.Type!.Type!.Tag))
                     {
                         if (ParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
                         {
@@ -760,7 +760,7 @@ public static unsafe class SDL
 
     private static string CSharpTypeFromFFI(RawFFIEntry type, TypeContext context)
     {
-        if ((type.Tag == ":pointer") && DefinedTypes.Contains(type.Type!.Tag))
+        if ((type.Tag == "pointer") && DefinedTypes.Contains(type.Type!.Tag))
         {
             return context switch
             {
@@ -775,32 +775,31 @@ public static unsafe class SDL
         // e.g. SDL_bool is a typedef of int, in a function signatures "int value" can be very misleading
         return type.Tag switch
         {
-            ":_Bool"            => "bool",
-            ":int"              => "int",
-            ":long"             => "long",
-            ":unsigned-short"   => "ushort",
-            ":unsigned-int"     => "uint",
-            ":unsigned-long"    => "ulong",
-            ":float"            => "float",
-            ":double"           => "double",
-            "Uint8"             => "byte",
-            "Uint16"            => "UInt16",
-            "Uint32"            => "UInt32",
-            "Uint64"            => "UInt64",
-            "Sint8"             => "sbyte",
-            "Sint16"            => "Int16",
-            "Sint32"            => "Int32",
-            "Sint64"            => "Int64",
-            "size_t"            => "UIntPtr",
-            ":void"             => "void",
-            ":pointer"          => "IntPtr",
-            ":function-pointer" => "FUNCTION_POINTER",
-            ":enum"             => type.Name!,
-            ":struct"           => type.Name!,
-            "struct"            => type.Name!,
-            ":array"            => "INLINE_ARRAY",
-            "union"             => "UNION",
-            _                   => type.Tag,
+            "_Bool"            => "bool",
+            "int"              => "int",
+            "long"             => "long",
+            "unsigned-short"   => "ushort",
+            "unsigned-int"     => "uint",
+            "unsigned-long"    => "ulong",
+            "float"            => "float",
+            "double"           => "double",
+            "Uint8"            => "byte",
+            "Uint16"           => "UInt16",
+            "Uint32"           => "UInt32",
+            "Uint64"           => "UInt64",
+            "Sint8"            => "sbyte",
+            "Sint16"           => "Int16",
+            "Sint32"           => "Int32",
+            "Sint64"           => "Int64",
+            "size_t"           => "UIntPtr",
+            "void"             => "void",
+            "pointer"          => "IntPtr",
+            "function-pointer" => "FUNCTION_POINTER",
+            "enum"             => type.Name!,
+            "struct"           => type.Name!,
+            "array"            => "INLINE_ARRAY",
+            "union"            => "UNION",
+            _                  => type.Tag,
         };
     }
 

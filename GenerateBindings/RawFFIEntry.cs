@@ -48,7 +48,7 @@ internal class RawFFIEntry
         uint? bitOffset
     )
     {
-        Tag = tag;
+        Tag = tag.Replace(":", "");
         Name = name;
         Header = header;
         Type = type;
