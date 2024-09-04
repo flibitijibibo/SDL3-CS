@@ -31,6 +31,9 @@ internal class RawFFIEntry
     [JsonPropertyName("size")]
     public uint? Size { get; }
 
+    [JsonPropertyName("bit-offset")]
+    public uint? BitOffset { get; }
+
     [JsonConstructor]
     public RawFFIEntry(
         string tag,
@@ -41,7 +44,8 @@ internal class RawFFIEntry
         uint? value,
         RawFFIEntry[]? parameters,
         RawFFIEntry? returnType,
-        uint? size
+        uint? size,
+        uint? bitOffset
     )
     {
         Tag = tag;
@@ -53,5 +57,6 @@ internal class RawFFIEntry
         Parameters = parameters;
         ReturnType = returnType;
         Size = size;
+        BitOffset = bitOffset;
     }
 }

@@ -2829,15 +2829,6 @@ public static unsafe class SDL
         SDL_GAMEPAD_BINDTYPE_HAT = 3,
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GamepadBinding
-    {
-        public SDL_GamepadBindingType input_type;
-        // public UNION_SDL_GamepadBinding_input input; // WARN_UNHANDLED_UNION
-        public SDL_GamepadBindingType output_type;
-        // public UNION_SDL_GamepadBinding_output output; // WARN_UNHANDLED_UNION
-    }
-
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_AddGamepadMapping(IntPtr mapping);
 

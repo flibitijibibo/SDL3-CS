@@ -450,9 +450,83 @@ internal static class Program
                     continue;
                 }
 
+                definedTypes.Add(entry.Name!);
+
+                var hasUnionFields = false;
+                foreach (var field in entry.Fields!)
+                {
+                    if (field.Type!.Tag == "union")
+                    {
+                        hasUnionFields = true;
+                        break;
+                    }
+                }
+
+                if (hasUnionFields)
+                {
+                    continue; // TODO: work in progress
+
+                    var internalStructs = new Dictionary<string, RawFFIEntry>();
+
+                    definitions.Append("[StructLayout(LayoutKind.Explicit)]\n");
+                    definitions.Append($"public struct {entry.Name!}\n{{\n");
+
+                    foreach (var field in entry.Fields!)
+                    {
+                        var fieldName = SanitizeNames(field.Name!);
+                        var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!, typedefMap);
+                        var fieldTypeName = CSharpTypeFromFFI(fieldTypedef, definedTypes, TypeContext.StructField);
+
+                        if (fieldTypeName == "UNION")
+                        {
+                            foreach (var unionField in fieldTypedef.Fields!)
+                            {
+                                var unionFieldName = SanitizeNames(unionField.Name!);
+                                var unionFieldTypedef = GetTypeFromTypedefMap(type: unionField.Type!, typedefMap);
+                                var unionFieldTypeName = CSharpTypeFromFFI(unionFieldTypedef, definedTypes, TypeContext.StructField);
+
+                                if ((unionFieldTypeName == "") && (unionFieldTypedef.Tag == "struct"))
+                                {
+                                    unionFieldTypeName = $"INTERNAL_{entry.Name!}_{fieldName}_{unionFieldName}";
+                                    internalStructs.Add(unionFieldTypeName, unionFieldTypedef);
+                                }
+
+                                definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
+                                definitions.Append($"public {unionFieldTypeName} {unionFieldName};\n\n");
+                            }
+                        }
+                        else if (fieldTypeName == "INLINE_ARRAY")
+                        {
+                            definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
+                            var elementType = CSharpTypeFromFFI(type: fieldTypedef.Type!, definedTypes, TypeContext.StructField);
+                            for (var i = 0; i < fieldTypedef.Size; i++) definitions.Append($"public {elementType} {fieldName}{i};\n");
+                        }
+                        else if (fieldTypeName == "FUNCTION_POINTER")
+                        {
+                            definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
+                            fieldTypeName = "IntPtr";
+                            definitions.Append($"public {fieldTypeName} {fieldName};");
+                            if (field.Type!.Tag == ":function-pointer")
+                            {
+                                definitions.Append("\t// WARN_ANONYMOUS_FUNCTION_POINTER");
+                            }
+                            else
+                            {
+                                definitions.Append($"\t// {field.Type!.Tag}");
+                            }
+
+                            definitions.Append('\n');
+                        }
+                        else
+                        {
+                            definitions.Append($"[FieldOffset({field.BitOffset / 8})]\n");
+                            definitions.Append($"public {fieldTypeName} {fieldName};\n");
+                        }
+                    }
+                }
+
                 definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
                 definitions.Append($"public struct {entry.Name!}\n{{\n");
-                definedTypes.Add(entry.Name!);
 
                 foreach (var field in entry.Fields!)
                 {
@@ -700,6 +774,7 @@ public static unsafe class SDL
             ":function-pointer" => "FUNCTION_POINTER",
             ":enum"             => type.Name!,
             ":struct"           => type.Name!,
+            "struct"            => type.Name!,
             ":array"            => "INLINE_ARRAY",
             "union"             => "UNION",
             _                   => type.Tag,
