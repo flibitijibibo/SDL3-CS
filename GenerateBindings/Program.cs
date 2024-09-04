@@ -729,6 +729,36 @@ internal static class Program
             "SDL_EnumeratePropertiesCallback",
             new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "props"), ("char*", "name")] }
         },
+        { "SDL_malloc_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_calloc_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_realloc_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_free_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_CompareCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_CompareCallback_r", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_FunctionPointer", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_AssertionHandler", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_CleanupPropertyCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_ThreadFunction", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_TLSDestructorCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_AudioStreamCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_AudioPostmixCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_EGLAttribArrayCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_EGLIntArrayCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_HitTest", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_ClipboardDataCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_ClipboardCleanupCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_DialogFileCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_EventFilter", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_EnumerateDirectoryCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_HintCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_AppInit_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_AppIterate_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_AppEvent_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_AppQuit_func", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_LogOutputFunction", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_X11EventHook", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_TimerCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
+        { "SDL_NSTimerCallback", new DelegateDefinition { ReturnType = "void", Parameters = [] } }, // TODO: define me
     };
 
     private static readonly List<string> DefinedTypes = new();
@@ -855,6 +885,7 @@ internal static class Program
 
         var definitions = new StringBuilder();
         var unknownPointerParameters = new StringBuilder();
+        var undefinedFunctionPointers = new StringBuilder();
         var currentSourceFile = "";
 
         foreach (var entry in ffiData)
@@ -906,6 +937,9 @@ internal static class Program
                     {
                         definitions.Append(
                             $"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
+                        );
+                        undefinedFunctionPointers.Append(
+                            $"{{ \"{entry.Name}\", new DelegateDefinition {{ ReturnType = \"void\", Parameters = [] }} }},\t// TODO: define me\n"
                         );
                     }
                 }
@@ -1133,7 +1167,7 @@ internal static class Program
                             typeName = $"ref {subtypeName}";
                             containsUnknownRef = true;
                             unknownPointerParameters.Append(
-                                $"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }},\n"
+                                $"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }},\t// TODO: set me\n"
                             );
                         }
                     }
@@ -1169,6 +1203,11 @@ internal static class Program
         if (unknownPointerParameters.Length > 0)
         {
             Console.Write($"new pointer parameters (add these to `ParametersIntents` dictionary:\n\n{unknownPointerParameters}");
+        }
+
+        if (undefinedFunctionPointers.Length > 0)
+        {
+            Console.Write($"new undefined function pointers (add these to `DelegateDefinitions` dictionary:\n\n{undefinedFunctionPointers}");
         }
 
         return 0;
