@@ -696,10 +696,11 @@ internal static class UserProvidedData
                 "Tooltip",
                 "PopupMenu",
                 "KeyboardGrabbed",
-                "Vulkan", // TODO: some means of specifying exact values -- this list of flags skips some values
-                "Metal",
-                "Transparent",
-                "NotFocusable",
+                // unused bits between "KeyboardGrabbed" and "Vulkan"
+                "Vulkan = 0x10000000",
+                "Metal = 0x20000000",
+                "Transparent = 0x40000000",
+                "NotFocusable = 0x080000000",
             ]
         }, // ./include/SDL3/SDL_video.h:158:16
         { "SDL_MouseButtonFlags", [] }, // ./include/SDL3/SDL_mouse.h:118:16

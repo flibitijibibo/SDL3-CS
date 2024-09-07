@@ -1103,7 +1103,7 @@ public static unsafe class SDL
     // ./include/SDL3/SDL_surface.h
 
     [Flags]
-    public enum SDL_SurfaceFlags
+    public enum SDL_SurfaceFlags : UInt32
     {
         Preallocated = 0x1,
         LockNeeded = 0x2,
@@ -1341,7 +1341,7 @@ public static unsafe class SDL
     }
 
     [Flags]
-    public enum SDL_WindowFlags
+    public enum SDL_WindowFlags : UInt64
     {
         Fullscreen = 0x1,
         OpenGL = 0x2,
@@ -1364,10 +1364,10 @@ public static unsafe class SDL
         Tooltip = 0x40000,
         PopupMenu = 0x080000,
         KeyboardGrabbed = 0x100000,
-        Vulkan = 0x200000,
-        Metal = 0x400000,
-        Transparent = 0x0800000,
-        NotFocusable = 0x1000000,
+        Vulkan = 0x10000000,
+        Metal = 0x20000000,
+        Transparent = 0x40000000,
+        NotFocusable = 0x080000000,
     }
 
     public enum SDL_FlashOperation
@@ -3032,7 +3032,7 @@ public static unsafe class SDL
     }
 
     [Flags]
-    public enum SDL_MouseButtonFlags
+    public enum SDL_MouseButtonFlags : UInt32
     {
         // WARN_UNPOPULATED_FLAG_ENUM
     }
@@ -3106,7 +3106,7 @@ public static unsafe class SDL
     // ./include/SDL3/SDL_pen.h
 
     [Flags]
-    public enum SDL_PenInputFlags
+    public enum SDL_PenInputFlags : UInt32
     {
         // WARN_UNPOPULATED_FLAG_ENUM
     }
@@ -4168,7 +4168,7 @@ public static unsafe class SDL
     }
 
     [Flags]
-    public enum SDL_GlobFlags
+    public enum SDL_GlobFlags : UInt32
     {
         // WARN_UNPOPULATED_FLAG_ENUM
     }
@@ -4288,7 +4288,7 @@ public static unsafe class SDL
     }
 
     [Flags]
-    public enum SDL_GPUTextureUsageFlags
+    public enum SDL_GPUTextureUsageFlags : UInt32
     {
         Sampler = 0x1,
         ColorTarget = 0x2,
@@ -4325,7 +4325,7 @@ public static unsafe class SDL
     }
 
     [Flags]
-    public enum SDL_GPUBufferUsageFlags
+    public enum SDL_GPUBufferUsageFlags : UInt32
     {
         // WARN_UNPOPULATED_FLAG_ENUM
     }
@@ -4452,7 +4452,7 @@ public static unsafe class SDL
     }
 
     [Flags]
-    public enum SDL_GPUColorComponentFlags
+    public enum SDL_GPUColorComponentFlags : byte
     {
         // WARN_UNPOPULATED_FLAG_ENUM
     }
@@ -5470,7 +5470,7 @@ public static unsafe class SDL
     // ./include/SDL3/SDL_init.h
 
     [Flags]
-    public enum SDL_InitFlags
+    public enum SDL_InitFlags : UInt32
     {
         // WARN_UNPOPULATED_FLAG_ENUM
     }
@@ -5625,13 +5625,13 @@ public static unsafe class SDL
     // ./include/SDL3/SDL_messagebox.h
 
     [Flags]
-    public enum SDL_MessageBoxFlags
+    public enum SDL_MessageBoxFlags : UInt32
     {
         // WARN_UNPOPULATED_FLAG_ENUM
     }
 
     [Flags]
-    public enum SDL_MessageBoxButtonFlags
+    public enum SDL_MessageBoxButtonFlags : UInt32
     {
         // WARN_UNPOPULATED_FLAG_ENUM
     }

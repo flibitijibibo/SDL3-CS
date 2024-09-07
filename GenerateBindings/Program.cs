@@ -233,7 +233,8 @@ internal static class Program
                 else if ((entry.Name != null) && entry.Name.EndsWith("Flags"))
                 {
                     definitions.Append("[Flags]\n");
-                    definitions.Append($"public enum {entry.Name}\n{{\n");
+                    var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
+                    definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
 
                     if (!UserProvidedData.FlagEnumDefinitions.TryGetValue(entry.Name, value: out var enumValues))
                     {
@@ -248,7 +249,15 @@ internal static class Program
                     {
                         for (var i = 0; i < enumValues.Length; i++)
                         {
-                            definitions.Append($"{enumValues[i]} = 0x{BigInteger.Pow(value: 2, i):X},\n");
+                            var enumEntry = enumValues[i];
+                            if (enumEntry.Contains('='))
+                            {
+                                definitions.Append($"{enumEntry},\n");
+                            }
+                            else
+                            {
+                                definitions.Append($"{enumValues[i]} = 0x{BigInteger.Pow(value: 2, i):X},\n");
+                            }
                         }
                     }
 
