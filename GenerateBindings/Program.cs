@@ -1,18 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-// if c2ffi output and SDL commit file are present
-// check provided SDL dir to see whether commit file matches
-// if no match, run c2ffi and capture SDL commit in build dir
-// else
-// run c2ffi and capture SDL commit in build dir
-
-// parse c2ffi json into structured data
-// write data out via streamwriter in sane order (enums, structs, functions, alphabetical?)
-// simple methods for spitting out typedefs and signatures (BuildFunctionSignature, BuildStructDef etc)
-// write out to destination dir under "generated" dir
-// run dotnet fmt?
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 
@@ -59,112 +45,6 @@ internal static class Program
     {
         { ("SDL_BeginGPURenderPass", "colorAttachmentInfos"), PointerParameterIntent.Array },
         { ("SDL_BeginGPURenderPass", "depthStencilAttachmentInfo"), PointerParameterIntent.Ref },
-        { ("SDL_getenv", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:670:42
-        { ("SDL_setenv", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:671:33
-        { ("SDL_setenv", "value"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:671:33
-        { ("SDL_unsetenv", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:672:33
-        { ("SDL_wcslen", "wstr"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:969:36
-        { ("SDL_wcsnlen", "wstr"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:970:36
-        { ("SDL_wcslcpy", "dst"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:971:36
-        { ("SDL_wcslcpy", "src"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:971:36
-        { ("SDL_wcslcat", "dst"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:972:36
-        { ("SDL_wcslcat", "src"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:972:36
-        { ("SDL_wcsdup", "wstr"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:973:39
-        { ("SDL_wcsstr", "haystack"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:974:39
-        { ("SDL_wcsstr", "needle"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:974:39
-        { ("SDL_wcsnstr", "haystack"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:975:39
-        { ("SDL_wcsnstr", "needle"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:975:39
-        { ("SDL_wcscmp", "str1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:994:33
-        { ("SDL_wcscmp", "str2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:994:33
-        { ("SDL_wcsncmp", "str1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1025:33
-        { ("SDL_wcsncmp", "str2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1025:33
-        { ("SDL_wcscasecmp", "str1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1055:33
-        { ("SDL_wcscasecmp", "str2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1055:33
-        { ("SDL_wcsncasecmp", "str1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1097:33
-        { ("SDL_wcsncasecmp", "str2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1097:33
-        { ("SDL_wcstol", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1099:34
-        { ("SDL_wcstol", "endp"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1099:34
-        { ("SDL_strlen", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1101:36
-        { ("SDL_strnlen", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1102:36
-        { ("SDL_strlcpy", "dst"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1103:36
-        { ("SDL_strlcpy", "src"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1103:36
-        { ("SDL_utf8strlcpy", "dst"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1104:36
-        { ("SDL_utf8strlcpy", "src"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1104:36
-        { ("SDL_strlcat", "dst"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1105:36
-        { ("SDL_strlcat", "src"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1105:36
-        { ("SDL_strdup", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1106:47
-        { ("SDL_strndup", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1107:47
-        { ("SDL_strrev", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1108:36
-        { ("SDL_strupr", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1129:36
-        { ("SDL_strlwr", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1150:36
-        { ("SDL_strchr", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1152:36
-        { ("SDL_strrchr", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1153:36
-        { ("SDL_strstr", "haystack"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1154:36
-        { ("SDL_strstr", "needle"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1154:36
-        { ("SDL_strnstr", "haystack"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1155:36
-        { ("SDL_strnstr", "needle"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1155:36
-        { ("SDL_strcasestr", "haystack"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1156:36
-        { ("SDL_strcasestr", "needle"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1156:36
-        { ("SDL_strtok_r", "s1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1157:36
-        { ("SDL_strtok_r", "s2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1157:36
-        { ("SDL_strtok_r", "saveptr"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1157:36
-        { ("SDL_utf8strlen", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1158:36
-        { ("SDL_utf8strnlen", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1159:36
-        { ("SDL_itoa", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1161:36
-        { ("SDL_uitoa", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1162:36
-        { ("SDL_ltoa", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1163:36
-        { ("SDL_ultoa", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1164:36
-        { ("SDL_lltoa", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1165:36
-        { ("SDL_ulltoa", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1166:36
-        { ("SDL_atoi", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1168:33
-        { ("SDL_atof", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1169:36
-        { ("SDL_strtol", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1170:34
-        { ("SDL_strtol", "endp"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1170:34
-        { ("SDL_strtoul", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1171:43
-        { ("SDL_strtoul", "endp"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1171:43
-        { ("SDL_strtoll", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1172:36
-        { ("SDL_strtoll", "endp"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1172:36
-        { ("SDL_strtoull", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1173:36
-        { ("SDL_strtoull", "endp"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1173:36
-        { ("SDL_strtod", "str"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1174:36
-        { ("SDL_strtod", "endp"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1174:36
-        { ("SDL_strcmp", "str1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1194:33
-        { ("SDL_strcmp", "str2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1194:33
-        { ("SDL_strncmp", "str1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1224:33
-        { ("SDL_strncmp", "str2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1224:33
-        { ("SDL_strcasecmp", "str1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1252:33
-        { ("SDL_strcasecmp", "str2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1252:33
-        { ("SDL_strncasecmp", "str1"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1292:33
-        { ("SDL_strncasecmp", "str2"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1292:33
-        { ("SDL_StepUTF8", "pstr"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1351:36
-        { ("SDL_StepUTF8", "pslen"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1351:36
-        { ("SDL_UCS4ToUTF8", "dst"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1380:36
-        { ("SDL_sscanf", "text"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1383:33
-        { ("SDL_sscanf", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1383:33
-        { ("SDL_snprintf", "text"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1385:33
-        { ("SDL_snprintf", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1385:33
-        { ("SDL_swprintf", "text"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1386:33
-        { ("SDL_swprintf", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1386:33
-        { ("SDL_asprintf", "strp"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1389:33
-        { ("SDL_asprintf", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1389:33
-        { ("SDL_rand_r", "state"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1525:36
-        { ("SDL_randf_r", "state"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1552:35
-        { ("SDL_rand_bits_r", "state"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:1577:36
-        { ("SDL_modf", "y"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:2480:36
-        { ("SDL_modff", "y"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:2500:35
-        { ("SDL_iconv_open", "tocode"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:2923:41
-        { ("SDL_iconv_open", "fromcode"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:2923:41
-        { ("SDL_iconv", "inbuf"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:2975:36
-        { ("SDL_iconv", "inbytesleft"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:2975:36
-        { ("SDL_iconv", "outbuf"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:2975:36
-        { ("SDL_iconv", "outbytesleft"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:2975:36
-        { ("SDL_iconv_string", "tocode"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:3004:36
-        { ("SDL_iconv_string", "fromcode"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:3004:36
-        { ("SDL_iconv_string", "inbuf"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:3004:36
-        { ("SDL_size_mul_check_overflow", "ret"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:3100:27
-        { ("SDL_size_mul_check_overflow_builtin", "ret"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:3114:27
-        { ("SDL_size_add_check_overflow", "ret"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:3140:27
-        { ("SDL_size_add_check_overflow_builtin", "ret"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_stdinc.h:3153:27
         { ("SDL_ReportAssertion", "data"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_assert.h:245:45
         { ("SDL_ReportAssertion", "func"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_assert.h:245:45
         { ("SDL_ReportAssertion", "file"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_assert.h:245:45
@@ -753,16 +633,6 @@ internal static class Program
             "SDL_EnumeratePropertiesCallback",
             new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "props"), ("char*", "name")] }
         },
-
-        { "SDL_malloc_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:539:25
-        { "SDL_calloc_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:540:25
-        { "SDL_realloc_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:541:25
-        { "SDL_free_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:542:24
-        { "SDL_CompareCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:674:23
-        {
-            "SDL_CompareCallback_r", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
-        }, // ./include/SDL3/SDL_stdinc.h:678:23
-        { "SDL_FunctionPointer", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_stdinc.h:3165:16
         { "SDL_AssertionHandler", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_assert.h:423:35
         {
             "SDL_CleanupPropertyCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
@@ -938,12 +808,14 @@ internal static class Program
 
         foreach (var entry in ffiData)
         {
-            if (DeniedTypes.Contains(entry.Name))
+            if ((entry.Header == null)
+                || !Path.GetFileName(entry.Header).StartsWith("SDL_")
+                || Path.GetFileName(entry.Header).StartsWith("SDL_stdinc.h"))
             {
                 continue;
             }
 
-            if ((entry.Header == null) || !Path.GetFileName(entry.Header).StartsWith("SDL_"))
+            if (DeniedTypes.Contains(entry.Name))
             {
                 continue;
             }
@@ -1246,7 +1118,7 @@ public static unsafe class SDL
             "Sint32"           => "Int32",
             "Sint64"           => "Int64",
             "size_t"           => "UIntPtr",
-            "wchar_t"          => "char", // TODO: doubt it's this easy (stdinc + sdl_hidapi)
+            "wchar_t"          => "char", // TODO: doubt it's this easy (sdl_hidapi)
             "unsigned-char"    => "byte", // TODO: confirm this (sdl_hidapi)
             "void"             => "void",
             "pointer"          => "IntPtr",
