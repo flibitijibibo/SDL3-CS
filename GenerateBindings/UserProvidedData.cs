@@ -665,8 +665,43 @@ internal static class UserProvidedData
                 "ComputeStorageWrite",
             ]
         }, // ./include/SDL3/SDL_gpu.h:231:16
-        { "SDL_SurfaceFlags", [] }, // ./include/SDL3/SDL_surface.h:52:16
-        { "SDL_WindowFlags", [] }, // ./include/SDL3/SDL_video.h:158:16
+        {
+            "SDL_SurfaceFlags", [
+                "Preallocated",
+                "LockNeeded",
+                "Locked",
+                "SIMDAligned",
+            ]
+        }, // ./include/SDL3/SDL_surface.h:52:16
+        {
+            "SDL_WindowFlags", [
+                "Fullscreen",
+                "OpenGL",
+                "Occluded",
+                "Hidden",
+                "Borderless",
+                "Resizable",
+                "Minimized",
+                "Maximized",
+                "MouseGrabbed",
+                "InputFocus",
+                "MouseFocus",
+                "External",
+                "Modal",
+                "HighPixelDensity",
+                "MouseCapture",
+                "MouseRelativeMode",
+                "AlwaysOnTop",
+                "Utility",
+                "Tooltip",
+                "PopupMenu",
+                "KeyboardGrabbed",
+                "Vulkan", // TODO: some means of specifying exact values -- this list of flags skips some values
+                "Metal",
+                "Transparent",
+                "NotFocusable",
+            ]
+        }, // ./include/SDL3/SDL_video.h:158:16
         { "SDL_MouseButtonFlags", [] }, // ./include/SDL3/SDL_mouse.h:118:16
         { "SDL_PenInputFlags", [] }, // ./include/SDL3/SDL_pen.h:68:16
         { "SDL_GlobFlags", [] }, // ./include/SDL3/SDL_filesystem.h:261:16
