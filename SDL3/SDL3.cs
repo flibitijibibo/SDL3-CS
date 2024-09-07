@@ -35,7 +35,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_AssertState SDL_ReportAssertion(ref SDL_AssertData data, ref char func, ref char file, int line);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public delegate WARN_PLACEHOLDER SDL_AssertionHandler();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate SDL_AssertState SDL_AssertionHandler(ref SDL_AssertData data, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetAssertionHandler(/* SDL_AssertionHandler */ IntPtr handler, IntPtr userdata);
@@ -219,7 +220,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnlockProperties(uint props);
 
-    // public delegate WARN_PLACEHOLDER SDL_CleanupPropertyCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_CleanupPropertyCallback(IntPtr userdata, IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetPointerPropertyWithCleanup(uint props, ref char name, IntPtr value, /* SDL_CleanupPropertyCallback */ IntPtr cleanup, IntPtr userdata);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -443,7 +445,8 @@ public static unsafe class SDL
         SDL_THREAD_PRIORITY_TIME_CRITICAL = 3,
     }
 
-    // public delegate WARN_PLACEHOLDER SDL_ThreadFunction();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int SDL_ThreadFunction(IntPtr data);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, ref char name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -472,7 +475,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetTLS(IntPtr id);
 
-    // public delegate WARN_PLACEHOLDER SDL_TLSDestructorCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_TLSDestructorCallback(IntPtr value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetTLS(IntPtr id, IntPtr value, /* SDL_TLSDestructorCallback */ IntPtr destructor);
@@ -629,7 +633,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_UnlockAudioStream(IntPtr stream);
 
-    // public delegate WARN_PLACEHOLDER SDL_AudioStreamCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_AudioStreamCallback(IntPtr userdata, IntPtr stream, int additionalAmount, int totalAmount);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetAudioStreamGetCallback(IntPtr stream, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);
@@ -643,7 +648,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenAudioDeviceStream(uint devid, ref SDL_AudioSpec spec, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public delegate WARN_PLACEHOLDER SDL_AudioPostmixCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_AudioPostmixCallback(IntPtr userdata, ref SDL_AudioSpec spec, ref float buffer, int buflen);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetAudioPostmixCallback(uint devid, /* SDL_AudioPostmixCallback */ IntPtr callback, IntPtr userdata);
@@ -1377,9 +1383,11 @@ public static unsafe class SDL
         SDL_FLASH_UNTIL_FOCUSED = 2,
     }
 
-    // public delegate WARN_PLACEHOLDER SDL_EGLAttribArrayCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate IntPtr SDL_EGLAttribArrayCallback();
 
-    // public delegate WARN_PLACEHOLDER SDL_EGLIntArrayCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int SDL_EGLIntArrayCallback();
 
     public enum SDL_GLattr
     {
@@ -1697,7 +1705,8 @@ public static unsafe class SDL
         SDL_HITTEST_RESIZE_LEFT = 9,
     }
 
-    // public delegate WARN_PLACEHOLDER SDL_HitTest();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate SDL_HitTestResult SDL_HitTest(IntPtr win, ref SDL_Point area, IntPtr data);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowHitTest(IntPtr window, /* SDL_HitTest */ IntPtr callback, IntPtr callback_data);
@@ -1865,9 +1874,11 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasPrimarySelectionText();
 
-    // public delegate WARN_PLACEHOLDER SDL_ClipboardDataCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate IntPtr SDL_ClipboardDataCallback(IntPtr userdata, IntPtr mimeType, UIntPtr size);
 
-    // public delegate WARN_PLACEHOLDER SDL_ClipboardCleanupCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_ClipboardCleanupCallback(IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, ref IntPtr mime_types, UIntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -1946,7 +1957,8 @@ public static unsafe class SDL
         public char* pattern;
     }
 
-    // public delegate WARN_PLACEHOLDER SDL_DialogFileCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_DialogFileCallback(IntPtr userdata, IntPtr filelist, int filter);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, ref char default_location, bool allow_many); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -4103,7 +4115,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_PushEvent(ref SDL_Event @event);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public delegate WARN_PLACEHOLDER SDL_EventFilter();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool SDL_EventFilter(IntPtr userdata, ref SDL_Event @event);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetEventFilter(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
@@ -4186,7 +4199,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_CreateDirectory(ref char path);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public delegate WARN_PLACEHOLDER SDL_EnumerateDirectoryCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int SDL_EnumerateDirectoryCallback(IntPtr userdata, IntPtr dirname, IntPtr fname);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_EnumerateDirectory(ref char path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -5477,7 +5491,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetHintBoolean(ref char name, bool default_value);    // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public delegate WARN_PLACEHOLDER SDL_HintCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_HintCallback(IntPtr userdata, IntPtr name, IntPtr oldValue, IntPtr newValue);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_AddHintCallback(ref char name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);  // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -5508,13 +5523,17 @@ public static unsafe class SDL
         SDL_APP_FAILURE = 2,
     }
 
-    // public delegate WARN_PLACEHOLDER SDL_AppInit_func();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate SDL_AppResult SDL_AppInit_func(ref IntPtr appstate, int argc, IntPtr argv);
 
-    // public delegate WARN_PLACEHOLDER SDL_AppIterate_func();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate SDL_AppResult SDL_AppIterate_func(IntPtr appstate);
 
-    // public delegate WARN_PLACEHOLDER SDL_AppEvent_func();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate SDL_AppResult SDL_AppEvent_func(IntPtr appstate, ref SDL_Event @event);
 
-    // public delegate WARN_PLACEHOLDER SDL_AppQuit_func();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_AppQuit_func(IntPtr appstate);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_Init(uint flags);
@@ -5640,7 +5659,8 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_LogMessage(int category, SDL_LogPriority priority, ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // public delegate WARN_PLACEHOLDER SDL_LogOutputFunction();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_LogOutputFunction(IntPtr userdata, int category, SDL_LogPriority priority, IntPtr message);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GetLogOutputFunction(IntPtr callback, ref IntPtr userdata);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -6097,7 +6117,8 @@ public static unsafe class SDL
 
     // ./include/SDL3/SDL_system.h
 
-    // public delegate WARN_PLACEHOLDER SDL_X11EventHook();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool SDL_X11EventHook(IntPtr userdata, IntPtr xevent);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetX11EventHook(/* SDL_X11EventHook */ IntPtr callback, IntPtr userdata);
@@ -6205,12 +6226,14 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DelayNS(ulong ns);
 
-    // public delegate WARN_PLACEHOLDER SDL_TimerCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate uint SDL_TimerCallback(IntPtr userdata, uint timerID, uint interval);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_AddTimer(uint interval, /* SDL_TimerCallback */ IntPtr callback, IntPtr userdata);
 
-    // public delegate WARN_PLACEHOLDER SDL_NSTimerCallback();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate ulong SDL_NSTimerCallback(IntPtr userdata, uint timerID, ulong interval);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_AddTimerNS(ulong interval, /* SDL_NSTimerCallback */ IntPtr callback, IntPtr userdata);

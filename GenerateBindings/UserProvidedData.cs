@@ -608,49 +608,123 @@ internal static class UserProvidedData
             "SDL_EnumeratePropertiesCallback",
             new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "props"), ("char*", "name")] }
         },
-        { "SDL_AssertionHandler", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_assert.h:423:35
         {
-            "SDL_CleanupPropertyCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+            "SDL_AssertionHandler",
+            new DelegateDefinition { ReturnType = "SDL_AssertState", Parameters = [("ref SDL_AssertData", "data"), ("IntPtr", "userdata")] }
+        }, // ./include/SDL3/SDL_assert.h:423:35
+        {
+            "SDL_CleanupPropertyCallback",
+            new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "value")] }
         }, // ./include/SDL3/SDL_properties.h:187:24
-        { "SDL_ThreadFunction", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_thread.h:114:24
         {
-            "SDL_TLSDestructorCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+            "SDL_ThreadFunction",
+            new DelegateDefinition { ReturnType = "int", Parameters = [("IntPtr", "data")] }
+        }, // ./include/SDL3/SDL_thread.h:114:24
+        {
+            "SDL_TLSDestructorCallback",
+            new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "value")] }
         }, // ./include/SDL3/SDL_thread.h:488:24
         {
-            "SDL_AudioStreamCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+            "SDL_AudioStreamCallback",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [("IntPtr", "userdata"), ("IntPtr", "stream"), ("int", "additionalAmount"), ("int", "totalAmount")],
+            }
         }, // ./include/SDL3/SDL_audio.h:1527:24
         {
-            "SDL_AudioPostmixCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+            "SDL_AudioPostmixCallback",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [("IntPtr", "userdata"), ("ref SDL_AudioSpec", "spec"), ("ref float", "buffer"), ("int", "buflen")],
+            }
         }, // ./include/SDL3/SDL_audio.h:1744:24
         {
-            "SDL_EGLAttribArrayCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+            "SDL_EGLAttribArrayCallback", new DelegateDefinition { ReturnType = "IntPtr", Parameters = [] }
         }, // ./include/SDL3/SDL_video.h:246:34
         {
-            "SDL_EGLIntArrayCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+            "SDL_EGLIntArrayCallback", new DelegateDefinition { ReturnType = "int", Parameters = [] }
         }, // ./include/SDL3/SDL_video.h:247:31
-        { "SDL_HitTest", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_video.h:2313:37
         {
-            "SDL_ClipboardDataCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
-        }, // ./include/SDL3/SDL_clipboard.h:155:31
+            "SDL_HitTest",
+            new DelegateDefinition
+            {
+                ReturnType = "SDL_HitTestResult",
+                Parameters = [("IntPtr", "win"), ("ref SDL_Point", "area"), ("IntPtr", "data")],
+            }
+        }, // ./include/SDL3/SDL_video.h:2313:37
         {
-            "SDL_ClipboardCleanupCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+            "SDL_ClipboardDataCallback",
+            new DelegateDefinition { ReturnType = "IntPtr", Parameters = [("IntPtr", "userdata"), ("IntPtr", "mimeType"), ("UIntPtr", "size")] }
+        }, // ./include/SDL3/SDL_clipboard.h:155:31 // TODO: string marshalling (mimeType)
+        {
+            "SDL_ClipboardCleanupCallback", new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata")] }
         }, // ./include/SDL3/SDL_clipboard.h:167:24
         {
-            "SDL_DialogFileCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
+            "SDL_DialogFileCallback",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [("IntPtr", "userdata"), ("IntPtr", "filelist"), ("int", "filter")],
+            }
         }, // ./include/SDL3/SDL_dialog.h:96:24
-        { "SDL_EventFilter", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_events.h:1288:28
         {
-            "SDL_EnumerateDirectoryCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] }
-        }, // ./include/SDL3/SDL_filesystem.h:280:23
-        { "SDL_HintCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_hints.h:4291:23
-        { "SDL_AppInit_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_init.h:97:33
-        { "SDL_AppIterate_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_init.h:98:33
-        { "SDL_AppEvent_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_init.h:99:33
-        { "SDL_AppQuit_func", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_init.h:100:24
-        { "SDL_LogOutputFunction", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_log.h:411:24
-        { "SDL_X11EventHook", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_system.h:139:28
-        { "SDL_TimerCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_timer.h:158:26
-        { "SDL_NSTimerCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_timer.h:222:2
+            "SDL_EventFilter",
+            new DelegateDefinition { ReturnType = "bool", Parameters = [("IntPtr", "userdata"), ("ref SDL_Event", "@event")] }
+        }, // ./include/SDL3/SDL_events.h:1288:28
+        {
+            "SDL_EnumerateDirectoryCallback",
+            new DelegateDefinition { ReturnType = "int", Parameters = [("IntPtr", "userdata"), ("IntPtr", "dirname"), ("IntPtr", "fname")] }
+        }, // ./include/SDL3/SDL_filesystem.h:280:23 // TODO: string marshalling (dirname, fname)
+        {
+            "SDL_HintCallback",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [("IntPtr", "userdata"), ("IntPtr", "name"), ("IntPtr", "oldValue"), ("IntPtr", "newValue")],
+            }
+        }, // ./include/SDL3/SDL_hints.h:4291:23 // TODO: string marshalling (name, oldValue newValue)
+        {
+            "SDL_AppInit_func",
+            new DelegateDefinition
+            {
+                ReturnType = "SDL_AppResult",
+                Parameters = [("ref IntPtr", "appstate"), ("int", "argc"), ("IntPtr", "argv")],
+            }
+        }, // ./include/SDL3/SDL_init.h:97:33 // TODO: string(s?) marshalling (argv array)
+        {
+            "SDL_AppIterate_func",
+            new DelegateDefinition { ReturnType = "SDL_AppResult", Parameters = [("IntPtr", "appstate")] }
+        }, // ./include/SDL3/SDL_init.h:98:33
+        {
+            "SDL_AppEvent_func",
+            new DelegateDefinition { ReturnType = "SDL_AppResult", Parameters = [("IntPtr", "appstate"), ("ref SDL_Event", "@event")] }
+        }, // ./include/SDL3/SDL_init.h:99:33
+        {
+            "SDL_AppQuit_func",
+            new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "appstate")] }
+        }, // ./include/SDL3/SDL_init.h:100:24
+        {
+            "SDL_LogOutputFunction",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [("IntPtr", "userdata"), ("int", "category"), ("SDL_LogPriority", "priority"), ("IntPtr", "message")],
+            }
+        }, // ./include/SDL3/SDL_log.h:411:24 // TODO: string marshalling (message)
+        {
+            "SDL_X11EventHook",
+            new DelegateDefinition { ReturnType = "bool", Parameters = [("IntPtr", "userdata"), ("IntPtr", "xevent")] }
+        }, // ./include/SDL3/SDL_system.h:139:28
+        {
+            "SDL_TimerCallback",
+            new DelegateDefinition { ReturnType = "uint", Parameters = [("IntPtr", "userdata"), ("uint", "timerID"), ("uint", "interval")] }
+        }, // ./include/SDL3/SDL_timer.h:158:26
+        {
+            "SDL_NSTimerCallback",
+            new DelegateDefinition { ReturnType = "ulong", Parameters = [("IntPtr", "userdata"), ("uint", "timerID"), ("ulong", "interval")] }
+        }, // ./include/SDL3/SDL_timer.h:222:2
     };
 
     internal static readonly Dictionary<string, string[]> FlagEnumDefinitions = new()
