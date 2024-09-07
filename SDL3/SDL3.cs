@@ -1102,6 +1102,12 @@ public static unsafe class SDL
 
     // ./include/SDL3/SDL_surface.h
 
+    [Flags]
+    public enum SDL_SurfaceFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
+    }
+
     public enum SDL_ScaleMode
     {
         SDL_SCALEMODE_NEAREST = 0,
@@ -1329,6 +1335,12 @@ public static unsafe class SDL
         SDL_ORIENTATION_LANDSCAPE_FLIPPED = 2,
         SDL_ORIENTATION_PORTRAIT = 3,
         SDL_ORIENTATION_PORTRAIT_FLIPPED = 4,
+    }
+
+    [Flags]
+    public enum SDL_WindowFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
     }
 
     public enum SDL_FlashOperation
@@ -2992,6 +3004,12 @@ public static unsafe class SDL
         SDL_MOUSEWHEEL_FLIPPED = 1,
     }
 
+    [Flags]
+    public enum SDL_MouseButtonFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
+    }
+
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasMouse();
 
@@ -3059,6 +3077,12 @@ public static unsafe class SDL
     public static extern bool SDL_CursorVisible();
 
     // ./include/SDL3/SDL_pen.h
+
+    [Flags]
+    public enum SDL_PenInputFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
+    }
 
     public enum SDL_PenAxis
     {
@@ -4116,6 +4140,12 @@ public static unsafe class SDL
         public Int64 access_time;
     }
 
+    [Flags]
+    public enum SDL_GlobFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
+    }
+
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_CreateDirectory(ref char path);   // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
@@ -4230,6 +4260,17 @@ public static unsafe class SDL
         SDL_GPU_TEXTUREFORMAT_D32_FLOAT_S8_UINT = 55,
     }
 
+    [Flags]
+    public enum SDL_GPUTextureUsageFlags
+    {
+        Sampler = 0x1,
+        ColorTarget = 0x2,
+        DepthStencilTarget = 0x4,
+        GraphicsStorageRead = 0x08,
+        ComputeStorageRead = 0x10,
+        ComputeStorageWrite = 0x20,
+    }
+
     public enum SDL_GPUTextureType
     {
         SDL_GPU_TEXTURETYPE_2D = 0,
@@ -4254,6 +4295,12 @@ public static unsafe class SDL
         SDL_GPU_CUBEMAPFACE_NEGATIVEY = 3,
         SDL_GPU_CUBEMAPFACE_POSITIVEZ = 4,
         SDL_GPU_CUBEMAPFACE_NEGATIVEZ = 5,
+    }
+
+    [Flags]
+    public enum SDL_GPUBufferUsageFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
     }
 
     public enum SDL_GPUTransferBufferUsage
@@ -4375,6 +4422,12 @@ public static unsafe class SDL
         SDL_GPU_BLENDFACTOR_CONSTANT_COLOR = 10,
         SDL_GPU_BLENDFACTOR_ONE_MINUS_CONSTANT_COLOR = 11,
         SDL_GPU_BLENDFACTOR_SRC_ALPHA_SATURATE = 12,
+    }
+
+    [Flags]
+    public enum SDL_GPUColorComponentFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
     }
 
     public enum SDL_GPUFilter
@@ -5389,6 +5442,12 @@ public static unsafe class SDL
 
     // ./include/SDL3/SDL_init.h
 
+    [Flags]
+    public enum SDL_InitFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
+    }
+
     public enum SDL_AppResult
     {
         SDL_APP_CONTINUE = 0,
@@ -5537,6 +5596,18 @@ public static unsafe class SDL
     public static extern void SDL_SetLogOutputFunction(/* SDL_LogOutputFunction */ IntPtr callback, IntPtr userdata);
 
     // ./include/SDL3/SDL_messagebox.h
+
+    [Flags]
+    public enum SDL_MessageBoxFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
+    }
+
+    [Flags]
+    public enum SDL_MessageBoxButtonFlags
+    {
+        // WARN_UNPOPULATED_FLAG_ENUM
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_MessageBoxButtonData

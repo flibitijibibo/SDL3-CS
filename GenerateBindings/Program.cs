@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using System.Text;
 using System.Text.Json;
 
@@ -678,6 +679,30 @@ internal static class Program
         { "SDL_NSTimerCallback", new DelegateDefinition { ReturnType = "WARN_PLACEHOLDER", Parameters = [] } }, // ./include/SDL3/SDL_timer.h:222:2
     };
 
+    private static readonly Dictionary<string, string[]> FlagEnumDefinitions = new()
+    {
+        {
+            "SDL_GPUTextureUsageFlags", [
+                "Sampler",
+                "ColorTarget",
+                "DepthStencilTarget",
+                "GraphicsStorageRead",
+                "ComputeStorageRead",
+                "ComputeStorageWrite",
+            ]
+        }, // ./include/SDL3/SDL_gpu.h:231:16
+        { "SDL_SurfaceFlags", [] }, // ./include/SDL3/SDL_surface.h:52:16
+        { "SDL_WindowFlags", [] }, // ./include/SDL3/SDL_video.h:158:16
+        { "SDL_MouseButtonFlags", [] }, // ./include/SDL3/SDL_mouse.h:118:16
+        { "SDL_PenInputFlags", [] }, // ./include/SDL3/SDL_pen.h:68:16
+        { "SDL_GlobFlags", [] }, // ./include/SDL3/SDL_filesystem.h:261:16
+        { "SDL_GPUBufferUsageFlags", [] }, // ./include/SDL3/SDL_gpu.h:266:16
+        { "SDL_GPUColorComponentFlags", [] }, // ./include/SDL3/SDL_gpu.h:428:15
+        { "SDL_InitFlags", [] }, // ./include/SDL3/SDL_init.h:58:16
+        { "SDL_MessageBoxFlags", [] }, // ./include/SDL3/SDL_messagebox.h:48:16
+        { "SDL_MessageBoxButtonFlags", [] }, // ./include/SDL3/SDL_messagebox.h:61:16
+    };
+
     private static readonly string[] DeniedTypes =
     [
         "alloca",
@@ -804,6 +829,7 @@ internal static class Program
         var definitions = new StringBuilder();
         var unknownPointerParameters = new StringBuilder();
         var undefinedFunctionPointers = new StringBuilder();
+        var unpopulatedFlagDefinitions = new StringBuilder();
         var currentSourceFile = "";
 
         foreach (var entry in ffiData)
@@ -883,6 +909,30 @@ internal static class Program
                             $"{{ \"{entry.Name}\", new DelegateDefinition {{ ReturnType = \"WARN_PLACEHOLDER\", Parameters = [] }} }},\t// {entry.Header}\n"
                         );
                     }
+                }
+                else if ((entry.Name != null) && entry.Name.EndsWith("Flags"))
+                {
+                    definitions.Append("[Flags]\n");
+                    definitions.Append($"public enum {entry.Name}\n{{\n");
+
+                    if (!FlagEnumDefinitions.TryGetValue(entry.Name, value: out var enumValues))
+                    {
+                        unpopulatedFlagDefinitions.Append($"{{ \"{entry.Name}\", [ ] }},\t// {entry.Header}\n");
+                        definitions.Append("// WARN_UNPOPULATED_FLAG_ENUM\n");
+                    }
+                    else if (enumValues.Length == 0)
+                    {
+                        definitions.Append("// WARN_UNPOPULATED_FLAG_ENUM\n");
+                    }
+                    else
+                    {
+                        for (var i = 0; i < enumValues.Length; i++)
+                        {
+                            definitions.Append($"{enumValues[i]} = 0x{BigInteger.Pow(value: 2, i):X},\n");
+                        }
+                    }
+
+                    definitions.Append("}\n\n");
                 }
             }
 
@@ -1013,6 +1063,11 @@ internal static class Program
         if (undefinedFunctionPointers.Length > 0)
         {
             Console.Write($"new undefined function pointers (add these to `DelegateDefinitions` dictionary:\n\n{undefinedFunctionPointers}");
+        }
+
+        if (unpopulatedFlagDefinitions.Length > 0)
+        {
+            Console.Write($"new unpopulated flag enums (add these to `FlagEnumDefinitions` dictionary:\n\n{unpopulatedFlagDefinitions}");
         }
 
         return 0;
