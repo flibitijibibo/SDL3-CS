@@ -18,8 +18,6 @@ internal static class UserProvidedData
 
     internal static readonly Dictionary<(string, string), PointerParameterIntent> PointerParametersIntents = new()
     {
-        { ("SDL_BeginGPURenderPass", "colorAttachmentInfos"), PointerParameterIntent.Array },
-        { ("SDL_BeginGPURenderPass", "depthStencilAttachmentInfo"), PointerParameterIntent.Ref },
         { ("SDL_ReportAssertion", "data"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_assert.h:245:45
         { ("SDL_ReportAssertion", "func"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_assert.h:245:45
         { ("SDL_ReportAssertion", "file"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_assert.h:245:45
@@ -409,6 +407,8 @@ internal static class UserProvidedData
         { ("SDL_SetGPUTextureName", "text"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_gpu.h:1277:34
         { ("SDL_InsertGPUDebugLabel", "text"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_gpu.h:1292:34
         { ("SDL_PushGPUDebugGroup", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_gpu.h:1317:34
+        { ("SDL_BeginGPURenderPass", "colorAttachmentInfos"), PointerParameterIntent.Array }, // ./include/SDL3/SDL_gpu.h:1608:48
+        { ("SDL_BeginGPURenderPass", "depthStencilAttachmentInfo"), PointerParameterIntent.Ref }, // ./include/SDL3/SDL_gpu.h:1608:48
         { ("SDL_SetGPUViewport", "viewport"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_gpu.h:1636:34
         { ("SDL_SetGPUScissor", "scissor"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_gpu.h:1648:34
         { ("SDL_BindGPUVertexBuffers", "pBindings"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_gpu.h:1664:34
@@ -605,10 +605,6 @@ internal static class UserProvidedData
     internal static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
     {
         {
-            "SDL_EnumeratePropertiesCallback",
-            new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "props"), ("char*", "name")] }
-        },
-        {
             "SDL_AssertionHandler",
             new DelegateDefinition { ReturnType = "SDL_AssertState", Parameters = [("ref SDL_AssertData", "data"), ("IntPtr", "userdata")] }
         }, // ./include/SDL3/SDL_assert.h:423:35
@@ -616,6 +612,10 @@ internal static class UserProvidedData
             "SDL_CleanupPropertyCallback",
             new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "value")] }
         }, // ./include/SDL3/SDL_properties.h:187:24
+        {
+            "SDL_EnumeratePropertiesCallback",
+            new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "props"), ("char*", "name")] }
+        }, // ./include/SDL3/SDL_properties.h:499:24
         {
             "SDL_ThreadFunction",
             new DelegateDefinition { ReturnType = "int", Parameters = [("IntPtr", "data")] }
@@ -730,16 +730,6 @@ internal static class UserProvidedData
     internal static readonly Dictionary<string, string[]> FlagEnumDefinitions = new()
     {
         {
-            "SDL_GPUTextureUsageFlags", [
-                "Sampler",
-                "ColorTarget",
-                "DepthStencilTarget",
-                "GraphicsStorageRead",
-                "ComputeStorageRead",
-                "ComputeStorageWrite",
-            ]
-        }, // ./include/SDL3/SDL_gpu.h:231:16
-        {
             "SDL_SurfaceFlags", [
                 "Preallocated",
                 "LockNeeded",
@@ -803,6 +793,16 @@ internal static class UserProvidedData
             ]
         }, // ./include/SDL3/SDL_filesystem.h:261:16
         {
+            "SDL_GPUTextureUsageFlags", [
+                "Sampler",
+                "ColorTarget",
+                "DepthStencilTarget",
+                "GraphicsStorageRead",
+                "ComputeStorageRead",
+                "ComputeStorageWrite",
+            ]
+        }, // ./include/SDL3/SDL_gpu.h:231:16
+        {
             "SDL_GPUBufferUsageFlags", [
                 "Vertex",
                 "Index",
@@ -851,7 +851,5 @@ internal static class UserProvidedData
     };
 
     internal static readonly string[] DeniedTypes =
-    [
-        "alloca",
-    ];
+        [];
 }

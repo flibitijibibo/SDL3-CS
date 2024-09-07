@@ -223,10 +223,10 @@ internal static class Program
                     else
                     {
                         definitions.Append(
-                            $"// public static delegate RETURN {entry.Name}(PARAMS)\t// WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
+                            $"// public static delegate RETURN {entry.Name}(PARAMS) // WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
                         );
                         undefinedFunctionPointers.Append(
-                            $"{{ \"{entry.Name}\", new DelegateDefinition {{ ReturnType = \"WARN_PLACEHOLDER\", Parameters = [] }} }},\t// {entry.Header}\n"
+                            $"{{ \"{entry.Name}\", new DelegateDefinition {{ ReturnType = \"WARN_PLACEHOLDER\", Parameters = [] }} }}, // {entry.Header}\n"
                         );
                     }
                 }
@@ -238,7 +238,7 @@ internal static class Program
 
                     if (!UserProvidedData.FlagEnumDefinitions.TryGetValue(entry.Name, value: out var enumValues))
                     {
-                        unpopulatedFlagDefinitions.Append($"{{ \"{entry.Name}\", [ ] }},\t// {entry.Header}\n");
+                        unpopulatedFlagDefinitions.Append($"{{ \"{entry.Name}\", [ ] }}, // {entry.Header}\n");
                         definitions.Append("// WARN_UNPOPULATED_FLAG_ENUM\n");
                     }
                     else if (enumValues.Length == 0)
@@ -351,7 +351,7 @@ internal static class Program
                             typeName = $"ref {subtypeName}";
                             containsUnknownRef = true;
                             unknownPointerParameters.Append(
-                                $"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }},\t// {entry.Header}\n"
+                                $"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }}, // {entry.Header}\n"
                             );
                         }
                     }
@@ -368,7 +368,7 @@ internal static class Program
                     definitions.Append($"{typeName} {name}");
                 }
 
-                definitions.Append(");\t");
+                definitions.Append("); ");
                 if (containsUnknownRef)
                 {
                     definitions.Append("// WARN_UNKNOWN_POINTER_PARAMETER: check for array usage");
@@ -386,19 +386,19 @@ internal static class Program
         RunProcess(dotnetExe, args: $"format {sdlBindingsProjectFile}");
         if (unknownPointerParameters.Length > 0)
         {
-            Console.Write($"new pointer parameters (add these to `PointerParametersIntents` in UserProvidedData.cs:\n\n{unknownPointerParameters}");
+            Console.Write($"new pointer parameters (add these to `PointerParametersIntents` in UserProvidedData.cs:\n{unknownPointerParameters}\n");
         }
 
         if (undefinedFunctionPointers.Length > 0)
         {
             Console.Write(
-                $"new undefined function pointers (add these to `DelegateDefinitions` in UserProvidedData.cs:\n\n{undefinedFunctionPointers}"
+                $"new undefined function pointers (add these to `DelegateDefinitions` in UserProvidedData.cs:\n{undefinedFunctionPointers}\n"
             );
         }
 
         if (unpopulatedFlagDefinitions.Length > 0)
         {
-            Console.Write($"new unpopulated flag enums (add these to `FlagEnumDefinitions` in UserProvidedData.cs:\n\n{unpopulatedFlagDefinitions}");
+            Console.Write($"new unpopulated flag enums (add these to `FlagEnumDefinitions` in UserProvidedData.cs:\n{unpopulatedFlagDefinitions}\n");
         }
 
         return 0;
@@ -638,7 +638,7 @@ public static unsafe class SDL
                 StructDefinition.OffsetFields.Add(
                     (
                         byteOffset + (uint) field.BitOffset! / 8,
-                        $"public IntPtr {fieldName};\t// {context}"
+                        $"public IntPtr {fieldName}; // {context}"
                     )
                 );
             }
