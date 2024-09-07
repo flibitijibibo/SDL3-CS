@@ -1364,10 +1364,10 @@ public static unsafe class SDL
         Tooltip = 0x40000,
         PopupMenu = 0x080000,
         KeyboardGrabbed = 0x100000,
-        Vulkan = 0x10000000,
-        Metal = 0x20000000,
-        Transparent = 0x40000000,
-        NotFocusable = 0x080000000,
+        Vulkan = 0x1000_0000,
+        Metal = 0x2000_0000,
+        Transparent = 0x4000_0000,
+        NotFocusable = 0x0_8000_0000,
     }
 
     public enum SDL_FlashOperation
@@ -3034,7 +3034,11 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_MouseButtonFlags : uint
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        LMask = 0x1,
+        MMask = 0x2,
+        RMask = 0x4,
+        X1Mask = 0x08,
+        X2Mask = 0x10,
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3108,7 +3112,13 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_PenInputFlags : uint
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        Down = 0x1,
+        Button1 = 0x2,
+        Button2 = 0x4,
+        Button3 = 0x08,
+        Button4 = 0x10,
+        Button5 = 0x20,
+        EraserTip = 0x4000_0000,
     }
 
     public enum SDL_PenAxis
@@ -4170,7 +4180,7 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_GlobFlags : uint
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        CaseInsensitive = 0x1,
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -4327,7 +4337,12 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_GPUBufferUsageFlags : uint
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        Vertex = 0x1,
+        Index = 0x2,
+        Indirect = 0x4,
+        GraphicsStorageRead = 0x08,
+        ComputeStorageRead = 0x10,
+        ComputeStorageWrite = 0x20,
     }
 
     public enum SDL_GPUTransferBufferUsage
@@ -4454,7 +4469,10 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_GPUColorComponentFlags : byte
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        Red = 0x1,
+        Green = 0x2,
+        Blue = 0x4,
+        Alpha = 0x08,
     }
 
     public enum SDL_GPUFilter
@@ -5472,7 +5490,15 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_InitFlags : uint
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        Timer = 0x1,
+        Audio = 0x10,
+        Video = 0x20,
+        Joystick = 0x200,
+        Haptic = 0x1000,
+        Gamepad = 0x2000,
+        Events = 0x4000,
+        Sensor = 0x0_8000,
+        Camera = 0x1_0000,
     }
 
     public enum SDL_AppResult
@@ -5627,13 +5653,18 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_MessageBoxFlags : uint
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        Error = 0x10,
+        Warning = 0x20,
+        Information = 0x40,
+        ButtonsLeftToRight = 0x080,
+        ButtonsRightToLeft = 0x100,
     }
 
     [Flags]
     public enum SDL_MessageBoxButtonFlags : uint
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        ReturnKeyDefault = 0x1,
+        EscapeKeyDefault = 0x2,
     }
 
     [StructLayout(LayoutKind.Sequential)]

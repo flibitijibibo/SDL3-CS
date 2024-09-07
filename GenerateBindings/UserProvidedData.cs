@@ -697,20 +697,83 @@ internal static class UserProvidedData
                 "PopupMenu",
                 "KeyboardGrabbed",
                 // unused bits between "KeyboardGrabbed" and "Vulkan"
-                "Vulkan = 0x10000000",
-                "Metal = 0x20000000",
-                "Transparent = 0x40000000",
-                "NotFocusable = 0x080000000",
+                "Vulkan = 0x1000_0000",
+                "Metal = 0x2000_0000",
+                "Transparent = 0x4000_0000",
+                "NotFocusable = 0x0_8000_0000",
             ]
         }, // ./include/SDL3/SDL_video.h:158:16
-        { "SDL_MouseButtonFlags", [] }, // ./include/SDL3/SDL_mouse.h:118:16
-        { "SDL_PenInputFlags", [] }, // ./include/SDL3/SDL_pen.h:68:16
-        { "SDL_GlobFlags", [] }, // ./include/SDL3/SDL_filesystem.h:261:16
-        { "SDL_GPUBufferUsageFlags", [] }, // ./include/SDL3/SDL_gpu.h:266:16
-        { "SDL_GPUColorComponentFlags", [] }, // ./include/SDL3/SDL_gpu.h:428:15
-        { "SDL_InitFlags", [] }, // ./include/SDL3/SDL_init.h:58:16
-        { "SDL_MessageBoxFlags", [] }, // ./include/SDL3/SDL_messagebox.h:48:16
-        { "SDL_MessageBoxButtonFlags", [] }, // ./include/SDL3/SDL_messagebox.h:61:16
+        {
+            "SDL_MouseButtonFlags", [
+                "LMask",
+                "MMask",
+                "RMask",
+                "X1Mask",
+                "X2Mask",
+            ]
+        }, // ./include/SDL3/SDL_mouse.h:118:16
+        {
+            "SDL_PenInputFlags", [
+                "Down",
+                "Button1",
+                "Button2",
+                "Button3",
+                "Button4",
+                "Button5",
+                "EraserTip = 0x4000_0000",
+            ]
+        }, // ./include/SDL3/SDL_pen.h:68:16
+        {
+            "SDL_GlobFlags", [
+                "CaseInsensitive",
+            ]
+        }, // ./include/SDL3/SDL_filesystem.h:261:16
+        {
+            "SDL_GPUBufferUsageFlags", [
+                "Vertex",
+                "Index",
+                "Indirect",
+                "GraphicsStorageRead",
+                "ComputeStorageRead",
+                "ComputeStorageWrite",
+            ]
+        }, // ./include/SDL3/SDL_gpu.h:266:16
+        {
+            "SDL_GPUColorComponentFlags", [
+                "Red",
+                "Green",
+                "Blue",
+                "Alpha",
+            ]
+        }, // ./include/SDL3/SDL_gpu.h:428:15
+        {
+            "SDL_InitFlags", [
+                "Timer = 0x1",
+                "Audio = 0x10",
+                "Video = 0x20",
+                "Joystick = 0x200",
+                "Haptic = 0x1000",
+                "Gamepad = 0x2000",
+                "Events = 0x4000",
+                "Sensor = 0x0_8000",
+                "Camera = 0x1_0000",
+            ]
+        }, // ./include/SDL3/SDL_init.h:58:16
+        {
+            "SDL_MessageBoxFlags", [
+                "Error = 0x10",
+                "Warning = 0x20",
+                "Information = 0x40",
+                "ButtonsLeftToRight = 0x080",
+                "ButtonsRightToLeft = 0x100",
+            ]
+        }, // ./include/SDL3/SDL_messagebox.h:48:16
+        {
+            "SDL_MessageBoxButtonFlags", [
+                "ReturnKeyDefault",
+                "EscapeKeyDefault",
+            ]
+        }, // ./include/SDL3/SDL_messagebox.h:61:16
     };
 
     internal static readonly string[] DeniedTypes =
