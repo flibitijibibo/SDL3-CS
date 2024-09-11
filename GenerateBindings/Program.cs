@@ -34,7 +34,7 @@ internal static partial class Program
         public string Name { get; set; }
         public string ReturnType { get; set; } = "";
         public List<(string, string)> ParameterTypesNames { get; } = new();
-        public List<string> StackAllocatedStringParams { get; } = new();
+        public List<string> HeapAllocatedStringParams { get; } = new();
         public StringBuilder ParameterString { get; } = new();
 
         public void Reset()
@@ -42,7 +42,7 @@ internal static partial class Program
             Name = "";
             ReturnType = "";
             ParameterTypesNames.Clear();
-            StackAllocatedStringParams.Clear();
+            HeapAllocatedStringParams.Clear();
             ParameterString.Clear();
         }
     }
@@ -404,9 +404,9 @@ internal static partial class Program
                                 case UserProvidedData.PointerParameterIntent.Array:
                                     typeName = $"{subtypeName}*";
                                     break;
-                                case UserProvidedData.PointerParameterIntent.StringStack:
+                                case UserProvidedData.PointerParameterIntent.String:
                                     typeName = "MARSHALLED_STRING";
-                                    FunctionSignature.StackAllocatedStringParams.Add(name);
+                                    FunctionSignature.HeapAllocatedStringParams.Add(name);
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Unknown:
                                 default:
@@ -446,7 +446,7 @@ internal static partial class Program
                     FunctionSignature.ParameterString.Append($"{type} {name}");
                 }
 
-                if (FunctionSignature.StackAllocatedStringParams.Count > 0)
+                if (FunctionSignature.HeapAllocatedStringParams.Count > 0)
                 {
                     definitions.Append(
                         $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
@@ -466,16 +466,16 @@ internal static partial class Program
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("MARSHALLED_STRING", "string"));
                     definitions.Append(")\n{\n");
 
-                    foreach (var stringParam in FunctionSignature.StackAllocatedStringParams)
+                    foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
                     {
-                        definitions.Append($"var {stringParam}UTF8Size = SizeAsUTF8({stringParam});\n");
-                        definitions.Append($"var {stringParam}UTF8 = stackalloc byte[{stringParam}UTF8Size];\n");
-                        definitions.Append('\n');
+                        definitions.Append($"var {stringParam}UTF8 = EncodeAsUTF8({stringParam});\n");
                     }
+
+                    definitions.Append('\n');
 
                     if (FunctionSignature.ReturnType != "void")
                     {
-                        definitions.Append("return ");
+                        definitions.Append("var result = ");
                     }
 
                     definitions.Append($"INTERNAL_{FunctionSignature.Name}(");
@@ -489,9 +489,9 @@ internal static partial class Program
 
                         isInitialParameter = false;
 
-                        if (FunctionSignature.StackAllocatedStringParams.Contains(name))
+                        if (FunctionSignature.HeapAllocatedStringParams.Contains(name))
                         {
-                            definitions.Append($"EncodeAsUTF8({name}, {name}UTF8, {name}UTF8Size)");
+                            definitions.Append($"{name}UTF8");
                         }
                         else
                         {
@@ -499,7 +499,19 @@ internal static partial class Program
                         }
                     }
 
-                    definitions.Append(");\n");
+                    definitions.Append(");\n\n");
+
+                    foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
+                    {
+                        definitions.Append($"SDL_free((IntPtr){stringParam}UTF8);\n");
+                    }
+
+                    definitions.Append('\n');
+
+                    if (FunctionSignature.ReturnType != "void")
+                    {
+                        definitions.Append("return result;\n");
+                    }
 
                     definitions.Append("}\n\n");
                 }
@@ -518,95 +530,6 @@ internal static partial class Program
 
                     definitions.Append("\n\n");
                 }
-
-
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-                // THE OLD WAY
-
-
-                // definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
-                // returnTypedef = GetTypeFromTypedefMap(type: entry.ReturnType!);
-                // var returnType = CSharpTypeFromFFI(returnTypedef, TypeContext.Return);
-                // if (returnType == "FUNCTION_POINTER")
-                // {
-                //     returnType = "IntPtr";
-                // }
-                //
-                // definitions.Append($"public static extern {returnType} {entry.Name!}(");
-                //
-                // var initialParameter = true;
-                // foreach (var parameter in entry.Parameters!)
-                // {
-                //     if (!initialParameter)
-                //     {
-                //         definitions.Append(", ");
-                //     }
-                //     else
-                //     {
-                //         initialParameter = false;
-                //     }
-                //
-                //     var parameterTypedef = GetTypeFromTypedefMap(type: parameter.Type!);
-                //
-                //     string typeName;
-                //     if ((parameter.Type!.Tag == "pointer") && IsDefinedType(parameter.Type!.Type!.Tag))
-                //     {
-                //         var subtype = GetTypeFromTypedefMap(type: parameter.Type!.Type!);
-                //         var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.Parameter);
-                //         if (UserProvidedData.PointerParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
-                //         {
-                //             UnusedUserProvidedTypes.Remove(entry.Name!);
-                //
-                //             typeName = intent switch
-                //             {
-                //                 UserProvidedData.PointerParameterIntent.Ref   => $"ref {subtypeName}",
-                //                 UserProvidedData.PointerParameterIntent.Out   => $"out {subtypeName}",
-                //                 UserProvidedData.PointerParameterIntent.Array => $"{subtypeName}*",
-                //                 _                                             => $"ref {subtypeName}",
-                //             };
-                //             if (intent == UserProvidedData.PointerParameterIntent.Unknown)
-                //             {
-                //                 containsUnknownRef = true;
-                //             }
-                //         }
-                //         else
-                //         {
-                //             typeName = $"ref {subtypeName}";
-                //             containsUnknownRef = true;
-                //             unknownPointerParameters.Append(
-                //                 $"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }}, // {entry.Header}\n"
-                //             );
-                //         }
-                //     }
-                //     else
-                //     {
-                //         typeName = CSharpTypeFromFFI(parameterTypedef, TypeContext.Parameter);
-                //         if (typeName == "FUNCTION_POINTER")
-                //         {
-                //             typeName = $"/* {parameter.Type!.Tag} */ IntPtr";
-                //         }
-                //     }
-                //
-                //     var name = SanitizeName(parameter.Name!);
-                //     definitions.Append($"{typeName} {name}");
-                // }
-                //
-                // definitions.Append("); ");
-                // if (containsUnknownRef)
-                // {
-                //     definitions.Append("// WARN_UNKNOWN_POINTER_PARAMETER: check for array usage");
-                // }
-                //
-                // definitions.Append("\n\n");
             }
         }
 
@@ -708,13 +631,15 @@ public static unsafe class SDL
         return (str.Length * 4) + 1;
     }}
 
-    internal static byte* EncodeAsUTF8(string str, byte* buffer, int size)
+    internal static byte* EncodeAsUTF8(string str)
     {{
         if (str == null)
         {{
             return (byte*) 0;
         }}
         
+        var size = (str.Length * 4) + 1;
+        var buffer = (byte*) SDL_malloc((UIntPtr) size);
         fixed (char* strPtr = str)
         {{
             Encoding.UTF8.GetBytes(strPtr, str.Length + 1, buffer, size);

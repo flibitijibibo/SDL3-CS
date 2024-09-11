@@ -20,13 +20,15 @@ public static unsafe class SDL
         return (str.Length * 4) + 1;
     }
 
-    internal static byte* EncodeAsUTF8(string str, byte* buffer, int size)
+    internal static byte* EncodeAsUTF8(string str)
     {
         if (str == null)
         {
             return (byte*)0;
         }
 
+        var size = (str.Length * 4) + 1;
+        var buffer = (byte*)SDL_malloc((UIntPtr)size);
         fixed (char* strPtr = str)
         {
             Encoding.UTF8.GetBytes(strPtr, str.Length + 1, buffer, size);
@@ -5734,26 +5736,30 @@ public static unsafe class SDL
     private static extern bool INTERNAL_SDL_SetHintWithPriority(byte* name, byte* value, SDL_HintPriority priority);
     public static bool SDL_SetHintWithPriority(string name, string value, SDL_HintPriority priority)
     {
-        var nameUTF8Size = SizeAsUTF8(name);
-        var nameUTF8 = stackalloc byte[nameUTF8Size];
+        var nameUTF8 = EncodeAsUTF8(name);
+        var valueUTF8 = EncodeAsUTF8(value);
 
-        var valueUTF8Size = SizeAsUTF8(value);
-        var valueUTF8 = stackalloc byte[valueUTF8Size];
+        var result = INTERNAL_SDL_SetHintWithPriority(nameUTF8, valueUTF8, priority);
 
-        return INTERNAL_SDL_SetHintWithPriority(EncodeAsUTF8(name, nameUTF8, nameUTF8Size), EncodeAsUTF8(value, valueUTF8, valueUTF8Size), priority);
+        SDL_free((IntPtr)nameUTF8);
+        SDL_free((IntPtr)valueUTF8);
+
+        return result;
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_SetHint", CallingConvention = CallingConvention.Cdecl)]
     private static extern bool INTERNAL_SDL_SetHint(byte* name, byte* value);
     public static bool SDL_SetHint(string name, string value)
     {
-        var nameUTF8Size = SizeAsUTF8(name);
-        var nameUTF8 = stackalloc byte[nameUTF8Size];
+        var nameUTF8 = EncodeAsUTF8(name);
+        var valueUTF8 = EncodeAsUTF8(value);
 
-        var valueUTF8Size = SizeAsUTF8(value);
-        var valueUTF8 = stackalloc byte[valueUTF8Size];
+        var result = INTERNAL_SDL_SetHint(nameUTF8, valueUTF8);
 
-        return INTERNAL_SDL_SetHint(EncodeAsUTF8(name, nameUTF8, nameUTF8Size), EncodeAsUTF8(value, valueUTF8, valueUTF8Size));
+        SDL_free((IntPtr)nameUTF8);
+        SDL_free((IntPtr)valueUTF8);
+
+        return result;
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5936,10 +5942,12 @@ public static unsafe class SDL
     private static extern void INTERNAL_SDL_LogMessage(int category, SDL_LogPriority priority, byte* fmt);
     public static void SDL_LogMessage(int category, SDL_LogPriority priority, string fmt)
     {
-        var fmtUTF8Size = SizeAsUTF8(fmt);
-        var fmtUTF8 = stackalloc byte[fmtUTF8Size];
+        var fmtUTF8 = EncodeAsUTF8(fmt);
 
-        INTERNAL_SDL_LogMessage(category, priority, EncodeAsUTF8(fmt, fmtUTF8, fmtUTF8Size));
+        INTERNAL_SDL_LogMessage(category, priority, fmtUTF8);
+
+        SDL_free((IntPtr)fmtUTF8);
+
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

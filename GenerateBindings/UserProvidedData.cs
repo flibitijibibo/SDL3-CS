@@ -8,7 +8,7 @@ internal static class UserProvidedData
         Ref,
         Out,
         Array,
-        StringStack,
+        String,
     }
 
     internal struct DelegateDefinition
@@ -458,10 +458,10 @@ internal static class UserProvidedData
         { ("SDL_hid_get_serial_number_string", "string"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hidapi.h:493:33
         { ("SDL_hid_get_indexed_string", "string"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hidapi.h:507:33
         { ("SDL_hid_get_report_descriptor", "buf"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hidapi.h:535:33
-        { ("SDL_SetHintWithPriority", "name"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_hints.h:4176:38
-        { ("SDL_SetHintWithPriority", "value"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_hints.h:4176:38
-        { ("SDL_SetHint", "name"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_hints.h:4198:38
-        { ("SDL_SetHint", "value"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_hints.h:4198:38
+        { ("SDL_SetHintWithPriority", "name"), PointerParameterIntent.String }, // ./include/SDL3/SDL_hints.h:4176:38
+        { ("SDL_SetHintWithPriority", "value"), PointerParameterIntent.String }, // ./include/SDL3/SDL_hints.h:4176:38
+        { ("SDL_SetHint", "name"), PointerParameterIntent.String }, // ./include/SDL3/SDL_hints.h:4198:38
+        { ("SDL_SetHint", "value"), PointerParameterIntent.String }, // ./include/SDL3/SDL_hints.h:4198:38
         { ("SDL_ResetHint", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4218:38
         { ("SDL_GetHint", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4253:41
         { ("SDL_GetHintBoolean", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4270:38
@@ -484,7 +484,7 @@ internal static class UserProvidedData
         { ("SDL_LogWarn", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:307:34
         { ("SDL_LogError", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:328:34
         { ("SDL_LogCritical", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:349:34
-        { ("SDL_LogMessage", "fmt"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_log.h:371:34
+        { ("SDL_LogMessage", "fmt"), PointerParameterIntent.String }, // ./include/SDL3/SDL_log.h:371:34
         { ("SDL_GetLogOutputFunction", "userdata"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:425:34
         { ("SDL_ShowMessageBox", "messageboxdata"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_messagebox.h:164:38
         { ("SDL_ShowMessageBox", "buttonid"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_messagebox.h:164:38
