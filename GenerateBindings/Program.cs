@@ -33,7 +33,7 @@ internal static class Program
         public string Name { get; set; }
         public string ReturnType { get; set; } = "";
         public List<(string, string)> ParameterTypesNames { get; } = new();
-        public List<string> MarshalledStringParams { get; } = new();
+        public List<string> StackAllocatedStringParams { get; } = new();
         public StringBuilder ParameterString { get; } = new();
 
         public void Reset()
@@ -41,7 +41,7 @@ internal static class Program
             Name = "";
             ReturnType = "";
             ParameterTypesNames.Clear();
-            MarshalledStringParams.Clear();
+            StackAllocatedStringParams.Clear();
             ParameterString.Clear();
         }
     }
@@ -377,23 +377,26 @@ internal static class Program
                         {
                             UnusedUserProvidedTypes.Remove(entry.Name!);
 
-                            typeName = intent switch
+                            switch (intent)
                             {
-                                UserProvidedData.PointerParameterIntent.Ref         => $"ref {subtypeName}",
-                                UserProvidedData.PointerParameterIntent.Out         => $"out {subtypeName}",
-                                UserProvidedData.PointerParameterIntent.Array       => $"{subtypeName}*",
-                                UserProvidedData.PointerParameterIntent.StringStack => "MARSHALLED_STRING",
-                                _                                                   => $"ref {subtypeName}",
-                            };
-
-                            if (intent == UserProvidedData.PointerParameterIntent.Unknown)
-                            {
-                                containsUnknownRef = true;
-                            }
-
-                            if (intent == UserProvidedData.PointerParameterIntent.StringStack)
-                            {
-                                FunctionSignature.MarshalledStringParams.Add(name);
+                                case UserProvidedData.PointerParameterIntent.Ref:
+                                    typeName = $"ref {subtypeName}";
+                                    break;
+                                case UserProvidedData.PointerParameterIntent.Out:
+                                    typeName = $"out {subtypeName}";
+                                    break;
+                                case UserProvidedData.PointerParameterIntent.Array:
+                                    typeName = $"{subtypeName}*";
+                                    break;
+                                case UserProvidedData.PointerParameterIntent.StringStack:
+                                    typeName = "MARSHALLED_STRING";
+                                    FunctionSignature.StackAllocatedStringParams.Add(name);
+                                    break;
+                                case UserProvidedData.PointerParameterIntent.Unknown:
+                                default:
+                                    typeName = $"ref {subtypeName}";
+                                    containsUnknownRef = true;
+                                    break;
                             }
                         }
                         else
@@ -427,7 +430,7 @@ internal static class Program
                     FunctionSignature.ParameterString.Append($"{type} {name}");
                 }
 
-                if (FunctionSignature.MarshalledStringParams.Count > 0)
+                if (FunctionSignature.StackAllocatedStringParams.Count > 0)
                 {
                     definitions.Append(
                         $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
@@ -447,7 +450,7 @@ internal static class Program
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("MARSHALLED_STRING", "string"));
                     definitions.Append(")\n{\n");
 
-                    foreach (var stringParam in FunctionSignature.MarshalledStringParams)
+                    foreach (var stringParam in FunctionSignature.StackAllocatedStringParams)
                     {
                         definitions.Append($"var {stringParam}UTF8Size = SizeAsUTF8({stringParam});\n");
                         definitions.Append($"var {stringParam}UTF8 = stackalloc byte[{stringParam}UTF8Size];\n");
@@ -470,7 +473,7 @@ internal static class Program
 
                         isInitialParameter = false;
 
-                        if (FunctionSignature.MarshalledStringParams.Contains(name))
+                        if (FunctionSignature.StackAllocatedStringParams.Contains(name))
                         {
                             definitions.Append($"EncodeAsUTF8({name}, {name}UTF8, {name}UTF8Size)");
                         }
