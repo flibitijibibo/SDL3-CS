@@ -2,10 +2,11 @@
 using System.Numerics;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace GenerateBindings;
 
-internal static class Program
+internal static partial class Program
 {
     private enum TypeContext
     {
@@ -211,6 +212,21 @@ internal static class Program
             {
                 definitions.Append($"// {headerFile}\n\n");
                 currentSourceFile = headerFile;
+
+                if (currentSourceFile.EndsWith("SDL_hints.h"))
+                {
+                    IEnumerable<string> hintsFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, "include/SDL3/SDL_hints.h"));
+                    foreach (var line in hintsFileLines)
+                    {
+                        var match = HintDefinitionRegex().Match(line);
+                        if (match.Success)
+                        {
+                            definitions.Append($"const string {match.Groups["hintName"].Value} = \"{match.Groups["value"].Value}\";\n");
+                        }
+                    }
+
+                    definitions.Append('\n');
+                }
             }
 
             if (entry.Tag == "enum")
@@ -904,4 +920,7 @@ public static unsafe class SDL
             }
         }
     }
+
+    [GeneratedRegex(@"#define\s+(?<hintName>SDL_HINT_[A-Z0-9_]+)\s+""(?<value>.+)""")]
+    private static partial Regex HintDefinitionRegex();
 }
