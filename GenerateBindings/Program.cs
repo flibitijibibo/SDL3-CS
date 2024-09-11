@@ -31,6 +31,7 @@ internal static class Program
     private static readonly List<string> DefinedTypes = new();
     private static readonly Dictionary<string, RawFFIEntry> TypedefMap = new();
     private static readonly StructDefinitionType StructDefinition = new();
+    private static readonly HashSet<string> UnusedUserProvidedTypes = new();
 
     private static int Main(string[] args)
     {
@@ -126,6 +127,21 @@ internal static class Program
 
         // PARSE FFI.JSON
 
+        foreach (var key in UserProvidedData.PointerParametersIntents.Keys)
+        {
+            UnusedUserProvidedTypes.Add(key.Item1);
+        }
+
+        foreach (var key in UserProvidedData.DelegateDefinitions.Keys)
+        {
+            UnusedUserProvidedTypes.Add(key);
+        }
+
+        foreach (var key in UserProvidedData.FlagEnumDefinitions.Keys)
+        {
+            UnusedUserProvidedTypes.Add(key);
+        }
+
         RawFFIEntry[]? ffiData = JsonSerializer.Deserialize<RawFFIEntry[]>(File.ReadAllText(ffiJsonFile.FullName));
         if (ffiData == null)
         {
@@ -192,6 +208,8 @@ internal static class Program
                 {
                     if (UserProvidedData.DelegateDefinitions.TryGetValue(key: entry.Name!, value: out var delegateDefinition))
                     {
+                        UnusedUserProvidedTypes.Remove(entry.Name!);
+
                         if (delegateDefinition.ReturnType == "WARN_PLACEHOLDER")
                         {
                             definitions.Append("// ");
@@ -243,10 +261,14 @@ internal static class Program
                     }
                     else if (enumValues.Length == 0)
                     {
+                        UnusedUserProvidedTypes.Remove(entry.Name!);
+
                         definitions.Append("// WARN_UNPOPULATED_FLAG_ENUM\n");
                     }
                     else
                     {
+                        UnusedUserProvidedTypes.Remove(entry.Name!);
+
                         for (var i = 0; i < enumValues.Length; i++)
                         {
                             var enumEntry = enumValues[i];
@@ -334,6 +356,8 @@ internal static class Program
                         var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.Parameter);
                         if (UserProvidedData.PointerParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
                         {
+                            UnusedUserProvidedTypes.Remove(entry.Name!);
+
                             typeName = intent switch
                             {
                                 UserProvidedData.PointerParameterIntent.Ref   => $"ref {subtypeName}",
@@ -399,6 +423,15 @@ internal static class Program
         if (unpopulatedFlagDefinitions.Length > 0)
         {
             Console.Write($"new unpopulated flag enums (add these to `FlagEnumDefinitions` in UserProvidedData.cs:\n{unpopulatedFlagDefinitions}\n");
+        }
+
+        if (UnusedUserProvidedTypes.Count > 0)
+        {
+            Console.Write("unused definitions in UserProvidedData.cs:\n");
+            foreach (var definition in UnusedUserProvidedTypes)
+            {
+                Console.Write($"{definition}\n");
+            }
         }
 
         return 0;
