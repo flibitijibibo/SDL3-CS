@@ -1102,10 +1102,10 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_SurfaceFlags : uint
     {
-        Preallocated = 0x1,
-        LockNeeded = 0x2,
-        Locked = 0x4,
-        SIMDAligned = 0x08,
+        SDL_SURFACE_PREALLOCATED = 0x1,
+        SDL_SURFACE_LOCK_NEEDED = 0x2,
+        SDL_SURFACE_LOCKED = 0x4,
+        SDL_SURFACE_SIMD_ALIGNED = 0x08,
     }
 
     public enum SDL_ScaleMode
@@ -1499,31 +1499,31 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_WindowFlags : ulong
     {
-        Fullscreen = 0x1,
-        OpenGL = 0x2,
-        Occluded = 0x4,
-        Hidden = 0x08,
-        Borderless = 0x10,
-        Resizable = 0x20,
-        Minimized = 0x40,
-        Maximized = 0x080,
-        MouseGrabbed = 0x100,
-        InputFocus = 0x200,
-        MouseFocus = 0x400,
-        External = 0x0800,
-        Modal = 0x1000,
-        HighPixelDensity = 0x2000,
-        MouseCapture = 0x4000,
-        MouseRelativeMode = 0x08000,
-        AlwaysOnTop = 0x10000,
-        Utility = 0x20000,
-        Tooltip = 0x40000,
-        PopupMenu = 0x080000,
-        KeyboardGrabbed = 0x100000,
-        Vulkan = 0x1000_0000,
-        Metal = 0x2000_0000,
-        Transparent = 0x4000_0000,
-        NotFocusable = 0x0_8000_0000,
+        SDL_WINDOW_FULLSCREEN = 0x1,
+        SDL_WINDOW_OPENGL = 0x2,
+        SDL_WINDOW_OCCLUDED = 0x4,
+        SDL_WINDOW_HIDDEN = 0x08,
+        SDL_WINDOW_BORDERLESS = 0x10,
+        SDL_WINDOW_RESIZABLE = 0x20,
+        SDL_WINDOW_MINIMIZED = 0x40,
+        SDL_WINDOW_MAXIMIZED = 0x080,
+        SDL_WINDOW_MOUSE_GRABBED = 0x100,
+        SDL_WINDOW_INPUT_FOCUS = 0x200,
+        SDL_WINDOW_MOUSE_FOCUS = 0x400,
+        SDL_WINDOW_EXTERNAL = 0x0800,
+        SDL_WINDOW_MODAL = 0x1000,
+        SDL_WINDOW_HIGH_PIXEL_DENSITY = 0x2000,
+        SDL_WINDOW_MOUSE_CAPTURE = 0x4000,
+        SDL_WINDOW_MOUSE_RELATIVE_MODE = 0x08000,
+        SDL_WINDOW_ALWAYS_ON_TOP = 0x10000,
+        SDL_WINDOW_UTILITY = 0x20000,
+        SDL_WINDOW_TOOLTIP = 0x40000,
+        SDL_WINDOW_POPUP_MENU = 0x080000,
+        SDL_WINDOW_KEYBOARD_GRABBED = 0x100000,
+        SDL_WINDOW_VULKAN = 0x1000_0000,
+        SDL_WINDOW_METAL = 0x2000_0000,
+        SDL_WINDOW_TRANSPARENT = 0x4000_0000,
+        SDL_WINDOW_NOT_FOCUSABLE = 0x0_8000_0000,
     }
 
     public enum SDL_FlashOperation
@@ -3041,11 +3041,11 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_MouseButtonFlags : uint
     {
-        LMask = 0x1,
-        MMask = 0x2,
-        RMask = 0x4,
-        X1Mask = 0x08,
-        X2Mask = 0x10,
+        SDL_BUTTON_LMASK = 0x1,
+        SDL_BUTTON_MMASK = 0x2,
+        SDL_BUTTON_RMASK = 0x4,
+        SDL_BUTTON_X1MASK = 0x08,
+        SDL_BUTTON_X2MASK = 0x10,
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3119,13 +3119,13 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_PenInputFlags : uint
     {
-        Down = 0x1,
-        Button1 = 0x2,
-        Button2 = 0x4,
-        Button3 = 0x08,
-        Button4 = 0x10,
-        Button5 = 0x20,
-        EraserTip = 0x4000_0000,
+        SDL_PEN_INPUT_DOWN = 0x1,
+        SDL_PEN_INPUT_BUTTON_1 = 0x2,
+        SDL_PEN_INPUT_BUTTON_2 = 0x4,
+        SDL_PEN_INPUT_BUTTON_3 = 0x08,
+        SDL_PEN_INPUT_BUTTON_4 = 0x10,
+        SDL_PEN_INPUT_BUTTON_5 = 0x20,
+        SDL_PEN_INPUT_ERASER_TIP = 0x4000_0000,
     }
 
     public enum SDL_PenAxis
@@ -4191,7 +4191,7 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_GlobFlags : uint
     {
-        CaseInsensitive = 0x1,
+        SDL_GLOB_CASEINSENSITIVE = 0x1,
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -4312,12 +4312,12 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_GPUTextureUsageFlags : uint
     {
-        Sampler = 0x1,
-        ColorTarget = 0x2,
-        DepthStencilTarget = 0x4,
-        GraphicsStorageRead = 0x08,
-        ComputeStorageRead = 0x10,
-        ComputeStorageWrite = 0x20,
+        SDL_GPU_TEXTUREUSAGE_SAMPLER = 0x1,
+        SDL_GPU_TEXTUREUSAGE_COLOR_TARGET = 0x2,
+        SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET = 0x4,
+        SDL_GPU_TEXTUREUSAGE_GRAPHICS_STORAGE_READ = 0x08,
+        SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_READ = 0x10,
+        SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_WRITE = 0x20,
     }
 
     public enum SDL_GPUTextureType
@@ -4349,12 +4349,12 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_GPUBufferUsageFlags : uint
     {
-        Vertex = 0x1,
-        Index = 0x2,
-        Indirect = 0x4,
-        GraphicsStorageRead = 0x08,
-        ComputeStorageRead = 0x10,
-        ComputeStorageWrite = 0x20,
+        SDL_GPU_BUFFERUSAGE_VERTEX = 0x1,
+        SDL_GPU_BUFFERUSAGE_INDEX = 0x2,
+        SDL_GPU_BUFFERUSAGE_INDIRECT = 0x4,
+        SDL_GPU_BUFFERUSAGE_GRAPHICS_STORAGE_READ = 0x08,
+        SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_READ = 0x10,
+        SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_WRITE = 0x20,
     }
 
     public enum SDL_GPUTransferBufferUsage
@@ -4481,10 +4481,10 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_GPUColorComponentFlags : byte
     {
-        Red = 0x1,
-        Green = 0x2,
-        Blue = 0x4,
-        Alpha = 0x08,
+        SDL_GPU_COLORCOMPONENT_R = 0x1,
+        SDL_GPU_COLORCOMPONENT_G = 0x2,
+        SDL_GPU_COLORCOMPONENT_B = 0x4,
+        SDL_GPU_COLORCOMPONENT_A = 0x08,
     }
 
     public enum SDL_GPUFilter
@@ -5788,15 +5788,15 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_InitFlags : uint
     {
-        Timer = 0x1,
-        Audio = 0x10,
-        Video = 0x20,
-        Joystick = 0x200,
-        Haptic = 0x1000,
-        Gamepad = 0x2000,
-        Events = 0x4000,
-        Sensor = 0x0_8000,
-        Camera = 0x1_0000,
+        SDL_INIT_TIMER = 0x1,
+        SDL_INIT_AUDIO = 0x10,
+        SDL_INIT_VIDEO = 0x20,
+        SDL_INIT_JOYSTICK = 0x200,
+        SDL_INIT_HAPTIC = 0x1000,
+        SDL_INIT_GAMEPAD = 0x2000,
+        SDL_INIT_EVENTS = 0x4000,
+        SDL_INIT_SENSOR = 0x0_8000,
+        SDL_INIT_CAMERA = 0x1_0000,
     }
 
     public enum SDL_AppResult
@@ -5964,18 +5964,18 @@ public static unsafe class SDL
     [Flags]
     public enum SDL_MessageBoxFlags : uint
     {
-        Error = 0x10,
-        Warning = 0x20,
-        Information = 0x40,
-        ButtonsLeftToRight = 0x080,
-        ButtonsRightToLeft = 0x100,
+        SDL_MESSAGEBOX_ERROR = 0x10,
+        SDL_MESSAGEBOX_WARNING = 0x20,
+        SDL_MESSAGEBOX_INFORMATION = 0x40,
+        SDL_MESSAGEBOX_BUTTONS_LEFT_TO_RIGHT = 0x080,
+        SDL_MESSAGEBOX_BUTTONS_RIGHT_TO_LEFT = 0x100,
     }
 
     [Flags]
     public enum SDL_MessageBoxButtonFlags : uint
     {
-        ReturnKeyDefault = 0x1,
-        EscapeKeyDefault = 0x2,
+        SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT = 0x1,
+        SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT = 0x2,
     }
 
     [StructLayout(LayoutKind.Sequential)]

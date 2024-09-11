@@ -731,125 +731,124 @@ internal static class UserProvidedData
     {
         {
             "SDL_SurfaceFlags", [
-                "Preallocated",
-                "LockNeeded",
-                "Locked",
-                "SIMDAligned",
+                "SDL_SURFACE_PREALLOCATED",
+                "SDL_SURFACE_LOCK_NEEDED",
+                "SDL_SURFACE_LOCKED",
+                "SDL_SURFACE_SIMD_ALIGNED",
             ]
         }, // ./include/SDL3/SDL_surface.h:52:16
         {
             "SDL_WindowFlags", [
-                "Fullscreen",
-                "OpenGL",
-                "Occluded",
-                "Hidden",
-                "Borderless",
-                "Resizable",
-                "Minimized",
-                "Maximized",
-                "MouseGrabbed",
-                "InputFocus",
-                "MouseFocus",
-                "External",
-                "Modal",
-                "HighPixelDensity",
-                "MouseCapture",
-                "MouseRelativeMode",
-                "AlwaysOnTop",
-                "Utility",
-                "Tooltip",
-                "PopupMenu",
-                "KeyboardGrabbed",
+                "SDL_WINDOW_FULLSCREEN",
+                "SDL_WINDOW_OPENGL",
+                "SDL_WINDOW_OCCLUDED",
+                "SDL_WINDOW_HIDDEN",
+                "SDL_WINDOW_BORDERLESS",
+                "SDL_WINDOW_RESIZABLE",
+                "SDL_WINDOW_MINIMIZED",
+                "SDL_WINDOW_MAXIMIZED",
+                "SDL_WINDOW_MOUSE_GRABBED",
+                "SDL_WINDOW_INPUT_FOCUS",
+                "SDL_WINDOW_MOUSE_FOCUS",
+                "SDL_WINDOW_EXTERNAL",
+                "SDL_WINDOW_MODAL",
+                "SDL_WINDOW_HIGH_PIXEL_DENSITY",
+                "SDL_WINDOW_MOUSE_CAPTURE",
+                "SDL_WINDOW_MOUSE_RELATIVE_MODE",
+                "SDL_WINDOW_ALWAYS_ON_TOP",
+                "SDL_WINDOW_UTILITY",
+                "SDL_WINDOW_TOOLTIP",
+                "SDL_WINDOW_POPUP_MENU",
+                "SDL_WINDOW_KEYBOARD_GRABBED",
                 // unused bits between "KeyboardGrabbed" and "Vulkan"
-                "Vulkan = 0x1000_0000",
-                "Metal = 0x2000_0000",
-                "Transparent = 0x4000_0000",
-                "NotFocusable = 0x0_8000_0000",
+                "SDL_WINDOW_VULKAN = 0x1000_0000",
+                "SDL_WINDOW_METAL = 0x2000_0000",
+                "SDL_WINDOW_TRANSPARENT = 0x4000_0000",
+                "SDL_WINDOW_NOT_FOCUSABLE = 0x0_8000_0000",
             ]
         }, // ./include/SDL3/SDL_video.h:158:16
         {
             "SDL_MouseButtonFlags", [
-                "LMask",
-                "MMask",
-                "RMask",
-                "X1Mask",
-                "X2Mask",
+                "SDL_BUTTON_LMASK",
+                "SDL_BUTTON_MMASK",
+                "SDL_BUTTON_RMASK",
+                "SDL_BUTTON_X1MASK",
+                "SDL_BUTTON_X2MASK",
             ]
         }, // ./include/SDL3/SDL_mouse.h:118:16
         {
             "SDL_PenInputFlags", [
-                "Down",
-                "Button1",
-                "Button2",
-                "Button3",
-                "Button4",
-                "Button5",
-                "EraserTip = 0x4000_0000",
+                "SDL_PEN_INPUT_DOWN",
+                "SDL_PEN_INPUT_BUTTON_1",
+                "SDL_PEN_INPUT_BUTTON_2",
+                "SDL_PEN_INPUT_BUTTON_3",
+                "SDL_PEN_INPUT_BUTTON_4",
+                "SDL_PEN_INPUT_BUTTON_5",
+                "SDL_PEN_INPUT_ERASER_TIP = 0x4000_0000",
             ]
         }, // ./include/SDL3/SDL_pen.h:68:16
         {
             "SDL_GlobFlags", [
-                "CaseInsensitive",
+                "SDL_GLOB_CASEINSENSITIVE",
             ]
         }, // ./include/SDL3/SDL_filesystem.h:261:16
         {
             "SDL_GPUTextureUsageFlags", [
-                "Sampler",
-                "ColorTarget",
-                "DepthStencilTarget",
-                "GraphicsStorageRead",
-                "ComputeStorageRead",
-                "ComputeStorageWrite",
+                "SDL_GPU_TEXTUREUSAGE_SAMPLER",
+                "SDL_GPU_TEXTUREUSAGE_COLOR_TARGET",
+                "SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET",
+                "SDL_GPU_TEXTUREUSAGE_GRAPHICS_STORAGE_READ",
+                "SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_READ",
+                "SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_WRITE",
             ]
         }, // ./include/SDL3/SDL_gpu.h:231:16
         {
             "SDL_GPUBufferUsageFlags", [
-                "Vertex",
-                "Index",
-                "Indirect",
-                "GraphicsStorageRead",
-                "ComputeStorageRead",
-                "ComputeStorageWrite",
+                "SDL_GPU_BUFFERUSAGE_VERTEX",
+                "SDL_GPU_BUFFERUSAGE_INDEX",
+                "SDL_GPU_BUFFERUSAGE_INDIRECT",
+                "SDL_GPU_BUFFERUSAGE_GRAPHICS_STORAGE_READ",
+                "SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_READ",
+                "SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_WRITE",
             ]
         }, // ./include/SDL3/SDL_gpu.h:266:16
         {
             "SDL_GPUColorComponentFlags", [
-                "Red",
-                "Green",
-                "Blue",
-                "Alpha",
+                "SDL_GPU_COLORCOMPONENT_R",
+                "SDL_GPU_COLORCOMPONENT_G",
+                "SDL_GPU_COLORCOMPONENT_B",
+                "SDL_GPU_COLORCOMPONENT_A",
             ]
         }, // ./include/SDL3/SDL_gpu.h:428:15
         {
             "SDL_InitFlags", [
-                "Timer = 0x1",
-                "Audio = 0x10",
-                "Video = 0x20",
-                "Joystick = 0x200",
-                "Haptic = 0x1000",
-                "Gamepad = 0x2000",
-                "Events = 0x4000",
-                "Sensor = 0x0_8000",
-                "Camera = 0x1_0000",
+                "SDL_INIT_TIMER = 0x1",
+                "SDL_INIT_AUDIO = 0x10",
+                "SDL_INIT_VIDEO = 0x20",
+                "SDL_INIT_JOYSTICK = 0x200",
+                "SDL_INIT_HAPTIC = 0x1000",
+                "SDL_INIT_GAMEPAD = 0x2000",
+                "SDL_INIT_EVENTS = 0x4000",
+                "SDL_INIT_SENSOR = 0x0_8000",
+                "SDL_INIT_CAMERA = 0x1_0000",
             ]
         }, // ./include/SDL3/SDL_init.h:58:16
         {
             "SDL_MessageBoxFlags", [
-                "Error = 0x10",
-                "Warning = 0x20",
-                "Information = 0x40",
-                "ButtonsLeftToRight = 0x080",
-                "ButtonsRightToLeft = 0x100",
+                "SDL_MESSAGEBOX_ERROR = 0x10",
+                "SDL_MESSAGEBOX_WARNING = 0x20",
+                "SDL_MESSAGEBOX_INFORMATION = 0x40",
+                "SDL_MESSAGEBOX_BUTTONS_LEFT_TO_RIGHT = 0x080",
+                "SDL_MESSAGEBOX_BUTTONS_RIGHT_TO_LEFT = 0x100",
             ]
         }, // ./include/SDL3/SDL_messagebox.h:48:16
         {
             "SDL_MessageBoxButtonFlags", [
-                "ReturnKeyDefault",
-                "EscapeKeyDefault",
+                "SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT",
+                "SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT",
             ]
         }, // ./include/SDL3/SDL_messagebox.h:61:16
     };
 
-    internal static readonly string[] DeniedTypes =
-        [];
+    internal static readonly string[] DeniedTypes = [];
 }
