@@ -9,7 +9,7 @@ public static unsafe class SDL
 {
     private const string nativeLibName = "SDL3";
 
-    // ./include/SDL3/SDL_assert.h
+    // ../SDL3/SDL_assert.h
 
     public enum SDL_AssertState
     {
@@ -53,7 +53,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ResetAssertionReport();
 
-    // ./include/SDL3/SDL_atomic.h
+    // ../SDL3/SDL_atomic.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_TryLockSpinlock(IntPtr @lock);
@@ -97,12 +97,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_AtomicGetPointer(ref IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_endian.h
+    // ../SDL3/SDL_endian.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern float SDL_SwapFloat(float x);
 
-    // ./include/SDL3/SDL_error.h
+    // ../SDL3/SDL_error.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetError(ref char fmt); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -116,7 +116,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ClearError();
 
-    // ./include/SDL3/SDL_mutex.h
+    // ../SDL3/SDL_mutex.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateMutex();
@@ -193,7 +193,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_WaitConditionTimeout(IntPtr cond, IntPtr mutex, int timeoutMS);
 
-    // ./include/SDL3/SDL_properties.h
+    // ../SDL3/SDL_properties.h
 
     public enum SDL_PropertyType
     {
@@ -274,7 +274,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_DestroyProperties(uint props);
 
-    // ./include/SDL3/SDL_iostream.h
+    // ../SDL3/SDL_iostream.h
 
     public enum SDL_IOStatus
     {
@@ -296,6 +296,7 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_IOStreamInterface
     {
+        public uint version;
         public IntPtr size; // WARN_ANONYMOUS_FUNCTION_POINTER
         public IntPtr seek; // WARN_ANONYMOUS_FUNCTION_POINTER
         public IntPtr read; // WARN_ANONYMOUS_FUNCTION_POINTER
@@ -435,56 +436,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_WriteS64BE(IntPtr dst, long value);
 
-    // ./include/SDL3/SDL_thread.h
-
-    public enum SDL_ThreadPriority
-    {
-        SDL_THREAD_PRIORITY_LOW = 0,
-        SDL_THREAD_PRIORITY_NORMAL = 1,
-        SDL_THREAD_PRIORITY_HIGH = 2,
-        SDL_THREAD_PRIORITY_TIME_CRITICAL = 3,
-    }
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int SDL_ThreadFunction(IntPtr data);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, ref char name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateThreadWithPropertiesRuntime(uint props, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetThreadName(IntPtr thread);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern ulong SDL_GetCurrentThreadID();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern ulong SDL_GetThreadID(IntPtr thread);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetThreadPriority(SDL_ThreadPriority priority);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_WaitThread(IntPtr thread, ref int status); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DetachThread(IntPtr thread);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetTLS(IntPtr id);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void SDL_TLSDestructorCallback(IntPtr value);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetTLS(IntPtr id, IntPtr value, /* SDL_TLSDestructorCallback */ IntPtr destructor);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_CleanupTLS();
-
-    // ./include/SDL3/SDL_audio.h
+    // ../SDL3/SDL_audio.h
 
     public enum SDL_AudioFormat
     {
@@ -497,6 +449,9 @@ public static unsafe class SDL
         SDL_AUDIO_S32BE = 36896,
         SDL_AUDIO_F32LE = 33056,
         SDL_AUDIO_F32BE = 37152,
+        SDL_AUDIO_S16 = 32784,
+        SDL_AUDIO_S32 = 32800,
+        SDL_AUDIO_F32 = 33056,
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -672,7 +627,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetSilenceValueForFormat(SDL_AudioFormat format);
 
-    // ./include/SDL3/SDL_bits.h
+    // ../SDL3/SDL_bits.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_MostSignificantBitIndex32(uint x);
@@ -680,7 +635,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasExactlyOneBitSet32(uint x);
 
-    // ./include/SDL3/SDL_blendmode.h
+    // ../SDL3/SDL_blendmode.h
 
     public enum SDL_BlendOperation
     {
@@ -708,7 +663,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_ComposeCustomBlendMode(SDL_BlendFactor srcColorFactor, SDL_BlendFactor dstColorFactor, SDL_BlendOperation colorOperation, SDL_BlendFactor srcAlphaFactor, SDL_BlendFactor dstAlphaFactor, SDL_BlendOperation alphaOperation);
 
-    // ./include/SDL3/SDL_pixels.h
+    // ../SDL3/SDL_pixels.h
 
     public enum SDL_PixelType
     {
@@ -1018,7 +973,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_GetRGBA(uint pixel, ref SDL_PixelFormatDetails format, ref SDL_Palette palette, ref byte r, ref byte g, ref byte b, ref byte a); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_rect.h
+    // ../SDL3/SDL_rect.h
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_Point
@@ -1106,7 +1061,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetRectAndLineIntersectionFloat(ref SDL_FRect rect, ref float X1, ref float Y1, ref float X2, ref float Y2); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_surface.h
+    // ../SDL3/SDL_surface.h
 
     [Flags]
     public enum SDL_SurfaceFlags : uint
@@ -1314,7 +1269,166 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_WriteSurfacePixelFloat(ref SDL_Surface surface, int x, int y, float r, float g, float b, float a); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_video.h
+    // ../SDL3/SDL_camera.h
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_CameraSpec
+    {
+        public SDL_PixelFormat format;
+        public SDL_Colorspace colorspace;
+        public int width;
+        public int height;
+        public int framerate_numerator;
+        public int framerate_denominator;
+    }
+
+    public enum SDL_CameraPosition
+    {
+        SDL_CAMERA_POSITION_UNKNOWN = 0,
+        SDL_CAMERA_POSITION_FRONT_FACING = 1,
+        SDL_CAMERA_POSITION_BACK_FACING = 2,
+    }
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int SDL_GetNumCameraDrivers();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetCameraDriver(int index);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetCurrentCameraDriver();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetCameras(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetCameraSupportedFormats(uint devid, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetCameraName(uint instance_id);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern SDL_CameraPosition SDL_GetCameraPosition(uint instance_id);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_OpenCamera(uint instance_id, ref SDL_CameraSpec spec); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int SDL_GetCameraPermissionState(IntPtr camera);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern uint SDL_GetCameraID(IntPtr camera);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern uint SDL_GetCameraProperties(IntPtr camera);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_GetCameraFormat(IntPtr camera, ref SDL_CameraSpec spec); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_AcquireCameraFrame(IntPtr camera, ref ulong timestampNS); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SDL_ReleaseCameraFrame(IntPtr camera, ref SDL_Surface frame); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SDL_CloseCamera(IntPtr camera);
+
+    // ../SDL3/SDL_clipboard.h
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_SetClipboardText(ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetClipboardText();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasClipboardText();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_SetPrimarySelectionText(ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetPrimarySelectionText();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasPrimarySelectionText();
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate IntPtr SDL_ClipboardDataCallback(IntPtr userdata, IntPtr mimeType, UIntPtr size);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_ClipboardCleanupCallback(IntPtr userdata);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, ref IntPtr mime_types, UIntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_ClearClipboardData();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetClipboardData(ref char mime_type, ref UIntPtr size); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasClipboardData(ref char mime_type); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    // ../SDL3/SDL_cpuinfo.h
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int SDL_GetCPUCount();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int SDL_GetCPUCacheLineSize();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasAltiVec();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasMMX();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasSSE();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasSSE2();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasSSE3();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasSSE41();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasSSE42();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasAVX();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasAVX2();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasAVX512F();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasARMSIMD();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasNEON();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasLSX();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_HasLASX();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int SDL_GetSystemRAM();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern UIntPtr SDL_GetSIMDAlignment();
+
+    // ../SDL3/SDL_video.h
 
     public enum SDL_SystemTheme
     {
@@ -1683,7 +1797,10 @@ public static unsafe class SDL
     public static extern float SDL_GetWindowOpacity(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetWindowModalFor(IntPtr modal_window, IntPtr parent_window);
+    public static extern bool SDL_SetWindowParent(IntPtr window, IntPtr parent);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_SetWindowModal(IntPtr window, bool modal);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowFocusable(IntPtr window, bool focusable);
@@ -1789,166 +1906,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GL_DestroyContext(IntPtr context);
 
-    // ./include/SDL3/SDL_camera.h
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_CameraSpec
-    {
-        public SDL_PixelFormat format;
-        public SDL_Colorspace colorspace;
-        public int width;
-        public int height;
-        public int framerate_numerator;
-        public int framerate_denominator;
-    }
-
-    public enum SDL_CameraPosition
-    {
-        SDL_CAMERA_POSITION_UNKNOWN = 0,
-        SDL_CAMERA_POSITION_FRONT_FACING = 1,
-        SDL_CAMERA_POSITION_BACK_FACING = 2,
-    }
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetNumCameraDrivers();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetCameraDriver(int index);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetCurrentCameraDriver();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetCameras(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetCameraSupportedFormats(uint devid, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetCameraName(uint instance_id);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_CameraPosition SDL_GetCameraPosition(uint instance_id);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_OpenCamera(uint instance_id, ref SDL_CameraSpec spec); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetCameraPermissionState(IntPtr camera);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint SDL_GetCameraID(IntPtr camera);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint SDL_GetCameraProperties(IntPtr camera);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetCameraFormat(IntPtr camera, ref SDL_CameraSpec spec); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_AcquireCameraFrame(IntPtr camera, ref ulong timestampNS); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ReleaseCameraFrame(IntPtr camera, ref SDL_Surface frame); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_CloseCamera(IntPtr camera);
-
-    // ./include/SDL3/SDL_clipboard.h
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetClipboardText(ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetClipboardText();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasClipboardText();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetPrimarySelectionText(ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetPrimarySelectionText();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasPrimarySelectionText();
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate IntPtr SDL_ClipboardDataCallback(IntPtr userdata, IntPtr mimeType, UIntPtr size);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void SDL_ClipboardCleanupCallback(IntPtr userdata);
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, ref IntPtr mime_types, UIntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_ClearClipboardData();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetClipboardData(ref char mime_type, ref UIntPtr size); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasClipboardData(ref char mime_type); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
-
-    // ./include/SDL3/SDL_cpuinfo.h
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetCPUCount();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetCPUCacheLineSize();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasAltiVec();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasMMX();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasSSE();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasSSE2();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasSSE3();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasSSE41();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasSSE42();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasAVX();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasAVX2();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasAVX512F();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasARMSIMD();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasNEON();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasLSX();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_HasLASX();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_GetSystemRAM();
-
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UIntPtr SDL_GetSIMDAlignment();
-
-    // ./include/SDL3/SDL_dialog.h
+    // ../SDL3/SDL_dialog.h
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_DialogFileFilter
@@ -1969,7 +1927,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ShowOpenFolderDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref char default_location, bool allow_many); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_guid.h
+    // ../SDL3/SDL_guid.h
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GUID
@@ -1998,7 +1956,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_GUID SDL_StringToGUID(ref char pchGUID); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_power.h
+    // ../SDL3/SDL_power.h
 
     public enum SDL_PowerState
     {
@@ -2013,7 +1971,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_PowerState SDL_GetPowerInfo(ref int seconds, ref int percent); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_sensor.h
+    // ../SDL3/SDL_sensor.h
 
     public enum SDL_SensorType
     {
@@ -2069,7 +2027,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UpdateSensors();
 
-    // ./include/SDL3/SDL_joystick.h
+    // ../SDL3/SDL_joystick.h
 
     public enum SDL_JoystickType
     {
@@ -2157,6 +2115,7 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_VirtualJoystickDesc
     {
+        public uint version;
         public ushort type;
         public ushort padding;
         public ushort vendor_id;
@@ -2201,13 +2160,13 @@ public static unsafe class SDL
     public static extern bool SDL_SetJoystickVirtualBall(IntPtr joystick, int ball, short xrel, short yrel);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetJoystickVirtualButton(IntPtr joystick, int button, byte value);
+    public static extern bool SDL_SetJoystickVirtualButton(IntPtr joystick, int button, bool down);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetJoystickVirtualHat(IntPtr joystick, int hat, byte value);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetJoystickVirtualTouchpad(IntPtr joystick, int touchpad, int finger, byte state, float x, float y, float pressure);
+    public static extern bool SDL_SetJoystickVirtualTouchpad(IntPtr joystick, int touchpad, int finger, bool down, float x, float y, float pressure);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, ulong sensor_timestamp, ref float data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -2291,7 +2250,7 @@ public static unsafe class SDL
     public static extern byte SDL_GetJoystickHat(IntPtr joystick, int hat);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern byte SDL_GetJoystickButton(IntPtr joystick, int button);
+    public static extern bool SDL_GetJoystickButton(IntPtr joystick, int button);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_RumbleJoystick(IntPtr joystick, ushort low_frequency_rumble, ushort high_frequency_rumble, uint duration_ms);
@@ -2314,7 +2273,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_PowerState SDL_GetJoystickPowerInfo(IntPtr joystick, ref int percent); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_gamepad.h
+    // ../SDL3/SDL_gamepad.h
 
     public enum SDL_GamepadType
     {
@@ -2605,7 +2564,7 @@ public static unsafe class SDL
     public static extern bool SDL_GamepadHasButton(IntPtr gamepad, SDL_GamepadButton button);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern byte SDL_GetGamepadButton(IntPtr gamepad, SDL_GamepadButton button);
+    public static extern bool SDL_GetGamepadButton(IntPtr gamepad, SDL_GamepadButton button);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_GamepadButtonLabel SDL_GetGamepadButtonLabelForType(SDL_GamepadType type, SDL_GamepadButton button);
@@ -2620,7 +2579,7 @@ public static unsafe class SDL
     public static extern int SDL_GetNumGamepadTouchpadFingers(IntPtr gamepad, int touchpad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, ref byte state, ref float x, ref float y, ref float pressure); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, IntPtr down, ref float x, ref float y, ref float pressure); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GamepadHasSensor(IntPtr gamepad, SDL_SensorType type);
@@ -2658,7 +2617,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis);
 
-    // ./include/SDL3/SDL_scancode.h
+    // ../SDL3/SDL_scancode.h
 
     public enum SDL_Scancode
     {
@@ -2913,9 +2872,9 @@ public static unsafe class SDL
         SDL_NUM_SCANCODES = 512,
     }
 
-    // ./include/SDL3/SDL_keycode.h
+    // ../SDL3/SDL_keycode.h
 
-    // ./include/SDL3/SDL_keyboard.h
+    // ../SDL3/SDL_keyboard.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasKeyboard();
@@ -3010,7 +2969,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ScreenKeyboardShown(IntPtr window);
 
-    // ./include/SDL3/SDL_mouse.h
+    // ../SDL3/SDL_mouse.h
 
     public enum SDL_SystemCursor
     {
@@ -3119,7 +3078,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_CursorVisible();
 
-    // ./include/SDL3/SDL_pen.h
+    // ../SDL3/SDL_pen.h
 
     [Flags]
     public enum SDL_PenInputFlags : uint
@@ -3145,7 +3104,7 @@ public static unsafe class SDL
         SDL_PEN_NUM_AXES = 7,
     }
 
-    // ./include/SDL3/SDL_touch.h
+    // ../SDL3/SDL_touch.h
 
     public enum SDL_TouchDeviceType
     {
@@ -3176,7 +3135,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetTouchFingers(ulong touchID, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_events.h
+    // ../SDL3/SDL_events.h
 
     public enum SDL_EventType
     {
@@ -3345,8 +3304,8 @@ public static unsafe class SDL
         public uint key;
         public ushort mod;
         public ushort raw;
-        public byte state;
-        public byte repeat;
+        public bool down;
+        public bool repeat;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -3372,6 +3331,9 @@ public static unsafe class SDL
         public int num_candidates;
         public int selected_candidate;
         public bool horizontal;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -3417,7 +3379,7 @@ public static unsafe class SDL
         public uint windowID;
         public uint which;
         public byte button;
-        public byte state;
+        public bool down;
         public byte clicks;
         public byte padding;
         public float x;
@@ -3490,7 +3452,7 @@ public static unsafe class SDL
         public ulong timestamp;
         public uint which;
         public byte button;
-        public byte state;
+        public bool down;
         public byte padding1;
         public byte padding2;
     }
@@ -3538,7 +3500,7 @@ public static unsafe class SDL
         public ulong timestamp;
         public uint which;
         public byte button;
-        public byte state;
+        public bool down;
         public byte padding1;
         public byte padding2;
     }
@@ -3587,7 +3549,7 @@ public static unsafe class SDL
         public uint reserved;
         public ulong timestamp;
         public uint which;
-        public byte recording;
+        public bool recording;
         public byte padding1;
         public byte padding2;
         public byte padding3;
@@ -3652,8 +3614,8 @@ public static unsafe class SDL
         public uint pen_state;
         public float x;
         public float y;
-        public byte eraser;
-        public byte state;
+        public bool eraser;
+        public bool down;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -3668,7 +3630,7 @@ public static unsafe class SDL
         public float x;
         public float y;
         public byte button;
-        public byte state;
+        public bool down;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -4145,7 +4107,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetWindowFromEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_filesystem.h
+    // ../SDL3/SDL_filesystem.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetBasePath();
@@ -4220,7 +4182,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GlobDirectory(ref char path, ref char pattern, uint flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_gpu.h
+    // ../SDL3/SDL_gpu.h
 
     public enum SDL_GPUPrimitiveType
     {
@@ -4534,36 +4496,29 @@ public static unsafe class SDL
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GPUDepthStencilValue
-    {
-        public float depth;
-        public byte stencil;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUViewport
     {
         public float x;
         public float y;
         public float w;
         public float h;
-        public float minDepth;
-        public float maxDepth;
+        public float min_depth;
+        public float max_depth;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUTextureTransferInfo
     {
-        public IntPtr transferBuffer;
+        public IntPtr transfer_buffer;
         public uint offset;
-        public uint imagePitch;
-        public uint imageHeight;
+        public uint pixels_per_row;
+        public uint rows_per_layer;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUTransferBufferLocation
     {
-        public IntPtr transferBuffer;
+        public IntPtr transfer_buffer;
         public uint offset;
     }
 
@@ -4571,7 +4526,7 @@ public static unsafe class SDL
     public struct SDL_GPUTextureLocation
     {
         public IntPtr texture;
-        public uint mipLevel;
+        public uint mip_level;
         public uint layer;
         public uint x;
         public uint y;
@@ -4582,7 +4537,7 @@ public static unsafe class SDL
     public struct SDL_GPUTextureRegion
     {
         public IntPtr texture;
-        public uint mipLevel;
+        public uint mip_level;
         public uint layer;
         public uint x;
         public uint y;
@@ -4596,8 +4551,8 @@ public static unsafe class SDL
     public struct SDL_GPUBlitRegion
     {
         public IntPtr texture;
-        public uint mipLevel;
-        public uint layerOrDepthPlane;
+        public uint mip_level;
+        public uint layer_or_depth_plane;
         public uint x;
         public uint y;
         public uint w;
@@ -4622,63 +4577,65 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUIndirectDrawCommand
     {
-        public uint vertexCount;
-        public uint instanceCount;
-        public uint firstVertex;
-        public uint firstInstance;
+        public uint num_vertices;
+        public uint num_instances;
+        public uint first_vertex;
+        public uint first_instance;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUIndexedIndirectDrawCommand
     {
-        public uint indexCount;
-        public uint instanceCount;
-        public uint firstIndex;
-        public int vertexOffset;
-        public uint firstInstance;
+        public uint num_indices;
+        public uint num_instances;
+        public uint first_index;
+        public int vertex_offset;
+        public uint first_instance;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUIndirectDispatchCommand
     {
-        public uint groupCountX;
-        public uint groupCountY;
-        public uint groupCountZ;
+        public uint groupcount_x;
+        public uint groupcount_y;
+        public uint groupcount_z;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUSamplerCreateInfo
     {
-        public SDL_GPUFilter minFilter;
-        public SDL_GPUFilter magFilter;
-        public SDL_GPUSamplerMipmapMode mipmapMode;
-        public SDL_GPUSamplerAddressMode addressModeU;
-        public SDL_GPUSamplerAddressMode addressModeV;
-        public SDL_GPUSamplerAddressMode addressModeW;
-        public float mipLodBias;
-        public bool anisotropyEnable;
-        public float maxAnisotropy;
-        public bool compareEnable;
-        public SDL_GPUCompareOp compareOp;
-        public float minLod;
-        public float maxLod;
+        public SDL_GPUFilter min_filter;
+        public SDL_GPUFilter mag_filter;
+        public SDL_GPUSamplerMipmapMode mipmap_mode;
+        public SDL_GPUSamplerAddressMode address_mode_u;
+        public SDL_GPUSamplerAddressMode address_mode_v;
+        public SDL_GPUSamplerAddressMode address_mode_w;
+        public float mip_lod_bias;
+        public float max_anisotropy;
+        public bool enable_anisotropy;
+        public bool enable_compare;
+        public byte padding1;
+        public byte padding2;
+        public SDL_GPUCompareOp compare_op;
+        public float min_lod;
+        public float max_lod;
         public uint props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUVertexBinding
     {
-        public uint binding;
-        public uint stride;
-        public SDL_GPUVertexInputRate inputRate;
-        public uint instanceStepRate;
+        public uint index;
+        public uint pitch;
+        public SDL_GPUVertexInputRate input_rate;
+        public uint instance_step_rate;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUVertexAttribute
     {
         public uint location;
-        public uint binding;
+        public uint binding_index;
         public SDL_GPUVertexElementFormat format;
         public uint offset;
     }
@@ -4686,46 +4643,49 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUVertexInputState
     {
-        public SDL_GPUVertexBinding* vertexBindings;
-        public uint vertexBindingCount;
-        public SDL_GPUVertexAttribute* vertexAttributes;
-        public uint vertexAttributeCount;
+        public SDL_GPUVertexBinding* vertex_bindings;
+        public uint num_vertex_bindings;
+        public SDL_GPUVertexAttribute* vertex_attributes;
+        public uint num_vertex_attributes;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUStencilOpState
     {
-        public SDL_GPUStencilOp failOp;
-        public SDL_GPUStencilOp passOp;
-        public SDL_GPUStencilOp depthFailOp;
-        public SDL_GPUCompareOp compareOp;
+        public SDL_GPUStencilOp fail_op;
+        public SDL_GPUStencilOp pass_op;
+        public SDL_GPUStencilOp depth_fail_op;
+        public SDL_GPUCompareOp compare_op;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GPUColorAttachmentBlendState
+    public struct SDL_GPUColorTargetBlendState
     {
-        public bool blendEnable;
-        public SDL_GPUBlendFactor srcColorBlendFactor;
-        public SDL_GPUBlendFactor dstColorBlendFactor;
-        public SDL_GPUBlendOp colorBlendOp;
-        public SDL_GPUBlendFactor srcAlphaBlendFactor;
-        public SDL_GPUBlendFactor dstAlphaBlendFactor;
-        public SDL_GPUBlendOp alphaBlendOp;
-        public byte colorWriteMask;
+        public bool enable_blend;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public SDL_GPUBlendFactor src_color_blendfactor;
+        public SDL_GPUBlendFactor dst_color_blendfactor;
+        public SDL_GPUBlendOp color_blend_op;
+        public SDL_GPUBlendFactor src_alpha_blendfactor;
+        public SDL_GPUBlendFactor dst_alpha_blendfactor;
+        public SDL_GPUBlendOp alpha_blend_op;
+        public byte color_write_mask;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUShaderCreateInfo
     {
-        public UIntPtr codeSize;
+        public UIntPtr code_size;
         public byte* code;
-        public char* entryPointName;
+        public char* entrypoint;
         public uint format;
         public SDL_GPUShaderStage stage;
-        public uint samplerCount;
-        public uint storageTextureCount;
-        public uint storageBufferCount;
-        public uint uniformBufferCount;
+        public uint num_samplers;
+        public uint num_storage_textures;
+        public uint num_storage_buffers;
+        public uint num_uniform_buffers;
         public uint props;
     }
 
@@ -4734,20 +4694,20 @@ public static unsafe class SDL
     {
         public SDL_GPUTextureType type;
         public SDL_GPUTextureFormat format;
-        public uint usageFlags;
+        public uint usage;
         public uint width;
         public uint height;
-        public uint layerCountOrDepth;
-        public uint levelCount;
-        public SDL_GPUSampleCount sampleCount;
+        public uint layer_count_or_depth;
+        public uint num_levels;
+        public SDL_GPUSampleCount sample_count;
         public uint props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUBufferCreateInfo
     {
-        public uint usageFlags;
-        public uint sizeInBytes;
+        public uint usage;
+        public uint size;
         public uint props;
     }
 
@@ -4755,117 +4715,142 @@ public static unsafe class SDL
     public struct SDL_GPUTransferBufferCreateInfo
     {
         public SDL_GPUTransferBufferUsage usage;
-        public uint sizeInBytes;
+        public uint size;
         public uint props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPURasterizerState
     {
-        public SDL_GPUFillMode fillMode;
-        public SDL_GPUCullMode cullMode;
-        public SDL_GPUFrontFace frontFace;
-        public bool depthBiasEnable;
-        public float depthBiasConstantFactor;
-        public float depthBiasClamp;
-        public float depthBiasSlopeFactor;
+        public SDL_GPUFillMode fill_mode;
+        public SDL_GPUCullMode cull_mode;
+        public SDL_GPUFrontFace front_face;
+        public bool enable_depth_bias;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public float depth_bias_constant_factor;
+        public float depth_bias_clamp;
+        public float depth_bias_slope_factor;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUMultisampleState
     {
-        public SDL_GPUSampleCount sampleCount;
-        public uint sampleMask;
+        public SDL_GPUSampleCount sample_count;
+        public uint sample_mask;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUDepthStencilState
     {
-        public bool depthTestEnable;
-        public bool depthWriteEnable;
-        public SDL_GPUCompareOp compareOp;
-        public bool stencilTestEnable;
-        public SDL_GPUStencilOpState backStencilState;
-        public SDL_GPUStencilOpState frontStencilState;
-        public byte compareMask;
-        public byte writeMask;
-        public byte reference;
+        public bool enable_depth_test;
+        public bool enable_depth_write;
+        public bool enable_stencil_test;
+        public byte padding1;
+        public SDL_GPUCompareOp compare_op;
+        public SDL_GPUStencilOpState back_stencil_state;
+        public SDL_GPUStencilOpState front_stencil_state;
+        public byte compare_mask;
+        public byte write_mask;
+        public byte padding2;
+        public byte padding3;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GPUColorAttachmentDescription
+    public struct SDL_GPUColorTargetDescription
     {
         public SDL_GPUTextureFormat format;
-        public SDL_GPUColorAttachmentBlendState blendState;
+        public SDL_GPUColorTargetBlendState blend_state;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GPUGraphicsPipelineAttachmentInfo
+    public struct SDL_GpuGraphicsPipelineTargetInfo
     {
-        public SDL_GPUColorAttachmentDescription* colorAttachmentDescriptions;
-        public uint colorAttachmentCount;
-        public bool hasDepthStencilAttachment;
-        public SDL_GPUTextureFormat depthStencilFormat;
+        public SDL_GPUColorTargetDescription* color_target_descriptions;
+        public uint num_color_targets;
+        public bool has_depth_stencil_target;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public SDL_GPUTextureFormat depth_stencil_format;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUGraphicsPipelineCreateInfo
     {
-        public IntPtr vertexShader;
-        public IntPtr fragmentShader;
-        public SDL_GPUVertexInputState vertexInputState;
-        public SDL_GPUPrimitiveType primitiveType;
-        public SDL_GPURasterizerState rasterizerState;
-        public SDL_GPUMultisampleState multisampleState;
-        public SDL_GPUDepthStencilState depthStencilState;
-        public SDL_GPUGraphicsPipelineAttachmentInfo attachmentInfo;
-        public float blendConstants0;
-        public float blendConstants1;
-        public float blendConstants2;
-        public float blendConstants3;
+        public IntPtr vertex_shader;
+        public IntPtr fragment_shader;
+        public SDL_GPUVertexInputState vertex_input_state;
+        public SDL_GPUPrimitiveType primitive_type;
+        public SDL_GPURasterizerState rasterizer_state;
+        public SDL_GPUMultisampleState multisample_state;
+        public SDL_GPUDepthStencilState depth_stencil_state;
+        public SDL_GpuGraphicsPipelineTargetInfo target_info;
         public uint props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUComputePipelineCreateInfo
     {
-        public UIntPtr codeSize;
+        public UIntPtr code_size;
         public byte* code;
-        public char* entryPointName;
+        public char* entrypoint;
         public uint format;
-        public uint readOnlyStorageTextureCount;
-        public uint readOnlyStorageBufferCount;
-        public uint writeOnlyStorageTextureCount;
-        public uint writeOnlyStorageBufferCount;
-        public uint uniformBufferCount;
-        public uint threadCountX;
-        public uint threadCountY;
-        public uint threadCountZ;
+        public uint num_readonly_storage_textures;
+        public uint num_readonly_storage_buffers;
+        public uint num_writeonly_storage_textures;
+        public uint num_writeonly_storage_buffers;
+        public uint num_uniform_buffers;
+        public uint threadcount_x;
+        public uint threadcount_y;
+        public uint threadcount_z;
         public uint props;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GPUColorAttachmentInfo
+    public struct SDL_GPUColorTargetInfo
     {
         public IntPtr texture;
-        public uint mipLevel;
-        public uint layerOrDepthPlane;
-        public SDL_FColor clearColor;
-        public SDL_GPULoadOp loadOp;
-        public SDL_GPUStoreOp storeOp;
+        public uint mip_level;
+        public uint layer_or_depth_plane;
+        public SDL_FColor clear_color;
+        public SDL_GPULoadOp load_op;
+        public SDL_GPUStoreOp store_op;
         public bool cycle;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDL_GPUDepthStencilAttachmentInfo
+    public struct SDL_GPUDepthStencilTargetInfo
     {
         public IntPtr texture;
-        public SDL_GPUDepthStencilValue depthStencilClearValue;
-        public SDL_GPULoadOp loadOp;
-        public SDL_GPUStoreOp storeOp;
-        public SDL_GPULoadOp stencilLoadOp;
-        public SDL_GPUStoreOp stencilStoreOp;
+        public float clear_depth;
+        public SDL_GPULoadOp load_op;
+        public SDL_GPUStoreOp store_op;
+        public SDL_GPULoadOp stencil_load_op;
+        public SDL_GPUStoreOp stencil_store_op;
         public bool cycle;
+        public byte clear_stencil;
+        public byte padding1;
+        public byte padding2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GPUBlitInfo
+    {
+        public SDL_GPUBlitRegion source;
+        public SDL_GPUBlitRegion destination;
+        public SDL_GPULoadOp load_op;
+        public SDL_FColor clear_color;
+        public SDL_FlipMode flip_mode;
+        public SDL_GPUFilter filter;
+        public bool cycle;
+        public byte padding;
+        public byte padding2;
+        public byte padding3;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -4887,19 +4872,25 @@ public static unsafe class SDL
     {
         public IntPtr buffer;
         public bool cycle;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUStorageTextureWriteOnlyBinding
     {
         public IntPtr texture;
-        public uint mipLevel;
+        public uint mip_level;
         public uint layer;
         public bool cycle;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUDevice(uint formatFlags, bool debugMode, ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_CreateGPUDevice(uint format_flags, bool debug_mode, ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateGPUDeviceWithProperties(uint props);
@@ -4911,25 +4902,25 @@ public static unsafe class SDL
     public static extern SDL_GPUDriver SDL_GetGPUDriver(IntPtr device);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUComputePipeline(IntPtr device, ref SDL_GPUComputePipelineCreateInfo computePipelineCreateInfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_CreateGPUComputePipeline(IntPtr device, ref SDL_GPUComputePipelineCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUGraphicsPipeline(IntPtr device, ref SDL_GPUGraphicsPipelineCreateInfo pipelineCreateInfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_CreateGPUGraphicsPipeline(IntPtr device, ref SDL_GPUGraphicsPipelineCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUSampler(IntPtr device, ref SDL_GPUSamplerCreateInfo samplerCreateInfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_CreateGPUSampler(IntPtr device, ref SDL_GPUSamplerCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUShader(IntPtr device, ref SDL_GPUShaderCreateInfo shaderCreateInfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_CreateGPUShader(IntPtr device, ref SDL_GPUShaderCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUTexture(IntPtr device, ref SDL_GPUTextureCreateInfo textureCreateInfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_CreateGPUTexture(IntPtr device, ref SDL_GPUTextureCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUBuffer(IntPtr device, ref SDL_GPUBufferCreateInfo bufferCreateInfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_CreateGPUBuffer(IntPtr device, ref SDL_GPUBufferCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreateGPUTransferBuffer(IntPtr device, ref SDL_GPUTransferBufferCreateInfo transferBufferCreateInfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_CreateGPUTransferBuffer(IntPtr device, ref SDL_GPUTransferBufferCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -4938,13 +4929,13 @@ public static unsafe class SDL
     public static extern void SDL_SetGPUTextureName(IntPtr device, IntPtr texture, ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_InsertGPUDebugLabel(IntPtr commandBuffer, ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_InsertGPUDebugLabel(IntPtr command_buffer, ref char text); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_PushGPUDebugGroup(IntPtr commandBuffer, ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_PushGPUDebugGroup(IntPtr command_buffer, ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_PopGPUDebugGroup(IntPtr commandBuffer);
+    public static extern void SDL_PopGPUDebugGroup(IntPtr command_buffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ReleaseGPUTexture(IntPtr device, IntPtr texture);
@@ -4956,142 +4947,148 @@ public static unsafe class SDL
     public static extern void SDL_ReleaseGPUBuffer(IntPtr device, IntPtr buffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ReleaseGPUTransferBuffer(IntPtr device, IntPtr transferBuffer);
+    public static extern void SDL_ReleaseGPUTransferBuffer(IntPtr device, IntPtr transfer_buffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ReleaseGPUComputePipeline(IntPtr device, IntPtr computePipeline);
+    public static extern void SDL_ReleaseGPUComputePipeline(IntPtr device, IntPtr compute_pipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_ReleaseGPUShader(IntPtr device, IntPtr shader);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_ReleaseGPUGraphicsPipeline(IntPtr device, IntPtr graphicsPipeline);
+    public static extern void SDL_ReleaseGPUGraphicsPipeline(IntPtr device, IntPtr graphics_pipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_AcquireGPUCommandBuffer(IntPtr device);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_PushGPUVertexUniformData(IntPtr commandBuffer, uint slotIndex, IntPtr data, uint dataLengthInBytes);
+    public static extern void SDL_PushGPUVertexUniformData(IntPtr command_buffer, uint slot_index, IntPtr data, uint length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_PushGPUFragmentUniformData(IntPtr commandBuffer, uint slotIndex, IntPtr data, uint dataLengthInBytes);
+    public static extern void SDL_PushGPUFragmentUniformData(IntPtr command_buffer, uint slot_index, IntPtr data, uint length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_PushGPUComputeUniformData(IntPtr commandBuffer, uint slotIndex, IntPtr data, uint dataLengthInBytes);
+    public static extern void SDL_PushGPUComputeUniformData(IntPtr command_buffer, uint slot_index, IntPtr data, uint length);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_BeginGPURenderPass(IntPtr commandBuffer, SDL_GPUColorAttachmentInfo* colorAttachmentInfos, uint colorAttachmentCount, ref SDL_GPUDepthStencilAttachmentInfo depthStencilAttachmentInfo);
+    public static extern IntPtr SDL_BeginGPURenderPass(IntPtr command_buffer, ref SDL_GPUColorTargetInfo color_target_infos, uint num_color_targets, ref SDL_GPUDepthStencilTargetInfo depth_stencil_target_info); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUGraphicsPipeline(IntPtr renderPass, IntPtr graphicsPipeline);
+    public static extern void SDL_BindGPUGraphicsPipeline(IntPtr render_pass, IntPtr graphics_pipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_SetGPUViewport(IntPtr renderPass, ref SDL_GPUViewport viewport); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_SetGPUViewport(IntPtr render_pass, ref SDL_GPUViewport viewport); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_SetGPUScissor(IntPtr renderPass, ref SDL_Rect scissor); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_SetGPUScissor(IntPtr render_pass, ref SDL_Rect scissor); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUVertexBuffers(IntPtr renderPass, uint firstBinding, ref SDL_GPUBufferBinding pBindings, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_SetGPUBlendConstants(IntPtr render_pass, SDL_FColor blend_constants);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUIndexBuffer(IntPtr renderPass, ref SDL_GPUBufferBinding pBinding, SDL_GPUIndexElementSize indexElementSize); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_SetGPUStencilReference(IntPtr render_pass, byte reference);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUVertexSamplers(IntPtr renderPass, uint firstSlot, ref SDL_GPUTextureSamplerBinding textureSamplerBindings, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_BindGPUVertexBuffers(IntPtr render_pass, uint first_binding, ref SDL_GPUBufferBinding bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUVertexStorageTextures(IntPtr renderPass, uint firstSlot, ref IntPtr storageTextures, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_BindGPUIndexBuffer(IntPtr render_pass, ref SDL_GPUBufferBinding binding, SDL_GPUIndexElementSize index_element_size); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUVertexStorageBuffers(IntPtr renderPass, uint firstSlot, ref IntPtr storageBuffers, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_BindGPUVertexSamplers(IntPtr render_pass, uint first_slot, ref SDL_GPUTextureSamplerBinding texture_sampler_bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUFragmentSamplers(IntPtr renderPass, uint firstSlot, ref SDL_GPUTextureSamplerBinding textureSamplerBindings, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_BindGPUVertexStorageTextures(IntPtr render_pass, uint first_slot, ref IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUFragmentStorageTextures(IntPtr renderPass, uint firstSlot, ref IntPtr storageTextures, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_BindGPUVertexStorageBuffers(IntPtr render_pass, uint first_slot, ref IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUFragmentStorageBuffers(IntPtr renderPass, uint firstSlot, ref IntPtr storageBuffers, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_BindGPUFragmentSamplers(IntPtr render_pass, uint first_slot, ref SDL_GPUTextureSamplerBinding texture_sampler_bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DrawGPUIndexedPrimitives(IntPtr renderPass, uint indexCount, uint instanceCount, uint firstIndex, int vertexOffset, uint firstInstance);
+    public static extern void SDL_BindGPUFragmentStorageTextures(IntPtr render_pass, uint first_slot, ref IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DrawGPUPrimitives(IntPtr renderPass, uint vertexCount, uint instanceCount, uint firstVertex, uint firstInstance);
+    public static extern void SDL_BindGPUFragmentStorageBuffers(IntPtr render_pass, uint first_slot, ref IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DrawGPUPrimitivesIndirect(IntPtr renderPass, IntPtr buffer, uint offsetInBytes, uint drawCount, uint stride);
+    public static extern void SDL_DrawGPUIndexedPrimitives(IntPtr render_pass, uint num_indices, uint num_instances, uint first_index, int vertex_offset, uint first_instance);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DrawGPUIndexedPrimitivesIndirect(IntPtr renderPass, IntPtr buffer, uint offsetInBytes, uint drawCount, uint stride);
+    public static extern void SDL_DrawGPUPrimitives(IntPtr render_pass, uint num_vertices, uint num_instances, uint first_vertex, uint first_instance);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_EndGPURenderPass(IntPtr renderPass);
+    public static extern void SDL_DrawGPUPrimitivesIndirect(IntPtr render_pass, IntPtr buffer, uint offset, uint draw_count, uint pitch);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_BeginGPUComputePass(IntPtr commandBuffer, ref SDL_GPUStorageTextureWriteOnlyBinding storageTextureBindings, uint storageTextureBindingCount, ref SDL_GPUStorageBufferWriteOnlyBinding storageBufferBindings, uint storageBufferBindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_DrawGPUIndexedPrimitivesIndirect(IntPtr render_pass, IntPtr buffer, uint offset, uint draw_count, uint pitch);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUComputePipeline(IntPtr computePass, IntPtr computePipeline);
+    public static extern void SDL_EndGPURenderPass(IntPtr render_pass);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUComputeStorageTextures(IntPtr computePass, uint firstSlot, ref IntPtr storageTextures, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_BeginGPUComputePass(IntPtr command_buffer, ref SDL_GPUStorageTextureWriteOnlyBinding storage_texture_bindings, uint num_storage_texture_bindings, ref SDL_GPUStorageBufferWriteOnlyBinding storage_buffer_bindings, uint num_storage_buffer_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BindGPUComputeStorageBuffers(IntPtr computePass, uint firstSlot, ref IntPtr storageBuffers, uint bindingCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_BindGPUComputePipeline(IntPtr compute_pass, IntPtr compute_pipeline);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DispatchGPUCompute(IntPtr computePass, uint groupCountX, uint groupCountY, uint groupCountZ);
+    public static extern void SDL_BindGPUComputeStorageTextures(IntPtr compute_pass, uint first_slot, ref IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DispatchGPUComputeIndirect(IntPtr computePass, IntPtr buffer, uint offsetInBytes);
+    public static extern void SDL_BindGPUComputeStorageBuffers(IntPtr compute_pass, uint first_slot, ref IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_EndGPUComputePass(IntPtr computePass);
+    public static extern void SDL_DispatchGPUCompute(IntPtr compute_pass, uint groupcount_x, uint groupcount_y, uint groupcount_z);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_MapGPUTransferBuffer(IntPtr device, IntPtr transferBuffer, bool cycle);
+    public static extern void SDL_DispatchGPUComputeIndirect(IntPtr compute_pass, IntPtr buffer, uint offset);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_UnmapGPUTransferBuffer(IntPtr device, IntPtr transferBuffer);
+    public static extern void SDL_EndGPUComputePass(IntPtr compute_pass);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_BeginGPUCopyPass(IntPtr commandBuffer);
+    public static extern IntPtr SDL_MapGPUTransferBuffer(IntPtr device, IntPtr transfer_buffer, bool cycle);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_UploadToGPUTexture(IntPtr copyPass, ref SDL_GPUTextureTransferInfo source, ref SDL_GPUTextureRegion destination, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_UnmapGPUTransferBuffer(IntPtr device, IntPtr transfer_buffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_UploadToGPUBuffer(IntPtr copyPass, ref SDL_GPUTransferBufferLocation source, ref SDL_GPUBufferRegion destination, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_BeginGPUCopyPass(IntPtr command_buffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_CopyGPUTextureToTexture(IntPtr copyPass, ref SDL_GPUTextureLocation source, ref SDL_GPUTextureLocation destination, uint w, uint h, uint d, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_UploadToGPUTexture(IntPtr copy_pass, ref SDL_GPUTextureTransferInfo source, ref SDL_GPUTextureRegion destination, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_CopyGPUBufferToBuffer(IntPtr copyPass, ref SDL_GPUBufferLocation source, ref SDL_GPUBufferLocation destination, uint size, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_UploadToGPUBuffer(IntPtr copy_pass, ref SDL_GPUTransferBufferLocation source, ref SDL_GPUBufferRegion destination, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DownloadFromGPUTexture(IntPtr copyPass, ref SDL_GPUTextureRegion source, ref SDL_GPUTextureTransferInfo destination); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_CopyGPUTextureToTexture(IntPtr copy_pass, ref SDL_GPUTextureLocation source, ref SDL_GPUTextureLocation destination, uint w, uint h, uint d, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_DownloadFromGPUBuffer(IntPtr copyPass, ref SDL_GPUBufferRegion source, ref SDL_GPUTransferBufferLocation destination); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_CopyGPUBufferToBuffer(IntPtr copy_pass, ref SDL_GPUBufferLocation source, ref SDL_GPUBufferLocation destination, uint size, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_EndGPUCopyPass(IntPtr copyPass);
+    public static extern void SDL_DownloadFromGPUTexture(IntPtr copy_pass, ref SDL_GPUTextureRegion source, ref SDL_GPUTextureTransferInfo destination); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_GenerateMipmapsForGPUTexture(IntPtr commandBuffer, IntPtr texture);
+    public static extern void SDL_DownloadFromGPUBuffer(IntPtr copy_pass, ref SDL_GPUBufferRegion source, ref SDL_GPUTransferBufferLocation destination); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_BlitGPUTexture(IntPtr commandBuffer, ref SDL_GPUBlitRegion source, ref SDL_GPUBlitRegion destination, SDL_FlipMode flipMode, SDL_GPUFilter filterMode, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_EndGPUCopyPass(IntPtr copy_pass);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_WindowSupportsGPUSwapchainComposition(IntPtr device, IntPtr window, SDL_GPUSwapchainComposition swapchainComposition);
+    public static extern void SDL_GenerateMipmapsForGPUTexture(IntPtr command_buffer, IntPtr texture);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_WindowSupportsGPUPresentMode(IntPtr device, IntPtr window, SDL_GPUPresentMode presentMode);
+    public static extern void SDL_BlitGPUTexture(IntPtr command_buffer, ref SDL_GPUBlitInfo info); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_WindowSupportsGPUSwapchainComposition(IntPtr device, IntPtr window, SDL_GPUSwapchainComposition swapchain_composition);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_WindowSupportsGPUPresentMode(IntPtr device, IntPtr window, SDL_GPUPresentMode present_mode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ClaimWindowForGPUDevice(IntPtr device, IntPtr window);
@@ -5100,25 +5097,25 @@ public static unsafe class SDL
     public static extern void SDL_ReleaseWindowFromGPUDevice(IntPtr device, IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetGPUSwapchainParameters(IntPtr device, IntPtr window, SDL_GPUSwapchainComposition swapchainComposition, SDL_GPUPresentMode presentMode);
+    public static extern bool SDL_SetGPUSwapchainParameters(IntPtr device, IntPtr window, SDL_GPUSwapchainComposition swapchain_composition, SDL_GPUPresentMode present_mode);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_GPUTextureFormat SDL_GetGPUSwapchainTextureFormat(IntPtr device, IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_AcquireGPUSwapchainTexture(IntPtr commandBuffer, IntPtr window, ref uint pWidth, ref uint pHeight); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern IntPtr SDL_AcquireGPUSwapchainTexture(IntPtr command_buffer, IntPtr window, ref uint w, ref uint h); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_SubmitGPUCommandBuffer(IntPtr commandBuffer);
+    public static extern void SDL_SubmitGPUCommandBuffer(IntPtr command_buffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_SubmitGPUCommandBufferAndAcquireFence(IntPtr commandBuffer);
+    public static extern IntPtr SDL_SubmitGPUCommandBufferAndAcquireFence(IntPtr command_buffer);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_WaitForGPUIdle(IntPtr device);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_WaitForGPUFences(IntPtr device, bool waitAll, ref IntPtr pFences, uint fenceCount); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+    public static extern void SDL_WaitForGPUFences(IntPtr device, bool wait_all, ref IntPtr fences, uint num_fences); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_QueryGPUFence(IntPtr device, IntPtr fence);
@@ -5127,15 +5124,15 @@ public static unsafe class SDL
     public static extern void SDL_ReleaseGPUFence(IntPtr device, IntPtr fence);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint SDL_GPUTextureFormatTexelBlockSize(SDL_GPUTextureFormat textureFormat);
+    public static extern uint SDL_GPUTextureFormatTexelBlockSize(SDL_GPUTextureFormat format);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GPUTextureSupportsFormat(IntPtr device, SDL_GPUTextureFormat format, SDL_GPUTextureType type, uint usage);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GPUTextureSupportsSampleCount(IntPtr device, SDL_GPUTextureFormat format, SDL_GPUSampleCount sampleCount);
+    public static extern bool SDL_GPUTextureSupportsSampleCount(IntPtr device, SDL_GPUTextureFormat format, SDL_GPUSampleCount sample_count);
 
-    // ./include/SDL3/SDL_haptic.h
+    // ../SDL3/SDL_haptic.h
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_HapticDirection
@@ -5367,7 +5364,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_StopHapticRumble(IntPtr haptic);
 
-    // ./include/SDL3/SDL_hidapi.h
+    // ../SDL3/SDL_hidapi.h
 
     public enum SDL_hid_bus_type
     {
@@ -5464,7 +5461,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_hid_ble_scan(bool active);
 
-    // ./include/SDL3/SDL_hints.h
+    // ../SDL3/SDL_hints.h
 
     public enum SDL_HintPriority
     {
@@ -5500,7 +5497,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_RemoveHintCallback(ref char name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_init.h
+    // ../SDL3/SDL_init.h
 
     [Flags]
     public enum SDL_InitFlags : uint
@@ -5559,7 +5556,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAppMetadataProperty(ref char name); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_loadso.h
+    // ../SDL3/SDL_loadso.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_LoadObject(ref char sofile); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
@@ -5570,7 +5567,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UnloadObject(IntPtr handle);
 
-    // ./include/SDL3/SDL_locale.h
+    // ../SDL3/SDL_locale.h
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_Locale
@@ -5582,7 +5579,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetPreferredLocales(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_log.h
+    // ../SDL3/SDL_log.h
 
     public enum SDL_LogCategory
     {
@@ -5593,20 +5590,19 @@ public static unsafe class SDL
         SDL_LOG_CATEGORY_AUDIO = 4,
         SDL_LOG_CATEGORY_VIDEO = 5,
         SDL_LOG_CATEGORY_RENDER = 6,
-        SDL_LOG_CATEGORY_GPU = 7,
-        SDL_LOG_CATEGORY_INPUT = 8,
-        SDL_LOG_CATEGORY_TEST = 9,
-        SDL_LOG_CATEGORY_RESERVED1 = 10,
-        SDL_LOG_CATEGORY_RESERVED2 = 11,
-        SDL_LOG_CATEGORY_RESERVED3 = 12,
-        SDL_LOG_CATEGORY_RESERVED4 = 13,
-        SDL_LOG_CATEGORY_RESERVED5 = 14,
-        SDL_LOG_CATEGORY_RESERVED6 = 15,
-        SDL_LOG_CATEGORY_RESERVED7 = 16,
-        SDL_LOG_CATEGORY_RESERVED8 = 17,
-        SDL_LOG_CATEGORY_RESERVED9 = 18,
-        SDL_LOG_CATEGORY_RESERVED10 = 19,
-        SDL_LOG_CATEGORY_CUSTOM = 20,
+        SDL_LOG_CATEGORY_INPUT = 7,
+        SDL_LOG_CATEGORY_TEST = 8,
+        SDL_LOG_CATEGORY_GPU = 9,
+        SDL_LOG_CATEGORY_RESERVED2 = 10,
+        SDL_LOG_CATEGORY_RESERVED3 = 11,
+        SDL_LOG_CATEGORY_RESERVED4 = 12,
+        SDL_LOG_CATEGORY_RESERVED5 = 13,
+        SDL_LOG_CATEGORY_RESERVED6 = 14,
+        SDL_LOG_CATEGORY_RESERVED7 = 15,
+        SDL_LOG_CATEGORY_RESERVED8 = 16,
+        SDL_LOG_CATEGORY_RESERVED9 = 17,
+        SDL_LOG_CATEGORY_RESERVED10 = 18,
+        SDL_LOG_CATEGORY_CUSTOM = 19,
     }
 
     public enum SDL_LogPriority
@@ -5668,7 +5664,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_SetLogOutputFunction(/* SDL_LogOutputFunction */ IntPtr callback, IntPtr userdata);
 
-    // ./include/SDL3/SDL_messagebox.h
+    // ../SDL3/SDL_messagebox.h
 
     [Flags]
     public enum SDL_MessageBoxFlags : uint
@@ -5741,7 +5737,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ShowSimpleMessageBox(uint flags, ref char title, ref char message, IntPtr window); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_metal.h
+    // ../SDL3/SDL_metal.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_Metal_CreateView(IntPtr window);
@@ -5752,17 +5748,17 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_Metal_GetLayer(IntPtr view);
 
-    // ./include/SDL3/SDL_misc.h
+    // ../SDL3/SDL_misc.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_OpenURL(ref char url); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_platform.h
+    // ../SDL3/SDL_platform.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetPlatform();
 
-    // ./include/SDL3/SDL_render.h
+    // ../SDL3/SDL_render.h
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_Vertex
@@ -6046,11 +6042,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetRenderVSync(IntPtr renderer, ref int vsync); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_storage.h
+    // ../SDL3/SDL_storage.h
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_StorageInterface
     {
+        public uint version;
         public IntPtr close; // WARN_ANONYMOUS_FUNCTION_POINTER
         public IntPtr ready; // WARN_ANONYMOUS_FUNCTION_POINTER
         public IntPtr enumerate; // WARN_ANONYMOUS_FUNCTION_POINTER
@@ -6115,7 +6112,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GlobStorageDirectory(IntPtr storage, ref char path, ref char pattern, uint flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
 
-    // ./include/SDL3/SDL_system.h
+    // ../SDL3/SDL_system.h
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool SDL_X11EventHook(IntPtr userdata, IntPtr xevent);
@@ -6150,7 +6147,56 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_OnApplicationDidEnterForeground();
 
-    // ./include/SDL3/SDL_time.h
+    // ../SDL3/SDL_thread.h
+
+    public enum SDL_ThreadPriority
+    {
+        SDL_THREAD_PRIORITY_LOW = 0,
+        SDL_THREAD_PRIORITY_NORMAL = 1,
+        SDL_THREAD_PRIORITY_HIGH = 2,
+        SDL_THREAD_PRIORITY_TIME_CRITICAL = 3,
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int SDL_ThreadFunction(IntPtr data);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, ref char name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_CreateThreadWithPropertiesRuntime(uint props, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetThreadName(IntPtr thread);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong SDL_GetCurrentThreadID();
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong SDL_GetThreadID(IntPtr thread);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_SetThreadPriority(SDL_ThreadPriority priority);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SDL_WaitThread(IntPtr thread, ref int status); // WARN_UNKNOWN_POINTER_PARAMETER: check for array usage
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SDL_DetachThread(IntPtr thread);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_GetTLS(IntPtr id);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SDL_TLSDestructorCallback(IntPtr value);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool SDL_SetTLS(IntPtr id, IntPtr value, /* SDL_TLSDestructorCallback */ IntPtr destructor);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SDL_CleanupTLS();
+
+    // ../SDL3/SDL_time.h
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_DateTime
@@ -6206,7 +6252,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetDayOfWeek(int year, int month, int day);
 
-    // ./include/SDL3/SDL_timer.h
+    // ../SDL3/SDL_timer.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern ulong SDL_GetTicks();
@@ -6241,7 +6287,7 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_RemoveTimer(uint id);
 
-    // ./include/SDL3/SDL_version.h
+    // ../SDL3/SDL_version.h
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetVersion();
