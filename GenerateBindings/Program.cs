@@ -170,9 +170,13 @@ internal static class Program
 
         foreach (var entry in ffiData)
         {
-            if ((entry.Header == null)
-                || !Path.GetFileName(entry.Header).StartsWith("SDL_")
-                || Path.GetFileName(entry.Header).StartsWith("SDL_stdinc.h"))
+            if ((entry.Header == null) || !Path.GetFileName(entry.Header).StartsWith("SDL_"))
+            {
+                continue;
+            }
+
+            if (Path.GetFileName(entry.Header).StartsWith("SDL_stdinc.h") &&
+                !((entry.Name == "SDL_malloc") || (entry.Name == "SDL_free")))
             {
                 continue;
             }

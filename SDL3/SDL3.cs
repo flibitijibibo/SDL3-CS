@@ -9,6 +9,14 @@ public static unsafe class SDL
 {
     private const string nativeLibName = "SDL3";
 
+    // ../SDL3/SDL_stdinc.h
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr SDL_malloc(UIntPtr size);
+
+    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SDL_free(IntPtr mem);
+
     // ../SDL3/SDL_assert.h
 
     public enum SDL_AssertState
