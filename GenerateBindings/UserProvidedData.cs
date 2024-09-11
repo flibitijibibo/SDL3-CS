@@ -458,10 +458,10 @@ internal static class UserProvidedData
         { ("SDL_hid_get_serial_number_string", "string"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hidapi.h:493:33
         { ("SDL_hid_get_indexed_string", "string"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hidapi.h:507:33
         { ("SDL_hid_get_report_descriptor", "buf"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hidapi.h:535:33
-        { ("SDL_SetHintWithPriority", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4176:38
-        { ("SDL_SetHintWithPriority", "value"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4176:38
-        { ("SDL_SetHint", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4198:38
-        { ("SDL_SetHint", "value"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4198:38
+        { ("SDL_SetHintWithPriority", "name"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_hints.h:4176:38
+        { ("SDL_SetHintWithPriority", "value"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_hints.h:4176:38
+        { ("SDL_SetHint", "name"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_hints.h:4198:38
+        { ("SDL_SetHint", "value"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_hints.h:4198:38
         { ("SDL_ResetHint", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4218:38
         { ("SDL_GetHint", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4253:41
         { ("SDL_GetHintBoolean", "name"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_hints.h:4270:38

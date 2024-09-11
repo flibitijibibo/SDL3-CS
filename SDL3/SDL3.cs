@@ -5504,11 +5504,31 @@ public static unsafe class SDL
         SDL_HINT_OVERRIDE = 2,
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetHintWithPriority(ref char name, ref char value, SDL_HintPriority priority); // WARN_UNKNOWN_POINTER_PARAMETER
+    [DllImport(nativeLibName, EntryPoint = "SDL_SetHintWithPriority", CallingConvention = CallingConvention.Cdecl)]
+    private static extern bool INTERNAL_SDL_SetHintWithPriority(byte* name, byte* value, SDL_HintPriority priority);
+    private static bool SDL_SetHintWithPriority(string name, string value, SDL_HintPriority priority)
+    {
+        var nameUTF8Size = SizeAsUTF8(name);
+        var nameUTF8 = stackalloc byte[nameUTF8Size];
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetHint(ref char name, ref char value); // WARN_UNKNOWN_POINTER_PARAMETER
+        var valueUTF8Size = SizeAsUTF8(value);
+        var valueUTF8 = stackalloc byte[valueUTF8Size];
+
+        return INTERNAL_SDL_SetHintWithPriority(EncodeAsUTF8(name, nameUTF8, nameUTF8Size), EncodeAsUTF8(value, valueUTF8, valueUTF8Size), priority);
+    }
+
+    [DllImport(nativeLibName, EntryPoint = "SDL_SetHint", CallingConvention = CallingConvention.Cdecl)]
+    private static extern bool INTERNAL_SDL_SetHint(byte* name, byte* value);
+    private static bool SDL_SetHint(string name, string value)
+    {
+        var nameUTF8Size = SizeAsUTF8(name);
+        var nameUTF8 = stackalloc byte[nameUTF8Size];
+
+        var valueUTF8Size = SizeAsUTF8(value);
+        var valueUTF8 = stackalloc byte[valueUTF8Size];
+
+        return INTERNAL_SDL_SetHint(EncodeAsUTF8(name, nameUTF8, nameUTF8Size), EncodeAsUTF8(value, valueUTF8, valueUTF8Size));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ResetHint(ref char name); // WARN_UNKNOWN_POINTER_PARAMETER
@@ -5690,8 +5710,9 @@ public static unsafe class SDL
     private static extern void INTERNAL_SDL_LogMessage(int category, SDL_LogPriority priority, byte* fmt);
     private static void SDL_LogMessage(int category, SDL_LogPriority priority, string fmt)
     {
-        int fmtUTF8Size = SizeAsUTF8(fmt);
-        byte* fmtUTF8 = stackalloc byte[fmtUTF8Size];
+        var fmtUTF8Size = SizeAsUTF8(fmt);
+        var fmtUTF8 = stackalloc byte[fmtUTF8Size];
+
         INTERNAL_SDL_LogMessage(category, priority, EncodeAsUTF8(fmt, fmtUTF8, fmtUTF8Size));
     }
 

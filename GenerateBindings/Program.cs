@@ -449,8 +449,8 @@ internal static class Program
 
                     foreach (var stringParam in FunctionSignature.MarshalledStringParams)
                     {
-                        definitions.Append($"int {stringParam}UTF8Size = SizeAsUTF8({stringParam});\n");
-                        definitions.Append($"byte* {stringParam}UTF8 = stackalloc byte[{stringParam}UTF8Size];\n");
+                        definitions.Append($"var {stringParam}UTF8Size = SizeAsUTF8({stringParam});\n");
+                        definitions.Append($"var {stringParam}UTF8 = stackalloc byte[{stringParam}UTF8Size];\n");
                         definitions.Append('\n');
                     }
 
