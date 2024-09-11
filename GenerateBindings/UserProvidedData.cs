@@ -8,6 +8,7 @@ internal static class UserProvidedData
         Ref,
         Out,
         Array,
+        StringStack,
     }
 
     internal struct DelegateDefinition
@@ -483,7 +484,7 @@ internal static class UserProvidedData
         { ("SDL_LogWarn", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:307:34
         { ("SDL_LogError", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:328:34
         { ("SDL_LogCritical", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:349:34
-        { ("SDL_LogMessage", "fmt"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:371:34
+        { ("SDL_LogMessage", "fmt"), PointerParameterIntent.StringStack }, // ./include/SDL3/SDL_log.h:371:34
         { ("SDL_GetLogOutputFunction", "userdata"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_log.h:425:34
         { ("SDL_ShowMessageBox", "messageboxdata"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_messagebox.h:164:38
         { ("SDL_ShowMessageBox", "buttonid"), PointerParameterIntent.Unknown }, // ./include/SDL3/SDL_messagebox.h:164:38
