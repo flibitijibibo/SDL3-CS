@@ -5506,7 +5506,7 @@ public static unsafe class SDL
 
     [DllImport(nativeLibName, EntryPoint = "SDL_SetHintWithPriority", CallingConvention = CallingConvention.Cdecl)]
     private static extern bool INTERNAL_SDL_SetHintWithPriority(byte* name, byte* value, SDL_HintPriority priority);
-    private static bool SDL_SetHintWithPriority(string name, string value, SDL_HintPriority priority)
+    public static bool SDL_SetHintWithPriority(string name, string value, SDL_HintPriority priority)
     {
         var nameUTF8Size = SizeAsUTF8(name);
         var nameUTF8 = stackalloc byte[nameUTF8Size];
@@ -5519,7 +5519,7 @@ public static unsafe class SDL
 
     [DllImport(nativeLibName, EntryPoint = "SDL_SetHint", CallingConvention = CallingConvention.Cdecl)]
     private static extern bool INTERNAL_SDL_SetHint(byte* name, byte* value);
-    private static bool SDL_SetHint(string name, string value)
+    public static bool SDL_SetHint(string name, string value)
     {
         var nameUTF8Size = SizeAsUTF8(name);
         var nameUTF8 = stackalloc byte[nameUTF8Size];
@@ -5708,7 +5708,7 @@ public static unsafe class SDL
 
     [DllImport(nativeLibName, EntryPoint = "SDL_LogMessage", CallingConvention = CallingConvention.Cdecl)]
     private static extern void INTERNAL_SDL_LogMessage(int category, SDL_LogPriority priority, byte* fmt);
-    private static void SDL_LogMessage(int category, SDL_LogPriority priority, string fmt)
+    public static void SDL_LogMessage(int category, SDL_LogPriority priority, string fmt)
     {
         var fmtUTF8Size = SizeAsUTF8(fmt);
         var fmtUTF8 = stackalloc byte[fmtUTF8Size];

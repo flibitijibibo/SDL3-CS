@@ -443,7 +443,7 @@ internal static class Program
 
                     definitions.Append('\n');
 
-                    definitions.Append($"private static {FunctionSignature.ReturnType} {FunctionSignature.Name}(");
+                    definitions.Append($"public static {FunctionSignature.ReturnType} {FunctionSignature.Name}(");
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("MARSHALLED_STRING", "string"));
                     definitions.Append(")\n{\n");
 
