@@ -221,7 +221,7 @@ internal static partial class Program
                         var match = HintDefinitionRegex().Match(line);
                         if (match.Success)
                         {
-                            definitions.Append($"const string {match.Groups["hintName"].Value} = \"{match.Groups["value"].Value}\";\n");
+                            definitions.Append($"public const string {match.Groups["hintName"].Value} = \"{match.Groups["value"].Value}\";\n");
                         }
                     }
 
