@@ -364,8 +364,6 @@ internal static partial class Program
                     continue;
                 }
 
-                // THE NEW WAY
-
                 FunctionSignature.Reset();
 
                 FunctionSignature.Name = entry.Name!;
@@ -389,7 +387,13 @@ internal static partial class Program
                     {
                         var subtype = GetTypeFromTypedefMap(type: parameter.Type!.Type!);
                         var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.Parameter);
-                        if (UserProvidedData.PointerParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
+
+                        if (subtypeName == "char")
+                        {
+                            typeName = "UTF8_STRING";
+                            FunctionSignature.HeapAllocatedStringParams.Add(name);
+                        }
+                        else if (UserProvidedData.PointerParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
                         {
                             UnusedUserProvidedTypes.Remove(entry.Name!);
 
@@ -403,10 +407,6 @@ internal static partial class Program
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Array:
                                     typeName = $"{subtypeName}*";
-                                    break;
-                                case UserProvidedData.PointerParameterIntent.String:
-                                    typeName = "MARSHALLED_STRING";
-                                    FunctionSignature.HeapAllocatedStringParams.Add(name);
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Unknown:
                                 default:
@@ -452,7 +452,7 @@ internal static partial class Program
                         $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
                     );
                     definitions.Append($"private static extern {FunctionSignature.ReturnType} INTERNAL_{FunctionSignature.Name}(");
-                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("MARSHALLED_STRING", "byte*"));
+                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "byte*"));
                     definitions.Append("); ");
 
                     if (containsUnknownRef)
@@ -463,7 +463,7 @@ internal static partial class Program
                     definitions.Append('\n');
 
                     definitions.Append($"public static {FunctionSignature.ReturnType} {FunctionSignature.Name}(");
-                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("MARSHALLED_STRING", "string"));
+                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
                     definitions.Append(")\n{\n");
 
                     foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
@@ -480,7 +480,7 @@ internal static partial class Program
 
                     definitions.Append($"INTERNAL_{FunctionSignature.Name}(");
                     var isInitialParameter = true;
-                    foreach (var (_, name) in FunctionSignature.ParameterTypesNames)
+                    foreach (var (typeName, name) in FunctionSignature.ParameterTypesNames)
                     {
                         if (!isInitialParameter)
                         {
@@ -488,6 +488,15 @@ internal static partial class Program
                         }
 
                         isInitialParameter = false;
+
+                        if (typeName.StartsWith("ref"))
+                        {
+                            definitions.Append("ref ");
+                        }
+                        else if (typeName.StartsWith("out"))
+                        {
+                            definitions.Append("out ");
+                        }
 
                         if (FunctionSignature.HeapAllocatedStringParams.Contains(name))
                         {
@@ -696,8 +705,8 @@ public static unsafe class SDL
             "float"            => "float",
             "double"           => "double",
             "size_t"           => "UIntPtr",
-            "wchar_t"          => "char", // TODO: doubt it's this easy (sdl_hidapi)
-            "unsigned-char"    => "byte", // TODO: confirm this (sdl_hidapi)
+            "wchar_t"          => "char",
+            "unsigned-char"    => "byte",
             "void"             => "void",
             "pointer"          => "IntPtr",
             "function-pointer" => "FUNCTION_POINTER",
