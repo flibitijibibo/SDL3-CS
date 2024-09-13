@@ -388,7 +388,11 @@ internal static partial class Program
                         var subtype = GetTypeFromTypedefMap(type: parameter.Type!.Type!);
                         var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.Parameter);
 
-                        if (subtypeName == "char")
+                        if (subtypeName == "UTF8_STRING") // pointer to an array; give up
+                        {
+                            typeName = "IntPtr";
+                        }
+                        else if (subtypeName == "char")
                         {
                             typeName = "UTF8_STRING";
                             FunctionSignature.HeapAllocatedStringParams.Add(name);

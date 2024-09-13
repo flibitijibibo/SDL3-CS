@@ -1659,7 +1659,7 @@ public static unsafe class SDL
     public delegate void SDL_ClipboardCleanupCallback(IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, ref UTF8_STRING mime_types, UIntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, IntPtr mime_types, UIntPtr num_mime_types);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ClearClipboardData();

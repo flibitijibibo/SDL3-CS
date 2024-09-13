@@ -243,7 +243,6 @@ internal static class UserProvidedData
         { ("SDL_GetCameraFormat", "spec"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_camera.h:388:38
         { ("SDL_AcquireCameraFrame", "timestampNS"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_camera.h:431:43
         { ("SDL_ReleaseCameraFrame", "frame"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_camera.h:459:34
-        { ("SDL_SetClipboardData", "mime_types"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_clipboard.h:197:38
         { ("SDL_GetClipboardData", "size"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_clipboard.h:228:36
         { ("SDL_GetDisplays", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_video.h:415:45
         { ("SDL_GetDisplayBounds", "rect"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_video.h:486:38
