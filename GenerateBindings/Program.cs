@@ -184,18 +184,7 @@ internal static partial class Program
 
             if ((entry.Tag == "typedef") && entry.Name!.StartsWith("SDL_"))
             {
-                // Flags are technically uints, but they ARE exported by name, so we can hack this in to get the type instead of just uint... -cosmonaut
-                RawFFIEntry type;
-                if (entry.Name!.EndsWith("Flags"))
-                {
-                    type = new RawFFIEntry(entry.Name!, null, null, null, null, null, null, null, null, null);
-                }
-                else
-                {
-                    type = entry.Type!;
-                }
-
-                TypedefMap[entry.Name!] = type;
+                TypedefMap[entry.Name!] = entry.Type!;
             }
         }
 
@@ -753,9 +742,18 @@ public static unsafe class SDL
 
     private static RawFFIEntry GetTypeFromTypedefMap(RawFFIEntry type)
     {
-        if (type.Tag.StartsWith("SDL_") && TypedefMap.TryGetValue(type.Tag, value: out var value))
+        if (type.Tag.StartsWith("SDL_"))
         {
-            return value;
+            // preserve flag types
+            if (type.Tag.EndsWith("Flags"))
+            {
+                return type;
+            }
+
+            if (TypedefMap.TryGetValue(type.Tag, value: out var value))
+            {
+                return value;
+            }
         }
 
         return type;
