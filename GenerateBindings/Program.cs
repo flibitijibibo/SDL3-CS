@@ -294,7 +294,7 @@ internal static partial class Program
                         );
                     }
                 }
-                else if ((entry.Name != null) && entry.Name.EndsWith("Flags"))
+                else if ((entry.Name != null) && (entry.Name.EndsWith("Flags") || (entry.Name == "SDL_Keymod")))
                 {
                     definitions.Append("[Flags]\n");
                     var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
@@ -949,4 +949,7 @@ public static unsafe class SDL
 
     [GeneratedRegex(@"#define\s+(?<hintName>SDL_HINT_[A-Z0-9_]+)\s+""(?<value>.+)""")]
     private static partial Regex HintDefinitionRegex();
+
+    [GeneratedRegex(@"#define\s+(?<hintName>SDLK_[A-Z0-9_]+)\s+(?<value>0x.+u)")]
+    private static partial Regex KeycodeDefinitionRegex();
 }
