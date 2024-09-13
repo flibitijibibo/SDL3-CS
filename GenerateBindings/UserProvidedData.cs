@@ -10,6 +10,13 @@ internal static class UserProvidedData
         Array,
     }
 
+    internal enum ReturnedCharPtrMemoryOwner
+    {
+        Unknown,
+        SDL,
+        Caller,
+    }
+
     internal struct DelegateDefinition
     {
         public string ReturnType { get; set; }
@@ -475,6 +482,63 @@ internal static class UserProvidedData
         { ("SDL_DateTimeToTime", "dt"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_time.h:146:38
         { ("SDL_TimeToWindows", "dwLowDateTime"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_time.h:162:34
         { ("SDL_TimeToWindows", "dwHighDateTime"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_time.h:162:34
+    };
+
+    internal static readonly Dictionary<string, ReturnedCharPtrMemoryOwner> ReturnedCharPtrMemoryOwners = new()
+    {
+        { "SDL_GetError", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_error.h:112:42
+        { "SDL_GetStringProperty", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_properties.h:400:42
+        { "SDL_GetAudioDriver", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_audio.h:415:42
+        { "SDL_GetCurrentAudioDriver", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_audio.h:432:42
+        { "SDL_GetAudioDeviceName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_audio.h:507:42
+        { "SDL_GetAudioFormatName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_audio.h:1994:42
+        { "SDL_GetPixelFormatName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_pixels.h:772:42
+        { "SDL_GetCameraDriver", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_camera.h:150:42
+        { "SDL_GetCurrentCameraDriver", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_camera.h:166:42
+        { "SDL_GetCameraName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_camera.h:237:42
+        { "SDL_GetClipboardText", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_clipboard.h:74:36
+        { "SDL_GetPrimarySelectionText", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_clipboard.h:117:36
+        { "SDL_GetVideoDriver", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_video.h:376:42
+        { "SDL_GetCurrentVideoDriver", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_video.h:393:42
+        { "SDL_GetDisplayName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_video.h:469:42
+        { "SDL_GetWindowTitle", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_video.h:1344:42
+        { "SDL_GetSensorNameForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_sensor.h:163:42
+        { "SDL_GetSensorName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_sensor.h:233:42
+        { "SDL_GetJoystickNameForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_joystick.h:230:42
+        { "SDL_GetJoystickPathForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_joystick.h:246:42
+        { "SDL_GetJoystickName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_joystick.h:678:42
+        { "SDL_GetJoystickPath", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_joystick.h:691:42
+        { "SDL_GetJoystickSerial", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_joystick.h:806:42
+        { "SDL_GetGamepadMappingForGUID", ReturnedCharPtrMemoryOwner.Caller }, // ../SDL3/SDL_gamepad.h:418:36
+        { "SDL_GetGamepadMapping", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:437:36
+        { "SDL_GetGamepadNameForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:512:42
+        { "SDL_GetGamepadPathForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:528:42
+        { "SDL_GetGamepadMappingForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:658:36
+        { "SDL_GetGamepadName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:756:42
+        { "SDL_GetGamepadPath", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:770:42
+        { "SDL_GetGamepadSerial", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:891:42
+        { "SDL_GetGamepadStringForType", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:1055:42
+        { "SDL_GetGamepadStringForAxis", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:1091:42
+        { "SDL_GetGamepadStringForButton", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:1164:42
+        { "SDL_GetGamepadAppleSFSymbolsNameForButton", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:1450:42
+        { "SDL_GetGamepadAppleSFSymbolsNameForAxis", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_gamepad.h:1463:42
+        { "SDL_GetKeyboardNameForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_keyboard.h:104:42
+        { "SDL_GetScancodeName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_keyboard.h:268:42
+        { "SDL_GetKeyName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_keyboard.h:299:42
+        { "SDL_GetMouseNameForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_mouse.h:182:42
+        { "SDL_GetTouchDeviceName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_touch.h:104:42
+        { "SDL_GetBasePath", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_filesystem.h:80:42
+        { "SDL_GetPrefPath", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_filesystem.h:135:36
+        { "SDL_GetUserFolder", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_filesystem.h:231:42
+        { "SDL_GetHapticNameForID", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_haptic.h:960:42
+        { "SDL_GetHapticName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_haptic.h:1022:42
+        { "SDL_GetHint", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_hints.h:4140:41
+        { "SDL_GetAppMetadataProperty", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_init.h:354:42
+        { "SDL_GetPlatform", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_platform.h:56:42
+        { "SDL_GetRenderDriver", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_render.h:168:42
+        { "SDL_GetRendererName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_render.h:336:42
+        { "SDL_GetThreadName", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_thread.h:338:42
+        { "SDL_GetRevision", ReturnedCharPtrMemoryOwner.Unknown }, // ../SDL3/SDL_version.h:172:42
     };
 
     internal static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()

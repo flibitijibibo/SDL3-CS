@@ -153,6 +153,11 @@ internal static partial class Program
             UnusedUserProvidedTypes.Add(key.Item1);
         }
 
+        foreach (var key in UserProvidedData.ReturnedCharPtrMemoryOwners.Keys)
+        {
+            UnusedUserProvidedTypes.Add(key);
+        }
+
         foreach (var key in UserProvidedData.DelegateDefinitions.Keys)
         {
             UnusedUserProvidedTypes.Add(key);
@@ -185,6 +190,7 @@ internal static partial class Program
 
         var definitions = new StringBuilder();
         var unknownPointerParameters = new StringBuilder();
+        var unknownReturnedCharPtrMemoryOwners = new StringBuilder();
         var undefinedFunctionPointers = new StringBuilder();
         var unpopulatedFlagDefinitions = new StringBuilder();
         var currentSourceFile = "";
@@ -459,11 +465,11 @@ internal static partial class Program
                         $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
                     );
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "byte*"));
-                    definitions.Append("); ");
+                    definitions.Append(");");
 
                     if (containsUnknownRef)
                     {
-                        definitions.Append("// WARN_UNKNOWN_POINTER_PARAMETER");
+                        definitions.Append(" // WARN_UNKNOWN_POINTER_PARAMETER");
                     }
 
                     definitions.Append('\n');
@@ -522,12 +528,38 @@ internal static partial class Program
                         }
                     }
 
+                    var unknownMemoryOwner = false;
                     if (returnsCharPtr)
                     {
                         definitions.Append(')');
+
+                        if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
+                        {
+                            UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
+                            unknownMemoryOwner = memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Unknown;
+
+                            if (memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Caller)
+                            {
+                                definitions.Append(", shouldFree: true");
+                            }
+                        }
+                        else
+                        {
+                            unknownMemoryOwner = true;
+                            unknownReturnedCharPtrMemoryOwners.Append(
+                                $"{{ \"{FunctionSignature.Name!}\", ReturnedCharPtrMemoryOwner.Unknown }}, // {entry.Header}\n"
+                            );
+                        }
                     }
 
-                    definitions.Append(");\n");
+                    definitions.Append(");");
+
+                    if (unknownMemoryOwner)
+                    {
+                        definitions.Append(" // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER");
+                    }
+
+                    definitions.Append('\n');
 
                     if (FunctionSignature.HeapAllocatedStringParams.Count > 0)
                     {
@@ -572,6 +604,13 @@ internal static partial class Program
         if (unknownPointerParameters.Length > 0)
         {
             Console.Write($"new pointer parameters (add these to `PointerParametersIntents` in UserProvidedData.cs:\n{unknownPointerParameters}\n");
+        }
+
+        if (unknownReturnedCharPtrMemoryOwners.Length > 0)
+        {
+            Console.Write(
+                $"new returned char pointers (add these to `ReturnedCharPtrMemoryOwners` in UserProvidedData.cs:\n{unknownReturnedCharPtrMemoryOwners}\n"
+            );
         }
 
         if (undefinedFunctionPointers.Length > 0)
@@ -651,7 +690,7 @@ public static unsafe class SDL
 {{
     private const string nativeLibName = ""SDL3"";
 
-    internal static byte* EncodeAsUTF8(string str)
+    private static byte* EncodeAsUTF8(string str)
     {{
         if (str == null)
         {{
@@ -668,20 +707,20 @@ public static unsafe class SDL
         return buffer;
     }}
 
-    internal static string DecodeFromUTF8(IntPtr ptr, bool shouldFree = false)
+    private static string DecodeFromUTF8(IntPtr ptr, bool shouldFree = false)
     {{
         if (ptr == IntPtr.Zero)
         {{
             return null;
         }}
 
-        byte* end = (byte*) ptr;
+        var end = (byte*) ptr;
         while (*end != 0)
         {{
             end++;
         }}
 
-        string result = new string(
+        var result = new string(
             (sbyte*) ptr,
             0,
             (int) (end - (byte*)ptr),

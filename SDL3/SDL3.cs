@@ -10,7 +10,7 @@ public static unsafe class SDL
 {
     private const string nativeLibName = "SDL3";
 
-    internal static byte* EncodeAsUTF8(string str)
+    private static byte* EncodeAsUTF8(string str)
     {
         if (str == null)
         {
@@ -27,20 +27,20 @@ public static unsafe class SDL
         return buffer;
     }
 
-    internal static string DecodeFromUTF8(IntPtr ptr, bool shouldFree = false)
+    private static string DecodeFromUTF8(IntPtr ptr, bool shouldFree = false)
     {
         if (ptr == IntPtr.Zero)
         {
             return null;
         }
 
-        byte* end = (byte*)ptr;
+        var end = (byte*)ptr;
         while (*end != 0)
         {
             end++;
         }
 
-        string result = new string(
+        var result = new string(
             (sbyte*)ptr,
             0,
             (int)(end - (byte*)ptr),
@@ -186,7 +186,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetError();
     public static string SDL_GetError()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetError());
+        return DecodeFromUTF8(INTERNAL_SDL_GetError()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -406,7 +406,7 @@ public static unsafe class SDL
     {
         var nameUTF8 = EncodeAsUTF8(name);
         var default_valueUTF8 = EncodeAsUTF8(default_value);
-        var result = DecodeFromUTF8(INTERNAL_SDL_GetStringProperty(props, nameUTF8, default_valueUTF8));
+        var result = DecodeFromUTF8(INTERNAL_SDL_GetStringProperty(props, nameUTF8, default_valueUTF8)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
 
         SDL_free((IntPtr)nameUTF8);
         SDL_free((IntPtr)default_valueUTF8);
@@ -687,14 +687,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetAudioDriver(int index);
     public static string SDL_GetAudioDriver(int index)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetAudioDriver(index));
+        return DecodeFromUTF8(INTERNAL_SDL_GetAudioDriver(index)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentAudioDriver", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetCurrentAudioDriver();
     public static string SDL_GetCurrentAudioDriver()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentAudioDriver());
+        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentAudioDriver()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -707,7 +707,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetAudioDeviceName(uint devid);
     public static string SDL_GetAudioDeviceName(uint devid)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetAudioDeviceName(devid));
+        return DecodeFromUTF8(INTERNAL_SDL_GetAudioDeviceName(devid)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -863,7 +863,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetAudioFormatName(SDL_AudioFormat format);
     public static string SDL_GetAudioFormatName(SDL_AudioFormat format)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetAudioFormatName(format));
+        return DecodeFromUTF8(INTERNAL_SDL_GetAudioFormatName(format)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1186,7 +1186,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetPixelFormatName(SDL_PixelFormat format);
     public static string SDL_GetPixelFormatName(SDL_PixelFormat format)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetPixelFormatName(format));
+        return DecodeFromUTF8(INTERNAL_SDL_GetPixelFormatName(format)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1558,14 +1558,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetCameraDriver(int index);
     public static string SDL_GetCameraDriver(int index)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetCameraDriver(index));
+        return DecodeFromUTF8(INTERNAL_SDL_GetCameraDriver(index)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentCameraDriver", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetCurrentCameraDriver();
     public static string SDL_GetCurrentCameraDriver()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentCameraDriver());
+        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentCameraDriver()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1578,7 +1578,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetCameraName(uint instance_id);
     public static string SDL_GetCameraName(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetCameraName(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetCameraName(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1625,7 +1625,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetClipboardText();
     public static string SDL_GetClipboardText()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetClipboardText());
+        return DecodeFromUTF8(INTERNAL_SDL_GetClipboardText()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1646,7 +1646,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetPrimarySelectionText();
     public static string SDL_GetPrimarySelectionText()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetPrimarySelectionText());
+        return DecodeFromUTF8(INTERNAL_SDL_GetPrimarySelectionText()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1883,14 +1883,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetVideoDriver(int index);
     public static string SDL_GetVideoDriver(int index)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetVideoDriver(index));
+        return DecodeFromUTF8(INTERNAL_SDL_GetVideoDriver(index)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentVideoDriver", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetCurrentVideoDriver();
     public static string SDL_GetCurrentVideoDriver()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentVideoDriver());
+        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentVideoDriver()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1909,7 +1909,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetDisplayName(uint displayID);
     public static string SDL_GetDisplayName(uint displayID)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetDisplayName(displayID));
+        return DecodeFromUTF8(INTERNAL_SDL_GetDisplayName(displayID)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2016,7 +2016,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetWindowTitle(IntPtr window);
     public static string SDL_GetWindowTitle(IntPtr window)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetWindowTitle(window));
+        return DecodeFromUTF8(INTERNAL_SDL_GetWindowTitle(window)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2406,7 +2406,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetSensorNameForID(uint instance_id);
     public static string SDL_GetSensorNameForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetSensorNameForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetSensorNameForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2428,7 +2428,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetSensorName(IntPtr sensor);
     public static string SDL_GetSensorName(IntPtr sensor)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetSensorName(sensor));
+        return DecodeFromUTF8(INTERNAL_SDL_GetSensorName(sensor)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2489,14 +2489,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetJoystickNameForID(uint instance_id);
     public static string SDL_GetJoystickNameForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickNameForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickNameForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetJoystickPathForID", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetJoystickPathForID(uint instance_id);
     public static string SDL_GetJoystickPathForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickPathForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickPathForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2608,14 +2608,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetJoystickName(IntPtr joystick);
     public static string SDL_GetJoystickName(IntPtr joystick)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickName(joystick));
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickName(joystick)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetJoystickPath", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetJoystickPath(IntPtr joystick);
     public static string SDL_GetJoystickPath(IntPtr joystick)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickPath(joystick));
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickPath(joystick)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2643,7 +2643,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetJoystickSerial(IntPtr joystick);
     public static string SDL_GetJoystickSerial(IntPtr joystick)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickSerial(joystick));
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickSerial(joystick)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2875,14 +2875,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadMappingForGUID(SDL_GUID guid);
     public static string SDL_GetGamepadMappingForGUID(SDL_GUID guid)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMappingForGUID(guid));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMappingForGUID(guid), shouldFree: true);
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadMapping", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetGamepadMapping(IntPtr gamepad);
     public static string SDL_GetGamepadMapping(IntPtr gamepad)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMapping(gamepad));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMapping(gamepad)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_SetGamepadMapping", CallingConvention = CallingConvention.Cdecl)]
@@ -2909,14 +2909,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadNameForID(uint instance_id);
     public static string SDL_GetGamepadNameForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadNameForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadNameForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadPathForID", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetGamepadPathForID(uint instance_id);
     public static string SDL_GetGamepadPathForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadPathForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadPathForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2944,7 +2944,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadMappingForID(uint instance_id);
     public static string SDL_GetGamepadMappingForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMappingForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMappingForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2966,14 +2966,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadName(IntPtr gamepad);
     public static string SDL_GetGamepadName(IntPtr gamepad)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadName(gamepad));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadName(gamepad)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadPath", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetGamepadPath(IntPtr gamepad);
     public static string SDL_GetGamepadPath(IntPtr gamepad)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadPath(gamepad));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadPath(gamepad)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3004,7 +3004,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadSerial(IntPtr gamepad);
     public static string SDL_GetGamepadSerial(IntPtr gamepad)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadSerial(gamepad));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadSerial(gamepad)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3049,7 +3049,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadStringForType(SDL_GamepadType type);
     public static string SDL_GetGamepadStringForType(SDL_GamepadType type)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForType(type));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForType(type)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadAxisFromString", CallingConvention = CallingConvention.Cdecl)]
@@ -3067,7 +3067,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis);
     public static string SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForAxis(axis));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForAxis(axis)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3091,7 +3091,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadStringForButton(SDL_GamepadButton button);
     public static string SDL_GetGamepadStringForButton(SDL_GamepadButton button)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForButton(button));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForButton(button)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3149,14 +3149,14 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForButton(IntPtr gamepad, SDL_GamepadButton button);
     public static string SDL_GetGamepadAppleSFSymbolsNameForButton(IntPtr gamepad, SDL_GamepadButton button)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForButton(gamepad, button));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForButton(gamepad, button)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadAppleSFSymbolsNameForAxis", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis);
     public static string SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForAxis(gamepad, axis));
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForAxis(gamepad, axis)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     // ../SDL3/SDL_scancode.h
@@ -3428,7 +3428,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetKeyboardNameForID(uint instance_id);
     public static string SDL_GetKeyboardNameForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetKeyboardNameForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetKeyboardNameForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3467,7 +3467,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetScancodeName(SDL_Scancode scancode);
     public static string SDL_GetScancodeName(SDL_Scancode scancode)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetScancodeName(scancode));
+        return DecodeFromUTF8(INTERNAL_SDL_GetScancodeName(scancode)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetScancodeFromName", CallingConvention = CallingConvention.Cdecl)]
@@ -3485,7 +3485,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetKeyName(uint key);
     public static string SDL_GetKeyName(uint key)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetKeyName(key));
+        return DecodeFromUTF8(INTERNAL_SDL_GetKeyName(key)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetKeyFromName", CallingConvention = CallingConvention.Cdecl)]
@@ -3600,7 +3600,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetMouseNameForID(uint instance_id);
     public static string SDL_GetMouseNameForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetMouseNameForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetMouseNameForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3712,7 +3712,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetTouchDeviceName(ulong touchID);
     public static string SDL_GetTouchDeviceName(ulong touchID)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetTouchDeviceName(touchID));
+        return DecodeFromUTF8(INTERNAL_SDL_GetTouchDeviceName(touchID)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -4699,7 +4699,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetBasePath();
     public static string SDL_GetBasePath()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetBasePath());
+        return DecodeFromUTF8(INTERNAL_SDL_GetBasePath()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetPrefPath", CallingConvention = CallingConvention.Cdecl)]
@@ -4708,7 +4708,7 @@ public static unsafe class SDL
     {
         var orgUTF8 = EncodeAsUTF8(org);
         var appUTF8 = EncodeAsUTF8(app);
-        var result = DecodeFromUTF8(INTERNAL_SDL_GetPrefPath(orgUTF8, appUTF8));
+        var result = DecodeFromUTF8(INTERNAL_SDL_GetPrefPath(orgUTF8, appUTF8)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
 
         SDL_free((IntPtr)orgUTF8);
         SDL_free((IntPtr)appUTF8);
@@ -4735,7 +4735,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetUserFolder(SDL_Folder folder);
     public static string SDL_GetUserFolder(SDL_Folder folder)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetUserFolder(folder));
+        return DecodeFromUTF8(INTERNAL_SDL_GetUserFolder(folder)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     public enum SDL_PathType
@@ -5980,7 +5980,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetHapticNameForID(uint instance_id);
     public static string SDL_GetHapticNameForID(uint instance_id)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetHapticNameForID(instance_id));
+        return DecodeFromUTF8(INTERNAL_SDL_GetHapticNameForID(instance_id)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5996,7 +5996,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetHapticName(IntPtr haptic);
     public static string SDL_GetHapticName(IntPtr haptic)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetHapticName(haptic));
+        return DecodeFromUTF8(INTERNAL_SDL_GetHapticName(haptic)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -6499,7 +6499,7 @@ public static unsafe class SDL
     public static string SDL_GetHint(string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-        var result = DecodeFromUTF8(INTERNAL_SDL_GetHint(nameUTF8));
+        var result = DecodeFromUTF8(INTERNAL_SDL_GetHint(nameUTF8)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
 
         SDL_free((IntPtr)nameUTF8);
         return result;
@@ -6623,7 +6623,7 @@ public static unsafe class SDL
     public static string SDL_GetAppMetadataProperty(string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-        var result = DecodeFromUTF8(INTERNAL_SDL_GetAppMetadataProperty(nameUTF8));
+        var result = DecodeFromUTF8(INTERNAL_SDL_GetAppMetadataProperty(nameUTF8)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
 
         SDL_free((IntPtr)nameUTF8);
         return result;
@@ -6930,7 +6930,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetPlatform();
     public static string SDL_GetPlatform()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetPlatform());
+        return DecodeFromUTF8(INTERNAL_SDL_GetPlatform()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     // ../SDL3/SDL_render.h
@@ -6966,7 +6966,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetRenderDriver(int index);
     public static string SDL_GetRenderDriver(int index)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetRenderDriver(index));
+        return DecodeFromUTF8(INTERNAL_SDL_GetRenderDriver(index)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_CreateWindowAndRenderer", CallingConvention = CallingConvention.Cdecl)]
@@ -7007,7 +7007,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetRendererName(IntPtr renderer);
     public static string SDL_GetRendererName(IntPtr renderer)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetRendererName(renderer));
+        return DecodeFromUTF8(INTERNAL_SDL_GetRendererName(renderer)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -7489,7 +7489,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetThreadName(IntPtr thread);
     public static string SDL_GetThreadName(IntPtr thread)
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetThreadName(thread));
+        return DecodeFromUTF8(INTERNAL_SDL_GetThreadName(thread)); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -7619,7 +7619,7 @@ public static unsafe class SDL
     private static extern IntPtr INTERNAL_SDL_GetRevision();
     public static string SDL_GetRevision()
     {
-        return DecodeFromUTF8(INTERNAL_SDL_GetRevision());
+        return DecodeFromUTF8(INTERNAL_SDL_GetRevision()); // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER
     }
 
 
