@@ -294,6 +294,25 @@ internal static partial class Program
                         );
                     }
                 }
+                else if (entry.Name == "SDL_Keycode")
+                {
+                    var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
+                    definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
+                    definitions.Append("SDLK_SCANCODE_MASK = 0x4000_0000,\n");
+
+                    IEnumerable<string> hintsFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, "include/SDL3/SDL_keycode.h"));
+
+                    foreach (var line in hintsFileLines)
+                    {
+                        var match = KeycodeDefinitionRegex().Match(line);
+                        if (match.Success)
+                        {
+                            definitions.Append($"{match.Groups["keycodeName"].Value} = {match.Groups["value"].Value},\n");
+                        }
+                    }
+
+                    definitions.Append("}\n\n");
+                }
                 else if ((entry.Name != null) && (entry.Name.EndsWith("Flags") || (entry.Name == "SDL_Keymod")))
                 {
                     definitions.Append("[Flags]\n");
@@ -950,6 +969,6 @@ public static unsafe class SDL
     [GeneratedRegex(@"#define\s+(?<hintName>SDL_HINT_[A-Z0-9_]+)\s+""(?<value>.+)""")]
     private static partial Regex HintDefinitionRegex();
 
-    [GeneratedRegex(@"#define\s+(?<hintName>SDLK_[A-Z0-9_]+)\s+(?<value>0x.+u)")]
+    [GeneratedRegex(@"#define\s+(?<keycodeName>SDLK_[A-Z0-9_]+)\s+(?<value>0x[0-9a-f]+u)")]
     private static partial Regex KeycodeDefinitionRegex();
 }
