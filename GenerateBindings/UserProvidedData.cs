@@ -327,13 +327,13 @@ internal static class UserProvidedData
         { ("SDL_CreateColorCursor", "surface"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_mouse.h:461:42
         { ("SDL_GetTouchDevices", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_touch.h:93:43
         { ("SDL_GetTouchFingers", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_touch.h:129:43
-        { ("SDL_PeepEvents", "events"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_events.h:1045:33
-        { ("SDL_PollEvent", "event"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_events.h:1177:38
-        { ("SDL_WaitEvent", "event"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_events.h:1199:38
-        { ("SDL_WaitEventTimeout", "event"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_events.h:1227:38
-        { ("SDL_PushEvent", "event"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_events.h:1261:38
-        { ("SDL_GetEventFilter", "userdata"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_events.h:1347:38
-        { ("SDL_GetWindowFromEvent", "event"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_events.h:1464:42
+        { ("SDL_PeepEvents", "events"), PointerParameterIntent.Array }, // ../SDL3/SDL_events.h:1045:33
+        { ("SDL_PollEvent", "event"), PointerParameterIntent.Ref }, // ../SDL3/SDL_events.h:1177:38
+        { ("SDL_WaitEvent", "event"), PointerParameterIntent.Ref }, // ../SDL3/SDL_events.h:1199:38
+        { ("SDL_WaitEventTimeout", "event"), PointerParameterIntent.Ref }, // ../SDL3/SDL_events.h:1227:38
+        { ("SDL_PushEvent", "event"), PointerParameterIntent.Ref }, // ../SDL3/SDL_events.h:1261:38
+        { ("SDL_GetEventFilter", "userdata"), PointerParameterIntent.Out }, // ../SDL3/SDL_events.h:1347:38
+        { ("SDL_GetWindowFromEvent", "event"), PointerParameterIntent.Ref }, // ../SDL3/SDL_events.h:1464:42
         { ("SDL_GetPathInfo", "info"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_filesystem.h:345:38
         { ("SDL_GlobDirectory", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_filesystem.h:378:37
         { ("SDL_CreateGPUComputePipeline", "createinfo"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gpu.h:1820:53

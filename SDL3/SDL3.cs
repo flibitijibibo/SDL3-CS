@@ -4637,7 +4637,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int SDL_PeepEvents(ref SDL_Event events, int numevents, SDL_EventAction action, uint minType, uint maxType); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern int SDL_PeepEvents(SDL_Event* events, int numevents, SDL_EventAction action, uint minType, uint maxType);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasEvent(uint type);
@@ -4652,16 +4652,16 @@ public static unsafe class SDL
     public static extern void SDL_FlushEvents(uint minType, uint maxType);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_PollEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern bool SDL_PollEvent(ref SDL_Event @event);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_WaitEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern bool SDL_WaitEvent(ref SDL_Event @event);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_WaitEventTimeout(ref SDL_Event @event, int timeoutMS); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern bool SDL_WaitEventTimeout(ref SDL_Event @event, int timeoutMS);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_PushEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern bool SDL_PushEvent(ref SDL_Event @event);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool SDL_EventFilter(IntPtr userdata, ref SDL_Event @event);
@@ -4670,7 +4670,7 @@ public static unsafe class SDL
     public static extern void SDL_SetEventFilter(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetEventFilter(IntPtr filter, ref IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern bool SDL_GetEventFilter(IntPtr filter, out IntPtr userdata);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_AddEventWatch(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
@@ -4691,7 +4691,7 @@ public static unsafe class SDL
     public static extern uint SDL_RegisterEvents(int numevents);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetWindowFromEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern IntPtr SDL_GetWindowFromEvent(ref SDL_Event @event);
 
     // ../SDL3/SDL_filesystem.h
 
