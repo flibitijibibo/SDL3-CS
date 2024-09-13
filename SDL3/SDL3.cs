@@ -1334,7 +1334,7 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_Surface
     {
-        public uint flags;
+        public SDL_SurfaceFlags flags;
         public SDL_PixelFormat format;
         public int w;
         public int h;
@@ -1970,8 +1970,8 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetWindows(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [DllImport(nativeLibName, EntryPoint = "SDL_CreateWindow", CallingConvention = CallingConvention.Cdecl)]
-    private static extern IntPtr INTERNAL_SDL_CreateWindow(byte* title, int w, int h, ulong flags);
-    public static IntPtr SDL_CreateWindow(string title, int w, int h, ulong flags)
+    private static extern IntPtr INTERNAL_SDL_CreateWindow(byte* title, int w, int h, SDL_WindowFlags flags);
+    public static IntPtr SDL_CreateWindow(string title, int w, int h, SDL_WindowFlags flags)
     {
         var titleUTF8 = EncodeAsUTF8(title);
         var result = INTERNAL_SDL_CreateWindow(titleUTF8, w, h, flags);
@@ -1981,7 +1981,7 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_CreatePopupWindow(IntPtr parent, int offset_x, int offset_y, int w, int h, ulong flags);
+    public static extern IntPtr SDL_CreatePopupWindow(IntPtr parent, int offset_x, int offset_y, int w, int h, SDL_WindowFlags flags);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateWindowWithProperties(uint props);
@@ -1999,7 +1999,7 @@ public static unsafe class SDL
     public static extern uint SDL_GetWindowProperties(IntPtr window);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern ulong SDL_GetWindowFlags(IntPtr window);
+    public static extern SDL_WindowFlags SDL_GetWindowFlags(IntPtr window);
 
     [DllImport(nativeLibName, EntryPoint = "SDL_SetWindowTitle", CallingConvention = CallingConvention.Cdecl)]
     private static extern bool INTERNAL_SDL_SetWindowTitle(IntPtr window, byte* title);
@@ -3607,13 +3607,13 @@ public static unsafe class SDL
     public static extern IntPtr SDL_GetMouseFocus();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint SDL_GetMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern SDL_MouseButtonFlags SDL_GetMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint SDL_GetGlobalMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern SDL_MouseButtonFlags SDL_GetGlobalMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint SDL_GetRelativeMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern SDL_MouseButtonFlags SDL_GetRelativeMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_WarpMouseInWindow(IntPtr window, float x, float y);
@@ -3949,7 +3949,7 @@ public static unsafe class SDL
         public ulong timestamp;
         public uint windowID;
         public uint which;
-        public uint state;
+        public SDL_MouseButtonFlags state;
         public float x;
         public float y;
         public float xrel;
@@ -4184,7 +4184,7 @@ public static unsafe class SDL
         public ulong timestamp;
         public uint windowID;
         public uint which;
-        public uint pen_state;
+        public SDL_PenInputFlags pen_state;
         public float x;
         public float y;
     }
@@ -4197,7 +4197,7 @@ public static unsafe class SDL
         public ulong timestamp;
         public uint windowID;
         public uint which;
-        public uint pen_state;
+        public SDL_PenInputFlags pen_state;
         public float x;
         public float y;
         public bool eraser;
@@ -4212,7 +4212,7 @@ public static unsafe class SDL
         public ulong timestamp;
         public uint windowID;
         public uint which;
-        public uint pen_state;
+        public SDL_PenInputFlags pen_state;
         public float x;
         public float y;
         public byte button;
@@ -4227,7 +4227,7 @@ public static unsafe class SDL
         public ulong timestamp;
         public uint windowID;
         public uint which;
-        public uint pen_state;
+        public SDL_PenInputFlags pen_state;
         public float x;
         public float y;
         public SDL_PenAxis axis;
@@ -4836,8 +4836,8 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GlobDirectory", CallingConvention = CallingConvention.Cdecl)]
-    private static extern IntPtr INTERNAL_SDL_GlobDirectory(byte* path, byte* pattern, uint flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
-    public static IntPtr SDL_GlobDirectory(string path, string pattern, uint flags, ref int count)
+    private static extern IntPtr INTERNAL_SDL_GlobDirectory(byte* path, byte* pattern, SDL_GlobFlags flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static IntPtr SDL_GlobDirectory(string path, string pattern, SDL_GlobFlags flags, ref int count)
     {
         var pathUTF8 = EncodeAsUTF8(path);
         var patternUTF8 = EncodeAsUTF8(pattern);
@@ -5337,7 +5337,7 @@ public static unsafe class SDL
         public SDL_GPUBlendFactor src_alpha_blendfactor;
         public SDL_GPUBlendFactor dst_alpha_blendfactor;
         public SDL_GPUBlendOp alpha_blend_op;
-        public byte color_write_mask;
+        public SDL_GPUColorComponentFlags color_write_mask;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -5360,7 +5360,7 @@ public static unsafe class SDL
     {
         public SDL_GPUTextureType type;
         public SDL_GPUTextureFormat format;
-        public uint usage;
+        public SDL_GPUTextureUsageFlags usage;
         public uint width;
         public uint height;
         public uint layer_count_or_depth;
@@ -5372,7 +5372,7 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_GPUBufferCreateInfo
     {
-        public uint usage;
+        public SDL_GPUBufferUsageFlags usage;
         public uint size;
         public uint props;
     }
@@ -5829,7 +5829,7 @@ public static unsafe class SDL
     public static extern uint SDL_GPUTextureFormatTexelBlockSize(SDL_GPUTextureFormat format);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GPUTextureSupportsFormat(IntPtr device, SDL_GPUTextureFormat format, SDL_GPUTextureType type, uint usage);
+    public static extern bool SDL_GPUTextureSupportsFormat(IntPtr device, SDL_GPUTextureFormat format, SDL_GPUTextureType type, SDL_GPUTextureUsageFlags usage);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GPUTextureSupportsSampleCount(IntPtr device, SDL_GPUTextureFormat format, SDL_GPUSampleCount sample_count);
@@ -6576,16 +6576,16 @@ public static unsafe class SDL
     public delegate void SDL_AppQuit_func(IntPtr appstate);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_Init(uint flags);
+    public static extern bool SDL_Init(SDL_InitFlags flags);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_InitSubSystem(uint flags);
+    public static extern bool SDL_InitSubSystem(SDL_InitFlags flags);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SDL_QuitSubSystem(uint flags);
+    public static extern void SDL_QuitSubSystem(SDL_InitFlags flags);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint SDL_WasInit(uint flags);
+    public static extern SDL_InitFlags SDL_WasInit(SDL_InitFlags flags);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_Quit();
@@ -6839,7 +6839,7 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_MessageBoxButtonData
     {
-        public uint flags;
+        public SDL_MessageBoxButtonFlags flags;
         public int buttonID;
         public char* text;
     }
@@ -6875,7 +6875,7 @@ public static unsafe class SDL
     [StructLayout(LayoutKind.Sequential)]
     public struct SDL_MessageBoxData
     {
-        public uint flags;
+        public SDL_MessageBoxFlags flags;
         public IntPtr window;
         public char* title;
         public char* message;
@@ -6888,8 +6888,8 @@ public static unsafe class SDL
     public static extern bool SDL_ShowMessageBox(ref SDL_MessageBoxData messageboxdata, ref int buttonid); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [DllImport(nativeLibName, EntryPoint = "SDL_ShowSimpleMessageBox", CallingConvention = CallingConvention.Cdecl)]
-    private static extern bool INTERNAL_SDL_ShowSimpleMessageBox(uint flags, byte* title, byte* message, IntPtr window);
-    public static bool SDL_ShowSimpleMessageBox(uint flags, string title, string message, IntPtr window)
+    private static extern bool INTERNAL_SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags flags, byte* title, byte* message, IntPtr window);
+    public static bool SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags flags, string title, string message, IntPtr window)
     {
         var titleUTF8 = EncodeAsUTF8(title);
         var messageUTF8 = EncodeAsUTF8(message);
@@ -6970,8 +6970,8 @@ public static unsafe class SDL
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_CreateWindowAndRenderer", CallingConvention = CallingConvention.Cdecl)]
-    private static extern bool INTERNAL_SDL_CreateWindowAndRenderer(byte* title, int width, int height, ulong window_flags, ref IntPtr window, ref IntPtr renderer); // WARN_UNKNOWN_POINTER_PARAMETER
-    public static bool SDL_CreateWindowAndRenderer(string title, int width, int height, ulong window_flags, ref IntPtr window, ref IntPtr renderer)
+    private static extern bool INTERNAL_SDL_CreateWindowAndRenderer(byte* title, int width, int height, SDL_WindowFlags window_flags, ref IntPtr window, ref IntPtr renderer); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static bool SDL_CreateWindowAndRenderer(string title, int width, int height, SDL_WindowFlags window_flags, ref IntPtr window, ref IntPtr renderer)
     {
         var titleUTF8 = EncodeAsUTF8(title);
         var result = INTERNAL_SDL_CreateWindowAndRenderer(titleUTF8, width, height, window_flags, ref window, ref renderer);
@@ -7411,8 +7411,8 @@ public static unsafe class SDL
     public static extern ulong SDL_GetStorageSpaceRemaining(IntPtr storage);
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GlobStorageDirectory", CallingConvention = CallingConvention.Cdecl)]
-    private static extern IntPtr INTERNAL_SDL_GlobStorageDirectory(IntPtr storage, byte* path, byte* pattern, uint flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
-    public static IntPtr SDL_GlobStorageDirectory(IntPtr storage, string path, string pattern, uint flags, ref int count)
+    private static extern IntPtr INTERNAL_SDL_GlobStorageDirectory(IntPtr storage, byte* path, byte* pattern, SDL_GlobFlags flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static IntPtr SDL_GlobStorageDirectory(IntPtr storage, string path, string pattern, SDL_GlobFlags flags, ref int count)
     {
         var pathUTF8 = EncodeAsUTF8(path);
         var patternUTF8 = EncodeAsUTF8(pattern);
