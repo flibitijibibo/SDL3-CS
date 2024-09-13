@@ -10,16 +10,6 @@ public static unsafe class SDL
 {
     private const string nativeLibName = "SDL3";
 
-    internal static int SizeAsUTF8(string str)
-    {
-        if (str == null)
-        {
-            return 0;
-        }
-
-        return (str.Length * 4) + 1;
-    }
-
     internal static byte* EncodeAsUTF8(string str)
     {
         if (str == null)
@@ -35,6 +25,34 @@ public static unsafe class SDL
         }
 
         return buffer;
+    }
+
+    internal static string DecodeFromUTF8(IntPtr ptr, bool shouldFree = false)
+    {
+        if (ptr == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        byte* end = (byte*)ptr;
+        while (*end != 0)
+        {
+            end++;
+        }
+
+        string result = new string(
+            (sbyte*)ptr,
+            0,
+            (int)(end - (byte*)ptr),
+            System.Text.Encoding.UTF8
+        );
+
+        if (shouldFree)
+        {
+            SDL_free(ptr);
+        }
+
+        return result;
     }
 
     // ../SDL3/SDL_stdinc.h
@@ -74,12 +92,10 @@ public static unsafe class SDL
     {
         var funcUTF8 = EncodeAsUTF8(func);
         var fileUTF8 = EncodeAsUTF8(file);
-
         var result = INTERNAL_SDL_ReportAssertion(ref data, funcUTF8, fileUTF8, line);
 
         SDL_free((IntPtr)funcUTF8);
         SDL_free((IntPtr)fileUTF8);
-
         return result;
     }
 
@@ -157,19 +173,21 @@ public static unsafe class SDL
     public static bool SDL_SetError(string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         var result = INTERNAL_SDL_SetError(fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
         return result;
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_OutOfMemory();
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetError();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetError", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetError();
+    public static string SDL_GetError()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetError());
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ClearError();
@@ -286,11 +304,9 @@ public static unsafe class SDL
     public static bool SDL_SetPointerPropertyWithCleanup(uint props, string name, IntPtr value, /* SDL_CleanupPropertyCallback */ IntPtr cleanup, IntPtr userdata)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_SetPointerPropertyWithCleanup(props, nameUTF8, value, cleanup, userdata);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -299,11 +315,9 @@ public static unsafe class SDL
     public static bool SDL_SetPointerProperty(uint props, string name, IntPtr value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_SetPointerProperty(props, nameUTF8, value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -313,12 +327,10 @@ public static unsafe class SDL
     {
         var nameUTF8 = EncodeAsUTF8(name);
         var valueUTF8 = EncodeAsUTF8(value);
-
         var result = INTERNAL_SDL_SetStringProperty(props, nameUTF8, valueUTF8);
 
         SDL_free((IntPtr)nameUTF8);
         SDL_free((IntPtr)valueUTF8);
-
         return result;
     }
 
@@ -327,11 +339,9 @@ public static unsafe class SDL
     public static bool SDL_SetNumberProperty(uint props, string name, long value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_SetNumberProperty(props, nameUTF8, value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -340,11 +350,9 @@ public static unsafe class SDL
     public static bool SDL_SetFloatProperty(uint props, string name, float value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_SetFloatProperty(props, nameUTF8, value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -353,11 +361,9 @@ public static unsafe class SDL
     public static bool SDL_SetBooleanProperty(uint props, string name, bool value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_SetBooleanProperty(props, nameUTF8, value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -366,11 +372,9 @@ public static unsafe class SDL
     public static bool SDL_HasProperty(uint props, string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_HasProperty(props, nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -379,11 +383,9 @@ public static unsafe class SDL
     public static SDL_PropertyType SDL_GetPropertyType(uint props, string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_GetPropertyType(props, nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -392,26 +394,22 @@ public static unsafe class SDL
     public static IntPtr SDL_GetPointerProperty(uint props, string name, IntPtr default_value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_GetPointerProperty(props, nameUTF8, default_value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetStringProperty", CallingConvention = CallingConvention.Cdecl)]
-    private static extern UTF8_STRING INTERNAL_SDL_GetStringProperty(uint props, byte* name, byte* default_value);
-    public static UTF8_STRING SDL_GetStringProperty(uint props, string name, string default_value)
+    private static extern IntPtr INTERNAL_SDL_GetStringProperty(uint props, byte* name, byte* default_value);
+    public static string SDL_GetStringProperty(uint props, string name, string default_value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
         var default_valueUTF8 = EncodeAsUTF8(default_value);
-
-        var result = INTERNAL_SDL_GetStringProperty(props, nameUTF8, default_valueUTF8);
+        var result = DecodeFromUTF8(INTERNAL_SDL_GetStringProperty(props, nameUTF8, default_valueUTF8));
 
         SDL_free((IntPtr)nameUTF8);
         SDL_free((IntPtr)default_valueUTF8);
-
         return result;
     }
 
@@ -420,11 +418,9 @@ public static unsafe class SDL
     public static long SDL_GetNumberProperty(uint props, string name, long default_value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_GetNumberProperty(props, nameUTF8, default_value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -433,11 +429,9 @@ public static unsafe class SDL
     public static float SDL_GetFloatProperty(uint props, string name, float default_value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_GetFloatProperty(props, nameUTF8, default_value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -446,11 +440,9 @@ public static unsafe class SDL
     public static bool SDL_GetBooleanProperty(uint props, string name, bool default_value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_GetBooleanProperty(props, nameUTF8, default_value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -459,11 +451,9 @@ public static unsafe class SDL
     public static bool SDL_ClearProperty(uint props, string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_ClearProperty(props, nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -512,12 +502,10 @@ public static unsafe class SDL
     {
         var fileUTF8 = EncodeAsUTF8(file);
         var modeUTF8 = EncodeAsUTF8(mode);
-
         var result = INTERNAL_SDL_IOFromFile(fileUTF8, modeUTF8);
 
         SDL_free((IntPtr)fileUTF8);
         SDL_free((IntPtr)modeUTF8);
-
         return result;
     }
 
@@ -562,11 +550,9 @@ public static unsafe class SDL
     public static UIntPtr SDL_IOprintf(IntPtr context, string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         var result = INTERNAL_SDL_IOprintf(context, fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
         return result;
     }
 
@@ -578,11 +564,9 @@ public static unsafe class SDL
     public static IntPtr SDL_LoadFile(string file, ref UIntPtr datasize)
     {
         var fileUTF8 = EncodeAsUTF8(file);
-
         var result = INTERNAL_SDL_LoadFile(fileUTF8, ref datasize);
 
         SDL_free((IntPtr)fileUTF8);
-
         return result;
     }
 
@@ -699,11 +683,19 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetNumAudioDrivers();
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetAudioDriver(int index);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDriver", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetAudioDriver(int index);
+    public static string SDL_GetAudioDriver(int index)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetAudioDriver(index));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetCurrentAudioDriver();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentAudioDriver", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetCurrentAudioDriver();
+    public static string SDL_GetCurrentAudioDriver()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentAudioDriver());
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAudioPlaybackDevices(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
@@ -711,8 +703,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetAudioRecordingDevices(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetAudioDeviceName(uint devid);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDeviceName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetAudioDeviceName(uint devid);
+    public static string SDL_GetAudioDeviceName(uint devid)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetAudioDeviceName(devid));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetAudioDeviceFormat(uint devid, ref SDL_AudioSpec spec, ref int sample_frames); // WARN_UNKNOWN_POINTER_PARAMETER
@@ -851,11 +847,9 @@ public static unsafe class SDL
     public static bool SDL_LoadWAV(string path, ref SDL_AudioSpec spec, ref IntPtr audio_buf, ref uint audio_len)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_LoadWAV(pathUTF8, ref spec, ref audio_buf, ref audio_len);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -865,8 +859,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_ConvertAudioSamples(ref SDL_AudioSpec src_spec, ref byte src_data, int src_len, ref SDL_AudioSpec dst_spec, ref IntPtr dst_data, ref int dst_len); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetAudioFormatName(SDL_AudioFormat format);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetAudioFormatName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetAudioFormatName(SDL_AudioFormat format);
+    public static string SDL_GetAudioFormatName(SDL_AudioFormat format)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetAudioFormatName(format));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetSilenceValueForFormat(SDL_AudioFormat format);
@@ -1184,8 +1182,12 @@ public static unsafe class SDL
         public byte Ashift;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetPixelFormatName(SDL_PixelFormat format);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetPixelFormatName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetPixelFormatName(SDL_PixelFormat format);
+    public static string SDL_GetPixelFormatName(SDL_PixelFormat format)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetPixelFormatName(format));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetMasksForPixelFormat(SDL_PixelFormat format, ref int bpp, ref uint Rmask, ref uint Gmask, ref uint Bmask, ref uint Amask); // WARN_UNKNOWN_POINTER_PARAMETER
@@ -1395,11 +1397,9 @@ public static unsafe class SDL
     public static IntPtr SDL_LoadBMP(string file)
     {
         var fileUTF8 = EncodeAsUTF8(file);
-
         var result = INTERNAL_SDL_LoadBMP(fileUTF8);
 
         SDL_free((IntPtr)fileUTF8);
-
         return result;
     }
 
@@ -1411,11 +1411,9 @@ public static unsafe class SDL
     public static bool SDL_SaveBMP(ref SDL_Surface surface, string file)
     {
         var fileUTF8 = EncodeAsUTF8(file);
-
         var result = INTERNAL_SDL_SaveBMP(ref surface, fileUTF8);
 
         SDL_free((IntPtr)fileUTF8);
-
         return result;
     }
 
@@ -1556,11 +1554,19 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetNumCameraDrivers();
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetCameraDriver(int index);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetCameraDriver", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetCameraDriver(int index);
+    public static string SDL_GetCameraDriver(int index)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetCameraDriver(index));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetCurrentCameraDriver();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentCameraDriver", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetCurrentCameraDriver();
+    public static string SDL_GetCurrentCameraDriver()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentCameraDriver());
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetCameras(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
@@ -1568,8 +1574,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetCameraSupportedFormats(uint devid, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetCameraName(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetCameraName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetCameraName(uint instance_id);
+    public static string SDL_GetCameraName(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetCameraName(instance_id));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_CameraPosition SDL_GetCameraPosition(uint instance_id);
@@ -1605,16 +1615,18 @@ public static unsafe class SDL
     public static bool SDL_SetClipboardText(string text)
     {
         var textUTF8 = EncodeAsUTF8(text);
-
         var result = INTERNAL_SDL_SetClipboardText(textUTF8);
 
         SDL_free((IntPtr)textUTF8);
-
         return result;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetClipboardText();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetClipboardText", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetClipboardText();
+    public static string SDL_GetClipboardText()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetClipboardText());
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasClipboardText();
@@ -1624,16 +1636,18 @@ public static unsafe class SDL
     public static bool SDL_SetPrimarySelectionText(string text)
     {
         var textUTF8 = EncodeAsUTF8(text);
-
         var result = INTERNAL_SDL_SetPrimarySelectionText(textUTF8);
 
         SDL_free((IntPtr)textUTF8);
-
         return result;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetPrimarySelectionText();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetPrimarySelectionText", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetPrimarySelectionText();
+    public static string SDL_GetPrimarySelectionText()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetPrimarySelectionText());
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_HasPrimarySelectionText();
@@ -1655,11 +1669,9 @@ public static unsafe class SDL
     public static IntPtr SDL_GetClipboardData(string mime_type, ref UIntPtr size)
     {
         var mime_typeUTF8 = EncodeAsUTF8(mime_type);
-
         var result = INTERNAL_SDL_GetClipboardData(mime_typeUTF8, ref size);
 
         SDL_free((IntPtr)mime_typeUTF8);
-
         return result;
     }
 
@@ -1668,11 +1680,9 @@ public static unsafe class SDL
     public static bool SDL_HasClipboardData(string mime_type)
     {
         var mime_typeUTF8 = EncodeAsUTF8(mime_type);
-
         var result = INTERNAL_SDL_HasClipboardData(mime_typeUTF8);
 
         SDL_free((IntPtr)mime_typeUTF8);
-
         return result;
     }
 
@@ -1869,11 +1879,19 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetNumVideoDrivers();
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetVideoDriver(int index);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetVideoDriver", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetVideoDriver(int index);
+    public static string SDL_GetVideoDriver(int index)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetVideoDriver(index));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetCurrentVideoDriver();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentVideoDriver", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetCurrentVideoDriver();
+    public static string SDL_GetCurrentVideoDriver()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetCurrentVideoDriver());
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_SystemTheme SDL_GetSystemTheme();
@@ -1887,8 +1905,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_GetDisplayProperties(uint displayID);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetDisplayName(uint displayID);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetDisplayName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetDisplayName(uint displayID);
+    public static string SDL_GetDisplayName(uint displayID)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetDisplayName(displayID));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GetDisplayBounds(uint displayID, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
@@ -1952,11 +1974,9 @@ public static unsafe class SDL
     public static IntPtr SDL_CreateWindow(string title, int w, int h, ulong flags)
     {
         var titleUTF8 = EncodeAsUTF8(title);
-
         var result = INTERNAL_SDL_CreateWindow(titleUTF8, w, h, flags);
 
         SDL_free((IntPtr)titleUTF8);
-
         return result;
     }
 
@@ -1986,16 +2006,18 @@ public static unsafe class SDL
     public static bool SDL_SetWindowTitle(IntPtr window, string title)
     {
         var titleUTF8 = EncodeAsUTF8(title);
-
         var result = INTERNAL_SDL_SetWindowTitle(window, titleUTF8);
 
         SDL_free((IntPtr)titleUTF8);
-
         return result;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetWindowTitle(IntPtr window);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetWindowTitle", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetWindowTitle(IntPtr window);
+    public static string SDL_GetWindowTitle(IntPtr window)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetWindowTitle(window));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_SetWindowIcon(IntPtr window, ref SDL_Surface icon); // WARN_UNKNOWN_POINTER_PARAMETER
@@ -2175,11 +2197,9 @@ public static unsafe class SDL
     public static bool SDL_GL_LoadLibrary(string path)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_GL_LoadLibrary(pathUTF8);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -2188,11 +2208,9 @@ public static unsafe class SDL
     public static IntPtr SDL_GL_GetProcAddress(string proc)
     {
         var procUTF8 = EncodeAsUTF8(proc);
-
         var result = INTERNAL_SDL_GL_GetProcAddress(procUTF8);
 
         SDL_free((IntPtr)procUTF8);
-
         return result;
     }
 
@@ -2201,11 +2219,9 @@ public static unsafe class SDL
     public static IntPtr SDL_EGL_GetProcAddress(string proc)
     {
         var procUTF8 = EncodeAsUTF8(proc);
-
         var result = INTERNAL_SDL_EGL_GetProcAddress(procUTF8);
 
         SDL_free((IntPtr)procUTF8);
-
         return result;
     }
 
@@ -2217,11 +2233,9 @@ public static unsafe class SDL
     public static bool SDL_GL_ExtensionSupported(string extension)
     {
         var extensionUTF8 = EncodeAsUTF8(extension);
-
         var result = INTERNAL_SDL_GL_ExtensionSupported(extensionUTF8);
 
         SDL_free((IntPtr)extensionUTF8);
-
         return result;
     }
 
@@ -2287,11 +2301,9 @@ public static unsafe class SDL
     public static void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, string default_location, bool allow_many)
     {
         var default_locationUTF8 = EncodeAsUTF8(default_location);
-
         INTERNAL_SDL_ShowOpenFileDialog(callback, userdata, window, ref filters, nfilters, default_locationUTF8, allow_many);
 
         SDL_free((IntPtr)default_locationUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_ShowSaveFileDialog", CallingConvention = CallingConvention.Cdecl)]
@@ -2299,11 +2311,9 @@ public static unsafe class SDL
     public static void SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, string default_location)
     {
         var default_locationUTF8 = EncodeAsUTF8(default_location);
-
         INTERNAL_SDL_ShowSaveFileDialog(callback, userdata, window, ref filters, nfilters, default_locationUTF8);
 
         SDL_free((IntPtr)default_locationUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_ShowOpenFolderDialog", CallingConvention = CallingConvention.Cdecl)]
@@ -2311,11 +2321,9 @@ public static unsafe class SDL
     public static void SDL_ShowOpenFolderDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, string default_location, bool allow_many)
     {
         var default_locationUTF8 = EncodeAsUTF8(default_location);
-
         INTERNAL_SDL_ShowOpenFolderDialog(callback, userdata, window, default_locationUTF8, allow_many);
 
         SDL_free((IntPtr)default_locationUTF8);
-
     }
 
     // ../SDL3/SDL_guid.h
@@ -2346,11 +2354,9 @@ public static unsafe class SDL
     public static void SDL_GUIDToString(SDL_GUID guid, string pszGUID, int cbGUID)
     {
         var pszGUIDUTF8 = EncodeAsUTF8(pszGUID);
-
         INTERNAL_SDL_GUIDToString(guid, pszGUIDUTF8, cbGUID);
 
         SDL_free((IntPtr)pszGUIDUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_StringToGUID", CallingConvention = CallingConvention.Cdecl)]
@@ -2358,11 +2364,9 @@ public static unsafe class SDL
     public static SDL_GUID SDL_StringToGUID(string pchGUID)
     {
         var pchGUIDUTF8 = EncodeAsUTF8(pchGUID);
-
         var result = INTERNAL_SDL_StringToGUID(pchGUIDUTF8);
 
         SDL_free((IntPtr)pchGUIDUTF8);
-
         return result;
     }
 
@@ -2398,8 +2402,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetSensors(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetSensorNameForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetSensorNameForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetSensorNameForID(uint instance_id);
+    public static string SDL_GetSensorNameForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetSensorNameForID(instance_id));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_SensorType SDL_GetSensorTypeForID(uint instance_id);
@@ -2416,8 +2424,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_GetSensorProperties(IntPtr sensor);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetSensorName(IntPtr sensor);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetSensorName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetSensorName(IntPtr sensor);
+    public static string SDL_GetSensorName(IntPtr sensor)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetSensorName(sensor));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_SensorType SDL_GetSensorType(IntPtr sensor);
@@ -2473,11 +2485,19 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetJoysticks(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetJoystickNameForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetJoystickNameForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetJoystickNameForID(uint instance_id);
+    public static string SDL_GetJoystickNameForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickNameForID(instance_id));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetJoystickPathForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetJoystickPathForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetJoystickPathForID(uint instance_id);
+    public static string SDL_GetJoystickPathForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickPathForID(instance_id));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetJoystickPlayerIndexForID(uint instance_id);
@@ -2584,11 +2604,19 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_GetJoystickProperties(IntPtr joystick);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetJoystickName(IntPtr joystick);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetJoystickName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetJoystickName(IntPtr joystick);
+    public static string SDL_GetJoystickName(IntPtr joystick)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickName(joystick));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetJoystickPath(IntPtr joystick);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetJoystickPath", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetJoystickPath(IntPtr joystick);
+    public static string SDL_GetJoystickPath(IntPtr joystick)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickPath(joystick));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetJoystickPlayerIndex(IntPtr joystick);
@@ -2611,8 +2639,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern ushort SDL_GetJoystickFirmwareVersion(IntPtr joystick);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetJoystickSerial(IntPtr joystick);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetJoystickSerial", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetJoystickSerial(IntPtr joystick);
+    public static string SDL_GetJoystickSerial(IntPtr joystick)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetJoystickSerial(joystick));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_JoystickType SDL_GetJoystickType(IntPtr joystick);
@@ -2813,11 +2845,9 @@ public static unsafe class SDL
     public static int SDL_AddGamepadMapping(string mapping)
     {
         var mappingUTF8 = EncodeAsUTF8(mapping);
-
         var result = INTERNAL_SDL_AddGamepadMapping(mappingUTF8);
 
         SDL_free((IntPtr)mappingUTF8);
-
         return result;
     }
 
@@ -2829,11 +2859,9 @@ public static unsafe class SDL
     public static int SDL_AddGamepadMappingsFromFile(string file)
     {
         var fileUTF8 = EncodeAsUTF8(file);
-
         var result = INTERNAL_SDL_AddGamepadMappingsFromFile(fileUTF8);
 
         SDL_free((IntPtr)fileUTF8);
-
         return result;
     }
 
@@ -2843,22 +2871,28 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetGamepadMappings(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadMappingForGUID(SDL_GUID guid);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadMappingForGUID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadMappingForGUID(SDL_GUID guid);
+    public static string SDL_GetGamepadMappingForGUID(SDL_GUID guid)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMappingForGUID(guid));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadMapping(IntPtr gamepad);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadMapping", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadMapping(IntPtr gamepad);
+    public static string SDL_GetGamepadMapping(IntPtr gamepad)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMapping(gamepad));
+    }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_SetGamepadMapping", CallingConvention = CallingConvention.Cdecl)]
     private static extern bool INTERNAL_SDL_SetGamepadMapping(uint instance_id, byte* mapping);
     public static bool SDL_SetGamepadMapping(uint instance_id, string mapping)
     {
         var mappingUTF8 = EncodeAsUTF8(mapping);
-
         var result = INTERNAL_SDL_SetGamepadMapping(instance_id, mappingUTF8);
 
         SDL_free((IntPtr)mappingUTF8);
-
         return result;
     }
 
@@ -2871,11 +2905,19 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_IsGamepad(uint instance_id);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadNameForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadNameForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadNameForID(uint instance_id);
+    public static string SDL_GetGamepadNameForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadNameForID(instance_id));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadPathForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadPathForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadPathForID(uint instance_id);
+    public static string SDL_GetGamepadPathForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadPathForID(instance_id));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetGamepadPlayerIndexForID(uint instance_id);
@@ -2898,8 +2940,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_GamepadType SDL_GetRealGamepadTypeForID(uint instance_id);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadMappingForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadMappingForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadMappingForID(uint instance_id);
+    public static string SDL_GetGamepadMappingForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMappingForID(instance_id));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenGamepad(uint instance_id);
@@ -2916,11 +2962,19 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_GetGamepadID(IntPtr gamepad);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadName(IntPtr gamepad);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadName(IntPtr gamepad);
+    public static string SDL_GetGamepadName(IntPtr gamepad)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadName(gamepad));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadPath(IntPtr gamepad);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadPath", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadPath(IntPtr gamepad);
+    public static string SDL_GetGamepadPath(IntPtr gamepad)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadPath(gamepad));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_GamepadType SDL_GetGamepadType(IntPtr gamepad);
@@ -2946,8 +3000,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern ushort SDL_GetGamepadFirmwareVersion(IntPtr gamepad);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadSerial(IntPtr gamepad);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadSerial", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadSerial(IntPtr gamepad);
+    public static string SDL_GetGamepadSerial(IntPtr gamepad)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadSerial(gamepad));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern ulong SDL_GetGamepadSteamHandle(IntPtr gamepad);
@@ -2981,32 +3039,36 @@ public static unsafe class SDL
     public static SDL_GamepadType SDL_GetGamepadTypeFromString(string str)
     {
         var strUTF8 = EncodeAsUTF8(str);
-
         var result = INTERNAL_SDL_GetGamepadTypeFromString(strUTF8);
 
         SDL_free((IntPtr)strUTF8);
-
         return result;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadStringForType(SDL_GamepadType type);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadStringForType", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadStringForType(SDL_GamepadType type);
+    public static string SDL_GetGamepadStringForType(SDL_GamepadType type)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForType(type));
+    }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadAxisFromString", CallingConvention = CallingConvention.Cdecl)]
     private static extern SDL_GamepadAxis INTERNAL_SDL_GetGamepadAxisFromString(byte* str);
     public static SDL_GamepadAxis SDL_GetGamepadAxisFromString(string str)
     {
         var strUTF8 = EncodeAsUTF8(str);
-
         var result = INTERNAL_SDL_GetGamepadAxisFromString(strUTF8);
 
         SDL_free((IntPtr)strUTF8);
-
         return result;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadStringForAxis", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis);
+    public static string SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForAxis(axis));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GamepadHasAxis(IntPtr gamepad, SDL_GamepadAxis axis);
@@ -3019,16 +3081,18 @@ public static unsafe class SDL
     public static SDL_GamepadButton SDL_GetGamepadButtonFromString(string str)
     {
         var strUTF8 = EncodeAsUTF8(str);
-
         var result = INTERNAL_SDL_GetGamepadButtonFromString(strUTF8);
 
         SDL_free((IntPtr)strUTF8);
-
         return result;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadStringForButton(SDL_GamepadButton button);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadStringForButton", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadStringForButton(SDL_GamepadButton button);
+    public static string SDL_GetGamepadStringForButton(SDL_GamepadButton button)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForButton(button));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GamepadHasButton(IntPtr gamepad, SDL_GamepadButton button);
@@ -3081,11 +3145,19 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_CloseGamepad(IntPtr gamepad);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadAppleSFSymbolsNameForButton(IntPtr gamepad, SDL_GamepadButton button);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadAppleSFSymbolsNameForButton", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForButton(IntPtr gamepad, SDL_GamepadButton button);
+    public static string SDL_GetGamepadAppleSFSymbolsNameForButton(IntPtr gamepad, SDL_GamepadButton button)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForButton(gamepad, button));
+    }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadAppleSFSymbolsNameForAxis", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis);
+    public static string SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForAxis(gamepad, axis));
+    }
 
     // ../SDL3/SDL_scancode.h
 
@@ -3352,8 +3424,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetKeyboards(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetKeyboardNameForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetKeyboardNameForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetKeyboardNameForID(uint instance_id);
+    public static string SDL_GetKeyboardNameForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetKeyboardNameForID(instance_id));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetKeyboardFocus();
@@ -3381,43 +3457,45 @@ public static unsafe class SDL
     public static bool SDL_SetScancodeName(SDL_Scancode scancode, string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_SetScancodeName(scancode, nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetScancodeName(SDL_Scancode scancode);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetScancodeName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetScancodeName(SDL_Scancode scancode);
+    public static string SDL_GetScancodeName(SDL_Scancode scancode)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetScancodeName(scancode));
+    }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetScancodeFromName", CallingConvention = CallingConvention.Cdecl)]
     private static extern SDL_Scancode INTERNAL_SDL_GetScancodeFromName(byte* name);
     public static SDL_Scancode SDL_GetScancodeFromName(string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_GetScancodeFromName(nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetKeyName(uint key);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetKeyName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetKeyName(uint key);
+    public static string SDL_GetKeyName(uint key)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetKeyName(key));
+    }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetKeyFromName", CallingConvention = CallingConvention.Cdecl)]
     private static extern uint INTERNAL_SDL_GetKeyFromName(byte* name);
     public static uint SDL_GetKeyFromName(string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_GetKeyFromName(nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -3518,8 +3596,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetMice(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetMouseNameForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetMouseNameForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetMouseNameForID(uint instance_id);
+    public static string SDL_GetMouseNameForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetMouseNameForID(instance_id));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetMouseFocus();
@@ -3626,8 +3708,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetTouchDevices(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetTouchDeviceName(ulong touchID);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetTouchDeviceName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetTouchDeviceName(ulong touchID);
+    public static string SDL_GetTouchDeviceName(ulong touchID)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetTouchDeviceName(touchID));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern SDL_TouchDeviceType SDL_GetTouchDeviceType(ulong touchID);
@@ -4609,21 +4695,23 @@ public static unsafe class SDL
 
     // ../SDL3/SDL_filesystem.h
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetBasePath();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetBasePath", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetBasePath();
+    public static string SDL_GetBasePath()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetBasePath());
+    }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetPrefPath", CallingConvention = CallingConvention.Cdecl)]
-    private static extern UTF8_STRING INTERNAL_SDL_GetPrefPath(byte* org, byte* app);
-    public static UTF8_STRING SDL_GetPrefPath(string org, string app)
+    private static extern IntPtr INTERNAL_SDL_GetPrefPath(byte* org, byte* app);
+    public static string SDL_GetPrefPath(string org, string app)
     {
         var orgUTF8 = EncodeAsUTF8(org);
         var appUTF8 = EncodeAsUTF8(app);
-
-        var result = INTERNAL_SDL_GetPrefPath(orgUTF8, appUTF8);
+        var result = DecodeFromUTF8(INTERNAL_SDL_GetPrefPath(orgUTF8, appUTF8));
 
         SDL_free((IntPtr)orgUTF8);
         SDL_free((IntPtr)appUTF8);
-
         return result;
     }
 
@@ -4643,8 +4731,12 @@ public static unsafe class SDL
         SDL_FOLDER_TOTAL = 11,
     }
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetUserFolder(SDL_Folder folder);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetUserFolder", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetUserFolder(SDL_Folder folder);
+    public static string SDL_GetUserFolder(SDL_Folder folder)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetUserFolder(folder));
+    }
 
     public enum SDL_PathType
     {
@@ -4675,11 +4767,9 @@ public static unsafe class SDL
     public static bool SDL_CreateDirectory(string path)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_CreateDirectory(pathUTF8);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -4691,11 +4781,9 @@ public static unsafe class SDL
     public static bool SDL_EnumerateDirectory(string path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_EnumerateDirectory(pathUTF8, callback, userdata);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -4704,11 +4792,9 @@ public static unsafe class SDL
     public static bool SDL_RemovePath(string path)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_RemovePath(pathUTF8);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -4718,12 +4804,10 @@ public static unsafe class SDL
     {
         var oldpathUTF8 = EncodeAsUTF8(oldpath);
         var newpathUTF8 = EncodeAsUTF8(newpath);
-
         var result = INTERNAL_SDL_RenamePath(oldpathUTF8, newpathUTF8);
 
         SDL_free((IntPtr)oldpathUTF8);
         SDL_free((IntPtr)newpathUTF8);
-
         return result;
     }
 
@@ -4733,12 +4817,10 @@ public static unsafe class SDL
     {
         var oldpathUTF8 = EncodeAsUTF8(oldpath);
         var newpathUTF8 = EncodeAsUTF8(newpath);
-
         var result = INTERNAL_SDL_CopyFile(oldpathUTF8, newpathUTF8);
 
         SDL_free((IntPtr)oldpathUTF8);
         SDL_free((IntPtr)newpathUTF8);
-
         return result;
     }
 
@@ -4747,11 +4829,9 @@ public static unsafe class SDL
     public static bool SDL_GetPathInfo(string path, ref SDL_PathInfo info)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_GetPathInfo(pathUTF8, ref info);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -4761,12 +4841,10 @@ public static unsafe class SDL
     {
         var pathUTF8 = EncodeAsUTF8(path);
         var patternUTF8 = EncodeAsUTF8(pattern);
-
         var result = INTERNAL_SDL_GlobDirectory(pathUTF8, patternUTF8, flags, ref count);
 
         SDL_free((IntPtr)pathUTF8);
         SDL_free((IntPtr)patternUTF8);
-
         return result;
     }
 
@@ -5482,11 +5560,9 @@ public static unsafe class SDL
     public static IntPtr SDL_CreateGPUDevice(uint format_flags, bool debug_mode, string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_CreateGPUDevice(format_flags, debug_mode, nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -5525,11 +5601,9 @@ public static unsafe class SDL
     public static void SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, string text)
     {
         var textUTF8 = EncodeAsUTF8(text);
-
         INTERNAL_SDL_SetGPUBufferName(device, buffer, textUTF8);
 
         SDL_free((IntPtr)textUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_SetGPUTextureName", CallingConvention = CallingConvention.Cdecl)]
@@ -5537,11 +5611,9 @@ public static unsafe class SDL
     public static void SDL_SetGPUTextureName(IntPtr device, IntPtr texture, string text)
     {
         var textUTF8 = EncodeAsUTF8(text);
-
         INTERNAL_SDL_SetGPUTextureName(device, texture, textUTF8);
 
         SDL_free((IntPtr)textUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_InsertGPUDebugLabel", CallingConvention = CallingConvention.Cdecl)]
@@ -5549,11 +5621,9 @@ public static unsafe class SDL
     public static void SDL_InsertGPUDebugLabel(IntPtr command_buffer, string text)
     {
         var textUTF8 = EncodeAsUTF8(text);
-
         INTERNAL_SDL_InsertGPUDebugLabel(command_buffer, textUTF8);
 
         SDL_free((IntPtr)textUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_PushGPUDebugGroup", CallingConvention = CallingConvention.Cdecl)]
@@ -5561,11 +5631,9 @@ public static unsafe class SDL
     public static void SDL_PushGPUDebugGroup(IntPtr command_buffer, string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         INTERNAL_SDL_PushGPUDebugGroup(command_buffer, nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5908,8 +5976,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetHaptics(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetHapticNameForID(uint instance_id);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetHapticNameForID", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetHapticNameForID(uint instance_id);
+    public static string SDL_GetHapticNameForID(uint instance_id)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetHapticNameForID(instance_id));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_OpenHaptic(uint instance_id);
@@ -5920,8 +5992,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_GetHapticID(IntPtr haptic);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetHapticName(IntPtr haptic);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetHapticName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetHapticName(IntPtr haptic);
+    public static string SDL_GetHapticName(IntPtr haptic)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetHapticName(haptic));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_IsMouseHaptic();
@@ -6049,11 +6125,9 @@ public static unsafe class SDL
     public static IntPtr SDL_hid_open(ushort vendor_id, ushort product_id, string serial_number)
     {
         var serial_numberUTF8 = EncodeAsUTF8(serial_number);
-
         var result = INTERNAL_SDL_hid_open(vendor_id, product_id, serial_numberUTF8);
 
         SDL_free((IntPtr)serial_numberUTF8);
-
         return result;
     }
 
@@ -6062,11 +6136,9 @@ public static unsafe class SDL
     public static IntPtr SDL_hid_open_path(string path)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_hid_open_path(pathUTF8);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -6099,11 +6171,9 @@ public static unsafe class SDL
     public static int SDL_hid_get_manufacturer_string(IntPtr dev, string @string, UIntPtr maxlen)
     {
         var @stringUTF8 = EncodeAsUTF8(@string);
-
         var result = INTERNAL_SDL_hid_get_manufacturer_string(dev, @stringUTF8, maxlen);
 
         SDL_free((IntPtr)@stringUTF8);
-
         return result;
     }
 
@@ -6112,11 +6182,9 @@ public static unsafe class SDL
     public static int SDL_hid_get_product_string(IntPtr dev, string @string, UIntPtr maxlen)
     {
         var @stringUTF8 = EncodeAsUTF8(@string);
-
         var result = INTERNAL_SDL_hid_get_product_string(dev, @stringUTF8, maxlen);
 
         SDL_free((IntPtr)@stringUTF8);
-
         return result;
     }
 
@@ -6125,11 +6193,9 @@ public static unsafe class SDL
     public static int SDL_hid_get_serial_number_string(IntPtr dev, string @string, UIntPtr maxlen)
     {
         var @stringUTF8 = EncodeAsUTF8(@string);
-
         var result = INTERNAL_SDL_hid_get_serial_number_string(dev, @stringUTF8, maxlen);
 
         SDL_free((IntPtr)@stringUTF8);
-
         return result;
     }
 
@@ -6138,11 +6204,9 @@ public static unsafe class SDL
     public static int SDL_hid_get_indexed_string(IntPtr dev, int string_index, string @string, UIntPtr maxlen)
     {
         var @stringUTF8 = EncodeAsUTF8(@string);
-
         var result = INTERNAL_SDL_hid_get_indexed_string(dev, string_index, @stringUTF8, maxlen);
 
         SDL_free((IntPtr)@stringUTF8);
-
         return result;
     }
 
@@ -6396,12 +6460,10 @@ public static unsafe class SDL
     {
         var nameUTF8 = EncodeAsUTF8(name);
         var valueUTF8 = EncodeAsUTF8(value);
-
         var result = INTERNAL_SDL_SetHintWithPriority(nameUTF8, valueUTF8, priority);
 
         SDL_free((IntPtr)nameUTF8);
         SDL_free((IntPtr)valueUTF8);
-
         return result;
     }
 
@@ -6411,12 +6473,10 @@ public static unsafe class SDL
     {
         var nameUTF8 = EncodeAsUTF8(name);
         var valueUTF8 = EncodeAsUTF8(value);
-
         var result = INTERNAL_SDL_SetHint(nameUTF8, valueUTF8);
 
         SDL_free((IntPtr)nameUTF8);
         SDL_free((IntPtr)valueUTF8);
-
         return result;
     }
 
@@ -6425,11 +6485,9 @@ public static unsafe class SDL
     public static bool SDL_ResetHint(string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_ResetHint(nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -6437,15 +6495,13 @@ public static unsafe class SDL
     public static extern void SDL_ResetHints();
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetHint", CallingConvention = CallingConvention.Cdecl)]
-    private static extern UTF8_STRING INTERNAL_SDL_GetHint(byte* name);
-    public static UTF8_STRING SDL_GetHint(string name)
+    private static extern IntPtr INTERNAL_SDL_GetHint(byte* name);
+    public static string SDL_GetHint(string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
-        var result = INTERNAL_SDL_GetHint(nameUTF8);
+        var result = DecodeFromUTF8(INTERNAL_SDL_GetHint(nameUTF8));
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -6454,11 +6510,9 @@ public static unsafe class SDL
     public static bool SDL_GetHintBoolean(string name, bool default_value)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_GetHintBoolean(nameUTF8, default_value);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -6470,11 +6524,9 @@ public static unsafe class SDL
     public static bool SDL_AddHintCallback(string name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_AddHintCallback(nameUTF8, callback, userdata);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -6483,11 +6535,9 @@ public static unsafe class SDL
     public static void SDL_RemoveHintCallback(string name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         INTERNAL_SDL_RemoveHintCallback(nameUTF8, callback, userdata);
 
         SDL_free((IntPtr)nameUTF8);
-
     }
 
     // ../SDL3/SDL_init.h
@@ -6547,13 +6597,11 @@ public static unsafe class SDL
         var appnameUTF8 = EncodeAsUTF8(appname);
         var appversionUTF8 = EncodeAsUTF8(appversion);
         var appidentifierUTF8 = EncodeAsUTF8(appidentifier);
-
         var result = INTERNAL_SDL_SetAppMetadata(appnameUTF8, appversionUTF8, appidentifierUTF8);
 
         SDL_free((IntPtr)appnameUTF8);
         SDL_free((IntPtr)appversionUTF8);
         SDL_free((IntPtr)appidentifierUTF8);
-
         return result;
     }
 
@@ -6563,25 +6611,21 @@ public static unsafe class SDL
     {
         var nameUTF8 = EncodeAsUTF8(name);
         var valueUTF8 = EncodeAsUTF8(value);
-
         var result = INTERNAL_SDL_SetAppMetadataProperty(nameUTF8, valueUTF8);
 
         SDL_free((IntPtr)nameUTF8);
         SDL_free((IntPtr)valueUTF8);
-
         return result;
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetAppMetadataProperty", CallingConvention = CallingConvention.Cdecl)]
-    private static extern UTF8_STRING INTERNAL_SDL_GetAppMetadataProperty(byte* name);
-    public static UTF8_STRING SDL_GetAppMetadataProperty(string name)
+    private static extern IntPtr INTERNAL_SDL_GetAppMetadataProperty(byte* name);
+    public static string SDL_GetAppMetadataProperty(string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
-        var result = INTERNAL_SDL_GetAppMetadataProperty(nameUTF8);
+        var result = DecodeFromUTF8(INTERNAL_SDL_GetAppMetadataProperty(nameUTF8));
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -6592,11 +6636,9 @@ public static unsafe class SDL
     public static IntPtr SDL_LoadObject(string sofile)
     {
         var sofileUTF8 = EncodeAsUTF8(sofile);
-
         var result = INTERNAL_SDL_LoadObject(sofileUTF8);
 
         SDL_free((IntPtr)sofileUTF8);
-
         return result;
     }
 
@@ -6605,11 +6647,9 @@ public static unsafe class SDL
     public static IntPtr SDL_LoadFunction(IntPtr handle, string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_LoadFunction(handle, nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -6682,11 +6722,9 @@ public static unsafe class SDL
     public static bool SDL_SetLogPriorityPrefix(SDL_LogPriority priority, string prefix)
     {
         var prefixUTF8 = EncodeAsUTF8(prefix);
-
         var result = INTERNAL_SDL_SetLogPriorityPrefix(priority, prefixUTF8);
 
         SDL_free((IntPtr)prefixUTF8);
-
         return result;
     }
 
@@ -6695,11 +6733,9 @@ public static unsafe class SDL
     public static void SDL_Log(string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         INTERNAL_SDL_Log(fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_LogVerbose", CallingConvention = CallingConvention.Cdecl)]
@@ -6707,11 +6743,9 @@ public static unsafe class SDL
     public static void SDL_LogVerbose(int category, string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         INTERNAL_SDL_LogVerbose(category, fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_LogDebug", CallingConvention = CallingConvention.Cdecl)]
@@ -6719,11 +6753,9 @@ public static unsafe class SDL
     public static void SDL_LogDebug(int category, string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         INTERNAL_SDL_LogDebug(category, fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_LogInfo", CallingConvention = CallingConvention.Cdecl)]
@@ -6731,11 +6763,9 @@ public static unsafe class SDL
     public static void SDL_LogInfo(int category, string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         INTERNAL_SDL_LogInfo(category, fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_LogWarn", CallingConvention = CallingConvention.Cdecl)]
@@ -6743,11 +6773,9 @@ public static unsafe class SDL
     public static void SDL_LogWarn(int category, string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         INTERNAL_SDL_LogWarn(category, fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_LogError", CallingConvention = CallingConvention.Cdecl)]
@@ -6755,11 +6783,9 @@ public static unsafe class SDL
     public static void SDL_LogError(int category, string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         INTERNAL_SDL_LogError(category, fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_LogCritical", CallingConvention = CallingConvention.Cdecl)]
@@ -6767,11 +6793,9 @@ public static unsafe class SDL
     public static void SDL_LogCritical(int category, string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         INTERNAL_SDL_LogCritical(category, fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
     }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_LogMessage", CallingConvention = CallingConvention.Cdecl)]
@@ -6779,11 +6803,9 @@ public static unsafe class SDL
     public static void SDL_LogMessage(int category, SDL_LogPriority priority, string fmt)
     {
         var fmtUTF8 = EncodeAsUTF8(fmt);
-
         INTERNAL_SDL_LogMessage(category, priority, fmtUTF8);
 
         SDL_free((IntPtr)fmtUTF8);
-
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -6871,12 +6893,10 @@ public static unsafe class SDL
     {
         var titleUTF8 = EncodeAsUTF8(title);
         var messageUTF8 = EncodeAsUTF8(message);
-
         var result = INTERNAL_SDL_ShowSimpleMessageBox(flags, titleUTF8, messageUTF8, window);
 
         SDL_free((IntPtr)titleUTF8);
         SDL_free((IntPtr)messageUTF8);
-
         return result;
     }
 
@@ -6898,18 +6918,20 @@ public static unsafe class SDL
     public static bool SDL_OpenURL(string url)
     {
         var urlUTF8 = EncodeAsUTF8(url);
-
         var result = INTERNAL_SDL_OpenURL(urlUTF8);
 
         SDL_free((IntPtr)urlUTF8);
-
         return result;
     }
 
     // ../SDL3/SDL_platform.h
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetPlatform();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetPlatform", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetPlatform();
+    public static string SDL_GetPlatform()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetPlatform());
+    }
 
     // ../SDL3/SDL_render.h
 
@@ -6940,19 +6962,21 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetNumRenderDrivers();
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetRenderDriver(int index);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetRenderDriver", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetRenderDriver(int index);
+    public static string SDL_GetRenderDriver(int index)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetRenderDriver(index));
+    }
 
     [DllImport(nativeLibName, EntryPoint = "SDL_CreateWindowAndRenderer", CallingConvention = CallingConvention.Cdecl)]
     private static extern bool INTERNAL_SDL_CreateWindowAndRenderer(byte* title, int width, int height, ulong window_flags, ref IntPtr window, ref IntPtr renderer); // WARN_UNKNOWN_POINTER_PARAMETER
     public static bool SDL_CreateWindowAndRenderer(string title, int width, int height, ulong window_flags, ref IntPtr window, ref IntPtr renderer)
     {
         var titleUTF8 = EncodeAsUTF8(title);
-
         var result = INTERNAL_SDL_CreateWindowAndRenderer(titleUTF8, width, height, window_flags, ref window, ref renderer);
 
         SDL_free((IntPtr)titleUTF8);
-
         return result;
     }
 
@@ -6961,11 +6985,9 @@ public static unsafe class SDL
     public static IntPtr SDL_CreateRenderer(IntPtr window, string name)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_CreateRenderer(window, nameUTF8);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
@@ -6981,8 +7003,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_GetRenderWindow(IntPtr renderer);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetRendererName(IntPtr renderer);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetRendererName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetRendererName(IntPtr renderer);
+    public static string SDL_GetRendererName(IntPtr renderer)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetRendererName(renderer));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern uint SDL_GetRendererProperties(IntPtr renderer);
@@ -7239,11 +7265,9 @@ public static unsafe class SDL
     public static IntPtr SDL_OpenTitleStorage(string @override, uint props)
     {
         var @overrideUTF8 = EncodeAsUTF8(@override);
-
         var result = INTERNAL_SDL_OpenTitleStorage(@overrideUTF8, props);
 
         SDL_free((IntPtr)@overrideUTF8);
-
         return result;
     }
 
@@ -7253,12 +7277,10 @@ public static unsafe class SDL
     {
         var orgUTF8 = EncodeAsUTF8(org);
         var appUTF8 = EncodeAsUTF8(app);
-
         var result = INTERNAL_SDL_OpenUserStorage(orgUTF8, appUTF8, props);
 
         SDL_free((IntPtr)orgUTF8);
         SDL_free((IntPtr)appUTF8);
-
         return result;
     }
 
@@ -7267,11 +7289,9 @@ public static unsafe class SDL
     public static IntPtr SDL_OpenFileStorage(string path)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_OpenFileStorage(pathUTF8);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -7289,11 +7309,9 @@ public static unsafe class SDL
     public static bool SDL_GetStorageFileSize(IntPtr storage, string path, ref ulong length)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_GetStorageFileSize(storage, pathUTF8, ref length);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -7302,11 +7320,9 @@ public static unsafe class SDL
     public static bool SDL_ReadStorageFile(IntPtr storage, string path, IntPtr destination, ulong length)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_ReadStorageFile(storage, pathUTF8, destination, length);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -7315,11 +7331,9 @@ public static unsafe class SDL
     public static bool SDL_WriteStorageFile(IntPtr storage, string path, IntPtr source, ulong length)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_WriteStorageFile(storage, pathUTF8, source, length);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -7328,11 +7342,9 @@ public static unsafe class SDL
     public static bool SDL_CreateStorageDirectory(IntPtr storage, string path)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_CreateStorageDirectory(storage, pathUTF8);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -7341,11 +7353,9 @@ public static unsafe class SDL
     public static bool SDL_EnumerateStorageDirectory(IntPtr storage, string path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_EnumerateStorageDirectory(storage, pathUTF8, callback, userdata);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -7354,11 +7364,9 @@ public static unsafe class SDL
     public static bool SDL_RemoveStoragePath(IntPtr storage, string path)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_RemoveStoragePath(storage, pathUTF8);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -7368,12 +7376,10 @@ public static unsafe class SDL
     {
         var oldpathUTF8 = EncodeAsUTF8(oldpath);
         var newpathUTF8 = EncodeAsUTF8(newpath);
-
         var result = INTERNAL_SDL_RenameStoragePath(storage, oldpathUTF8, newpathUTF8);
 
         SDL_free((IntPtr)oldpathUTF8);
         SDL_free((IntPtr)newpathUTF8);
-
         return result;
     }
 
@@ -7383,12 +7389,10 @@ public static unsafe class SDL
     {
         var oldpathUTF8 = EncodeAsUTF8(oldpath);
         var newpathUTF8 = EncodeAsUTF8(newpath);
-
         var result = INTERNAL_SDL_CopyStorageFile(storage, oldpathUTF8, newpathUTF8);
 
         SDL_free((IntPtr)oldpathUTF8);
         SDL_free((IntPtr)newpathUTF8);
-
         return result;
     }
 
@@ -7397,11 +7401,9 @@ public static unsafe class SDL
     public static bool SDL_GetStoragePathInfo(IntPtr storage, string path, ref SDL_PathInfo info)
     {
         var pathUTF8 = EncodeAsUTF8(path);
-
         var result = INTERNAL_SDL_GetStoragePathInfo(storage, pathUTF8, ref info);
 
         SDL_free((IntPtr)pathUTF8);
-
         return result;
     }
 
@@ -7414,12 +7416,10 @@ public static unsafe class SDL
     {
         var pathUTF8 = EncodeAsUTF8(path);
         var patternUTF8 = EncodeAsUTF8(pattern);
-
         var result = INTERNAL_SDL_GlobStorageDirectory(storage, pathUTF8, patternUTF8, flags, ref count);
 
         SDL_free((IntPtr)pathUTF8);
         SDL_free((IntPtr)patternUTF8);
-
         return result;
     }
 
@@ -7476,19 +7476,21 @@ public static unsafe class SDL
     public static IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, string name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread)
     {
         var nameUTF8 = EncodeAsUTF8(name);
-
         var result = INTERNAL_SDL_CreateThreadRuntime(fn, nameUTF8, data, pfnBeginThread, pfnEndThread);
 
         SDL_free((IntPtr)nameUTF8);
-
         return result;
     }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr SDL_CreateThreadWithPropertiesRuntime(uint props, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetThreadName(IntPtr thread);
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetThreadName", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetThreadName(IntPtr thread);
+    public static string SDL_GetThreadName(IntPtr thread)
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetThreadName(thread));
+    }
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern ulong SDL_GetCurrentThreadID();
@@ -7613,8 +7615,12 @@ public static unsafe class SDL
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int SDL_GetVersion();
 
-    [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern UTF8_STRING SDL_GetRevision();
+    [DllImport(nativeLibName, EntryPoint = "SDL_GetRevision", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr INTERNAL_SDL_GetRevision();
+    public static string SDL_GetRevision()
+    {
+        return DecodeFromUTF8(INTERNAL_SDL_GetRevision());
+    }
 
 
 }

@@ -31,7 +31,7 @@ internal static partial class Program
 
     private class FunctionSignatureType
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         public string ReturnType { get; set; } = "";
         public List<(string, string)> ParameterTypesNames { get; } = new();
         public List<string> HeapAllocatedStringParams { get; } = new();
@@ -446,12 +446,14 @@ internal static partial class Program
                     FunctionSignature.ParameterString.Append($"{type} {name}");
                 }
 
-                if (FunctionSignature.HeapAllocatedStringParams.Count > 0)
+                if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING"))
                 {
                     definitions.Append(
                         $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
                     );
-                    definitions.Append($"private static extern {FunctionSignature.ReturnType} INTERNAL_{FunctionSignature.Name}(");
+                    definitions.Append(
+                        $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
+                    );
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "byte*"));
                     definitions.Append("); ");
 
@@ -462,7 +464,7 @@ internal static partial class Program
 
                     definitions.Append('\n');
 
-                    definitions.Append($"public static {FunctionSignature.ReturnType} {FunctionSignature.Name}(");
+                    definitions.Append($"public static {FunctionSignature.ReturnType.Replace("UTF8_STRING", "string")} {FunctionSignature.Name}(");
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
                     definitions.Append(")\n{\n");
 
@@ -471,11 +473,19 @@ internal static partial class Program
                         definitions.Append($"var {stringParam}UTF8 = EncodeAsUTF8({stringParam});\n");
                     }
 
-                    definitions.Append('\n');
-
-                    if (FunctionSignature.ReturnType != "void")
+                    var returnsCharPtr = FunctionSignature.ReturnType == "UTF8_STRING";
+                    if (FunctionSignature.HeapAllocatedStringParams.Count == 0)
+                    {
+                        definitions.Append("return ");
+                    }
+                    else if (FunctionSignature.ReturnType != "void")
                     {
                         definitions.Append("var result = ");
+                    }
+
+                    if (returnsCharPtr)
+                    {
+                        definitions.Append("DecodeFromUTF8(");
                     }
 
                     definitions.Append($"INTERNAL_{FunctionSignature.Name}(");
@@ -508,18 +518,25 @@ internal static partial class Program
                         }
                     }
 
-                    definitions.Append(");\n\n");
-
-                    foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
+                    if (returnsCharPtr)
                     {
-                        definitions.Append($"SDL_free((IntPtr){stringParam}UTF8);\n");
+                        definitions.Append(')');
                     }
 
-                    definitions.Append('\n');
+                    definitions.Append(");\n");
 
-                    if (FunctionSignature.ReturnType != "void")
+                    if (FunctionSignature.HeapAllocatedStringParams.Count > 0)
                     {
-                        definitions.Append("return result;\n");
+                        definitions.Append('\n');
+                        foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
+                        {
+                            definitions.Append($"SDL_free((IntPtr){stringParam}UTF8);\n");
+                        }
+
+                        if (FunctionSignature.ReturnType != "void")
+                        {
+                            definitions.Append("return result;\n");
+                        }
                     }
 
                     definitions.Append("}\n\n");
@@ -630,16 +647,6 @@ public static unsafe class SDL
 {{
     private const string nativeLibName = ""SDL3"";
 
-    internal static int SizeAsUTF8(string str) 
-    {{
-        if (str == null)
-        {{
-            return 0;
-        }}
-
-        return (str.Length * 4) + 1;
-    }}
-
     internal static byte* EncodeAsUTF8(string str)
     {{
         if (str == null)
@@ -655,6 +662,34 @@ public static unsafe class SDL
         }}
 
         return buffer;
+    }}
+
+    internal static string DecodeFromUTF8(IntPtr ptr, bool shouldFree = false)
+    {{
+        if (ptr == IntPtr.Zero)
+        {{
+            return null;
+        }}
+
+        byte* end = (byte*) ptr;
+        while (*end != 0)
+        {{
+            end++;
+        }}
+
+        string result = new string(
+            (sbyte*) ptr,
+            0,
+            (int) (end - (byte*)ptr),
+            System.Text.Encoding.UTF8
+        );
+
+        if (shouldFree)
+        {{
+            SDL_free(ptr);
+        }}
+
+        return result;
     }}
 
     {definitions}
