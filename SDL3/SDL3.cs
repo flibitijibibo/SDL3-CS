@@ -2869,7 +2869,7 @@ public static unsafe class SDL
     public static extern bool SDL_ReloadGamepadMappings();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetGamepadMappings(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern IntPtr SDL_GetGamepadMappings(out int count);
 
     [DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadMappingForGUID", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr INTERNAL_SDL_GetGamepadMappingForGUID(SDL_GUID guid);
@@ -2900,7 +2900,7 @@ public static unsafe class SDL
     public static extern bool SDL_HasGamepad();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetGamepads(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern IntPtr SDL_GetGamepads(out int count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_IsGamepad(uint instance_id);
@@ -3014,7 +3014,7 @@ public static unsafe class SDL
     public static extern SDL_JoystickConnectionState SDL_GetGamepadConnectionState(IntPtr gamepad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern SDL_PowerState SDL_GetGamepadPowerInfo(IntPtr gamepad, ref int percent); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern SDL_PowerState SDL_GetGamepadPowerInfo(IntPtr gamepad, out int percent);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GamepadConnected(IntPtr gamepad);
@@ -3029,7 +3029,7 @@ public static unsafe class SDL
     public static extern bool SDL_GamepadEventsEnabled();
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SDL_GetGamepadBindings(IntPtr gamepad, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern IntPtr SDL_GetGamepadBindings(IntPtr gamepad, out int count);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SDL_UpdateGamepads();
@@ -3113,7 +3113,7 @@ public static unsafe class SDL
     public static extern int SDL_GetNumGamepadTouchpadFingers(IntPtr gamepad, int touchpad);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, IntPtr down, ref float x, ref float y, ref float pressure); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, IntPtr down, out float x, out float y, out float pressure);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_GamepadHasSensor(IntPtr gamepad, SDL_SensorType type);
@@ -3128,7 +3128,7 @@ public static unsafe class SDL
     public static extern float SDL_GetGamepadSensorDataRate(IntPtr gamepad, SDL_SensorType type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, ref float data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, out float data, int num_values);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_RumbleGamepad(IntPtr gamepad, ushort low_frequency_rumble, ushort high_frequency_rumble, uint duration_ms);

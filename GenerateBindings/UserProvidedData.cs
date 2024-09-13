@@ -302,14 +302,14 @@ internal static class UserProvidedData
         { ("SDL_GetJoystickBall", "dx"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_joystick.h:1035:38
         { ("SDL_GetJoystickBall", "dy"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_joystick.h:1035:38
         { ("SDL_GetJoystickPowerInfo", "percent"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_joystick.h:1201:44
-        { ("SDL_GetGamepadMappings", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gamepad.h:403:37
-        { ("SDL_GetGamepads", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gamepad.h:482:46
-        { ("SDL_GetGamepadPowerInfo", "percent"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gamepad.h:936:44
-        { ("SDL_GetGamepadBindings", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gamepad.h:1012:51
-        { ("SDL_GetGamepadTouchpadFinger", "x"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gamepad.h:1269:38
-        { ("SDL_GetGamepadTouchpadFinger", "y"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gamepad.h:1269:38
-        { ("SDL_GetGamepadTouchpadFinger", "pressure"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gamepad.h:1269:38
-        { ("SDL_GetGamepadSensorData", "data"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_gamepad.h:1341:38
+        { ("SDL_GetGamepadMappings", "count"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:403:37
+        { ("SDL_GetGamepads", "count"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:482:46
+        { ("SDL_GetGamepadPowerInfo", "percent"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:936:44
+        { ("SDL_GetGamepadBindings", "count"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1012:51
+        { ("SDL_GetGamepadTouchpadFinger", "x"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1269:38
+        { ("SDL_GetGamepadTouchpadFinger", "y"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1269:38
+        { ("SDL_GetGamepadTouchpadFinger", "pressure"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1269:38
+        { ("SDL_GetGamepadSensorData", "data"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1341:38
         { ("SDL_GetKeyboards", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_keyboard.h:89:46
         { ("SDL_GetKeyboardState", "numkeys"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_keyboard.h:144:46
         { ("SDL_SetTextInputArea", "rect"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_keyboard.h:499:38
