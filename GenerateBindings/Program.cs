@@ -679,6 +679,11 @@ public static unsafe class SDL
             var subtype = GetTypeFromTypedefMap(type.Type!);
             var subtypeName = CSharpTypeFromFFI(subtype, context);
 
+            if (subtypeName == "char")
+            {
+                return context == TypeContext.StructField ? "char*" : "UTF8_STRING";
+            }
+
             return context switch
             {
                 TypeContext.StructField => $"{subtypeName}*",
