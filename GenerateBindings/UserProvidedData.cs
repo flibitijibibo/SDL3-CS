@@ -309,7 +309,7 @@ internal static class UserProvidedData
         { ("SDL_GetGamepadTouchpadFinger", "x"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1269:38
         { ("SDL_GetGamepadTouchpadFinger", "y"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1269:38
         { ("SDL_GetGamepadTouchpadFinger", "pressure"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1269:38
-        { ("SDL_GetGamepadSensorData", "data"), PointerParameterIntent.Out }, // ../SDL3/SDL_gamepad.h:1341:38
+        { ("SDL_GetGamepadSensorData", "data"), PointerParameterIntent.Array }, // ../SDL3/SDL_gamepad.h:1341:38
         { ("SDL_GetKeyboards", "count"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_keyboard.h:89:46
         { ("SDL_GetKeyboardState", "numkeys"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_keyboard.h:144:46
         { ("SDL_SetTextInputArea", "rect"), PointerParameterIntent.Unknown }, // ../SDL3/SDL_keyboard.h:499:38

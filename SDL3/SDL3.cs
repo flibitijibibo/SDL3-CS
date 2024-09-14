@@ -3128,7 +3128,7 @@ public static unsafe class SDL
     public static extern float SDL_GetGamepadSensorDataRate(IntPtr gamepad, SDL_SensorType type);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, out float data, int num_values);
+    public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, float* data, int num_values);
 
     [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_RumbleGamepad(IntPtr gamepad, ushort low_frequency_rumble, ushort high_frequency_rumble, uint duration_ms);
