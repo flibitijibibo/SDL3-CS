@@ -703,7 +703,8 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SDL3;
+namespace SDL3
+{{
 
 public static unsafe class SDL
 {{
@@ -755,6 +756,7 @@ public static unsafe class SDL
     }}
 
     {definitions}
+}}
 }}
 ";
     }
