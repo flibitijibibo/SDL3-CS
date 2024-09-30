@@ -5,9 +5,11 @@ internal static class UserProvidedData
     internal enum PointerParameterIntent
     {
         Unknown,
+        IntPtr,
         Ref,
         Out,
         Array,
+        Pointer
     }
 
     internal enum ReturnedCharPtrMemoryOwner

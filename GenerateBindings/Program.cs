@@ -428,6 +428,9 @@ internal static partial class Program
 
                             switch (intent)
                             {
+                                case UserProvidedData.PointerParameterIntent.IntPtr:
+                                    typeName = $"IntPtr";
+                                    break;
                                 case UserProvidedData.PointerParameterIntent.Ref:
                                     typeName = $"ref {subtypeName}";
                                     break;
@@ -435,11 +438,14 @@ internal static partial class Program
                                     typeName = $"out {subtypeName}";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Array:
+                                    typeName = $"{subtypeName}[]";
+                                    break;
+                                case UserProvidedData.PointerParameterIntent.Pointer:
                                     typeName = $"{subtypeName}*";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Unknown:
                                 default:
-                                    typeName = $"ref {subtypeName}";
+                                    typeName = $"IntPtr";
                                     containsUnknownRef = true;
                                     break;
                             }

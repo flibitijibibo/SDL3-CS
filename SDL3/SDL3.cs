@@ -88,12 +88,12 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_ReportAssertion", CallingConvention = CallingConvention.Cdecl)]
-		private static extern SDL_AssertState INTERNAL_SDL_ReportAssertion(ref SDL_AssertData data, byte* func, byte* file, int line); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static SDL_AssertState SDL_ReportAssertion(ref SDL_AssertData data, string func, string file, int line)
+		private static extern SDL_AssertState INTERNAL_SDL_ReportAssertion(IntPtr data, byte* func, byte* file, int line); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static SDL_AssertState SDL_ReportAssertion(IntPtr data, string func, string file, int line)
 		{
 			var funcUTF8 = EncodeAsUTF8(func);
 			var fileUTF8 = EncodeAsUTF8(file);
-			var result = INTERNAL_SDL_ReportAssertion(ref data, funcUTF8, fileUTF8, line);
+			var result = INTERNAL_SDL_ReportAssertion(data, funcUTF8, fileUTF8, line);
 
 			SDL_free((IntPtr) funcUTF8);
 			SDL_free((IntPtr) fileUTF8);
@@ -109,7 +109,7 @@ namespace SDL3
 		public static extern IntPtr SDL_GetDefaultAssertionHandler();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetAssertionHandler(ref IntPtr puserdata); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetAssertionHandler(IntPtr puserdata); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetAssertionReport();
@@ -141,16 +141,16 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_CompareAndSwapAtomicInt(ref SDL_AtomicInt a, int oldval, int newval); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_CompareAndSwapAtomicInt(IntPtr a, int oldval, int newval); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_SetAtomicInt(ref SDL_AtomicInt a, int v); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_SetAtomicInt(IntPtr a, int v); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_GetAtomicInt(ref SDL_AtomicInt a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_GetAtomicInt(IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_AddAtomicInt(ref SDL_AtomicInt a, int v); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_AddAtomicInt(IntPtr a, int v); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_AtomicU32
@@ -159,22 +159,22 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_CompareAndSwapAtomicU32(ref SDL_AtomicU32 a, uint oldval, uint newval); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_CompareAndSwapAtomicU32(IntPtr a, uint oldval, uint newval); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_SetAtomicU32(ref SDL_AtomicU32 a, uint v); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_SetAtomicU32(IntPtr a, uint v); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_GetAtomicU32(ref SDL_AtomicU32 a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_GetAtomicU32(IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_CompareAndSwapAtomicPointer(ref IntPtr a, IntPtr oldval, IntPtr newval); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_CompareAndSwapAtomicPointer(IntPtr a, IntPtr oldval, IntPtr newval); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_SetAtomicPointer(ref IntPtr a, IntPtr v); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_SetAtomicPointer(IntPtr a, IntPtr v); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetAtomicPointer(ref IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetAtomicPointer(IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_endian.h
 
@@ -445,7 +445,7 @@ namespace SDL3
 		public static extern bool SDL_SetThreadPriority(SDL_ThreadPriority priority);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_WaitThread(IntPtr thread, ref int status); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_WaitThread(IntPtr thread, IntPtr status); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DetachThread(IntPtr thread);
@@ -555,13 +555,13 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ShouldInit(ref SDL_InitState state); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ShouldInit(IntPtr state); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ShouldQuit(ref SDL_InitState state); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ShouldQuit(IntPtr state); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetInitialized(ref SDL_InitState state, bool initialized); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_SetInitialized(IntPtr state, bool initialized); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_iostream.h
 
@@ -617,7 +617,7 @@ namespace SDL3
 		public static extern IntPtr SDL_IOFromDynamicMem();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_OpenIO(ref SDL_IOStreamInterface iface, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_OpenIO(IntPtr iface, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_CloseIO(IntPtr context);
@@ -658,60 +658,60 @@ namespace SDL3
 		public static extern bool SDL_FlushIO(IntPtr context);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_LoadFile_IO(IntPtr src, ref UIntPtr datasize, bool closeio); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_LoadFile_IO(IntPtr src, IntPtr datasize, bool closeio); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_LoadFile", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_SDL_LoadFile(byte* file, ref UIntPtr datasize); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static IntPtr SDL_LoadFile(string file, ref UIntPtr datasize)
+		private static extern IntPtr INTERNAL_SDL_LoadFile(byte* file, IntPtr datasize); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static IntPtr SDL_LoadFile(string file, IntPtr datasize)
 		{
 			var fileUTF8 = EncodeAsUTF8(file);
-			var result = INTERNAL_SDL_LoadFile(fileUTF8, ref datasize);
+			var result = INTERNAL_SDL_LoadFile(fileUTF8, datasize);
 
 			SDL_free((IntPtr) fileUTF8);
 			return result;
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadU8(IntPtr src, ref byte value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadU8(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadS8(IntPtr src, ref sbyte value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadS8(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadU16LE(IntPtr src, ref ushort value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadU16LE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadS16LE(IntPtr src, ref short value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadS16LE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadU16BE(IntPtr src, ref ushort value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadU16BE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadS16BE(IntPtr src, ref short value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadS16BE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadU32LE(IntPtr src, ref uint value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadU32LE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadS32LE(IntPtr src, ref int value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadS32LE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadU32BE(IntPtr src, ref uint value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadU32BE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadS32BE(IntPtr src, ref int value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadS32BE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadU64LE(IntPtr src, ref ulong value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadU64LE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadS64LE(IntPtr src, ref long value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadS64LE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadU64BE(IntPtr src, ref ulong value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadU64BE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadS64BE(IntPtr src, ref long value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadS64BE(IntPtr src, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_WriteU8(IntPtr dst, byte value);
@@ -799,10 +799,10 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetAudioPlaybackDevices(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetAudioPlaybackDevices(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetAudioRecordingDevices(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetAudioRecordingDevices(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDeviceName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetAudioDeviceName(uint devid);
@@ -812,13 +812,13 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetAudioDeviceFormat(uint devid, ref SDL_AudioSpec spec, ref int sample_frames); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetAudioDeviceFormat(uint devid, IntPtr spec, IntPtr sample_frames); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetAudioDeviceChannelMap(uint devid, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetAudioDeviceChannelMap(uint devid, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_OpenAudioDevice(uint devid, ref SDL_AudioSpec spec); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_OpenAudioDevice(uint devid, IntPtr spec); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_PauseAudioDevice(uint dev);
@@ -839,13 +839,13 @@ namespace SDL3
 		public static extern void SDL_CloseAudioDevice(uint devid);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_BindAudioStreams(uint devid, ref IntPtr streams, int num_streams); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_BindAudioStreams(uint devid, IntPtr streams, int num_streams); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_BindAudioStream(uint devid, IntPtr stream);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_UnbindAudioStreams(ref IntPtr streams, int num_streams); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_UnbindAudioStreams(IntPtr streams, int num_streams); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_UnbindAudioStream(IntPtr stream);
@@ -854,16 +854,16 @@ namespace SDL3
 		public static extern uint SDL_GetAudioStreamDevice(IntPtr stream);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateAudioStream(ref SDL_AudioSpec src_spec, ref SDL_AudioSpec dst_spec); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateAudioStream(IntPtr src_spec, IntPtr dst_spec); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_GetAudioStreamProperties(IntPtr stream);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetAudioStreamFormat(IntPtr stream, ref SDL_AudioSpec src_spec, ref SDL_AudioSpec dst_spec); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetAudioStreamFormat(IntPtr stream, IntPtr src_spec, IntPtr dst_spec); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetAudioStreamFormat(IntPtr stream, ref SDL_AudioSpec src_spec, ref SDL_AudioSpec dst_spec); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetAudioStreamFormat(IntPtr stream, IntPtr src_spec, IntPtr dst_spec); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern float SDL_GetAudioStreamFrequencyRatio(IntPtr stream);
@@ -878,16 +878,16 @@ namespace SDL3
 		public static extern bool SDL_SetAudioStreamGain(IntPtr stream, float gain);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetAudioStreamInputChannelMap(IntPtr stream, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetAudioStreamInputChannelMap(IntPtr stream, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetAudioStreamOutputChannelMap(IntPtr stream, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetAudioStreamOutputChannelMap(IntPtr stream, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetAudioStreamInputChannelMap(IntPtr stream, ref int chmap, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetAudioStreamInputChannelMap(IntPtr stream, IntPtr chmap, int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetAudioStreamOutputChannelMap(IntPtr stream, ref int chmap, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetAudioStreamOutputChannelMap(IntPtr stream, IntPtr chmap, int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_PutAudioStreamData(IntPtr stream, IntPtr buf, int len);
@@ -931,7 +931,7 @@ namespace SDL3
 		public static extern void SDL_DestroyAudioStream(IntPtr stream);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_OpenAudioDeviceStream(uint devid, ref SDL_AudioSpec spec, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_OpenAudioDeviceStream(uint devid, IntPtr spec, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// public delegate WARN_PLACEHOLDER SDL_AudioPostmixCallback();
 
@@ -939,24 +939,24 @@ namespace SDL3
 		public static extern bool SDL_SetAudioPostmixCallback(uint devid, /* SDL_AudioPostmixCallback */ IntPtr callback, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_LoadWAV_IO(IntPtr src, bool closeio, ref SDL_AudioSpec spec, ref IntPtr audio_buf, ref uint audio_len); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_LoadWAV_IO(IntPtr src, bool closeio, IntPtr spec, IntPtr audio_buf, IntPtr audio_len); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_LoadWAV", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_LoadWAV(byte* path, ref SDL_AudioSpec spec, ref IntPtr audio_buf, ref uint audio_len); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static bool SDL_LoadWAV(string path, ref SDL_AudioSpec spec, ref IntPtr audio_buf, ref uint audio_len)
+		private static extern bool INTERNAL_SDL_LoadWAV(byte* path, IntPtr spec, IntPtr audio_buf, IntPtr audio_len); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static bool SDL_LoadWAV(string path, IntPtr spec, IntPtr audio_buf, IntPtr audio_len)
 		{
 			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_LoadWAV(pathUTF8, ref spec, ref audio_buf, ref audio_len);
+			var result = INTERNAL_SDL_LoadWAV(pathUTF8, spec, audio_buf, audio_len);
 
 			SDL_free((IntPtr) pathUTF8);
 			return result;
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_MixAudio(ref byte dst, ref byte src, SDL_AudioFormat format, uint len, float volume); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_MixAudio(IntPtr dst, IntPtr src, SDL_AudioFormat format, uint len, float volume); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ConvertAudioSamples(ref SDL_AudioSpec src_spec, ref byte src_data, int src_len, ref SDL_AudioSpec dst_spec, ref IntPtr dst_data, ref int dst_len); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ConvertAudioSamples(IntPtr src_spec, IntPtr src_data, int src_len, IntPtr dst_spec, IntPtr dst_data, IntPtr dst_len); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioFormatName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetAudioFormatName(SDL_AudioFormat format);
@@ -1299,7 +1299,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetMasksForPixelFormat(SDL_PixelFormat format, ref int bpp, ref uint Rmask, ref uint Gmask, ref uint Bmask, ref uint Amask); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetMasksForPixelFormat(SDL_PixelFormat format, IntPtr bpp, IntPtr Rmask, IntPtr Gmask, IntPtr Bmask, IntPtr Amask); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_PixelFormat SDL_GetPixelFormatForMasks(int bpp, uint Rmask, uint Gmask, uint Bmask, uint Amask);
@@ -1311,22 +1311,22 @@ namespace SDL3
 		public static extern IntPtr SDL_CreatePalette(int ncolors);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetPaletteColors(ref SDL_Palette palette, ref SDL_Color colors, int firstcolor, int ncolors); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetPaletteColors(IntPtr palette, IntPtr colors, int firstcolor, int ncolors); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_DestroyPalette(ref SDL_Palette palette); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_DestroyPalette(IntPtr palette); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_MapRGB(ref SDL_PixelFormatDetails format, ref SDL_Palette palette, byte r, byte g, byte b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_MapRGB(IntPtr format, IntPtr palette, byte r, byte g, byte b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_MapRGBA(ref SDL_PixelFormatDetails format, ref SDL_Palette palette, byte r, byte g, byte b, byte a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_MapRGBA(IntPtr format, IntPtr palette, byte r, byte g, byte b, byte a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_GetRGB(uint pixel, ref SDL_PixelFormatDetails format, ref SDL_Palette palette, ref byte r, ref byte g, ref byte b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_GetRGB(uint pixel, IntPtr format, IntPtr palette, IntPtr r, IntPtr g, IntPtr b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_GetRGBA(uint pixel, ref SDL_PixelFormatDetails format, ref SDL_Palette palette, ref byte r, ref byte g, ref byte b, ref byte a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_GetRGBA(uint pixel, IntPtr format, IntPtr palette, IntPtr r, IntPtr g, IntPtr b, IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_rect.h
 
@@ -1363,58 +1363,58 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_RectToFRect(ref SDL_Rect rect, ref SDL_FRect frect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_RectToFRect(IntPtr rect, IntPtr frect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_PointInRect(ref SDL_Point p, ref SDL_Rect r); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_PointInRect(IntPtr p, IntPtr r); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RectEmpty(ref SDL_Rect r); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RectEmpty(IntPtr r); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RectsEqual(ref SDL_Rect a, ref SDL_Rect b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RectsEqual(IntPtr a, IntPtr b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_HasRectIntersection(ref SDL_Rect A, ref SDL_Rect B); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_HasRectIntersection(IntPtr A, IntPtr B); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRectIntersection(ref SDL_Rect A, ref SDL_Rect B, ref SDL_Rect result); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRectIntersection(IntPtr A, IntPtr B, IntPtr result); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRectUnion(ref SDL_Rect A, ref SDL_Rect B, ref SDL_Rect result); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRectUnion(IntPtr A, IntPtr B, IntPtr result); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRectEnclosingPoints(ref SDL_Point points, int count, ref SDL_Rect clip, ref SDL_Rect result); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRectEnclosingPoints(IntPtr points, int count, IntPtr clip, IntPtr result); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRectAndLineIntersection(ref SDL_Rect rect, ref int X1, ref int Y1, ref int X2, ref int Y2); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRectAndLineIntersection(IntPtr rect, IntPtr X1, IntPtr Y1, IntPtr X2, IntPtr Y2); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_PointInRectFloat(ref SDL_FPoint p, ref SDL_FRect r); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_PointInRectFloat(IntPtr p, IntPtr r); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RectEmptyFloat(ref SDL_FRect r); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RectEmptyFloat(IntPtr r); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RectsEqualEpsilon(ref SDL_FRect a, ref SDL_FRect b, float epsilon); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RectsEqualEpsilon(IntPtr a, IntPtr b, float epsilon); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RectsEqualFloat(ref SDL_FRect a, ref SDL_FRect b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RectsEqualFloat(IntPtr a, IntPtr b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_HasRectIntersectionFloat(ref SDL_FRect A, ref SDL_FRect B); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_HasRectIntersectionFloat(IntPtr A, IntPtr B); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRectIntersectionFloat(ref SDL_FRect A, ref SDL_FRect B, ref SDL_FRect result); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRectIntersectionFloat(IntPtr A, IntPtr B, IntPtr result); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRectUnionFloat(ref SDL_FRect A, ref SDL_FRect B, ref SDL_FRect result); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRectUnionFloat(IntPtr A, IntPtr B, IntPtr result); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRectEnclosingPointsFloat(ref SDL_FPoint points, int count, ref SDL_FRect clip, ref SDL_FRect result); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRectEnclosingPointsFloat(IntPtr points, int count, IntPtr clip, IntPtr result); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRectAndLineIntersectionFloat(ref SDL_FRect rect, ref float X1, ref float Y1, ref float X2, ref float Y2); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRectAndLineIntersectionFloat(IntPtr rect, IntPtr X1, IntPtr Y1, IntPtr X2, IntPtr Y2); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_surface.h
 
@@ -1460,43 +1460,43 @@ namespace SDL3
 		public static extern IntPtr SDL_CreateSurfaceFrom(int width, int height, SDL_PixelFormat format, IntPtr pixels, int pitch);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_DestroySurface(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_DestroySurface(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_GetSurfaceProperties(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_GetSurfaceProperties(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetSurfaceColorspace(ref SDL_Surface surface, SDL_Colorspace colorspace); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetSurfaceColorspace(IntPtr surface, SDL_Colorspace colorspace); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_Colorspace SDL_GetSurfaceColorspace(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern SDL_Colorspace SDL_GetSurfaceColorspace(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateSurfacePalette(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateSurfacePalette(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetSurfacePalette(ref SDL_Surface surface, ref SDL_Palette palette); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetSurfacePalette(IntPtr surface, IntPtr palette); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetSurfacePalette(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetSurfacePalette(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_AddSurfaceAlternateImage(ref SDL_Surface surface, ref SDL_Surface image); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_AddSurfaceAlternateImage(IntPtr surface, IntPtr image); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SurfaceHasAlternateImages(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SurfaceHasAlternateImages(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetSurfaceImages(ref SDL_Surface surface, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetSurfaceImages(IntPtr surface, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_RemoveSurfaceAlternateImages(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_RemoveSurfaceAlternateImages(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_LockSurface(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_LockSurface(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_UnlockSurface(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_UnlockSurface(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_LoadBMP_IO(IntPtr src, bool closeio);
@@ -1513,72 +1513,72 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SaveBMP_IO(ref SDL_Surface surface, IntPtr dst, bool closeio); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SaveBMP_IO(IntPtr surface, IntPtr dst, bool closeio); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_SaveBMP", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_SaveBMP(ref SDL_Surface surface, byte* file); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static bool SDL_SaveBMP(ref SDL_Surface surface, string file)
+		private static extern bool INTERNAL_SDL_SaveBMP(IntPtr surface, byte* file); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static bool SDL_SaveBMP(IntPtr surface, string file)
 		{
 			var fileUTF8 = EncodeAsUTF8(file);
-			var result = INTERNAL_SDL_SaveBMP(ref surface, fileUTF8);
+			var result = INTERNAL_SDL_SaveBMP(surface, fileUTF8);
 
 			SDL_free((IntPtr) fileUTF8);
 			return result;
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetSurfaceRLE(ref SDL_Surface surface, bool enabled); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetSurfaceRLE(IntPtr surface, bool enabled); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SurfaceHasRLE(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SurfaceHasRLE(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetSurfaceColorKey(ref SDL_Surface surface, bool enabled, uint key); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetSurfaceColorKey(IntPtr surface, bool enabled, uint key); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SurfaceHasColorKey(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SurfaceHasColorKey(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetSurfaceColorKey(ref SDL_Surface surface, ref uint key); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetSurfaceColorKey(IntPtr surface, IntPtr key); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetSurfaceColorMod(ref SDL_Surface surface, byte r, byte g, byte b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetSurfaceColorMod(IntPtr surface, byte r, byte g, byte b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetSurfaceColorMod(ref SDL_Surface surface, ref byte r, ref byte g, ref byte b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetSurfaceColorMod(IntPtr surface, IntPtr r, IntPtr g, IntPtr b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetSurfaceAlphaMod(ref SDL_Surface surface, byte alpha); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetSurfaceAlphaMod(IntPtr surface, byte alpha); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetSurfaceAlphaMod(ref SDL_Surface surface, ref byte alpha); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetSurfaceAlphaMod(IntPtr surface, IntPtr alpha); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetSurfaceBlendMode(ref SDL_Surface surface, uint blendMode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetSurfaceBlendMode(IntPtr surface, uint blendMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetSurfaceBlendMode(ref SDL_Surface surface, IntPtr blendMode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetSurfaceBlendMode(IntPtr surface, IntPtr blendMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetSurfaceClipRect(ref SDL_Surface surface, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetSurfaceClipRect(IntPtr surface, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetSurfaceClipRect(ref SDL_Surface surface, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetSurfaceClipRect(IntPtr surface, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_FlipSurface(ref SDL_Surface surface, SDL_FlipMode flip); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_FlipSurface(IntPtr surface, SDL_FlipMode flip); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_DuplicateSurface(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_DuplicateSurface(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_ScaleSurface(ref SDL_Surface surface, int width, int height, SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_ScaleSurface(IntPtr surface, int width, int height, SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_ConvertSurface(ref SDL_Surface surface, SDL_PixelFormat format); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_ConvertSurface(IntPtr surface, SDL_PixelFormat format); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_ConvertSurfaceAndColorspace(ref SDL_Surface surface, SDL_PixelFormat format, ref SDL_Palette palette, SDL_Colorspace colorspace, uint props); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_ConvertSurfaceAndColorspace(IntPtr surface, SDL_PixelFormat format, IntPtr palette, SDL_Colorspace colorspace, uint props); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_ConvertPixels(int width, int height, SDL_PixelFormat src_format, IntPtr src, int src_pitch, SDL_PixelFormat dst_format, IntPtr dst, int dst_pitch);
@@ -1590,55 +1590,55 @@ namespace SDL3
 		public static extern bool SDL_PremultiplyAlpha(int width, int height, SDL_PixelFormat src_format, IntPtr src, int src_pitch, SDL_PixelFormat dst_format, IntPtr dst, int dst_pitch, bool linear);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_PremultiplySurfaceAlpha(ref SDL_Surface surface, bool linear); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_PremultiplySurfaceAlpha(IntPtr surface, bool linear); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ClearSurface(ref SDL_Surface surface, float r, float g, float b, float a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ClearSurface(IntPtr surface, float r, float g, float b, float a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_FillSurfaceRect(ref SDL_Surface dst, ref SDL_Rect rect, uint color); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_FillSurfaceRect(IntPtr dst, IntPtr rect, uint color); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_FillSurfaceRects(ref SDL_Surface dst, ref SDL_Rect rects, int count, uint color); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_FillSurfaceRects(IntPtr dst, IntPtr rects, int count, uint color); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_BlitSurface(ref SDL_Surface src, ref SDL_Rect srcrect, ref SDL_Surface dst, ref SDL_Rect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_BlitSurface(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_BlitSurfaceUnchecked(ref SDL_Surface src, ref SDL_Rect srcrect, ref SDL_Surface dst, ref SDL_Rect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_BlitSurfaceUnchecked(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_BlitSurfaceScaled(ref SDL_Surface src, ref SDL_Rect srcrect, ref SDL_Surface dst, ref SDL_Rect dstrect, SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_BlitSurfaceScaled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect, SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_BlitSurfaceUncheckedScaled(ref SDL_Surface src, ref SDL_Rect srcrect, ref SDL_Surface dst, ref SDL_Rect dstrect, SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_BlitSurfaceUncheckedScaled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect, SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_BlitSurfaceTiled(ref SDL_Surface src, ref SDL_Rect srcrect, ref SDL_Surface dst, ref SDL_Rect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_BlitSurfaceTiled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_BlitSurfaceTiledWithScale(ref SDL_Surface src, ref SDL_Rect srcrect, float scale, SDL_ScaleMode scaleMode, ref SDL_Surface dst, ref SDL_Rect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_BlitSurfaceTiledWithScale(IntPtr src, IntPtr srcrect, float scale, SDL_ScaleMode scaleMode, IntPtr dst, IntPtr dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_BlitSurface9Grid(ref SDL_Surface src, ref SDL_Rect srcrect, int left_width, int right_width, int top_height, int bottom_height, float scale, SDL_ScaleMode scaleMode, ref SDL_Surface dst, ref SDL_Rect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_BlitSurface9Grid(IntPtr src, IntPtr srcrect, int left_width, int right_width, int top_height, int bottom_height, float scale, SDL_ScaleMode scaleMode, IntPtr dst, IntPtr dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_MapSurfaceRGB(ref SDL_Surface surface, byte r, byte g, byte b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_MapSurfaceRGB(IntPtr surface, byte r, byte g, byte b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_MapSurfaceRGBA(ref SDL_Surface surface, byte r, byte g, byte b, byte a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_MapSurfaceRGBA(IntPtr surface, byte r, byte g, byte b, byte a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadSurfacePixel(ref SDL_Surface surface, int x, int y, ref byte r, ref byte g, ref byte b, ref byte a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadSurfacePixel(IntPtr surface, int x, int y, IntPtr r, IntPtr g, IntPtr b, IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ReadSurfacePixelFloat(ref SDL_Surface surface, int x, int y, ref float r, ref float g, ref float b, ref float a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ReadSurfacePixelFloat(IntPtr surface, int x, int y, IntPtr r, IntPtr g, IntPtr b, IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_WriteSurfacePixel(ref SDL_Surface surface, int x, int y, byte r, byte g, byte b, byte a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_WriteSurfacePixel(IntPtr surface, int x, int y, byte r, byte g, byte b, byte a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_WriteSurfacePixelFloat(ref SDL_Surface surface, int x, int y, float r, float g, float b, float a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_WriteSurfacePixelFloat(IntPtr surface, int x, int y, float r, float g, float b, float a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_camera.h
 
@@ -1678,10 +1678,10 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetCameras(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetCameras(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetCameraSupportedFormats(uint devid, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetCameraSupportedFormats(uint devid, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetCameraName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetCameraName(uint instance_id);
@@ -1694,7 +1694,7 @@ namespace SDL3
 		public static extern SDL_CameraPosition SDL_GetCameraPosition(uint instance_id);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_OpenCamera(uint instance_id, ref SDL_CameraSpec spec); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_OpenCamera(uint instance_id, IntPtr spec); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetCameraPermissionState(IntPtr camera);
@@ -1706,13 +1706,13 @@ namespace SDL3
 		public static extern uint SDL_GetCameraProperties(IntPtr camera);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetCameraFormat(IntPtr camera, ref SDL_CameraSpec spec); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetCameraFormat(IntPtr camera, IntPtr spec); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_AcquireCameraFrame(IntPtr camera, ref ulong timestampNS); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_AcquireCameraFrame(IntPtr camera, IntPtr timestampNS); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_ReleaseCameraFrame(IntPtr camera, ref SDL_Surface frame); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_ReleaseCameraFrame(IntPtr camera, IntPtr frame); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_CloseCamera(IntPtr camera);
@@ -1772,11 +1772,11 @@ namespace SDL3
 		public static extern bool SDL_ClearClipboardData();
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetClipboardData", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_SDL_GetClipboardData(byte* mime_type, ref UIntPtr size); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static IntPtr SDL_GetClipboardData(string mime_type, ref UIntPtr size)
+		private static extern IntPtr INTERNAL_SDL_GetClipboardData(byte* mime_type, IntPtr size); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static IntPtr SDL_GetClipboardData(string mime_type, IntPtr size)
 		{
 			var mime_typeUTF8 = EncodeAsUTF8(mime_type);
-			var result = INTERNAL_SDL_GetClipboardData(mime_typeUTF8, ref size);
+			var result = INTERNAL_SDL_GetClipboardData(mime_typeUTF8, size);
 
 			SDL_free((IntPtr) mime_typeUTF8);
 			return result;
@@ -1794,7 +1794,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetClipboardMimeTypes(ref UIntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetClipboardMimeTypes(IntPtr num_mime_types); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_cpuinfo.h
 
@@ -2005,7 +2005,7 @@ namespace SDL3
 		public static extern SDL_SystemTheme SDL_GetSystemTheme();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetDisplays(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetDisplays(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_GetPrimaryDisplay();
@@ -2021,10 +2021,10 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetDisplayBounds(uint displayID, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetDisplayBounds(uint displayID, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetDisplayUsableBounds(uint displayID, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetDisplayUsableBounds(uint displayID, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_DisplayOrientation SDL_GetNaturalDisplayOrientation(uint displayID);
@@ -2036,10 +2036,10 @@ namespace SDL3
 		public static extern float SDL_GetDisplayContentScale(uint displayID);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetFullscreenDisplayModes(uint displayID, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetFullscreenDisplayModes(uint displayID, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetClosestFullscreenDisplayMode(uint displayID, int w, int h, float refresh_rate, bool include_high_density_modes, ref SDL_DisplayMode mode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetClosestFullscreenDisplayMode(uint displayID, int w, int h, float refresh_rate, bool include_high_density_modes, IntPtr mode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetDesktopDisplayMode(uint displayID);
@@ -2048,10 +2048,10 @@ namespace SDL3
 		public static extern IntPtr SDL_GetCurrentDisplayMode(uint displayID);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_GetDisplayForPoint(ref SDL_Point point); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_GetDisplayForPoint(IntPtr point); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_GetDisplayForRect(ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_GetDisplayForRect(IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_GetDisplayForWindow(IntPtr window);
@@ -2063,19 +2063,19 @@ namespace SDL3
 		public static extern float SDL_GetWindowDisplayScale(IntPtr window);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetWindowFullscreenMode(IntPtr window, ref SDL_DisplayMode mode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetWindowFullscreenMode(IntPtr window, IntPtr mode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetWindowFullscreenMode(IntPtr window);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetWindowICCProfile(IntPtr window, ref UIntPtr size); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetWindowICCProfile(IntPtr window, IntPtr size); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_PixelFormat SDL_GetWindowPixelFormat(IntPtr window);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetWindows(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetWindows(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_CreateWindow", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_CreateWindow(byte* title, int w, int h, SDL_WindowFlags flags);
@@ -2128,46 +2128,46 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetWindowIcon(IntPtr window, ref SDL_Surface icon); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetWindowIcon(IntPtr window, IntPtr icon); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetWindowPosition(IntPtr window, int x, int y);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowPosition(IntPtr window, ref int x, ref int y); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowPosition(IntPtr window, IntPtr x, IntPtr y); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetWindowSize(IntPtr window, int w, int h);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowSize(IntPtr window, ref int w, ref int h); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowSize(IntPtr window, IntPtr w, IntPtr h); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowSafeArea(IntPtr window, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowSafeArea(IntPtr window, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetWindowAspectRatio(IntPtr window, float min_aspect, float max_aspect);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowAspectRatio(IntPtr window, ref float min_aspect, ref float max_aspect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowAspectRatio(IntPtr window, IntPtr min_aspect, IntPtr max_aspect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowBordersSize(IntPtr window, ref int top, ref int left, ref int bottom, ref int right); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowBordersSize(IntPtr window, IntPtr top, IntPtr left, IntPtr bottom, IntPtr right); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowSizeInPixels(IntPtr window, ref int w, ref int h); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowSizeInPixels(IntPtr window, IntPtr w, IntPtr h); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetWindowMinimumSize(IntPtr window, int min_w, int min_h);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowMinimumSize(IntPtr window, ref int w, ref int h); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowMinimumSize(IntPtr window, IntPtr w, IntPtr h); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetWindowMaximumSize(IntPtr window, int max_w, int max_h);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowMaximumSize(IntPtr window, ref int w, ref int h); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowMaximumSize(IntPtr window, IntPtr w, IntPtr h); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetWindowBordered(IntPtr window, bool bordered);
@@ -2212,13 +2212,13 @@ namespace SDL3
 		public static extern bool SDL_SetWindowSurfaceVSync(IntPtr window, int vsync);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetWindowSurfaceVSync(IntPtr window, ref int vsync); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetWindowSurfaceVSync(IntPtr window, IntPtr vsync); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_UpdateWindowSurface(IntPtr window);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_UpdateWindowSurfaceRects(IntPtr window, ref SDL_Rect rects, int numrects); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_UpdateWindowSurfaceRects(IntPtr window, IntPtr rects, int numrects); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_DestroyWindowSurface(IntPtr window);
@@ -2239,7 +2239,7 @@ namespace SDL3
 		public static extern IntPtr SDL_GetGrabbedWindow();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetWindowMouseRect(IntPtr window, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetWindowMouseRect(IntPtr window, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetWindowMouseRect(IntPtr window);
@@ -2282,7 +2282,7 @@ namespace SDL3
 		public static extern bool SDL_SetWindowHitTest(IntPtr window, /* SDL_HitTest */ IntPtr callback, IntPtr callback_data);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetWindowShape(IntPtr window, ref SDL_Surface shape); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetWindowShape(IntPtr window, IntPtr shape); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_FlashWindow(IntPtr window, SDL_FlashOperation operation);
@@ -2353,7 +2353,7 @@ namespace SDL3
 		public static extern bool SDL_GL_SetAttribute(SDL_GLattr attr, int value);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GL_GetAttribute(SDL_GLattr attr, ref int value); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GL_GetAttribute(SDL_GLattr attr, IntPtr value); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GL_CreateContext(IntPtr window);
@@ -2383,7 +2383,7 @@ namespace SDL3
 		public static extern bool SDL_GL_SetSwapInterval(int interval);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GL_GetSwapInterval(ref int interval); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GL_GetSwapInterval(IntPtr interval); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_GL_SwapWindow(IntPtr window);
@@ -2403,21 +2403,21 @@ namespace SDL3
 		// public delegate WARN_PLACEHOLDER SDL_DialogFileCallback();
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowOpenFileDialog", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void INTERNAL_SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, byte* default_location, bool allow_many); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, string default_location, bool allow_many)
+		private static extern void INTERNAL_SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, IntPtr filters, int nfilters, byte* default_location, bool allow_many); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, IntPtr filters, int nfilters, string default_location, bool allow_many)
 		{
 			var default_locationUTF8 = EncodeAsUTF8(default_location);
-			INTERNAL_SDL_ShowOpenFileDialog(callback, userdata, window, ref filters, nfilters, default_locationUTF8, allow_many);
+			INTERNAL_SDL_ShowOpenFileDialog(callback, userdata, window, filters, nfilters, default_locationUTF8, allow_many);
 
 			SDL_free((IntPtr) default_locationUTF8);
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowSaveFileDialog", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void INTERNAL_SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, byte* default_location); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static void SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, ref SDL_DialogFileFilter filters, int nfilters, string default_location)
+		private static extern void INTERNAL_SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, IntPtr filters, int nfilters, byte* default_location); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static void SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, IntPtr filters, int nfilters, string default_location)
 		{
 			var default_locationUTF8 = EncodeAsUTF8(default_location);
-			INTERNAL_SDL_ShowSaveFileDialog(callback, userdata, window, ref filters, nfilters, default_locationUTF8);
+			INTERNAL_SDL_ShowSaveFileDialog(callback, userdata, window, filters, nfilters, default_locationUTF8);
 
 			SDL_free((IntPtr) default_locationUTF8);
 		}
@@ -2489,7 +2489,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_PowerState SDL_GetPowerInfo(ref int seconds, ref int percent); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern SDL_PowerState SDL_GetPowerInfo(IntPtr seconds, IntPtr percent); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_sensor.h
 
@@ -2506,7 +2506,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetSensors(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetSensors(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetSensorNameForID", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetSensorNameForID(uint instance_id);
@@ -2547,7 +2547,7 @@ namespace SDL3
 		public static extern uint SDL_GetSensorID(IntPtr sensor);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetSensorData(IntPtr sensor, ref float data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetSensorData(IntPtr sensor, IntPtr data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_CloseSensor(IntPtr sensor);
@@ -2590,7 +2590,7 @@ namespace SDL3
 		public static extern bool SDL_HasJoystick();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetJoysticks(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetJoysticks(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetJoystickNameForID", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetJoystickNameForID(uint instance_id);
@@ -2682,7 +2682,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_AttachVirtualJoystick(ref SDL_VirtualJoystickDesc desc); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern uint SDL_AttachVirtualJoystick(IntPtr desc); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_DetachVirtualJoystick(uint instance_id);
@@ -2706,7 +2706,7 @@ namespace SDL3
 		public static extern bool SDL_SetJoystickVirtualTouchpad(IntPtr joystick, int touchpad, int finger, bool down, float x, float y, float pressure);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, ulong sensor_timestamp, ref float data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, ulong sensor_timestamp, IntPtr data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_GetJoystickProperties(IntPtr joystick);
@@ -2757,7 +2757,7 @@ namespace SDL3
 		public static extern SDL_JoystickType SDL_GetJoystickType(IntPtr joystick);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_GetJoystickGUIDInfo(SDL_GUID guid, ref ushort vendor, ref ushort product, ref ushort version, ref ushort crc16); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_GetJoystickGUIDInfo(SDL_GUID guid, IntPtr vendor, IntPtr product, IntPtr version, IntPtr crc16); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_JoystickConnected(IntPtr joystick);
@@ -2790,10 +2790,10 @@ namespace SDL3
 		public static extern short SDL_GetJoystickAxis(IntPtr joystick, int axis);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetJoystickAxisInitialState(IntPtr joystick, int axis, ref short state); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetJoystickAxisInitialState(IntPtr joystick, int axis, IntPtr state); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetJoystickBall(IntPtr joystick, int ball, ref int dx, ref int dy); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetJoystickBall(IntPtr joystick, int ball, IntPtr dx, IntPtr dy); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern byte SDL_GetJoystickHat(IntPtr joystick, int hat);
@@ -2820,7 +2820,7 @@ namespace SDL3
 		public static extern SDL_JoystickConnectionState SDL_GetJoystickConnectionState(IntPtr joystick);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_PowerState SDL_GetJoystickPowerInfo(IntPtr joystick, ref int percent); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern SDL_PowerState SDL_GetJoystickPowerInfo(IntPtr joystick, IntPtr percent); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_gamepad.h
 
@@ -2976,7 +2976,7 @@ namespace SDL3
 		public static extern bool SDL_ReloadGamepadMappings();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetGamepadMappings(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetGamepadMappings(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetGamepadMappingForGUID", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetGamepadMappingForGUID(SDL_GUID guid);
@@ -3007,7 +3007,7 @@ namespace SDL3
 		public static extern bool SDL_HasGamepad();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetGamepads(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetGamepads(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_IsGamepad(uint instance_id);
@@ -3121,7 +3121,7 @@ namespace SDL3
 		public static extern SDL_JoystickConnectionState SDL_GetGamepadConnectionState(IntPtr gamepad);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_PowerState SDL_GetGamepadPowerInfo(IntPtr gamepad, ref int percent); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern SDL_PowerState SDL_GetGamepadPowerInfo(IntPtr gamepad, IntPtr percent); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_GamepadConnected(IntPtr gamepad);
@@ -3136,7 +3136,7 @@ namespace SDL3
 		public static extern bool SDL_GamepadEventsEnabled();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetGamepadBindings(IntPtr gamepad, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetGamepadBindings(IntPtr gamepad, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_UpdateGamepads();
@@ -3220,7 +3220,7 @@ namespace SDL3
 		public static extern int SDL_GetNumGamepadTouchpadFingers(IntPtr gamepad, int touchpad);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, ref bool down, ref float x, ref float y, ref float pressure); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetGamepadTouchpadFinger(IntPtr gamepad, int touchpad, int finger, IntPtr down, IntPtr x, IntPtr y, IntPtr pressure); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_GamepadHasSensor(IntPtr gamepad, SDL_SensorType type);
@@ -3235,7 +3235,7 @@ namespace SDL3
 		public static extern float SDL_GetGamepadSensorDataRate(IntPtr gamepad, SDL_SensorType type);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, ref float data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, IntPtr data, int num_values); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_RumbleGamepad(IntPtr gamepad, ushort low_frequency_rumble, ushort high_frequency_rumble, uint duration_ms);
@@ -3805,7 +3805,7 @@ namespace SDL3
 		public static extern bool SDL_HasKeyboard();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetKeyboards(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetKeyboards(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetKeyboardNameForID", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetKeyboardNameForID(uint instance_id);
@@ -3818,7 +3818,7 @@ namespace SDL3
 		public static extern IntPtr SDL_GetKeyboardFocus();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetKeyboardState(ref int numkeys); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetKeyboardState(IntPtr numkeys); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_ResetKeyboard();
@@ -3919,10 +3919,10 @@ namespace SDL3
 		public static extern bool SDL_ClearComposition(IntPtr window);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetTextInputArea(IntPtr window, ref SDL_Rect rect, int cursor); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetTextInputArea(IntPtr window, IntPtr rect, int cursor); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetTextInputArea(IntPtr window, ref SDL_Rect rect, ref int cursor); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetTextInputArea(IntPtr window, IntPtr rect, IntPtr cursor); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_HasScreenKeyboardSupport();
@@ -3977,7 +3977,7 @@ namespace SDL3
 		public static extern bool SDL_HasMouse();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetMice(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetMice(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetMouseNameForID", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetMouseNameForID(uint instance_id);
@@ -3990,13 +3990,13 @@ namespace SDL3
 		public static extern IntPtr SDL_GetMouseFocus();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_MouseButtonFlags SDL_GetMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern SDL_MouseButtonFlags SDL_GetMouseState(IntPtr x, IntPtr y); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_MouseButtonFlags SDL_GetGlobalMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern SDL_MouseButtonFlags SDL_GetGlobalMouseState(IntPtr x, IntPtr y); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_MouseButtonFlags SDL_GetRelativeMouseState(ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern SDL_MouseButtonFlags SDL_GetRelativeMouseState(IntPtr x, IntPtr y); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_WarpMouseInWindow(IntPtr window, float x, float y);
@@ -4014,10 +4014,10 @@ namespace SDL3
 		public static extern bool SDL_CaptureMouse(bool enabled);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateCursor(ref byte data, ref byte mask, int w, int h, int hot_x, int hot_y); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateCursor(IntPtr data, IntPtr mask, int w, int h, int hot_x, int hot_y); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateColorCursor(ref SDL_Surface surface, int hot_x, int hot_y); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateColorCursor(IntPtr surface, int hot_x, int hot_y); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_CreateSystemCursor(SDL_SystemCursor id);
@@ -4089,7 +4089,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetTouchDevices(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetTouchDevices(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetTouchDeviceName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetTouchDeviceName(ulong touchID);
@@ -4102,7 +4102,7 @@ namespace SDL3
 		public static extern SDL_TouchDeviceType SDL_GetTouchDeviceType(ulong touchID);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetTouchFingers(ulong touchID, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetTouchFingers(ulong touchID, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_events.h
 
@@ -5020,7 +5020,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_PeepEvents(ref SDL_Event events, int numevents, SDL_EventAction action, uint minType, uint maxType); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_PeepEvents(IntPtr events, int numevents, SDL_EventAction action, uint minType, uint maxType); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_HasEvent(uint type);
@@ -5035,16 +5035,16 @@ namespace SDL3
 		public static extern void SDL_FlushEvents(uint minType, uint maxType);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_PollEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_PollEvent(IntPtr @event); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_WaitEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_WaitEvent(IntPtr @event); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_WaitEventTimeout(ref SDL_Event @event, int timeoutMS); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_WaitEventTimeout(IntPtr @event, int timeoutMS); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_PushEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_PushEvent(IntPtr @event); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// public delegate WARN_PLACEHOLDER SDL_EventFilter();
 
@@ -5052,7 +5052,7 @@ namespace SDL3
 		public static extern void SDL_SetEventFilter(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetEventFilter(IntPtr filter, ref IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetEventFilter(IntPtr filter, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_AddEventWatch(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
@@ -5073,7 +5073,7 @@ namespace SDL3
 		public static extern uint SDL_RegisterEvents(int numevents);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetWindowFromEvent(ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetWindowFromEvent(IntPtr @event); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_filesystem.h
 
@@ -5213,23 +5213,23 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetPathInfo", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_GetPathInfo(byte* path, ref SDL_PathInfo info); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static bool SDL_GetPathInfo(string path, ref SDL_PathInfo info)
+		private static extern bool INTERNAL_SDL_GetPathInfo(byte* path, IntPtr info); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static bool SDL_GetPathInfo(string path, IntPtr info)
 		{
 			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_GetPathInfo(pathUTF8, ref info);
+			var result = INTERNAL_SDL_GetPathInfo(pathUTF8, info);
 
 			SDL_free((IntPtr) pathUTF8);
 			return result;
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GlobDirectory", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_SDL_GlobDirectory(byte* path, byte* pattern, SDL_GlobFlags flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static IntPtr SDL_GlobDirectory(string path, string pattern, SDL_GlobFlags flags, ref int count)
+		private static extern IntPtr INTERNAL_SDL_GlobDirectory(byte* path, byte* pattern, SDL_GlobFlags flags, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static IntPtr SDL_GlobDirectory(string path, string pattern, SDL_GlobFlags flags, IntPtr count)
 		{
 			var pathUTF8 = EncodeAsUTF8(path);
 			var patternUTF8 = EncodeAsUTF8(pattern);
-			var result = INTERNAL_SDL_GlobDirectory(pathUTF8, patternUTF8, flags, ref count);
+			var result = INTERNAL_SDL_GlobDirectory(pathUTF8, patternUTF8, flags, count);
 
 			SDL_free((IntPtr) pathUTF8);
 			SDL_free((IntPtr) patternUTF8);
@@ -6007,25 +6007,25 @@ namespace SDL3
 		public static extern uint SDL_GetGPUShaderFormats(IntPtr device);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateGPUComputePipeline(IntPtr device, ref SDL_GPUComputePipelineCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateGPUComputePipeline(IntPtr device, IntPtr createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateGPUGraphicsPipeline(IntPtr device, ref SDL_GPUGraphicsPipelineCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateGPUGraphicsPipeline(IntPtr device, IntPtr createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateGPUSampler(IntPtr device, ref SDL_GPUSamplerCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateGPUSampler(IntPtr device, IntPtr createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateGPUShader(IntPtr device, ref SDL_GPUShaderCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateGPUShader(IntPtr device, IntPtr createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateGPUTexture(IntPtr device, ref SDL_GPUTextureCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateGPUTexture(IntPtr device, IntPtr createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateGPUBuffer(IntPtr device, ref SDL_GPUBufferCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateGPUBuffer(IntPtr device, IntPtr createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateGPUTransferBuffer(IntPtr device, ref SDL_GPUTransferBufferCreateInfo createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateGPUTransferBuffer(IntPtr device, IntPtr createinfo); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetGPUBufferName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, byte* text);
@@ -6104,16 +6104,16 @@ namespace SDL3
 		public static extern void SDL_PushGPUComputeUniformData(IntPtr command_buffer, uint slot_index, IntPtr data, uint length);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_BeginGPURenderPass(IntPtr command_buffer, ref SDL_GPUColorTargetInfo color_target_infos, uint num_color_targets, ref SDL_GPUDepthStencilTargetInfo depth_stencil_target_info); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_BeginGPURenderPass(IntPtr command_buffer, IntPtr color_target_infos, uint num_color_targets, IntPtr depth_stencil_target_info); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_BindGPUGraphicsPipeline(IntPtr render_pass, IntPtr graphics_pipeline);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetGPUViewport(IntPtr render_pass, ref SDL_GPUViewport viewport); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_SetGPUViewport(IntPtr render_pass, IntPtr viewport); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetGPUScissor(IntPtr render_pass, ref SDL_Rect scissor); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_SetGPUScissor(IntPtr render_pass, IntPtr scissor); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetGPUBlendConstants(IntPtr render_pass, SDL_FColor blend_constants);
@@ -6122,28 +6122,28 @@ namespace SDL3
 		public static extern void SDL_SetGPUStencilReference(IntPtr render_pass, byte reference);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUVertexBuffers(IntPtr render_pass, uint first_slot, ref SDL_GPUBufferBinding bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUVertexBuffers(IntPtr render_pass, uint first_slot, IntPtr bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUIndexBuffer(IntPtr render_pass, ref SDL_GPUBufferBinding binding, SDL_GPUIndexElementSize index_element_size); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUIndexBuffer(IntPtr render_pass, IntPtr binding, SDL_GPUIndexElementSize index_element_size); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUVertexSamplers(IntPtr render_pass, uint first_slot, ref SDL_GPUTextureSamplerBinding texture_sampler_bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUVertexSamplers(IntPtr render_pass, uint first_slot, IntPtr texture_sampler_bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUVertexStorageTextures(IntPtr render_pass, uint first_slot, ref IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUVertexStorageTextures(IntPtr render_pass, uint first_slot, IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUVertexStorageBuffers(IntPtr render_pass, uint first_slot, ref IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUVertexStorageBuffers(IntPtr render_pass, uint first_slot, IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUFragmentSamplers(IntPtr render_pass, uint first_slot, ref SDL_GPUTextureSamplerBinding texture_sampler_bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUFragmentSamplers(IntPtr render_pass, uint first_slot, IntPtr texture_sampler_bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUFragmentStorageTextures(IntPtr render_pass, uint first_slot, ref IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUFragmentStorageTextures(IntPtr render_pass, uint first_slot, IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUFragmentStorageBuffers(IntPtr render_pass, uint first_slot, ref IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUFragmentStorageBuffers(IntPtr render_pass, uint first_slot, IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DrawGPUIndexedPrimitives(IntPtr render_pass, uint num_indices, uint num_instances, uint first_index, int vertex_offset, uint first_instance);
@@ -6161,19 +6161,19 @@ namespace SDL3
 		public static extern void SDL_EndGPURenderPass(IntPtr render_pass);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_BeginGPUComputePass(IntPtr command_buffer, ref SDL_GPUStorageTextureReadWriteBinding storage_texture_bindings, uint num_storage_texture_bindings, ref SDL_GPUStorageBufferReadWriteBinding storage_buffer_bindings, uint num_storage_buffer_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_BeginGPUComputePass(IntPtr command_buffer, IntPtr storage_texture_bindings, uint num_storage_texture_bindings, IntPtr storage_buffer_bindings, uint num_storage_buffer_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_BindGPUComputePipeline(IntPtr compute_pass, IntPtr compute_pipeline);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUComputeSamplers(IntPtr compute_pass, uint first_slot, ref SDL_GPUTextureSamplerBinding texture_sampler_bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUComputeSamplers(IntPtr compute_pass, uint first_slot, IntPtr texture_sampler_bindings, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUComputeStorageTextures(IntPtr compute_pass, uint first_slot, ref IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUComputeStorageTextures(IntPtr compute_pass, uint first_slot, IntPtr storage_textures, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BindGPUComputeStorageBuffers(IntPtr compute_pass, uint first_slot, ref IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BindGPUComputeStorageBuffers(IntPtr compute_pass, uint first_slot, IntPtr storage_buffers, uint num_bindings); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DispatchGPUCompute(IntPtr compute_pass, uint groupcount_x, uint groupcount_y, uint groupcount_z);
@@ -6194,22 +6194,22 @@ namespace SDL3
 		public static extern IntPtr SDL_BeginGPUCopyPass(IntPtr command_buffer);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_UploadToGPUTexture(IntPtr copy_pass, ref SDL_GPUTextureTransferInfo source, ref SDL_GPUTextureRegion destination, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_UploadToGPUTexture(IntPtr copy_pass, IntPtr source, IntPtr destination, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_UploadToGPUBuffer(IntPtr copy_pass, ref SDL_GPUTransferBufferLocation source, ref SDL_GPUBufferRegion destination, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_UploadToGPUBuffer(IntPtr copy_pass, IntPtr source, IntPtr destination, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_CopyGPUTextureToTexture(IntPtr copy_pass, ref SDL_GPUTextureLocation source, ref SDL_GPUTextureLocation destination, uint w, uint h, uint d, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_CopyGPUTextureToTexture(IntPtr copy_pass, IntPtr source, IntPtr destination, uint w, uint h, uint d, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_CopyGPUBufferToBuffer(IntPtr copy_pass, ref SDL_GPUBufferLocation source, ref SDL_GPUBufferLocation destination, uint size, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_CopyGPUBufferToBuffer(IntPtr copy_pass, IntPtr source, IntPtr destination, uint size, bool cycle); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_DownloadFromGPUTexture(IntPtr copy_pass, ref SDL_GPUTextureRegion source, ref SDL_GPUTextureTransferInfo destination); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_DownloadFromGPUTexture(IntPtr copy_pass, IntPtr source, IntPtr destination); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_DownloadFromGPUBuffer(IntPtr copy_pass, ref SDL_GPUBufferRegion source, ref SDL_GPUTransferBufferLocation destination); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_DownloadFromGPUBuffer(IntPtr copy_pass, IntPtr source, IntPtr destination); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_EndGPUCopyPass(IntPtr copy_pass);
@@ -6218,7 +6218,7 @@ namespace SDL3
 		public static extern void SDL_GenerateMipmapsForGPUTexture(IntPtr command_buffer, IntPtr texture);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_BlitGPUTexture(IntPtr command_buffer, ref SDL_GPUBlitInfo info); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_BlitGPUTexture(IntPtr command_buffer, IntPtr info); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_WindowSupportsGPUSwapchainComposition(IntPtr device, IntPtr window, SDL_GPUSwapchainComposition swapchain_composition);
@@ -6239,7 +6239,7 @@ namespace SDL3
 		public static extern SDL_GPUTextureFormat SDL_GetGPUSwapchainTextureFormat(IntPtr device, IntPtr window);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_AcquireGPUSwapchainTexture(IntPtr command_buffer, IntPtr window, ref IntPtr swapchain_texture, ref uint swapchain_texture_width, ref uint swapchain_texture_height); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_AcquireGPUSwapchainTexture(IntPtr command_buffer, IntPtr window, IntPtr swapchain_texture, IntPtr swapchain_texture_width, IntPtr swapchain_texture_height); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SubmitGPUCommandBuffer(IntPtr command_buffer);
@@ -6251,7 +6251,7 @@ namespace SDL3
 		public static extern bool SDL_WaitForGPUIdle(IntPtr device);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_WaitForGPUFences(IntPtr device, bool wait_all, ref IntPtr fences, uint num_fences); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_WaitForGPUFences(IntPtr device, bool wait_all, IntPtr fences, uint num_fences); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_QueryGPUFence(IntPtr device, IntPtr fence);
@@ -6408,7 +6408,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetHaptics(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetHaptics(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetHapticNameForID", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetHapticNameForID(uint instance_id);
@@ -6461,13 +6461,13 @@ namespace SDL3
 		public static extern int SDL_GetNumHapticAxes(IntPtr haptic);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_HapticEffectSupported(IntPtr haptic, ref SDL_HapticEffect effect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_HapticEffectSupported(IntPtr haptic, IntPtr effect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_CreateHapticEffect(IntPtr haptic, ref SDL_HapticEffect effect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_CreateHapticEffect(IntPtr haptic, IntPtr effect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_UpdateHapticEffect(IntPtr haptic, int effect, ref SDL_HapticEffect data); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_UpdateHapticEffect(IntPtr haptic, int effect, IntPtr data); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_RunHapticEffect(IntPtr haptic, int effect, uint iterations);
@@ -6552,7 +6552,7 @@ namespace SDL3
 		public static extern IntPtr SDL_hid_enumerate(ushort vendor_id, ushort product_id);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_hid_free_enumeration(ref SDL_hid_device_info devs); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_hid_free_enumeration(IntPtr devs); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_hid_open", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_hid_open(ushort vendor_id, ushort product_id, byte* serial_number);
@@ -6577,25 +6577,25 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_hid_write(IntPtr dev, ref byte data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_hid_write(IntPtr dev, IntPtr data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_hid_read_timeout(IntPtr dev, ref byte data, UIntPtr length, int milliseconds); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_hid_read_timeout(IntPtr dev, IntPtr data, UIntPtr length, int milliseconds); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_hid_read(IntPtr dev, ref byte data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_hid_read(IntPtr dev, IntPtr data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_hid_set_nonblocking(IntPtr dev, int nonblock);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_hid_send_feature_report(IntPtr dev, ref byte data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_hid_send_feature_report(IntPtr dev, IntPtr data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_hid_get_feature_report(IntPtr dev, ref byte data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_hid_get_feature_report(IntPtr dev, IntPtr data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_hid_get_input_report(IntPtr dev, ref byte data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_hid_get_input_report(IntPtr dev, IntPtr data, UIntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_hid_close(IntPtr dev);
@@ -6648,7 +6648,7 @@ namespace SDL3
 		public static extern IntPtr SDL_hid_get_device_info(IntPtr dev);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_hid_get_report_descriptor(IntPtr dev, ref byte buf, UIntPtr buf_size); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern int SDL_hid_get_report_descriptor(IntPtr dev, IntPtr buf, UIntPtr buf_size); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_hid_ble_scan(bool active);
@@ -7096,7 +7096,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetPreferredLocales(ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_GetPreferredLocales(IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_log.h
 
@@ -7253,7 +7253,7 @@ namespace SDL3
 		// public delegate WARN_PLACEHOLDER SDL_LogOutputFunction();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_GetLogOutputFunction(IntPtr callback, ref IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_GetLogOutputFunction(IntPtr callback, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetLogOutputFunction(/* SDL_LogOutputFunction */ IntPtr callback, IntPtr userdata);
@@ -7326,7 +7326,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ShowMessageBox(ref SDL_MessageBoxData messageboxdata, ref int buttonid); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ShowMessageBox(IntPtr messageboxdata, IntPtr buttonid); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowSimpleMessageBox", CallingConvention = CallingConvention.Cdecl)]
 		private static extern bool INTERNAL_SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags flags, byte* title, byte* message, IntPtr window);
@@ -7394,7 +7394,7 @@ namespace SDL3
 		public static extern uint SDL_GetProcessProperties(IntPtr process);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_ReadProcess(IntPtr process, ref UIntPtr datasize, ref int exitcode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_ReadProcess(IntPtr process, IntPtr datasize, IntPtr exitcode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetProcessInput(IntPtr process);
@@ -7406,7 +7406,7 @@ namespace SDL3
 		public static extern bool SDL_KillProcess(IntPtr process, bool force);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_WaitProcess(IntPtr process, bool block, ref int exitcode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_WaitProcess(IntPtr process, bool block, IntPtr exitcode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DestroyProcess(IntPtr process);
@@ -7448,11 +7448,11 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_CreateWindowAndRenderer", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_CreateWindowAndRenderer(byte* title, int width, int height, SDL_WindowFlags window_flags, ref IntPtr window, ref IntPtr renderer); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static bool SDL_CreateWindowAndRenderer(string title, int width, int height, SDL_WindowFlags window_flags, ref IntPtr window, ref IntPtr renderer)
+		private static extern bool INTERNAL_SDL_CreateWindowAndRenderer(byte* title, int width, int height, SDL_WindowFlags window_flags, IntPtr window, IntPtr renderer); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static bool SDL_CreateWindowAndRenderer(string title, int width, int height, SDL_WindowFlags window_flags, IntPtr window, IntPtr renderer)
 		{
 			var titleUTF8 = EncodeAsUTF8(title);
-			var result = INTERNAL_SDL_CreateWindowAndRenderer(titleUTF8, width, height, window_flags, ref window, ref renderer);
+			var result = INTERNAL_SDL_CreateWindowAndRenderer(titleUTF8, width, height, window_flags, window, renderer);
 
 			SDL_free((IntPtr) titleUTF8);
 			return result;
@@ -7473,7 +7473,7 @@ namespace SDL3
 		public static extern IntPtr SDL_CreateRendererWithProperties(uint props);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateSoftwareRenderer(ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateSoftwareRenderer(IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetRenderer(IntPtr window);
@@ -7492,16 +7492,16 @@ namespace SDL3
 		public static extern uint SDL_GetRendererProperties(IntPtr renderer);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderOutputSize(IntPtr renderer, ref int w, ref int h); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderOutputSize(IntPtr renderer, IntPtr w, IntPtr h); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetCurrentRenderOutputSize(IntPtr renderer, ref int w, ref int h); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetCurrentRenderOutputSize(IntPtr renderer, IntPtr w, IntPtr h); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_CreateTexture(IntPtr renderer, SDL_PixelFormat format, SDL_TextureAccess access, int w, int h);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateTextureFromSurface(IntPtr renderer, ref SDL_Surface surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_CreateTextureFromSurface(IntPtr renderer, IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_CreateTextureWithProperties(IntPtr renderer, uint props);
@@ -7513,7 +7513,7 @@ namespace SDL3
 		public static extern IntPtr SDL_GetRendererFromTexture(IntPtr texture);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetTextureSize(IntPtr texture, ref float w, ref float h); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetTextureSize(IntPtr texture, IntPtr w, IntPtr h); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetTextureColorMod(IntPtr texture, byte r, byte g, byte b);
@@ -7522,10 +7522,10 @@ namespace SDL3
 		public static extern bool SDL_SetTextureColorModFloat(IntPtr texture, float r, float g, float b);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetTextureColorMod(IntPtr texture, ref byte r, ref byte g, ref byte b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetTextureColorMod(IntPtr texture, IntPtr r, IntPtr g, IntPtr b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetTextureColorModFloat(IntPtr texture, ref float r, ref float g, ref float b); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetTextureColorModFloat(IntPtr texture, IntPtr r, IntPtr g, IntPtr b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetTextureAlphaMod(IntPtr texture, byte alpha);
@@ -7534,10 +7534,10 @@ namespace SDL3
 		public static extern bool SDL_SetTextureAlphaModFloat(IntPtr texture, float alpha);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetTextureAlphaMod(IntPtr texture, ref byte alpha); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetTextureAlphaMod(IntPtr texture, IntPtr alpha); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetTextureAlphaModFloat(IntPtr texture, ref float alpha); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetTextureAlphaModFloat(IntPtr texture, IntPtr alpha); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetTextureBlendMode(IntPtr texture, uint blendMode);
@@ -7549,22 +7549,22 @@ namespace SDL3
 		public static extern bool SDL_SetTextureScaleMode(IntPtr texture, SDL_ScaleMode scaleMode);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetTextureScaleMode(IntPtr texture, ref SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetTextureScaleMode(IntPtr texture, IntPtr scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_UpdateTexture(IntPtr texture, ref SDL_Rect rect, IntPtr pixels, int pitch); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_UpdateTexture(IntPtr texture, IntPtr rect, IntPtr pixels, int pitch); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_UpdateYUVTexture(IntPtr texture, ref SDL_Rect rect, ref byte Yplane, int Ypitch, ref byte Uplane, int Upitch, ref byte Vplane, int Vpitch); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_UpdateYUVTexture(IntPtr texture, IntPtr rect, IntPtr Yplane, int Ypitch, IntPtr Uplane, int Upitch, IntPtr Vplane, int Vpitch); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_UpdateNVTexture(IntPtr texture, ref SDL_Rect rect, ref byte Yplane, int Ypitch, ref byte UVplane, int UVpitch); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_UpdateNVTexture(IntPtr texture, IntPtr rect, IntPtr Yplane, int Ypitch, IntPtr UVplane, int UVpitch); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_LockTexture(IntPtr texture, ref SDL_Rect rect, ref IntPtr pixels, ref int pitch); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_LockTexture(IntPtr texture, IntPtr rect, IntPtr pixels, IntPtr pitch); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_LockTextureToSurface(IntPtr texture, ref SDL_Rect rect, ref IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_LockTextureToSurface(IntPtr texture, IntPtr rect, IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_UnlockTexture(IntPtr texture);
@@ -7579,37 +7579,37 @@ namespace SDL3
 		public static extern bool SDL_SetRenderLogicalPresentation(IntPtr renderer, int w, int h, SDL_RendererLogicalPresentation mode);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderLogicalPresentation(IntPtr renderer, ref int w, ref int h, ref SDL_RendererLogicalPresentation mode); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderLogicalPresentation(IntPtr renderer, IntPtr w, IntPtr h, IntPtr mode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderLogicalPresentationRect(IntPtr renderer, ref SDL_FRect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderLogicalPresentationRect(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderCoordinatesFromWindow(IntPtr renderer, float window_x, float window_y, ref float x, ref float y); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderCoordinatesFromWindow(IntPtr renderer, float window_x, float window_y, IntPtr x, IntPtr y); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderCoordinatesToWindow(IntPtr renderer, float x, float y, ref float window_x, ref float window_y); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderCoordinatesToWindow(IntPtr renderer, float x, float y, IntPtr window_x, IntPtr window_y); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_ConvertEventToRenderCoordinates(IntPtr renderer, ref SDL_Event @event); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_ConvertEventToRenderCoordinates(IntPtr renderer, IntPtr @event); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetRenderViewport(IntPtr renderer, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetRenderViewport(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderViewport(IntPtr renderer, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderViewport(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_RenderViewportSet(IntPtr renderer);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderSafeArea(IntPtr renderer, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderSafeArea(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetRenderClipRect(IntPtr renderer, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_SetRenderClipRect(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderClipRect(IntPtr renderer, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderClipRect(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_RenderClipEnabled(IntPtr renderer);
@@ -7618,7 +7618,7 @@ namespace SDL3
 		public static extern bool SDL_SetRenderScale(IntPtr renderer, float scaleX, float scaleY);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderScale(IntPtr renderer, ref float scaleX, ref float scaleY); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderScale(IntPtr renderer, IntPtr scaleX, IntPtr scaleY); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetRenderDrawColor(IntPtr renderer, byte r, byte g, byte b, byte a);
@@ -7627,16 +7627,16 @@ namespace SDL3
 		public static extern bool SDL_SetRenderDrawColorFloat(IntPtr renderer, float r, float g, float b, float a);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderDrawColor(IntPtr renderer, ref byte r, ref byte g, ref byte b, ref byte a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderDrawColor(IntPtr renderer, IntPtr r, IntPtr g, IntPtr b, IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderDrawColorFloat(IntPtr renderer, ref float r, ref float g, ref float b, ref float a); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderDrawColorFloat(IntPtr renderer, IntPtr r, IntPtr g, IntPtr b, IntPtr a); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetRenderColorScale(IntPtr renderer, float scale);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderColorScale(IntPtr renderer, ref float scale); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderColorScale(IntPtr renderer, IntPtr scale); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetRenderDrawBlendMode(IntPtr renderer, uint blendMode);
@@ -7651,46 +7651,46 @@ namespace SDL3
 		public static extern bool SDL_RenderPoint(IntPtr renderer, float x, float y);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderPoints(IntPtr renderer, ref SDL_FPoint points, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderPoints(IntPtr renderer, IntPtr points, int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_RenderLine(IntPtr renderer, float x1, float y1, float x2, float y2);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderLines(IntPtr renderer, ref SDL_FPoint points, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderLines(IntPtr renderer, IntPtr points, int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderRect(IntPtr renderer, ref SDL_FRect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderRect(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderRects(IntPtr renderer, ref SDL_FRect rects, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderRects(IntPtr renderer, IntPtr rects, int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderFillRect(IntPtr renderer, ref SDL_FRect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderFillRect(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderFillRects(IntPtr renderer, ref SDL_FRect rects, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderFillRects(IntPtr renderer, IntPtr rects, int count); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderTexture(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, ref SDL_FRect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderTexture(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderTextureRotated(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, ref SDL_FRect dstrect, double angle, ref SDL_FPoint center, SDL_FlipMode flip); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderTextureRotated(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect, double angle, IntPtr center, SDL_FlipMode flip); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderTextureTiled(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float scale, ref SDL_FRect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderTextureTiled(IntPtr renderer, IntPtr texture, IntPtr srcrect, float scale, IntPtr dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderTexture9Grid(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float left_width, float right_width, float top_height, float bottom_height, float scale, ref SDL_FRect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderTexture9Grid(IntPtr renderer, IntPtr texture, IntPtr srcrect, float left_width, float right_width, float top_height, float bottom_height, float scale, IntPtr dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, ref SDL_Vertex vertices, int num_vertices, ref int indices, int num_indices); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, IntPtr vertices, int num_vertices, IntPtr indices, int num_indices); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_RenderGeometryRaw(IntPtr renderer, IntPtr texture, ref float xy, int xy_stride, ref SDL_FColor color, int color_stride, ref float uv, int uv_stride, int num_vertices, IntPtr indices, int num_indices, int size_indices); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_RenderGeometryRaw(IntPtr renderer, IntPtr texture, IntPtr xy, int xy_stride, IntPtr color, int color_stride, IntPtr uv, int uv_stride, int num_vertices, IntPtr indices, int num_indices, int size_indices); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_RenderReadPixels(IntPtr renderer, ref SDL_Rect rect); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_RenderReadPixels(IntPtr renderer, IntPtr rect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_RenderPresent(IntPtr renderer);
@@ -7717,7 +7717,7 @@ namespace SDL3
 		public static extern bool SDL_SetRenderVSync(IntPtr renderer, int vsync);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetRenderVSync(IntPtr renderer, ref int vsync); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetRenderVSync(IntPtr renderer, IntPtr vsync); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		// /usr/local/include/SDL3/SDL_storage.h
 
@@ -7774,7 +7774,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_OpenStorage(ref SDL_StorageInterface iface, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern IntPtr SDL_OpenStorage(IntPtr iface, IntPtr userdata); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_CloseStorage(IntPtr storage);
@@ -7783,11 +7783,11 @@ namespace SDL3
 		public static extern bool SDL_StorageReady(IntPtr storage);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetStorageFileSize", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_GetStorageFileSize(IntPtr storage, byte* path, ref ulong length); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static bool SDL_GetStorageFileSize(IntPtr storage, string path, ref ulong length)
+		private static extern bool INTERNAL_SDL_GetStorageFileSize(IntPtr storage, byte* path, IntPtr length); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static bool SDL_GetStorageFileSize(IntPtr storage, string path, IntPtr length)
 		{
 			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_GetStorageFileSize(storage, pathUTF8, ref length);
+			var result = INTERNAL_SDL_GetStorageFileSize(storage, pathUTF8, length);
 
 			SDL_free((IntPtr) pathUTF8);
 			return result;
@@ -7875,11 +7875,11 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetStoragePathInfo", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_GetStoragePathInfo(IntPtr storage, byte* path, ref SDL_PathInfo info); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static bool SDL_GetStoragePathInfo(IntPtr storage, string path, ref SDL_PathInfo info)
+		private static extern bool INTERNAL_SDL_GetStoragePathInfo(IntPtr storage, byte* path, IntPtr info); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static bool SDL_GetStoragePathInfo(IntPtr storage, string path, IntPtr info)
 		{
 			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_GetStoragePathInfo(storage, pathUTF8, ref info);
+			var result = INTERNAL_SDL_GetStoragePathInfo(storage, pathUTF8, info);
 
 			SDL_free((IntPtr) pathUTF8);
 			return result;
@@ -7889,12 +7889,12 @@ namespace SDL3
 		public static extern ulong SDL_GetStorageSpaceRemaining(IntPtr storage);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GlobStorageDirectory", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_SDL_GlobStorageDirectory(IntPtr storage, byte* path, byte* pattern, SDL_GlobFlags flags, ref int count); // WARN_UNKNOWN_POINTER_PARAMETER
-		public static IntPtr SDL_GlobStorageDirectory(IntPtr storage, string path, string pattern, SDL_GlobFlags flags, ref int count)
+		private static extern IntPtr INTERNAL_SDL_GlobStorageDirectory(IntPtr storage, byte* path, byte* pattern, SDL_GlobFlags flags, IntPtr count); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static IntPtr SDL_GlobStorageDirectory(IntPtr storage, string path, string pattern, SDL_GlobFlags flags, IntPtr count)
 		{
 			var pathUTF8 = EncodeAsUTF8(path);
 			var patternUTF8 = EncodeAsUTF8(pattern);
-			var result = INTERNAL_SDL_GlobStorageDirectory(storage, pathUTF8, patternUTF8, flags, ref count);
+			var result = INTERNAL_SDL_GlobStorageDirectory(storage, pathUTF8, patternUTF8, flags, count);
 
 			SDL_free((IntPtr) pathUTF8);
 			SDL_free((IntPtr) patternUTF8);
@@ -7965,19 +7965,19 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetDateTimeLocalePreferences(ref SDL_DateFormat dateFormat, ref SDL_TimeFormat timeFormat); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_GetDateTimeLocalePreferences(IntPtr dateFormat, IntPtr timeFormat); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_GetCurrentTime(IntPtr ticks);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_TimeToDateTime(long ticks, ref SDL_DateTime dt, bool localTime); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_TimeToDateTime(long ticks, IntPtr dt, bool localTime); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_DateTimeToTime(ref SDL_DateTime dt, IntPtr ticks); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern bool SDL_DateTimeToTime(IntPtr dt, IntPtr ticks); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_TimeToWindows(long ticks, ref uint dwLowDateTime, ref uint dwHighDateTime); // WARN_UNKNOWN_POINTER_PARAMETER
+		public static extern void SDL_TimeToWindows(long ticks, IntPtr dwLowDateTime, IntPtr dwHighDateTime); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern long SDL_TimeFromWindows(uint dwLowDateTime, uint dwHighDateTime);
