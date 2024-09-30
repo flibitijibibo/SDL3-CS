@@ -789,7 +789,7 @@ public static unsafe class SDL
 
             if (subtypeName == "char")
             {
-                return context == TypeContext.StructField ? "char*" : "UTF8_STRING";
+                return context == TypeContext.StructField ? "byte*" : "UTF8_STRING";
             }
 
             return context switch

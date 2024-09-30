@@ -80,10 +80,10 @@ namespace SDL3
 		{
 			public bool always_ignore;
 			public uint trigger_count;
-			public char* condition;
-			public char* filename;
+			public byte* condition;
+			public byte* filename;
 			public int linenum;
-			public char* function;
+			public byte* function;
 			public SDL_AssertData* next;
 		}
 
@@ -2396,8 +2396,8 @@ namespace SDL3
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_DialogFileFilter
 		{
-			public char* name;
-			public char* pattern;
+			public byte* name;
+			public byte* pattern;
 		}
 
 		// public delegate WARN_PLACEHOLDER SDL_DialogFileCallback();
@@ -2667,7 +2667,7 @@ namespace SDL3
 			public ushort padding21;
 			public uint button_mask;
 			public uint axis_mask;
-			public char* name;
+			public byte* name;
 			public SDL_VirtualJoystickTouchpadDesc* touchpads;
 			public SDL_VirtualJoystickSensorDesc* sensors;
 			public IntPtr userdata;
@@ -4284,7 +4284,7 @@ namespace SDL3
 			public uint reserved;
 			public ulong timestamp;
 			public uint windowID;
-			public char* text;
+			public byte* text;
 			public int start;
 			public int length;
 		}
@@ -4296,7 +4296,7 @@ namespace SDL3
 			public uint reserved;
 			public ulong timestamp;
 			public uint windowID;
-			public char** candidates;
+			public byte** candidates;
 			public int num_candidates;
 			public int selected_candidate;
 			public bool horizontal;
@@ -4312,7 +4312,7 @@ namespace SDL3
 			public uint reserved;
 			public ulong timestamp;
 			public uint windowID;
-			public char* text;
+			public byte* text;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -4626,8 +4626,8 @@ namespace SDL3
 			public uint windowID;
 			public float x;
 			public float y;
-			public char* source;
-			public char* data;
+			public byte* source;
+			public byte* data;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -5737,7 +5737,7 @@ namespace SDL3
 		{
 			public UIntPtr code_size;
 			public byte* code;
-			public char* entrypoint;
+			public byte* entrypoint;
 			public uint format;
 			public SDL_GPUShaderStage stage;
 			public uint num_samplers;
@@ -5857,7 +5857,7 @@ namespace SDL3
 		{
 			public UIntPtr code_size;
 			public byte* code;
-			public char* entrypoint;
+			public byte* entrypoint;
 			public uint format;
 			public uint num_samplers;
 			public uint num_readonly_storage_textures;
@@ -6522,13 +6522,13 @@ namespace SDL3
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_hid_device_info
 		{
-			public char* path;
+			public byte* path;
 			public ushort vendor_id;
 			public ushort product_id;
-			public char* serial_number;
+			public byte* serial_number;
 			public ushort release_number;
-			public char* manufacturer_string;
-			public char* product_string;
+			public byte* manufacturer_string;
+			public byte* product_string;
 			public ushort usage_page;
 			public ushort usage;
 			public int interface_number;
@@ -7091,8 +7091,8 @@ namespace SDL3
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Locale
 		{
-			public char* language;
-			public char* country;
+			public byte* language;
+			public byte* country;
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -7282,7 +7282,7 @@ namespace SDL3
 		{
 			public SDL_MessageBoxButtonFlags flags;
 			public int buttonID;
-			public char* text;
+			public byte* text;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -7318,8 +7318,8 @@ namespace SDL3
 		{
 			public SDL_MessageBoxFlags flags;
 			public IntPtr window;
-			public char* title;
-			public char* message;
+			public byte* title;
+			public byte* message;
 			public int numbuttons;
 			public SDL_MessageBoxButtonData* buttons;
 			public SDL_MessageBoxColorScheme* colorScheme;
