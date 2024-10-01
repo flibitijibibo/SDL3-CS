@@ -707,6 +707,34 @@ public static unsafe class SDL
         return result;
     }}
 
+    // Taken from https://github.com/ppy/SDL3-CS
+    // C# bools are not blittable, so we need this workaround
+    public readonly struct SDLBool
+    {{
+        private readonly byte value;
+
+        internal const byte FALSE_VALUE = 0;
+        internal const byte TRUE_VALUE = 1;
+
+        [Obsolete(""Never explicitly construct an SDL bool."")]
+        public SDLBool()
+        {{
+        }}
+
+        internal SDLBool(byte value)
+        {{
+            this.value = value;
+        }}
+
+        public static implicit operator bool(SDLBool b) => b.value != FALSE_VALUE;
+
+        public static implicit operator SDLBool(bool b) => new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+
+        public bool Equals(SDLBool other) => (bool)other == (bool)this;
+
+        public override int GetHashCode() => ((bool)this).GetHashCode();
+    }}
+
     {definitions}
 }}
 }}
@@ -753,7 +781,7 @@ public static unsafe class SDL
 
         return type.Tag switch
         {
-            "_Bool"            => "byte", // TODO: Figure out the MarshalAs magic for C# bool
+            "_Bool"            => "SDLBool", // TODO: Figure out the MarshalAs magic for C# bool
             "Sint8"            => "sbyte",
             "Sint16"           => "short",
             "int"              => "int",
