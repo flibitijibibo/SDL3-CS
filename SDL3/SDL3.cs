@@ -8060,6 +8060,23 @@ namespace SDL3
 			return DecodeFromUTF8(INTERNAL_SDL_GetRevision());
 		}
 
+		// /usr/local/include/SDL3/SDL_main.h
+
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate int SDL_main_func(int argc, IntPtr argv);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_main(int argc, IntPtr argv);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetMainReady();
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RunApp(int argc, IntPtr argv, SDL_main_func mainFunction, IntPtr reserved);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_EnterAppMainCallbacks(int argc, IntPtr argv, SDL_AppInit_func appinit, SDL_AppIterate_func appiter, SDL_AppEvent_func appevent, SDL_AppQuit_func appquit);
+
 
 	}
 }
