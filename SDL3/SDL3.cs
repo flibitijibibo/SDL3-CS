@@ -1282,8 +1282,7 @@ namespace SDL3
 			public SDL_PixelFormat format;
 			public byte bits_per_pixel;
 			public byte bytes_per_pixel;
-			public byte padding0;
-			public byte padding1;
+			public fixed byte padding[2];
 			public uint Rmask;
 			public uint Gmask;
 			public uint Bmask;
@@ -2450,22 +2449,7 @@ namespace SDL3
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_GUID
 		{
-			public byte data0;
-			public byte data1;
-			public byte data2;
-			public byte data3;
-			public byte data4;
-			public byte data5;
-			public byte data6;
-			public byte data7;
-			public byte data8;
-			public byte data9;
-			public byte data10;
-			public byte data11;
-			public byte data12;
-			public byte data13;
-			public byte data14;
-			public byte data15;
+			public fixed byte data[16];
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GUIDToString", CallingConvention = CallingConvention.Cdecl)]
@@ -2650,9 +2634,7 @@ namespace SDL3
 		public struct SDL_VirtualJoystickTouchpadDesc
 		{
 			public ushort nfingers;
-			public ushort padding0;
-			public ushort padding1;
-			public ushort padding2;
+			public fixed ushort padding[3];
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -2676,8 +2658,7 @@ namespace SDL3
 			public ushort nhats;
 			public ushort ntouchpads;
 			public ushort nsensors;
-			public ushort padding20;
-			public ushort padding21;
+			public fixed ushort padding2[2];
 			public uint button_mask;
 			public uint axis_mask;
 			public byte* name;
@@ -4518,9 +4499,7 @@ namespace SDL3
 			public ulong timestamp;
 			public uint which;
 			public int sensor;
-			public float data0;
-			public float data1;
-			public float data2;
+			public fixed float data[3];
 			public ulong sensor_timestamp;
 		}
 
@@ -4658,12 +4637,7 @@ namespace SDL3
 			public uint reserved;
 			public ulong timestamp;
 			public uint which;
-			public float data0;
-			public float data1;
-			public float data2;
-			public float data3;
-			public float data4;
-			public float data5;
+			public fixed float data[6];
 			public ulong sensor_timestamp;
 		}
 
@@ -6035,9 +6009,7 @@ namespace SDL3
 		public struct SDL_HapticDirection
 		{
 			public byte type;
-			public int dir0;
-			public int dir1;
-			public int dir2;
+			public fixed int dir[3];
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -6084,24 +6056,12 @@ namespace SDL3
 			public ushort delay;
 			public ushort button;
 			public ushort interval;
-			public ushort right_sat0;
-			public ushort right_sat1;
-			public ushort right_sat2;
-			public ushort left_sat0;
-			public ushort left_sat1;
-			public ushort left_sat2;
-			public short right_coeff0;
-			public short right_coeff1;
-			public short right_coeff2;
-			public short left_coeff0;
-			public short left_coeff1;
-			public short left_coeff2;
-			public ushort deadband0;
-			public ushort deadband1;
-			public ushort deadband2;
-			public short center0;
-			public short center1;
-			public short center2;
+			public fixed ushort right_sat[3];
+			public fixed ushort left_sat[3];
+			public fixed short right_coeff[3];
+			public fixed short left_coeff[3];
+			public fixed ushort deadband[3];
+			public fixed short center[3];
 		}
 
 		[StructLayout(LayoutKind.Sequential)]

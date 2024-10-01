@@ -284,6 +284,7 @@ internal static partial class Program
 
             else if ((entry.Tag == "struct") || (entry.Tag == "union"))
             {
+                TypedefMap[entry.Name!] = entry;
                 if (entry.Fields!.Length == 0)
                 {
                     continue;
@@ -875,12 +876,25 @@ public static unsafe class SDL
             else if (fieldTypeName == "INLINE_ARRAY")
             {
                 var elementTypeName = CSharpTypeFromFFI(type: fieldTypedef.Type!, TypeContext.StructField);
-                for (var i = 0; i < fieldTypedef.Size; i++)
+                if (elementTypeName.StartsWith("SDL_")) // fixed buffers only work on primitives
+                {
+                    var elementByteSize = GetTypeFromTypedefMap(fieldTypedef.Type!).BitSize ?? 0 / 8;
+                    for (var i = 0; i < fieldTypedef.Size; i++)
+                    {
+                        StructDefinition.OffsetFields.Add(
+                            (
+                                byteOffset + (uint) (elementByteSize * i) + (uint) field.BitOffset! / 8,
+                                $"public {elementTypeName} {fieldName}{i};"
+                            )
+                        );
+                    }
+                }
+                else
                 {
                     StructDefinition.OffsetFields.Add(
                         (
-                            byteOffset + (uint) field.BitOffset! / 8, // TODO: maybe use MarshalAs thing
-                            $"public {elementTypeName} {fieldName}{i};"
+                            byteOffset + (uint) field.BitOffset! / 8,
+                            $"public fixed {elementTypeName} {fieldName}[{fieldTypedef.Size}];"
                         )
                     );
                 }
