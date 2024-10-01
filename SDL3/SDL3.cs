@@ -4811,7 +4811,6 @@ namespace SDL3
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetEventFilter(SDL_EventFilter filter, IntPtr userdata);
 
-		// THIS WAS MANUALLY EDITED -flibit
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_GetEventFilter(out SDL_EventFilter filter, out IntPtr userdata);
 
@@ -7021,7 +7020,7 @@ namespace SDL3
 		public delegate void SDL_LogOutputFunction(IntPtr userdata, int category, SDL_LogPriority priority, byte* message);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_GetLogOutputFunction(IntPtr callback, out IntPtr userdata);
+		public static extern void SDL_GetLogOutputFunction(out SDL_LogOutputFunction callback, out IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetLogOutputFunction(SDL_LogOutputFunction callback, IntPtr userdata);

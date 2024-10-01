@@ -9,7 +9,7 @@ internal static class UserProvidedData
         Ref,
         Out,
         Array,
-        Pointer
+        Pointer,
     }
 
     internal enum ReturnedCharPtrMemoryOwner
@@ -343,6 +343,7 @@ internal static class UserProvidedData
         { ("SDL_WaitEvent", "event"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_events.h:1200:34
         { ("SDL_WaitEventTimeout", "event"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_events.h:1228:34
         { ("SDL_PushEvent", "event"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_events.h:1262:34
+        { ("SDL_GetEventFilter", "filter"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_events.h:1348:34
         { ("SDL_GetEventFilter", "userdata"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_events.h:1348:34
         { ("SDL_GetWindowFromEvent", "event"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_events.h:1465:42
         { ("SDL_GetPathInfo", "info"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_filesystem.h:413:34
@@ -401,6 +402,7 @@ internal static class UserProvidedData
         { ("SDL_hid_get_input_report", "data"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_hidapi.h:443:33
         { ("SDL_hid_get_report_descriptor", "buf"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_hidapi.h:535:33
         { ("SDL_GetPreferredLocales", "count"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_locale.h:101:43
+        { ("SDL_GetLogOutputFunction", "callback"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_log.h:490:34
         { ("SDL_GetLogOutputFunction", "userdata"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_log.h:490:34
         { ("SDL_ShowMessageBox", "messageboxdata"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_messagebox.h:164:34
         { ("SDL_ShowMessageBox", "buttonid"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_messagebox.h:164:34

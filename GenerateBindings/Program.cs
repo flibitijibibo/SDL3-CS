@@ -192,6 +192,7 @@ internal static partial class Program
                         else
                         {
                             definitions.Append("[UnmanagedFunctionPointer(CallingConvention.Cdecl)]\n");
+                            DefinedTypes.Add(entry.Name!);
                         }
 
                         definitions.Append($"public delegate {delegateDefinition.ReturnType} {entry.Name}(");
@@ -353,6 +354,11 @@ internal static partial class Program
                         }
                         else if (UserProvidedData.PointerParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
                         {
+                            if (subtypeName == "FUNCTION_POINTER")
+                            {
+                                subtypeName = parameter.Type!.Type!.Tag;
+                            }
+
                             UnusedUserProvidedTypes.Remove(entry.Name!);
 
                             switch (intent)
