@@ -2560,7 +2560,7 @@ namespace SDL3
 		public static extern uint SDL_GetSensorID(IntPtr sensor);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetSensorData(IntPtr sensor, float[] data, int num_values);
+		public static extern bool SDL_GetSensorData(IntPtr sensor, float* data, int num_values);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_CloseSensor(IntPtr sensor);
@@ -2719,7 +2719,7 @@ namespace SDL3
 		public static extern bool SDL_SetJoystickVirtualTouchpad(IntPtr joystick, int touchpad, int finger, bool down, float x, float y, float pressure);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, ulong sensor_timestamp, float[] data, int num_values);
+		public static extern bool SDL_SendJoystickVirtualSensorData(IntPtr joystick, SDL_SensorType type, ulong sensor_timestamp, float* data, int num_values);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_GetJoystickProperties(IntPtr joystick);
@@ -3248,7 +3248,7 @@ namespace SDL3
 		public static extern float SDL_GetGamepadSensorDataRate(IntPtr gamepad, SDL_SensorType type);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, float[] data, int num_values);
+		public static extern bool SDL_GetGamepadSensorData(IntPtr gamepad, SDL_SensorType type, float* data, int num_values);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_RumbleGamepad(IntPtr gamepad, ushort low_frequency_rumble, ushort high_frequency_rumble, uint duration_ms);

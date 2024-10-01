@@ -300,10 +300,10 @@ internal static class UserProvidedData
         { ("SDL_GetPowerInfo", "seconds"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_power.h:85:44
         { ("SDL_GetPowerInfo", "percent"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_power.h:85:44
         { ("SDL_GetSensors", "count"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_sensor.h:151:44
-        { ("SDL_GetSensorData", "data"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_sensor.h:280:34
+        { ("SDL_GetSensorData", "data"), PointerParameterIntent.Pointer }, // /usr/local/include/SDL3/SDL_sensor.h:280:34
         { ("SDL_GetJoysticks", "count"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_joystick.h:215:46
         { ("SDL_AttachVirtualJoystick", "desc"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_joystick.h:482:44
-        { ("SDL_SendJoystickVirtualSensorData", "data"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_joystick.h:635:34
+        { ("SDL_SendJoystickVirtualSensorData", "data"), PointerParameterIntent.Pointer }, // /usr/local/include/SDL3/SDL_joystick.h:635:34
         { ("SDL_GetJoystickGUIDInfo", "vendor"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_joystick.h:837:34
         { ("SDL_GetJoystickGUIDInfo", "product"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_joystick.h:837:34
         { ("SDL_GetJoystickGUIDInfo", "version"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_joystick.h:837:34
@@ -320,7 +320,7 @@ internal static class UserProvidedData
         { ("SDL_GetGamepadTouchpadFinger", "x"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_gamepad.h:1268:34
         { ("SDL_GetGamepadTouchpadFinger", "y"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_gamepad.h:1268:34
         { ("SDL_GetGamepadTouchpadFinger", "pressure"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_gamepad.h:1268:34
-        { ("SDL_GetGamepadSensorData", "data"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gamepad.h:1340:34
+        { ("SDL_GetGamepadSensorData", "data"), PointerParameterIntent.Pointer }, // /usr/local/include/SDL3/SDL_gamepad.h:1340:34
         { ("SDL_GetKeyboards", "count"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_keyboard.h:89:46
         { ("SDL_GetKeyboardState", "numkeys"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_keyboard.h:144:42
         { ("SDL_SetTextInputArea", "rect"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_keyboard.h:499:34
