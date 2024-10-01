@@ -58,7 +58,7 @@ namespace SDL3
 
 		// Taken from https://github.com/ppy/SDL3-CS
 		// C# bools are not blittable, so we need this workaround
-		public readonly struct SDLBool
+		public struct SDLBool
 		{
 			private readonly byte value;
 
@@ -80,6 +80,22 @@ namespace SDL3
 			public static implicit operator SDLBool(bool b) => new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
 
 			public bool Equals(SDLBool other) => (bool) other == (bool) this;
+
+			public override bool Equals(object rhs)
+			{
+				if (rhs is bool rhsBool)
+				{
+					return Equals((SDLBool) rhsBool);
+				}
+				else if (rhs is SDLBool sdlBool)
+				{
+					return Equals(sdlBool);
+				}
+				else
+				{
+					return false;
+				}
+			}
 
 			public override int GetHashCode() => ((bool) this).GetHashCode();
 		}
