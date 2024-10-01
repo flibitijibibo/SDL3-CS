@@ -55,6 +55,51 @@ namespace SDL3
 
 			return result;
 		}
+
+		// Taken from https://github.com/ppy/SDL3-CS
+		// C# bools are not blittable, so we need this workaround
+		public struct SDLBool
+		{
+			private readonly byte value;
+
+			internal const byte FALSE_VALUE = 0;
+			internal const byte TRUE_VALUE = 1;
+
+			[Obsolete("Never explicitly construct an SDL bool.")]
+			public SDLBool()
+			{
+			}
+
+			internal SDLBool(byte value)
+			{
+				this.value = value;
+			}
+
+			public static implicit operator bool(SDLBool b) => b.value != FALSE_VALUE;
+
+			public static implicit operator SDLBool(bool b) => new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+
+			public bool Equals(SDLBool other) => (bool) other == (bool) this;
+
+			public override bool Equals(object rhs)
+			{
+				if (rhs is bool rhsBool)
+				{
+					return Equals((SDLBool) rhsBool);
+				}
+				else if (rhs is SDLBool sdlBool)
+				{
+					return Equals(sdlBool);
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			public override int GetHashCode() => ((bool) this).GetHashCode();
+		}
+
 		// /usr/local/include/SDL3/SDL_stdinc.h
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -7783,49 +7828,5 @@ namespace SDL3
 		public static extern int SDL_EnterAppMainCallbacks(int argc, IntPtr argv, SDL_AppInit_func appinit, SDL_AppIterate_func appiter, SDL_AppEvent_func appevent, SDL_AppQuit_func appquit);
 
 
-
-		// Taken from https://github.com/ppy/SDL3-CS
-		// C# bools are not blittable, so we need this workaround
-		public struct SDLBool
-		{
-			private readonly byte value;
-
-			internal const byte FALSE_VALUE = 0;
-			internal const byte TRUE_VALUE = 1;
-
-			[Obsolete("Never explicitly construct an SDL bool.")]
-			public SDLBool()
-			{
-			}
-
-			internal SDLBool(byte value)
-			{
-				this.value = value;
-			}
-
-			public static implicit operator bool(SDLBool b) => b.value != FALSE_VALUE;
-
-			public static implicit operator SDLBool(bool b) => new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
-
-			public bool Equals(SDLBool other) => (bool) other == (bool) this;
-
-			public override bool Equals(object rhs)
-			{
-				if (rhs is bool rhsBool)
-				{
-					return Equals((SDLBool) rhsBool);
-				}
-				else if (rhs is SDLBool sdlBool)
-				{
-					return Equals(sdlBool);
-				}
-				else
-				{
-					return false;
-				}
-			}
-
-			public override int GetHashCode() => ((bool) this).GetHashCode();
-		}
 	}
 }
