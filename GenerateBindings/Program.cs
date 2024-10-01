@@ -750,7 +750,7 @@ public static unsafe class SDL
 
         return type.Tag switch
         {
-            "_Bool"            => "bool",
+            "_Bool"            => "byte", // TODO: Figure out the MarshalAs magic for C# bool
             "Sint8"            => "sbyte",
             "Sint16"           => "short",
             "int"              => "int",
