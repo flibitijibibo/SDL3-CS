@@ -5065,8 +5065,9 @@ namespace SDL3
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetEventFilter(SDL_EventFilter filter, IntPtr userdata);
 
+		// THIS WAS MANUALLY EDITED -flibit
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_GetEventFilter(IntPtr filter, out IntPtr userdata);
+		public static extern bool SDL_GetEventFilter(out SDL_EventFilter filter, out IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_AddEventWatch(SDL_EventFilter filter, IntPtr userdata);
