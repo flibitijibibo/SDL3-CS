@@ -104,7 +104,7 @@ namespace SDL3
 		public delegate SDL_AssertState SDL_AssertionHandler(SDL_AssertData* data, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetAssertionHandler(/* SDL_AssertionHandler */ IntPtr handler, IntPtr userdata);
+		public static extern void SDL_SetAssertionHandler(SDL_AssertionHandler handler, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetDefaultAssertionHandler();
@@ -239,8 +239,8 @@ namespace SDL3
 		public delegate void SDL_CleanupPropertyCallback(IntPtr userdata, IntPtr value);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetPointerPropertyWithCleanup", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_SetPointerPropertyWithCleanup(uint props, byte* name, IntPtr value, /* SDL_CleanupPropertyCallback */ IntPtr cleanup, IntPtr userdata);
-		public static bool SDL_SetPointerPropertyWithCleanup(uint props, string name, IntPtr value, /* SDL_CleanupPropertyCallback */ IntPtr cleanup, IntPtr userdata)
+		private static extern bool INTERNAL_SDL_SetPointerPropertyWithCleanup(uint props, byte* name, IntPtr value, SDL_CleanupPropertyCallback cleanup, IntPtr userdata);
+		public static bool SDL_SetPointerPropertyWithCleanup(uint props, string name, IntPtr value, SDL_CleanupPropertyCallback cleanup, IntPtr userdata)
 		{
 			var nameUTF8 = EncodeAsUTF8(name);
 			var result = INTERNAL_SDL_SetPointerPropertyWithCleanup(props, nameUTF8, value, cleanup, userdata);
@@ -400,7 +400,7 @@ namespace SDL3
 		public delegate void SDL_EnumeratePropertiesCallback(IntPtr userdata, uint props, byte* name);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_EnumerateProperties(uint props, /* SDL_EnumeratePropertiesCallback */ IntPtr callback, IntPtr userdata);
+		public static extern bool SDL_EnumerateProperties(uint props, SDL_EnumeratePropertiesCallback callback, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DestroyProperties(uint props);
@@ -419,8 +419,8 @@ namespace SDL3
 		public delegate int SDL_ThreadFunction(IntPtr data);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_CreateThreadRuntime", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, byte* name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);
-		public static IntPtr SDL_CreateThreadRuntime(/* SDL_ThreadFunction */ IntPtr fn, string name, IntPtr data, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread)
+		private static extern IntPtr INTERNAL_SDL_CreateThreadRuntime(SDL_ThreadFunction fn, byte* name, IntPtr data, IntPtr pfnBeginThread, IntPtr pfnEndThread);
+		public static IntPtr SDL_CreateThreadRuntime(SDL_ThreadFunction fn, string name, IntPtr data, IntPtr pfnBeginThread, IntPtr pfnEndThread)
 		{
 			var nameUTF8 = EncodeAsUTF8(name);
 			var result = INTERNAL_SDL_CreateThreadRuntime(fn, nameUTF8, data, pfnBeginThread, pfnEndThread);
@@ -430,7 +430,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateThreadWithPropertiesRuntime(uint props, /* SDL_FunctionPointer */ IntPtr pfnBeginThread, /* SDL_FunctionPointer */ IntPtr pfnEndThread);
+		public static extern IntPtr SDL_CreateThreadWithPropertiesRuntime(uint props, IntPtr pfnBeginThread, IntPtr pfnEndThread);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetThreadName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetThreadName(IntPtr thread);
@@ -461,7 +461,7 @@ namespace SDL3
 		public delegate void SDL_TLSDestructorCallback(IntPtr value);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetTLS(IntPtr id, IntPtr value, /* SDL_TLSDestructorCallback */ IntPtr destructor);
+		public static extern bool SDL_SetTLS(IntPtr id, IntPtr value, SDL_TLSDestructorCallback destructor);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_CleanupTLS();
@@ -928,22 +928,22 @@ namespace SDL3
 		public delegate void SDL_AudioStreamCallback(IntPtr userdata, IntPtr stream, int additional_amount, int total_amount);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetAudioStreamGetCallback(IntPtr stream, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);
+		public static extern bool SDL_SetAudioStreamGetCallback(IntPtr stream, SDL_AudioStreamCallback callback, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetAudioStreamPutCallback(IntPtr stream, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);
+		public static extern bool SDL_SetAudioStreamPutCallback(IntPtr stream, SDL_AudioStreamCallback callback, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DestroyAudioStream(IntPtr stream);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_OpenAudioDeviceStream(uint devid, ref SDL_AudioSpec spec, /* SDL_AudioStreamCallback */ IntPtr callback, IntPtr userdata);
+		public static extern IntPtr SDL_OpenAudioDeviceStream(uint devid, ref SDL_AudioSpec spec, SDL_AudioStreamCallback callback, IntPtr userdata);
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void SDL_AudioPostmixCallback(IntPtr userdata, SDL_AudioSpec* spec, float* buffer, int buflen);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetAudioPostmixCallback(uint devid, /* SDL_AudioPostmixCallback */ IntPtr callback, IntPtr userdata);
+		public static extern bool SDL_SetAudioPostmixCallback(uint devid, SDL_AudioPostmixCallback callback, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_LoadWAV_IO(IntPtr src, bool closeio, out SDL_AudioSpec spec, out IntPtr audio_buf, out uint audio_len);
@@ -1775,7 +1775,7 @@ namespace SDL3
 		public delegate void SDL_ClipboardCleanupCallback(IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetClipboardData(/* SDL_ClipboardDataCallback */ IntPtr callback, /* SDL_ClipboardCleanupCallback */ IntPtr cleanup, IntPtr userdata, IntPtr mime_types, UIntPtr num_mime_types);
+		public static extern bool SDL_SetClipboardData(SDL_ClipboardDataCallback callback, SDL_ClipboardCleanupCallback cleanup, IntPtr userdata, IntPtr mime_types, UIntPtr num_mime_types);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_ClearClipboardData();
@@ -2291,7 +2291,7 @@ namespace SDL3
 		public delegate SDL_HitTestResult SDL_HitTest(IntPtr win, SDL_Point* area, IntPtr data);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_SetWindowHitTest(IntPtr window, /* SDL_HitTest */ IntPtr callback, IntPtr callback_data);
+		public static extern bool SDL_SetWindowHitTest(IntPtr window, SDL_HitTest callback, IntPtr callback_data);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetWindowShape(IntPtr window, IntPtr shape);
@@ -2389,7 +2389,7 @@ namespace SDL3
 		public static extern IntPtr SDL_EGL_GetWindowSurface(IntPtr window);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_EGL_SetAttributeCallbacks(/* SDL_EGLAttribArrayCallback */ IntPtr platformAttribCallback, /* SDL_EGLIntArrayCallback */ IntPtr surfaceAttribCallback, /* SDL_EGLIntArrayCallback */ IntPtr contextAttribCallback);
+		public static extern void SDL_EGL_SetAttributeCallbacks(SDL_EGLAttribArrayCallback platformAttribCallback, SDL_EGLIntArrayCallback surfaceAttribCallback, SDL_EGLIntArrayCallback contextAttribCallback);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_GL_SetSwapInterval(int interval);
@@ -2416,8 +2416,8 @@ namespace SDL3
 		public delegate void SDL_DialogFileCallback(IntPtr userdata, IntPtr filelist, int filter);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowOpenFileDialog", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void INTERNAL_SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, byte* default_location, bool allow_many);
-		public static void SDL_ShowOpenFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location, bool allow_many)
+		private static extern void INTERNAL_SDL_ShowOpenFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, byte* default_location, bool allow_many);
+		public static void SDL_ShowOpenFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location, bool allow_many)
 		{
 			var default_locationUTF8 = EncodeAsUTF8(default_location);
 			INTERNAL_SDL_ShowOpenFileDialog(callback, userdata, window, filters, nfilters, default_locationUTF8, allow_many);
@@ -2426,8 +2426,8 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowSaveFileDialog", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void INTERNAL_SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, byte* default_location);
-		public static void SDL_ShowSaveFileDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location)
+		private static extern void INTERNAL_SDL_ShowSaveFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, byte* default_location);
+		public static void SDL_ShowSaveFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location)
 		{
 			var default_locationUTF8 = EncodeAsUTF8(default_location);
 			INTERNAL_SDL_ShowSaveFileDialog(callback, userdata, window, filters, nfilters, default_locationUTF8);
@@ -2436,8 +2436,8 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowOpenFolderDialog", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void INTERNAL_SDL_ShowOpenFolderDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, byte* default_location, bool allow_many);
-		public static void SDL_ShowOpenFolderDialog(/* SDL_DialogFileCallback */ IntPtr callback, IntPtr userdata, IntPtr window, string default_location, bool allow_many)
+		private static extern void INTERNAL_SDL_ShowOpenFolderDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, byte* default_location, bool allow_many);
+		public static void SDL_ShowOpenFolderDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, string default_location, bool allow_many)
 		{
 			var default_locationUTF8 = EncodeAsUTF8(default_location);
 			INTERNAL_SDL_ShowOpenFolderDialog(callback, userdata, window, default_locationUTF8, allow_many);
@@ -5063,19 +5063,19 @@ namespace SDL3
 		public delegate bool SDL_EventFilter(IntPtr userdata, SDL_Event* evt);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetEventFilter(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
+		public static extern void SDL_SetEventFilter(SDL_EventFilter filter, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_GetEventFilter(IntPtr filter, out IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern bool SDL_AddEventWatch(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
+		public static extern bool SDL_AddEventWatch(SDL_EventFilter filter, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_RemoveEventWatch(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
+		public static extern void SDL_RemoveEventWatch(SDL_EventFilter filter, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_FilterEvents(/* SDL_EventFilter */ IntPtr filter, IntPtr userdata);
+		public static extern void SDL_FilterEvents(SDL_EventFilter filter, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetEventEnabled(uint type, bool enabled);
@@ -5180,8 +5180,8 @@ namespace SDL3
 		public delegate SDL_EnumerationResult SDL_EnumerateDirectoryCallback(IntPtr userdata, byte* dirname, byte* fname);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_EnumerateDirectory", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_EnumerateDirectory(byte* path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata);
-		public static bool SDL_EnumerateDirectory(string path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata)
+		private static extern bool INTERNAL_SDL_EnumerateDirectory(byte* path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata);
+		public static bool SDL_EnumerateDirectory(string path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata)
 		{
 			var pathUTF8 = EncodeAsUTF8(path);
 			var result = INTERNAL_SDL_EnumerateDirectory(pathUTF8, callback, userdata);
@@ -6970,8 +6970,8 @@ namespace SDL3
 		public delegate void SDL_HintCallback(IntPtr userdata, byte* name, byte* oldValue, byte* newValue);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_AddHintCallback", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_AddHintCallback(byte* name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);
-		public static bool SDL_AddHintCallback(string name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata)
+		private static extern bool INTERNAL_SDL_AddHintCallback(byte* name, SDL_HintCallback callback, IntPtr userdata);
+		public static bool SDL_AddHintCallback(string name, SDL_HintCallback callback, IntPtr userdata)
 		{
 			var nameUTF8 = EncodeAsUTF8(name);
 			var result = INTERNAL_SDL_AddHintCallback(nameUTF8, callback, userdata);
@@ -6981,8 +6981,8 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_RemoveHintCallback", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void INTERNAL_SDL_RemoveHintCallback(byte* name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata);
-		public static void SDL_RemoveHintCallback(string name, /* SDL_HintCallback */ IntPtr callback, IntPtr userdata)
+		private static extern void INTERNAL_SDL_RemoveHintCallback(byte* name, SDL_HintCallback callback, IntPtr userdata);
+		public static void SDL_RemoveHintCallback(string name, SDL_HintCallback callback, IntPtr userdata)
 		{
 			var nameUTF8 = EncodeAsUTF8(name);
 			INTERNAL_SDL_RemoveHintCallback(nameUTF8, callback, userdata);
@@ -7277,7 +7277,7 @@ namespace SDL3
 		public static extern void SDL_GetLogOutputFunction(IntPtr callback, out IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetLogOutputFunction(/* SDL_LogOutputFunction */ IntPtr callback, IntPtr userdata);
+		public static extern void SDL_SetLogOutputFunction(SDL_LogOutputFunction callback, IntPtr userdata);
 
 		// /usr/local/include/SDL3/SDL_messagebox.h
 
@@ -7848,8 +7848,8 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_EnumerateStorageDirectory", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool INTERNAL_SDL_EnumerateStorageDirectory(IntPtr storage, byte* path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata);
-		public static bool SDL_EnumerateStorageDirectory(IntPtr storage, string path, /* SDL_EnumerateDirectoryCallback */ IntPtr callback, IntPtr userdata)
+		private static extern bool INTERNAL_SDL_EnumerateStorageDirectory(IntPtr storage, byte* path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata);
+		public static bool SDL_EnumerateStorageDirectory(IntPtr storage, string path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata)
 		{
 			var pathUTF8 = EncodeAsUTF8(path);
 			var result = INTERNAL_SDL_EnumerateStorageDirectory(storage, pathUTF8, callback, userdata);
@@ -7928,7 +7928,7 @@ namespace SDL3
 		public delegate bool SDL_X11EventHook(IntPtr userdata, IntPtr xevent);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetX11EventHook(/* SDL_X11EventHook */ IntPtr callback, IntPtr userdata);
+		public static extern void SDL_SetX11EventHook(SDL_X11EventHook callback, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_SetLinuxThreadPriority(long threadID, int priority);
@@ -8037,13 +8037,13 @@ namespace SDL3
 		public delegate uint SDL_TimerCallback(IntPtr userdata, uint timerID, uint interval);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_AddTimer(uint interval, /* SDL_TimerCallback */ IntPtr callback, IntPtr userdata);
+		public static extern uint SDL_AddTimer(uint interval, SDL_TimerCallback callback, IntPtr userdata);
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate ulong SDL_NSTimerCallback(IntPtr userdata, uint timerID, ulong interval);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_AddTimerNS(ulong interval, /* SDL_NSTimerCallback */ IntPtr callback, IntPtr userdata);
+		public static extern uint SDL_AddTimerNS(ulong interval, SDL_NSTimerCallback callback, IntPtr userdata);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool SDL_RemoveTimer(uint id);

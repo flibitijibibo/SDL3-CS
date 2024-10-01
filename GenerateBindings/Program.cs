@@ -464,7 +464,14 @@ internal static partial class Program
                         typeName = CSharpTypeFromFFI(parameterTypedef, TypeContext.Parameter);
                         if (typeName == "FUNCTION_POINTER")
                         {
-                            typeName = $"/* {parameter.Type!.Tag} */ IntPtr";
+                            if (parameter.Type!.Tag == "SDL_FunctionPointer")
+                            {
+                                typeName = $"IntPtr";
+                            }
+                            else
+                            {
+                                typeName = $"{parameter.Type!.Tag}";
+                            }
                         }
                     }
 
