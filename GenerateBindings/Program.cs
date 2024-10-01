@@ -66,85 +66,14 @@ internal static partial class Program
 
         var sdlDir = new DirectoryInfo(Environment.GetEnvironmentVariable("SDL3_CS_SDL_REPO_ROOT") ?? "MISSING_ENV_VAR");
         var sdlBindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../SDL3/"));
-        var outputDir = sdlBindingsDir;
         var sdlBindingsProjectFile = new FileInfo(Path.Combine(sdlBindingsDir.FullName, "SDL3.csproj"));
-        var c2ffiConfigTemplateFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "config_extract.json.template"));
-        var c2ffiConfigFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "config_extract.json"));
         var ffiJsonFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "ffi.json"));
-        var ffiJsonIntermediateDir = new DirectoryInfo(Path.Combine(AppContext.BaseDirectory, "intermediate_ffis"));
-        var sdlTargetCommitFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "sdl_last_targeted_commit"));
 
 #if WINDOWS
-        var c2ffiExe = new FileInfo(Path.Combine(AppContext.BaseDirectory, path2: "c2ffi.exe"));
-        var gitExe = FindInPath("git.exe");
         var dotnetExe = FindInPath("dotnet.exe");
 #else
-        var c2ffiExe = new FileInfo(Path.Combine(AppContext.BaseDirectory, "c2ffi"));
-        var gitExe = FindInPath("git");
         var dotnetExe = FindInPath("dotnet");
 #endif
-
-        // BUILD FFI.JSON
-
-        // if (!sdlDir.Exists)
-        // {
-        //     Console.WriteLine($"ERROR: sdl dir `{sdlDir.FullName}` does not exist!");
-        //     return 1;
-        // }
-        //
-        // var isFFIJsonUpToDate = false;
-        // if (gitExe.Exists && ffiJsonFile.Exists && sdlTargetCommitFile.Exists)
-        // {
-        //     Console.WriteLine("checking if ffi.json is up-to-date...");
-        //     var commit = RunProcess(gitExe, "show -s --format=\"%H\"", workingDir: sdlDir, redirectStdOut: true).StandardOutput.ReadToEnd();
-        //     if (commit == File.ReadAllText(sdlTargetCommitFile.FullName))
-        //     {
-        //         Console.WriteLine($"ffi.json is up-to-date (SDL commit {commit.Trim()})!! skipping c2ffi...");
-        //         isFFIJsonUpToDate = true;
-        //     }
-        // }
-        //
-        // if (!isFFIJsonUpToDate)
-        // {
-        //     if (ffiJsonIntermediateDir.Exists)
-        //     {
-        //         foreach (var file in ffiJsonIntermediateDir.GetFiles())
-        //         {
-        //             file.Delete();
-        //         }
-        //     }
-        //     else
-        //     {
-        //         ffiJsonIntermediateDir.Create();
-        //     }
-        //
-        //     if (c2ffiConfigFile.Exists)
-        //     {
-        //         c2ffiConfigFile.Delete();
-        //     }
-        //
-        //     using (var writer = c2ffiConfigFile.CreateText())
-        //     {
-        //         using (var reader = c2ffiConfigTemplateFile.OpenText())
-        //         {
-        //             while (!reader.EndOfStream)
-        //                 writer.WriteLine(
-        //                     reader.ReadLine()!
-        //                         .Replace("TEMPLATE_SDL_PATH", sdlDir.FullName)
-        //                         .Replace("TEMPLATE_OUTPUT_DIR", ffiJsonIntermediateDir.FullName)
-        //                 );
-        //         }
-        //     }
-        //
-        //     RunProcess(c2ffiExe, args: $"extract --config {c2ffiConfigFile.FullName}");
-        //     RunProcess(c2ffiExe, args: $"merge --inputDirectoryPath {ffiJsonIntermediateDir.FullName} --outputFilePath {ffiJsonFile.FullName}");
-        //
-        //     if (gitExe.Exists)
-        //     {
-        //         var commit = RunProcess(gitExe, "show -s --format=\"%H\"", workingDir: sdlDir, redirectStdOut: true).StandardOutput.ReadToEnd();
-        //         File.WriteAllText(sdlTargetCommitFile.FullName, commit);
-        //     }
-        // }
 
         // PARSE FFI.JSON
 
@@ -429,7 +358,7 @@ internal static partial class Program
                             switch (intent)
                             {
                                 case UserProvidedData.PointerParameterIntent.IntPtr:
-                                    typeName = $"IntPtr";
+                                    typeName = "IntPtr";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Ref:
                                     typeName = $"ref {subtypeName}";
@@ -445,7 +374,7 @@ internal static partial class Program
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Unknown:
                                 default:
-                                    typeName = $"IntPtr";
+                                    typeName = "IntPtr";
                                     containsUnknownRef = true;
                                     break;
                             }
@@ -466,7 +395,7 @@ internal static partial class Program
                         {
                             if (parameter.Type!.Tag == "SDL_FunctionPointer")
                             {
-                                typeName = $"IntPtr";
+                                typeName = "IntPtr";
                             }
                             else
                             {
@@ -628,7 +557,7 @@ internal static partial class Program
         }
 
         File.WriteAllText(
-            path: Path.Combine(outputDir.FullName, "SDL3.cs"),
+            path: Path.Combine(sdlBindingsDir.FullName, "SDL3.cs"),
             contents: CompileBindingsCSharp(definitions.ToString())
         );
 
