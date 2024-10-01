@@ -707,6 +707,8 @@ public static unsafe class SDL
         return result;
     }}
 
+    {definitions}
+
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
     public struct SDLBool
@@ -750,8 +752,6 @@ public static unsafe class SDL
 
         public override int GetHashCode() => ((bool)this).GetHashCode();
     }}
-
-    {definitions}
 }}
 }}
 ";
