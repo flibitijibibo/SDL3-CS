@@ -7,6 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <Import Project="./CopyDependencies.targets"/>
+	<PropertyGroup>
+		<DefineConstants Condition="$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))">WINDOWS</DefineConstants>
+	</PropertyGroup>
+
+  <Import Project="./CopyDependencies.targets"/>
 
 </Project>

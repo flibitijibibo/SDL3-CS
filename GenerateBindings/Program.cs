@@ -228,7 +228,7 @@ internal static partial class Program
                 {
                     var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
                     definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
-                    definitions.Append("SDLK_SCANCODE_MASK = 0x4000_0000,\n");
+                    definitions.Append("SDLK_SCANCODE_MASK = 0x40000000,\n");
 
                     IEnumerable<string> hintsFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, "include/SDL3/SDL_keycode.h"));
 
@@ -603,7 +603,7 @@ internal static partial class Program
         }
 
         // TODO: separate bindgen for Core
-        File.Copy(Path.Combine(sdlBindingsDir.FullName, "SDL3.cs"), Path.Combine(sdlBindingsDir.FullName, "SDL3.Core.cs"));
+        File.Copy(Path.Combine(sdlBindingsDir.FullName, "SDL3.cs"), Path.Combine(sdlBindingsDir.FullName, "SDL3.Core.cs"), true);
 
         return 0;
     }
@@ -707,6 +707,57 @@ public static unsafe class SDL
         return result;
     }}
 
+    // Taken from https://github.com/ppy/SDL3-CS
+    // C# bools are not blittable, so we need this workaround
+    public struct SDLBool
+    {{
+        private readonly byte value;
+
+        internal const byte FALSE_VALUE = 0;
+        internal const byte TRUE_VALUE = 1;
+
+        internal SDLBool(byte value)
+        {{
+            this.value = value;
+        }}
+
+        public static implicit operator bool(SDLBool b)
+        {{
+            return b.value != FALSE_VALUE;
+        }}
+
+        public static implicit operator SDLBool(bool b)
+        {{
+            return new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+        }}
+
+        public bool Equals(SDLBool other)
+        {{
+            return other.value == value;
+        }}
+
+        public override bool Equals(object rhs)
+        {{
+            if (rhs is bool)
+            {{
+                return Equals((SDLBool)(bool)rhs);
+            }}
+            else if (rhs is SDLBool)
+            {{
+                return Equals((SDLBool)rhs);
+            }}
+            else
+            {{
+                return false;
+            }}
+        }}
+
+        public override int GetHashCode()
+        {{
+            return value.GetHashCode();
+        }}
+    }}
+
     {definitions}
 }}
 }}
@@ -753,7 +804,7 @@ public static unsafe class SDL
 
         return type.Tag switch
         {
-            "_Bool"            => "byte", // TODO: Figure out the MarshalAs magic for C# bool
+            "_Bool"            => "SDLBool",
             "Sint8"            => "sbyte",
             "Sint16"           => "short",
             "int"              => "int",
