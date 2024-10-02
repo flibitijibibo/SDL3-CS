@@ -1,0 +1,20 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: dotnet build GenerateBindings
+      run: |
+        dotnet build -c Debug --project GenerateBindings
+        dotnet build -c Release --project GenerateBindings
+
+    - name: msbuild SDL3-CS
+      run: |
+        msbuild SDL3-CS.sln /p:Configuration=Debug /p:Platform=x86
+        msbuild SDL3-CS.sln /p:Configuration=Release /p:Platform=x86

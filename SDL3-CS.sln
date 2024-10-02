@@ -1,7 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateBindings", "GenerateBindings\GenerateBindings.csproj", "{3BBF0197-6904-456E-AE78-88DC891EF032}"
-EndProject
+# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDL3", "SDL3\SDL3.csproj", "{879AE835-1F19-4BD4-ADCE-E0D17B9774F3}"
 EndProject
 Global
@@ -10,10 +9,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3BBF0197-6904-456E-AE78-88DC891EF032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BBF0197-6904-456E-AE78-88DC891EF032}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BBF0197-6904-456E-AE78-88DC891EF032}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BBF0197-6904-456E-AE78-88DC891EF032}.Release|Any CPU.Build.0 = Release|Any CPU
 		{879AE835-1F19-4BD4-ADCE-E0D17B9774F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{879AE835-1F19-4BD4-ADCE-E0D17B9774F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{879AE835-1F19-4BD4-ADCE-E0D17B9774F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
