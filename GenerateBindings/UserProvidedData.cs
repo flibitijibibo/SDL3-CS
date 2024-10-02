@@ -622,10 +622,10 @@ internal static class UserProvidedData
                 "SDL_WINDOW_POPUP_MENU",
                 "SDL_WINDOW_KEYBOARD_GRABBED",
                 // unused bits between "KeyboardGrabbed" and "Vulkan"
-                "SDL_WINDOW_VULKAN = 0x1000_0000",
-                "SDL_WINDOW_METAL = 0x2000_0000",
-                "SDL_WINDOW_TRANSPARENT = 0x4000_0000",
-                "SDL_WINDOW_NOT_FOCUSABLE = 0x0_8000_0000",
+                "SDL_WINDOW_VULKAN = 0x10000000",
+                "SDL_WINDOW_METAL = 0x20000000",
+                "SDL_WINDOW_TRANSPARENT = 0x40000000",
+                "SDL_WINDOW_NOT_FOCUSABLE = 0x080000000",
             ]
         }, // ./include/SDL3/SDL_video.h:158:16
         {
@@ -645,7 +645,7 @@ internal static class UserProvidedData
                 "SDL_PEN_INPUT_BUTTON_3",
                 "SDL_PEN_INPUT_BUTTON_4",
                 "SDL_PEN_INPUT_BUTTON_5",
-                "SDL_PEN_INPUT_ERASER_TIP = 0x4000_0000",
+                "SDL_PEN_INPUT_ERASER_TIP = 0x40000000",
             ]
         }, // ./include/SDL3/SDL_pen.h:68:16
         {
@@ -690,8 +690,8 @@ internal static class UserProvidedData
                 "SDL_INIT_HAPTIC = 0x1000",
                 "SDL_INIT_GAMEPAD = 0x2000",
                 "SDL_INIT_EVENTS = 0x4000",
-                "SDL_INIT_SENSOR = 0x0_8000",
-                "SDL_INIT_CAMERA = 0x1_0000",
+                "SDL_INIT_SENSOR = 0x08000",
+                "SDL_INIT_CAMERA = 0x10000",
             ]
         }, // ./include/SDL3/SDL_init.h:58:16
         {

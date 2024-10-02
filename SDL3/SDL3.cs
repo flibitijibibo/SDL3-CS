@@ -70,11 +70,20 @@ namespace SDL3
 				this.value = value;
 			}
 
-			public static implicit operator bool(SDLBool b) => b.value != FALSE_VALUE;
+			public static implicit operator bool(SDLBool b)
+			{
+				return b.value != FALSE_VALUE;
+			}
 
-			public static implicit operator SDLBool(bool b) => new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+			public static implicit operator SDLBool(bool b)
+			{
+				return new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+			}
 
-			public bool Equals(SDLBool other) => (bool) other == (bool) this;
+			public bool Equals(SDLBool other)
+			{
+				return other.value == value;
+			}
 
 			public override bool Equals(object rhs)
 			{
@@ -92,7 +101,10 @@ namespace SDL3
 				}
 			}
 
-			public override int GetHashCode() => ((bool) this).GetHashCode();
+			public override int GetHashCode()
+			{
+				return value.GetHashCode();
+			}
 		}
 
 		// /usr/local/include/SDL3/SDL_stdinc.h
@@ -1955,10 +1967,10 @@ namespace SDL3
 			SDL_WINDOW_TOOLTIP = 0x40000,
 			SDL_WINDOW_POPUP_MENU = 0x080000,
 			SDL_WINDOW_KEYBOARD_GRABBED = 0x100000,
-			SDL_WINDOW_VULKAN = 0x1000_0000,
-			SDL_WINDOW_METAL = 0x2000_0000,
-			SDL_WINDOW_TRANSPARENT = 0x4000_0000,
-			SDL_WINDOW_NOT_FOCUSABLE = 0x0_8000_0000,
+			SDL_WINDOW_VULKAN = 0x10000000,
+			SDL_WINDOW_METAL = 0x20000000,
+			SDL_WINDOW_TRANSPARENT = 0x40000000,
+			SDL_WINDOW_NOT_FOCUSABLE = 0x080000000,
 		}
 
 		public enum SDL_FlashOperation
@@ -3558,7 +3570,7 @@ namespace SDL3
 
 		public enum SDL_Keycode : uint
 		{
-			SDLK_SCANCODE_MASK = 0x4000_0000,
+			SDLK_SCANCODE_MASK = 0x40000000,
 			SDLK_UNKNOWN = 0x00000000u,
 			SDLK_RETURN = 0x0000000du,
 			SDLK_ESCAPE = 0x0000001bu,
@@ -4087,7 +4099,7 @@ namespace SDL3
 			SDL_PEN_INPUT_BUTTON_3 = 0x08,
 			SDL_PEN_INPUT_BUTTON_4 = 0x10,
 			SDL_PEN_INPUT_BUTTON_5 = 0x20,
-			SDL_PEN_INPUT_ERASER_TIP = 0x4000_0000,
+			SDL_PEN_INPUT_ERASER_TIP = 0x40000000,
 		}
 
 		public enum SDL_PenAxis
@@ -6747,8 +6759,8 @@ namespace SDL3
 			SDL_INIT_HAPTIC = 0x1000,
 			SDL_INIT_GAMEPAD = 0x2000,
 			SDL_INIT_EVENTS = 0x4000,
-			SDL_INIT_SENSOR = 0x0_8000,
-			SDL_INIT_CAMERA = 0x1_0000,
+			SDL_INIT_SENSOR = 0x08000,
+			SDL_INIT_CAMERA = 0x10000,
 		}
 
 		public enum SDL_AppResult

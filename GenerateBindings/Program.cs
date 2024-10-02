@@ -228,7 +228,7 @@ internal static partial class Program
                 {
                     var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
                     definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
-                    definitions.Append("SDLK_SCANCODE_MASK = 0x4000_0000,\n");
+                    definitions.Append("SDLK_SCANCODE_MASK = 0x40000000,\n");
 
                     IEnumerable<string> hintsFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, "include/SDL3/SDL_keycode.h"));
 
@@ -721,11 +721,20 @@ public static unsafe class SDL
             this.value = value;
         }}
 
-        public static implicit operator bool(SDLBool b) => b.value != FALSE_VALUE;
+        public static implicit operator bool(SDLBool b)
+        {{
+            return b.value != FALSE_VALUE;
+        }}
 
-        public static implicit operator SDLBool(bool b) => new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+        public static implicit operator SDLBool(bool b)
+        {{
+            return new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+        }}
 
-        public bool Equals(SDLBool other) => (bool)other == (bool)this;
+        public bool Equals(SDLBool other)
+        {{
+            return other.value == value;
+        }}
 
         public override bool Equals(object rhs)
         {{
@@ -743,7 +752,10 @@ public static unsafe class SDL
             }}
         }}
 
-        public override int GetHashCode() => ((bool)this).GetHashCode();
+        public override int GetHashCode()
+        {{
+            return value.GetHashCode();
+        }}
     }}
 
     {definitions}
