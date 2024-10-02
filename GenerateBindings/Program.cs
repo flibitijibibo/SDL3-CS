@@ -716,11 +716,6 @@ public static unsafe class SDL
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
-        [Obsolete(""Never explicitly construct an SDL bool."")]
-        public SDLBool()
-        {{
-        }}
-
         internal SDLBool(byte value)
         {{
             this.value = value;
@@ -734,13 +729,13 @@ public static unsafe class SDL
 
         public override bool Equals(object rhs)
         {{
-            if (rhs is bool rhsBool)
+            if (rhs is bool)
             {{
-                return Equals((SDLBool)rhsBool);
+                return Equals((SDLBool)(bool)rhs);
             }}
-            else if (rhs is SDLBool sdlBool)
+            else if (rhs is SDLBool)
             {{
-                return Equals(sdlBool);
+                return Equals((SDLBool)rhs);
             }}
             else
             {{
