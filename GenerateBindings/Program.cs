@@ -804,7 +804,7 @@ public static unsafe class SDL
 
         return type.Tag switch
         {
-            "_Bool"            => "SDLBool", // TODO: Figure out the MarshalAs magic for C# bool
+            "_Bool"            => "SDLBool",
             "Sint8"            => "sbyte",
             "Sint16"           => "short",
             "int"              => "int",
