@@ -602,6 +602,9 @@ internal static partial class Program
             }
         }
 
+        // TODO: separate bindgen for Core
+        File.Copy(Path.Combine(sdlBindingsDir.FullName, "SDL3.cs"), Path.Combine(sdlBindingsDir.FullName, "SDL3.Core.cs"));
+
         return 0;
     }
 

@@ -11,10 +11,15 @@ jobs:
 
     - name: dotnet build GenerateBindings
       run: |
-        dotnet build -c Debug --project GenerateBindings
-        dotnet build -c Release --project GenerateBindings
+        dotnet build --project GenerateBindings -c Debug
+        dotnet build --project GenerateBindings -c Release
 
-    - name: msbuild SDL3-CS
+    - name: msbuild SDL3
       run: |
         msbuild SDL3-CS.sln /p:Configuration=Debug /p:Platform=x86
         msbuild SDL3-CS.sln /p:Configuration=Release /p:Platform=x86
+
+    - name: dotnet build SDL3.Core
+      run: |
+        dotnet build --project SDL3/SDL3.Core.csproj -c Debug
+        dotnet build --project SDL3/SDL3.Core.csproj -c Release
