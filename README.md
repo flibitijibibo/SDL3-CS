@@ -19,4 +19,4 @@ SDL3-CS is a pure port of the C headers.
 You are encouraged to write your own wrapper objects if you care about "appropriate" C# style.
 
 The SDL headers themselves do not provide enough information to generate complete C# bindings.
-If you update the bindings, search "WARN_" in generated SDL3.cs for unhandled definitions or those that require manual intervention.
+If you update the bindings, search "WARN_" in generated files for unhandled definitions or those that require manual intervention.
