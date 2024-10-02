@@ -5,7 +5,11 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-	<ItemGroup>
-    	<Compile Exclude="SDL3.Core.cs" />
-	</ItemGroup>
+    <ItemGroup>
+        <Compile Include="SDL3.cs" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <DefaultItemExcludes>$(DefaultItemExcludes);SDL3.Core.cs</DefaultItemExcludes>
+    </PropertyGroup>
 </Project>
