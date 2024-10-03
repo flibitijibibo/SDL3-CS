@@ -141,19 +141,9 @@ namespace SDL3
 			public SDL_AssertData* next;
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_ReportAssertion")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDL_AssertState INTERNAL_SDL_ReportAssertion(ref SDL_AssertData data, byte* func, byte* file, int line);
-		public static SDL_AssertState SDL_ReportAssertion(ref SDL_AssertData data, string func, string file, int line)
-		{
-			var funcUTF8 = EncodeAsUTF8(func);
-			var fileUTF8 = EncodeAsUTF8(file);
-			var result = INTERNAL_SDL_ReportAssertion(ref data, funcUTF8, fileUTF8, line);
-
-			SDL_free((IntPtr) funcUTF8);
-			SDL_free((IntPtr) fileUTF8);
-			return result;
-		}
+		public static partial SDL_AssertState SDL_ReportAssertion(ref SDL_AssertData data, string func, string file, int line);
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate SDL_AssertState SDL_AssertionHandler(SDL_AssertData* data, IntPtr userdata);
@@ -260,29 +250,17 @@ namespace SDL3
 
 		// /usr/local/include/SDL3/SDL_error.h
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetError")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetError(byte* fmt);
-		public static SDLBool SDL_SetError(string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			var result = INTERNAL_SDL_SetError(fmtUTF8);
-
-			SDL_free((IntPtr) fmtUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_SetError(string fmt);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_OutOfMemory();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetError")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetError();
-		public static string SDL_GetError()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetError());
-		}
+		public static partial string SDL_GetError();
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -323,177 +301,61 @@ namespace SDL3
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void SDL_CleanupPropertyCallback(IntPtr userdata, IntPtr value);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetPointerPropertyWithCleanup")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetPointerPropertyWithCleanup(uint props, byte* name, IntPtr value, SDL_CleanupPropertyCallback cleanup, IntPtr userdata);
-		public static SDLBool SDL_SetPointerPropertyWithCleanup(uint props, string name, IntPtr value, SDL_CleanupPropertyCallback cleanup, IntPtr userdata)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_SetPointerPropertyWithCleanup(props, nameUTF8, value, cleanup, userdata);
+		public static partial SDLBool SDL_SetPointerPropertyWithCleanup(uint props, string name, IntPtr value, SDL_CleanupPropertyCallback cleanup, IntPtr userdata);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetPointerProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetPointerProperty(uint props, byte* name, IntPtr value);
-		public static SDLBool SDL_SetPointerProperty(uint props, string name, IntPtr value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_SetPointerProperty(props, nameUTF8, value);
+		public static partial SDLBool SDL_SetPointerProperty(uint props, string name, IntPtr value);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetStringProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetStringProperty(uint props, byte* name, byte* value);
-		public static SDLBool SDL_SetStringProperty(uint props, string name, string value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var valueUTF8 = EncodeAsUTF8(value);
-			var result = INTERNAL_SDL_SetStringProperty(props, nameUTF8, valueUTF8);
+		public static partial SDLBool SDL_SetStringProperty(uint props, string name, string value);
 
-			SDL_free((IntPtr) nameUTF8);
-			SDL_free((IntPtr) valueUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetNumberProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetNumberProperty(uint props, byte* name, long value);
-		public static SDLBool SDL_SetNumberProperty(uint props, string name, long value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_SetNumberProperty(props, nameUTF8, value);
+		public static partial SDLBool SDL_SetNumberProperty(uint props, string name, long value);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetFloatProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetFloatProperty(uint props, byte* name, float value);
-		public static SDLBool SDL_SetFloatProperty(uint props, string name, float value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_SetFloatProperty(props, nameUTF8, value);
+		public static partial SDLBool SDL_SetFloatProperty(uint props, string name, float value);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetBooleanProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetBooleanProperty(uint props, byte* name, SDLBool value);
-		public static SDLBool SDL_SetBooleanProperty(uint props, string name, SDLBool value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_SetBooleanProperty(props, nameUTF8, value);
+		public static partial SDLBool SDL_SetBooleanProperty(uint props, string name, SDLBool value);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_HasProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_HasProperty(uint props, byte* name);
-		public static SDLBool SDL_HasProperty(uint props, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_HasProperty(props, nameUTF8);
+		public static partial SDLBool SDL_HasProperty(uint props, string name);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetPropertyType")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDL_PropertyType INTERNAL_SDL_GetPropertyType(uint props, byte* name);
-		public static SDL_PropertyType SDL_GetPropertyType(uint props, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GetPropertyType(props, nameUTF8);
+		public static partial SDL_PropertyType SDL_GetPropertyType(uint props, string name);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetPointerProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetPointerProperty(uint props, byte* name, IntPtr default_value);
-		public static IntPtr SDL_GetPointerProperty(uint props, string name, IntPtr default_value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GetPointerProperty(props, nameUTF8, default_value);
+		public static partial IntPtr SDL_GetPointerProperty(uint props, string name, IntPtr default_value);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetStringProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetStringProperty(uint props, byte* name, byte* default_value);
-		public static string SDL_GetStringProperty(uint props, string name, string default_value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var default_valueUTF8 = EncodeAsUTF8(default_value);
-			var result = DecodeFromUTF8(INTERNAL_SDL_GetStringProperty(props, nameUTF8, default_valueUTF8));
+		public static partial string SDL_GetStringProperty(uint props, string name, string default_value);
 
-			SDL_free((IntPtr) nameUTF8);
-			SDL_free((IntPtr) default_valueUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetNumberProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial long INTERNAL_SDL_GetNumberProperty(uint props, byte* name, long default_value);
-		public static long SDL_GetNumberProperty(uint props, string name, long default_value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GetNumberProperty(props, nameUTF8, default_value);
+		public static partial long SDL_GetNumberProperty(uint props, string name, long default_value);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetFloatProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial float INTERNAL_SDL_GetFloatProperty(uint props, byte* name, float default_value);
-		public static float SDL_GetFloatProperty(uint props, string name, float default_value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GetFloatProperty(props, nameUTF8, default_value);
+		public static partial float SDL_GetFloatProperty(uint props, string name, float default_value);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetBooleanProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_GetBooleanProperty(uint props, byte* name, SDLBool default_value);
-		public static SDLBool SDL_GetBooleanProperty(uint props, string name, SDLBool default_value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GetBooleanProperty(props, nameUTF8, default_value);
+		public static partial SDLBool SDL_GetBooleanProperty(uint props, string name, SDLBool default_value);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_ClearProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_ClearProperty(uint props, byte* name);
-		public static SDLBool SDL_ClearProperty(uint props, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_ClearProperty(props, nameUTF8);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_ClearProperty(uint props, string name);
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void SDL_EnumeratePropertiesCallback(IntPtr userdata, uint props, byte* name);
@@ -519,29 +381,17 @@ namespace SDL3
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate int SDL_ThreadFunction(IntPtr data);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CreateThreadRuntime")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_CreateThreadRuntime(SDL_ThreadFunction fn, byte* name, IntPtr data, IntPtr pfnBeginThread, IntPtr pfnEndThread);
-		public static IntPtr SDL_CreateThreadRuntime(SDL_ThreadFunction fn, string name, IntPtr data, IntPtr pfnBeginThread, IntPtr pfnEndThread)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_CreateThreadRuntime(fn, nameUTF8, data, pfnBeginThread, pfnEndThread);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_CreateThreadRuntime(SDL_ThreadFunction fn, string name, IntPtr data, IntPtr pfnBeginThread, IntPtr pfnEndThread);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_CreateThreadWithPropertiesRuntime(uint props, IntPtr pfnBeginThread, IntPtr pfnEndThread);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetThreadName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetThreadName(IntPtr thread);
-		public static string SDL_GetThreadName(IntPtr thread)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetThreadName(thread));
-		}
+		public static partial string SDL_GetThreadName(IntPtr thread);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -739,19 +589,9 @@ namespace SDL3
 			public IntPtr close; // WARN_ANONYMOUS_FUNCTION_POINTER
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_IOFromFile")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_IOFromFile(byte* file, byte* mode);
-		public static IntPtr SDL_IOFromFile(string file, string mode)
-		{
-			var fileUTF8 = EncodeAsUTF8(file);
-			var modeUTF8 = EncodeAsUTF8(mode);
-			var result = INTERNAL_SDL_IOFromFile(fileUTF8, modeUTF8);
-
-			SDL_free((IntPtr) fileUTF8);
-			SDL_free((IntPtr) modeUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_IOFromFile(string file, string mode);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -801,17 +641,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial UIntPtr SDL_WriteIO(IntPtr context, IntPtr ptr, UIntPtr size);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_IOprintf")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial UIntPtr INTERNAL_SDL_IOprintf(IntPtr context, byte* fmt);
-		public static UIntPtr SDL_IOprintf(IntPtr context, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			var result = INTERNAL_SDL_IOprintf(context, fmtUTF8);
-
-			SDL_free((IntPtr) fmtUTF8);
-			return result;
-		}
+		public static partial UIntPtr SDL_IOprintf(IntPtr context, string fmt);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -821,17 +653,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_LoadFile_IO(IntPtr src, out UIntPtr datasize, SDLBool closeio);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LoadFile")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_LoadFile(byte* file, out UIntPtr datasize);
-		public static IntPtr SDL_LoadFile(string file, out UIntPtr datasize)
-		{
-			var fileUTF8 = EncodeAsUTF8(file);
-			var result = INTERNAL_SDL_LoadFile(fileUTF8, out datasize);
-
-			SDL_free((IntPtr) fileUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_LoadFile(string file, out UIntPtr datasize);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -975,21 +799,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial int SDL_GetNumAudioDrivers();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetAudioDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetAudioDriver(int index);
-		public static string SDL_GetAudioDriver(int index)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetAudioDriver(index));
-		}
+		public static partial string SDL_GetAudioDriver(int index);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetCurrentAudioDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetCurrentAudioDriver();
-		public static string SDL_GetCurrentAudioDriver()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetCurrentAudioDriver());
-		}
+		public static partial string SDL_GetCurrentAudioDriver();
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -999,13 +815,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetAudioRecordingDevices(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetAudioDeviceName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetAudioDeviceName(uint devid);
-		public static string SDL_GetAudioDeviceName(uint devid)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetAudioDeviceName(devid));
-		}
+		public static partial string SDL_GetAudioDeviceName(uint devid);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1181,17 +993,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_LoadWAV_IO(IntPtr src, SDLBool closeio, out SDL_AudioSpec spec, out IntPtr audio_buf, out uint audio_len);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LoadWAV")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_LoadWAV(byte* path, out SDL_AudioSpec spec, out IntPtr audio_buf, out uint audio_len);
-		public static SDLBool SDL_LoadWAV(string path, out SDL_AudioSpec spec, out IntPtr audio_buf, out uint audio_len)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_LoadWAV(pathUTF8, out spec, out audio_buf, out audio_len);
-
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_LoadWAV(string path, out SDL_AudioSpec spec, out IntPtr audio_buf, out uint audio_len);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1201,13 +1005,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_ConvertAudioSamples(ref SDL_AudioSpec src_spec, IntPtr src_data, int src_len, ref SDL_AudioSpec dst_spec, IntPtr dst_data, out int dst_len);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetAudioFormatName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetAudioFormatName(SDL_AudioFormat format);
-		public static string SDL_GetAudioFormatName(SDL_AudioFormat format)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetAudioFormatName(format));
-		}
+		public static partial string SDL_GetAudioFormatName(SDL_AudioFormat format);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1538,13 +1338,9 @@ namespace SDL3
 			public byte Ashift;
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetPixelFormatName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetPixelFormatName(SDL_PixelFormat format);
-		public static string SDL_GetPixelFormatName(SDL_PixelFormat format)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetPixelFormatName(format));
-		}
+		public static partial string SDL_GetPixelFormatName(SDL_PixelFormat format);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1793,33 +1589,17 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_LoadBMP_IO(IntPtr src, SDLBool closeio);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LoadBMP")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_LoadBMP(byte* file);
-		public static IntPtr SDL_LoadBMP(string file)
-		{
-			var fileUTF8 = EncodeAsUTF8(file);
-			var result = INTERNAL_SDL_LoadBMP(fileUTF8);
-
-			SDL_free((IntPtr) fileUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_LoadBMP(string file);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_SaveBMP_IO(IntPtr surface, IntPtr dst, SDLBool closeio);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SaveBMP")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SaveBMP(IntPtr surface, byte* file);
-		public static SDLBool SDL_SaveBMP(IntPtr surface, string file)
-		{
-			var fileUTF8 = EncodeAsUTF8(file);
-			var result = INTERNAL_SDL_SaveBMP(surface, fileUTF8);
-
-			SDL_free((IntPtr) fileUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_SaveBMP(IntPtr surface, string file);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1997,21 +1777,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial int SDL_GetNumCameraDrivers();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetCameraDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetCameraDriver(int index);
-		public static string SDL_GetCameraDriver(int index)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetCameraDriver(index));
-		}
+		public static partial string SDL_GetCameraDriver(int index);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetCurrentCameraDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetCurrentCameraDriver();
-		public static string SDL_GetCurrentCameraDriver()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetCurrentCameraDriver());
-		}
+		public static partial string SDL_GetCurrentCameraDriver();
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2021,13 +1793,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetCameraSupportedFormats(uint devid, out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetCameraName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetCameraName(uint instance_id);
-		public static string SDL_GetCameraName(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetCameraName(instance_id));
-		}
+		public static partial string SDL_GetCameraName(uint instance_id);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2067,49 +1835,25 @@ namespace SDL3
 
 		// /usr/local/include/SDL3/SDL_clipboard.h
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetClipboardText")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetClipboardText(byte* text);
-		public static SDLBool SDL_SetClipboardText(string text)
-		{
-			var textUTF8 = EncodeAsUTF8(text);
-			var result = INTERNAL_SDL_SetClipboardText(textUTF8);
+		public static partial SDLBool SDL_SetClipboardText(string text);
 
-			SDL_free((IntPtr) textUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetClipboardText")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetClipboardText();
-		public static string SDL_GetClipboardText()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetClipboardText(), shouldFree: true);
-		}
+		public static partial string SDL_GetClipboardText();
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_HasClipboardText();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetPrimarySelectionText")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetPrimarySelectionText(byte* text);
-		public static SDLBool SDL_SetPrimarySelectionText(string text)
-		{
-			var textUTF8 = EncodeAsUTF8(text);
-			var result = INTERNAL_SDL_SetPrimarySelectionText(textUTF8);
+		public static partial SDLBool SDL_SetPrimarySelectionText(string text);
 
-			SDL_free((IntPtr) textUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetPrimarySelectionText")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetPrimarySelectionText();
-		public static string SDL_GetPrimarySelectionText()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetPrimarySelectionText(), shouldFree: true);
-		}
+		public static partial string SDL_GetPrimarySelectionText();
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2129,29 +1873,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_ClearClipboardData();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetClipboardData")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetClipboardData(byte* mime_type, out UIntPtr size);
-		public static IntPtr SDL_GetClipboardData(string mime_type, out UIntPtr size)
-		{
-			var mime_typeUTF8 = EncodeAsUTF8(mime_type);
-			var result = INTERNAL_SDL_GetClipboardData(mime_typeUTF8, out size);
+		public static partial IntPtr SDL_GetClipboardData(string mime_type, out UIntPtr size);
 
-			SDL_free((IntPtr) mime_typeUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_HasClipboardData")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_HasClipboardData(byte* mime_type);
-		public static SDLBool SDL_HasClipboardData(string mime_type)
-		{
-			var mime_typeUTF8 = EncodeAsUTF8(mime_type);
-			var result = INTERNAL_SDL_HasClipboardData(mime_typeUTF8);
-
-			SDL_free((IntPtr) mime_typeUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_HasClipboardData(string mime_type);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2369,21 +2097,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial int SDL_GetNumVideoDrivers();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetVideoDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetVideoDriver(int index);
-		public static string SDL_GetVideoDriver(int index)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetVideoDriver(index));
-		}
+		public static partial string SDL_GetVideoDriver(int index);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetCurrentVideoDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetCurrentVideoDriver();
-		public static string SDL_GetCurrentVideoDriver()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetCurrentVideoDriver());
-		}
+		public static partial string SDL_GetCurrentVideoDriver();
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2401,13 +2121,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial uint SDL_GetDisplayProperties(uint displayID);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetDisplayName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetDisplayName(uint displayID);
-		public static string SDL_GetDisplayName(uint displayID)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetDisplayName(displayID));
-		}
+		public static partial string SDL_GetDisplayName(uint displayID);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2485,17 +2201,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetWindows(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CreateWindow")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_CreateWindow(byte* title, int w, int h, SDL_WindowFlags flags);
-		public static IntPtr SDL_CreateWindow(string title, int w, int h, SDL_WindowFlags flags)
-		{
-			var titleUTF8 = EncodeAsUTF8(title);
-			var result = INTERNAL_SDL_CreateWindow(titleUTF8, w, h, flags);
-
-			SDL_free((IntPtr) titleUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_CreateWindow(string title, int w, int h, SDL_WindowFlags flags);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2525,25 +2233,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDL_WindowFlags SDL_GetWindowFlags(IntPtr window);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetWindowTitle")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetWindowTitle(IntPtr window, byte* title);
-		public static SDLBool SDL_SetWindowTitle(IntPtr window, string title)
-		{
-			var titleUTF8 = EncodeAsUTF8(title);
-			var result = INTERNAL_SDL_SetWindowTitle(window, titleUTF8);
+		public static partial SDLBool SDL_SetWindowTitle(IntPtr window, string title);
 
-			SDL_free((IntPtr) titleUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetWindowTitle")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetWindowTitle(IntPtr window);
-		public static string SDL_GetWindowTitle(IntPtr window)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetWindowTitle(window));
-		}
+		public static partial string SDL_GetWindowTitle(IntPtr window);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2770,57 +2466,25 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_DisableScreenSaver();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GL_LoadLibrary")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_GL_LoadLibrary(byte* path);
-		public static SDLBool SDL_GL_LoadLibrary(string path)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_GL_LoadLibrary(pathUTF8);
+		public static partial SDLBool SDL_GL_LoadLibrary(string path);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GL_GetProcAddress")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GL_GetProcAddress(byte* proc);
-		public static IntPtr SDL_GL_GetProcAddress(string proc)
-		{
-			var procUTF8 = EncodeAsUTF8(proc);
-			var result = INTERNAL_SDL_GL_GetProcAddress(procUTF8);
+		public static partial IntPtr SDL_GL_GetProcAddress(string proc);
 
-			SDL_free((IntPtr) procUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_EGL_GetProcAddress")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_EGL_GetProcAddress(byte* proc);
-		public static IntPtr SDL_EGL_GetProcAddress(string proc)
-		{
-			var procUTF8 = EncodeAsUTF8(proc);
-			var result = INTERNAL_SDL_EGL_GetProcAddress(procUTF8);
-
-			SDL_free((IntPtr) procUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_EGL_GetProcAddress(string proc);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial void SDL_GL_UnloadLibrary();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GL_ExtensionSupported")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_GL_ExtensionSupported(byte* extension);
-		public static SDLBool SDL_GL_ExtensionSupported(string extension)
-		{
-			var extensionUTF8 = EncodeAsUTF8(extension);
-			var result = INTERNAL_SDL_GL_ExtensionSupported(extensionUTF8);
-
-			SDL_free((IntPtr) extensionUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_GL_ExtensionSupported(string extension);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2894,38 +2558,17 @@ namespace SDL3
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void SDL_DialogFileCallback(IntPtr userdata, IntPtr filelist, int filter);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_ShowOpenFileDialog")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_ShowOpenFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, byte* default_location, SDLBool allow_many);
-		public static void SDL_ShowOpenFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location, SDLBool allow_many)
-		{
-			var default_locationUTF8 = EncodeAsUTF8(default_location);
-			INTERNAL_SDL_ShowOpenFileDialog(callback, userdata, window, filters, nfilters, default_locationUTF8, allow_many);
+		public static partial void SDL_ShowOpenFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location, SDLBool allow_many);
 
-			SDL_free((IntPtr) default_locationUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_ShowSaveFileDialog")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_ShowSaveFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, byte* default_location);
-		public static void SDL_ShowSaveFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location)
-		{
-			var default_locationUTF8 = EncodeAsUTF8(default_location);
-			INTERNAL_SDL_ShowSaveFileDialog(callback, userdata, window, filters, nfilters, default_locationUTF8);
+		public static partial void SDL_ShowSaveFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location);
 
-			SDL_free((IntPtr) default_locationUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_ShowOpenFolderDialog")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_ShowOpenFolderDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, byte* default_location, SDLBool allow_many);
-		public static void SDL_ShowOpenFolderDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, string default_location, SDLBool allow_many)
-		{
-			var default_locationUTF8 = EncodeAsUTF8(default_location);
-			INTERNAL_SDL_ShowOpenFolderDialog(callback, userdata, window, default_locationUTF8, allow_many);
-
-			SDL_free((IntPtr) default_locationUTF8);
-		}
+		public static partial void SDL_ShowOpenFolderDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, string default_location, SDLBool allow_many);
 
 		// /usr/local/include/SDL3/SDL_guid.h
 
@@ -2935,28 +2578,13 @@ namespace SDL3
 			public fixed byte data[16];
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GUIDToString")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_GUIDToString(SDL_GUID guid, byte* pszGUID, int cbGUID);
-		public static void SDL_GUIDToString(SDL_GUID guid, string pszGUID, int cbGUID)
-		{
-			var pszGUIDUTF8 = EncodeAsUTF8(pszGUID);
-			INTERNAL_SDL_GUIDToString(guid, pszGUIDUTF8, cbGUID);
+		public static partial void SDL_GUIDToString(SDL_GUID guid, string pszGUID, int cbGUID);
 
-			SDL_free((IntPtr) pszGUIDUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_StringToGUID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDL_GUID INTERNAL_SDL_StringToGUID(byte* pchGUID);
-		public static SDL_GUID SDL_StringToGUID(string pchGUID)
-		{
-			var pchGUIDUTF8 = EncodeAsUTF8(pchGUID);
-			var result = INTERNAL_SDL_StringToGUID(pchGUIDUTF8);
-
-			SDL_free((IntPtr) pchGUIDUTF8);
-			return result;
-		}
+		public static partial SDL_GUID SDL_StringToGUID(string pchGUID);
 
 		// /usr/local/include/SDL3/SDL_power.h
 
@@ -2992,13 +2620,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetSensors(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetSensorNameForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetSensorNameForID(uint instance_id);
-		public static string SDL_GetSensorNameForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetSensorNameForID(instance_id));
-		}
+		public static partial string SDL_GetSensorNameForID(uint instance_id);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3020,13 +2644,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial uint SDL_GetSensorProperties(IntPtr sensor);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetSensorName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetSensorName(IntPtr sensor);
-		public static string SDL_GetSensorName(IntPtr sensor)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetSensorName(sensor));
-		}
+		public static partial string SDL_GetSensorName(IntPtr sensor);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3093,21 +2713,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetJoysticks(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetJoystickNameForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetJoystickNameForID(uint instance_id);
-		public static string SDL_GetJoystickNameForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetJoystickNameForID(instance_id));
-		}
+		public static partial string SDL_GetJoystickNameForID(uint instance_id);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetJoystickPathForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetJoystickPathForID(uint instance_id);
-		public static string SDL_GetJoystickPathForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetJoystickPathForID(instance_id));
-		}
+		public static partial string SDL_GetJoystickPathForID(uint instance_id);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3230,21 +2842,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial uint SDL_GetJoystickProperties(IntPtr joystick);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetJoystickName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetJoystickName(IntPtr joystick);
-		public static string SDL_GetJoystickName(IntPtr joystick)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetJoystickName(joystick));
-		}
+		public static partial string SDL_GetJoystickName(IntPtr joystick);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetJoystickPath")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetJoystickPath(IntPtr joystick);
-		public static string SDL_GetJoystickPath(IntPtr joystick)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetJoystickPath(joystick));
-		}
+		public static partial string SDL_GetJoystickPath(IntPtr joystick);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3274,13 +2878,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial ushort SDL_GetJoystickFirmwareVersion(IntPtr joystick);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetJoystickSerial")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetJoystickSerial(IntPtr joystick);
-		public static string SDL_GetJoystickSerial(IntPtr joystick)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetJoystickSerial(joystick));
-		}
+		public static partial string SDL_GetJoystickSerial(IntPtr joystick);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3499,33 +3099,17 @@ namespace SDL3
 			public int axis_max;
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_AddGamepadMapping")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial int INTERNAL_SDL_AddGamepadMapping(byte* mapping);
-		public static int SDL_AddGamepadMapping(string mapping)
-		{
-			var mappingUTF8 = EncodeAsUTF8(mapping);
-			var result = INTERNAL_SDL_AddGamepadMapping(mappingUTF8);
-
-			SDL_free((IntPtr) mappingUTF8);
-			return result;
-		}
+		public static partial int SDL_AddGamepadMapping(string mapping);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial int SDL_AddGamepadMappingsFromIO(IntPtr src, SDLBool closeio);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_AddGamepadMappingsFromFile")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial int INTERNAL_SDL_AddGamepadMappingsFromFile(byte* file);
-		public static int SDL_AddGamepadMappingsFromFile(string file)
-		{
-			var fileUTF8 = EncodeAsUTF8(file);
-			var result = INTERNAL_SDL_AddGamepadMappingsFromFile(fileUTF8);
-
-			SDL_free((IntPtr) fileUTF8);
-			return result;
-		}
+		public static partial int SDL_AddGamepadMappingsFromFile(string file);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3535,33 +3119,17 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetGamepadMappings(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadMappingForGUID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadMappingForGUID(SDL_GUID guid);
-		public static string SDL_GetGamepadMappingForGUID(SDL_GUID guid)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMappingForGUID(guid), shouldFree: true);
-		}
+		public static partial string SDL_GetGamepadMappingForGUID(SDL_GUID guid);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadMapping")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadMapping(IntPtr gamepad);
-		public static string SDL_GetGamepadMapping(IntPtr gamepad)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMapping(gamepad), shouldFree: true);
-		}
+		public static partial string SDL_GetGamepadMapping(IntPtr gamepad);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetGamepadMapping")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetGamepadMapping(uint instance_id, byte* mapping);
-		public static SDLBool SDL_SetGamepadMapping(uint instance_id, string mapping)
-		{
-			var mappingUTF8 = EncodeAsUTF8(mapping);
-			var result = INTERNAL_SDL_SetGamepadMapping(instance_id, mappingUTF8);
-
-			SDL_free((IntPtr) mappingUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_SetGamepadMapping(uint instance_id, string mapping);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3575,21 +3143,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_IsGamepad(uint instance_id);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadNameForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadNameForID(uint instance_id);
-		public static string SDL_GetGamepadNameForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadNameForID(instance_id));
-		}
+		public static partial string SDL_GetGamepadNameForID(uint instance_id);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadPathForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadPathForID(uint instance_id);
-		public static string SDL_GetGamepadPathForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadPathForID(instance_id));
-		}
+		public static partial string SDL_GetGamepadPathForID(uint instance_id);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3619,13 +3179,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDL_GamepadType SDL_GetRealGamepadTypeForID(uint instance_id);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadMappingForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadMappingForID(uint instance_id);
-		public static string SDL_GetGamepadMappingForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadMappingForID(instance_id), shouldFree: true);
-		}
+		public static partial string SDL_GetGamepadMappingForID(uint instance_id);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3647,21 +3203,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial uint SDL_GetGamepadID(IntPtr gamepad);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadName(IntPtr gamepad);
-		public static string SDL_GetGamepadName(IntPtr gamepad)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadName(gamepad));
-		}
+		public static partial string SDL_GetGamepadName(IntPtr gamepad);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadPath")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadPath(IntPtr gamepad);
-		public static string SDL_GetGamepadPath(IntPtr gamepad)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadPath(gamepad));
-		}
+		public static partial string SDL_GetGamepadPath(IntPtr gamepad);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3695,13 +3243,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial ushort SDL_GetGamepadFirmwareVersion(IntPtr gamepad);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadSerial")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadSerial(IntPtr gamepad);
-		public static string SDL_GetGamepadSerial(IntPtr gamepad)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadSerial(gamepad));
-		}
+		public static partial string SDL_GetGamepadSerial(IntPtr gamepad);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3739,45 +3283,21 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial void SDL_UpdateGamepads();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadTypeFromString")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDL_GamepadType INTERNAL_SDL_GetGamepadTypeFromString(byte* str);
-		public static SDL_GamepadType SDL_GetGamepadTypeFromString(string str)
-		{
-			var strUTF8 = EncodeAsUTF8(str);
-			var result = INTERNAL_SDL_GetGamepadTypeFromString(strUTF8);
+		public static partial SDL_GamepadType SDL_GetGamepadTypeFromString(string str);
 
-			SDL_free((IntPtr) strUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadStringForType")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadStringForType(SDL_GamepadType type);
-		public static string SDL_GetGamepadStringForType(SDL_GamepadType type)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForType(type));
-		}
+		public static partial string SDL_GetGamepadStringForType(SDL_GamepadType type);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadAxisFromString")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDL_GamepadAxis INTERNAL_SDL_GetGamepadAxisFromString(byte* str);
-		public static SDL_GamepadAxis SDL_GetGamepadAxisFromString(string str)
-		{
-			var strUTF8 = EncodeAsUTF8(str);
-			var result = INTERNAL_SDL_GetGamepadAxisFromString(strUTF8);
+		public static partial SDL_GamepadAxis SDL_GetGamepadAxisFromString(string str);
 
-			SDL_free((IntPtr) strUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadStringForAxis")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis);
-		public static string SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForAxis(axis));
-		}
+		public static partial string SDL_GetGamepadStringForAxis(SDL_GamepadAxis axis);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3787,25 +3307,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial short SDL_GetGamepadAxis(IntPtr gamepad, SDL_GamepadAxis axis);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadButtonFromString")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDL_GamepadButton INTERNAL_SDL_GetGamepadButtonFromString(byte* str);
-		public static SDL_GamepadButton SDL_GetGamepadButtonFromString(string str)
-		{
-			var strUTF8 = EncodeAsUTF8(str);
-			var result = INTERNAL_SDL_GetGamepadButtonFromString(strUTF8);
+		public static partial SDL_GamepadButton SDL_GetGamepadButtonFromString(string str);
 
-			SDL_free((IntPtr) strUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadStringForButton")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadStringForButton(SDL_GamepadButton button);
-		public static string SDL_GetGamepadStringForButton(SDL_GamepadButton button)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadStringForButton(button));
-		}
+		public static partial string SDL_GetGamepadStringForButton(SDL_GamepadButton button);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -3875,21 +3383,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial void SDL_CloseGamepad(IntPtr gamepad);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadAppleSFSymbolsNameForButton")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForButton(IntPtr gamepad, SDL_GamepadButton button);
-		public static string SDL_GetGamepadAppleSFSymbolsNameForButton(IntPtr gamepad, SDL_GamepadButton button)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForButton(gamepad, button));
-		}
+		public static partial string SDL_GetGamepadAppleSFSymbolsNameForButton(IntPtr gamepad, SDL_GamepadButton button);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGamepadAppleSFSymbolsNameForAxis")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis);
-		public static string SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGamepadAppleSFSymbolsNameForAxis(gamepad, axis));
-		}
+		public static partial string SDL_GetGamepadAppleSFSymbolsNameForAxis(IntPtr gamepad, SDL_GamepadAxis axis);
 
 		// /usr/local/include/SDL3/SDL_scancode.h
 
@@ -4434,13 +3934,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetKeyboards(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetKeyboardNameForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetKeyboardNameForID(uint instance_id);
-		public static string SDL_GetKeyboardNameForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetKeyboardNameForID(instance_id));
-		}
+		public static partial string SDL_GetKeyboardNameForID(uint instance_id);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -4470,57 +3966,25 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDL_Scancode SDL_GetScancodeFromKey(uint key, IntPtr modstate);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetScancodeName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetScancodeName(SDL_Scancode scancode, byte* name);
-		public static SDLBool SDL_SetScancodeName(SDL_Scancode scancode, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_SetScancodeName(scancode, nameUTF8);
+		public static partial SDLBool SDL_SetScancodeName(SDL_Scancode scancode, string name);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetScancodeName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetScancodeName(SDL_Scancode scancode);
-		public static string SDL_GetScancodeName(SDL_Scancode scancode)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetScancodeName(scancode));
-		}
+		public static partial string SDL_GetScancodeName(SDL_Scancode scancode);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetScancodeFromName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDL_Scancode INTERNAL_SDL_GetScancodeFromName(byte* name);
-		public static SDL_Scancode SDL_GetScancodeFromName(string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GetScancodeFromName(nameUTF8);
+		public static partial SDL_Scancode SDL_GetScancodeFromName(string name);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetKeyName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetKeyName(uint key);
-		public static string SDL_GetKeyName(uint key)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetKeyName(key));
-		}
+		public static partial string SDL_GetKeyName(uint key);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetKeyFromName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial uint INTERNAL_SDL_GetKeyFromName(byte* name);
-		public static uint SDL_GetKeyFromName(string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GetKeyFromName(nameUTF8);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial uint SDL_GetKeyFromName(string name);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -4630,13 +4094,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetMice(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetMouseNameForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetMouseNameForID(uint instance_id);
-		public static string SDL_GetMouseNameForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetMouseNameForID(instance_id));
-		}
+		public static partial string SDL_GetMouseNameForID(uint instance_id);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -4763,13 +4223,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetTouchDevices(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetTouchDeviceName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetTouchDeviceName(ulong touchID);
-		public static string SDL_GetTouchDeviceName(ulong touchID)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetTouchDeviceName(touchID));
-		}
+		public static partial string SDL_GetTouchDeviceName(ulong touchID);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -5511,27 +4967,13 @@ namespace SDL3
 
 		// /usr/local/include/SDL3/SDL_filesystem.h
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetBasePath")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetBasePath();
-		public static string SDL_GetBasePath()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetBasePath());
-		}
+		public static partial string SDL_GetBasePath();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetPrefPath")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetPrefPath(byte* org, byte* app);
-		public static string SDL_GetPrefPath(string org, string app)
-		{
-			var orgUTF8 = EncodeAsUTF8(org);
-			var appUTF8 = EncodeAsUTF8(app);
-			var result = DecodeFromUTF8(INTERNAL_SDL_GetPrefPath(orgUTF8, appUTF8), shouldFree: true);
-
-			SDL_free((IntPtr) orgUTF8);
-			SDL_free((IntPtr) appUTF8);
-			return result;
-		}
+		public static partial string SDL_GetPrefPath(string org, string app);
 
 		public enum SDL_Folder
 		{
@@ -5549,13 +4991,9 @@ namespace SDL3
 			SDL_FOLDER_COUNT = 11,
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetUserFolder")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetUserFolder(SDL_Folder folder);
-		public static string SDL_GetUserFolder(SDL_Folder folder)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetUserFolder(folder));
-		}
+		public static partial string SDL_GetUserFolder(SDL_Folder folder);
 
 		public enum SDL_PathType
 		{
@@ -5581,17 +5019,9 @@ namespace SDL3
 			SDL_GLOB_CASEINSENSITIVE = 0x1,
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CreateDirectory")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_CreateDirectory(byte* path);
-		public static SDLBool SDL_CreateDirectory(string path)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_CreateDirectory(pathUTF8);
-
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_CreateDirectory(string path);
 
 		public enum SDL_EnumerationResult
 		{
@@ -5603,83 +5033,29 @@ namespace SDL3
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate SDL_EnumerationResult SDL_EnumerateDirectoryCallback(IntPtr userdata, byte* dirname, byte* fname);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_EnumerateDirectory")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_EnumerateDirectory(byte* path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata);
-		public static SDLBool SDL_EnumerateDirectory(string path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_EnumerateDirectory(pathUTF8, callback, userdata);
+		public static partial SDLBool SDL_EnumerateDirectory(string path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_RemovePath")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_RemovePath(byte* path);
-		public static SDLBool SDL_RemovePath(string path)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_RemovePath(pathUTF8);
+		public static partial SDLBool SDL_RemovePath(string path);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_RenamePath")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_RenamePath(byte* oldpath, byte* newpath);
-		public static SDLBool SDL_RenamePath(string oldpath, string newpath)
-		{
-			var oldpathUTF8 = EncodeAsUTF8(oldpath);
-			var newpathUTF8 = EncodeAsUTF8(newpath);
-			var result = INTERNAL_SDL_RenamePath(oldpathUTF8, newpathUTF8);
+		public static partial SDLBool SDL_RenamePath(string oldpath, string newpath);
 
-			SDL_free((IntPtr) oldpathUTF8);
-			SDL_free((IntPtr) newpathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CopyFile")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_CopyFile(byte* oldpath, byte* newpath);
-		public static SDLBool SDL_CopyFile(string oldpath, string newpath)
-		{
-			var oldpathUTF8 = EncodeAsUTF8(oldpath);
-			var newpathUTF8 = EncodeAsUTF8(newpath);
-			var result = INTERNAL_SDL_CopyFile(oldpathUTF8, newpathUTF8);
+		public static partial SDLBool SDL_CopyFile(string oldpath, string newpath);
 
-			SDL_free((IntPtr) oldpathUTF8);
-			SDL_free((IntPtr) newpathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetPathInfo")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_GetPathInfo(byte* path, out SDL_PathInfo info);
-		public static SDLBool SDL_GetPathInfo(string path, out SDL_PathInfo info)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_GetPathInfo(pathUTF8, out info);
+		public static partial SDLBool SDL_GetPathInfo(string path, out SDL_PathInfo info);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GlobDirectory")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GlobDirectory(byte* path, byte* pattern, SDL_GlobFlags flags, out int count);
-		public static IntPtr SDL_GlobDirectory(string path, string pattern, SDL_GlobFlags flags, out int count)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var patternUTF8 = EncodeAsUTF8(pattern);
-			var result = INTERNAL_SDL_GlobDirectory(pathUTF8, patternUTF8, flags, out count);
-
-			SDL_free((IntPtr) pathUTF8);
-			SDL_free((IntPtr) patternUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_GlobDirectory(string path, string pattern, SDL_GlobFlags flags, out int count);
 
 		// /usr/local/include/SDL3/SDL_gpu.h
 
@@ -6400,33 +5776,17 @@ namespace SDL3
 			public byte padding3;
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GPUSupportsShaderFormats")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_GPUSupportsShaderFormats(uint format_flags, byte* name);
-		public static SDLBool SDL_GPUSupportsShaderFormats(uint format_flags, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GPUSupportsShaderFormats(format_flags, nameUTF8);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_GPUSupportsShaderFormats(uint format_flags, string name);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_GPUSupportsProperties(uint props);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CreateGPUDevice")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_CreateGPUDevice(uint format_flags, SDLBool debug_mode, byte* name);
-		public static IntPtr SDL_CreateGPUDevice(uint format_flags, SDLBool debug_mode, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_CreateGPUDevice(format_flags, debug_mode, nameUTF8);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_CreateGPUDevice(uint format_flags, SDLBool debug_mode, string name);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -6440,21 +5800,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial int SDL_GetNumGPUDrivers();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGPUDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGPUDriver(int index);
-		public static string SDL_GetGPUDriver(int index)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGPUDriver(index));
-		}
+		public static partial string SDL_GetGPUDriver(int index);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetGPUDeviceDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetGPUDeviceDriver(IntPtr device);
-		public static string SDL_GetGPUDeviceDriver(IntPtr device)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetGPUDeviceDriver(device));
-		}
+		public static partial string SDL_GetGPUDeviceDriver(IntPtr device);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -6488,49 +5840,21 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_CreateGPUTransferBuffer(IntPtr device, ref SDL_GPUTransferBufferCreateInfo createinfo);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetGPUBufferName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, byte* text);
-		public static void SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, string text)
-		{
-			var textUTF8 = EncodeAsUTF8(text);
-			INTERNAL_SDL_SetGPUBufferName(device, buffer, textUTF8);
+		public static partial void SDL_SetGPUBufferName(IntPtr device, IntPtr buffer, string text);
 
-			SDL_free((IntPtr) textUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetGPUTextureName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_SetGPUTextureName(IntPtr device, IntPtr texture, byte* text);
-		public static void SDL_SetGPUTextureName(IntPtr device, IntPtr texture, string text)
-		{
-			var textUTF8 = EncodeAsUTF8(text);
-			INTERNAL_SDL_SetGPUTextureName(device, texture, textUTF8);
+		public static partial void SDL_SetGPUTextureName(IntPtr device, IntPtr texture, string text);
 
-			SDL_free((IntPtr) textUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_InsertGPUDebugLabel")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_InsertGPUDebugLabel(IntPtr command_buffer, byte* text);
-		public static void SDL_InsertGPUDebugLabel(IntPtr command_buffer, string text)
-		{
-			var textUTF8 = EncodeAsUTF8(text);
-			INTERNAL_SDL_InsertGPUDebugLabel(command_buffer, textUTF8);
+		public static partial void SDL_InsertGPUDebugLabel(IntPtr command_buffer, string text);
 
-			SDL_free((IntPtr) textUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_PushGPUDebugGroup")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_PushGPUDebugGroup(IntPtr command_buffer, byte* name);
-		public static void SDL_PushGPUDebugGroup(IntPtr command_buffer, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			INTERNAL_SDL_PushGPUDebugGroup(command_buffer, nameUTF8);
-
-			SDL_free((IntPtr) nameUTF8);
-		}
+		public static partial void SDL_PushGPUDebugGroup(IntPtr command_buffer, string name);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -6929,13 +6253,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetHaptics(out int count);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetHapticNameForID")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetHapticNameForID(uint instance_id);
-		public static string SDL_GetHapticNameForID(uint instance_id)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetHapticNameForID(instance_id));
-		}
+		public static partial string SDL_GetHapticNameForID(uint instance_id);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -6949,13 +6269,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial uint SDL_GetHapticID(IntPtr haptic);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetHapticName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetHapticName(IntPtr haptic);
-		public static string SDL_GetHapticName(IntPtr haptic)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetHapticName(haptic));
-		}
+		public static partial string SDL_GetHapticName(IntPtr haptic);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7108,29 +6424,13 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial void SDL_hid_free_enumeration(IntPtr devs); // WARN_UNKNOWN_POINTER_PARAMETER
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_hid_open")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_hid_open(ushort vendor_id, ushort product_id, byte* serial_number);
-		public static IntPtr SDL_hid_open(ushort vendor_id, ushort product_id, string serial_number)
-		{
-			var serial_numberUTF8 = EncodeAsUTF8(serial_number);
-			var result = INTERNAL_SDL_hid_open(vendor_id, product_id, serial_numberUTF8);
+		public static partial IntPtr SDL_hid_open(ushort vendor_id, ushort product_id, string serial_number);
 
-			SDL_free((IntPtr) serial_numberUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_hid_open_path")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_hid_open_path(byte* path);
-		public static IntPtr SDL_hid_open_path(string path)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_hid_open_path(pathUTF8);
-
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_hid_open_path(string path);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7164,53 +6464,21 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial int SDL_hid_close(IntPtr dev);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_hid_get_manufacturer_string")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial int INTERNAL_SDL_hid_get_manufacturer_string(IntPtr dev, byte* @string, UIntPtr maxlen);
-		public static int SDL_hid_get_manufacturer_string(IntPtr dev, string @string, UIntPtr maxlen)
-		{
-			var @stringUTF8 = EncodeAsUTF8(@string);
-			var result = INTERNAL_SDL_hid_get_manufacturer_string(dev, @stringUTF8, maxlen);
+		public static partial int SDL_hid_get_manufacturer_string(IntPtr dev, string @string, UIntPtr maxlen);
 
-			SDL_free((IntPtr) @stringUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_hid_get_product_string")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial int INTERNAL_SDL_hid_get_product_string(IntPtr dev, byte* @string, UIntPtr maxlen);
-		public static int SDL_hid_get_product_string(IntPtr dev, string @string, UIntPtr maxlen)
-		{
-			var @stringUTF8 = EncodeAsUTF8(@string);
-			var result = INTERNAL_SDL_hid_get_product_string(dev, @stringUTF8, maxlen);
+		public static partial int SDL_hid_get_product_string(IntPtr dev, string @string, UIntPtr maxlen);
 
-			SDL_free((IntPtr) @stringUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_hid_get_serial_number_string")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial int INTERNAL_SDL_hid_get_serial_number_string(IntPtr dev, byte* @string, UIntPtr maxlen);
-		public static int SDL_hid_get_serial_number_string(IntPtr dev, string @string, UIntPtr maxlen)
-		{
-			var @stringUTF8 = EncodeAsUTF8(@string);
-			var result = INTERNAL_SDL_hid_get_serial_number_string(dev, @stringUTF8, maxlen);
+		public static partial int SDL_hid_get_serial_number_string(IntPtr dev, string @string, UIntPtr maxlen);
 
-			SDL_free((IntPtr) @stringUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_hid_get_indexed_string")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial int INTERNAL_SDL_hid_get_indexed_string(IntPtr dev, int string_index, byte* @string, UIntPtr maxlen);
-		public static int SDL_hid_get_indexed_string(IntPtr dev, int string_index, string @string, UIntPtr maxlen)
-		{
-			var @stringUTF8 = EncodeAsUTF8(@string);
-			var result = INTERNAL_SDL_hid_get_indexed_string(dev, string_index, @stringUTF8, maxlen);
-
-			SDL_free((IntPtr) @stringUTF8);
-			return result;
-		}
+		public static partial int SDL_hid_get_indexed_string(IntPtr dev, int string_index, string @string, UIntPtr maxlen);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7460,99 +6728,40 @@ namespace SDL3
 			SDL_HINT_OVERRIDE = 2,
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetHintWithPriority")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetHintWithPriority(byte* name, byte* value, SDL_HintPriority priority);
-		public static SDLBool SDL_SetHintWithPriority(string name, string value, SDL_HintPriority priority)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var valueUTF8 = EncodeAsUTF8(value);
-			var result = INTERNAL_SDL_SetHintWithPriority(nameUTF8, valueUTF8, priority);
+		public static partial SDLBool SDL_SetHintWithPriority(string name, string value, SDL_HintPriority priority);
 
-			SDL_free((IntPtr) nameUTF8);
-			SDL_free((IntPtr) valueUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetHint")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetHint(byte* name, byte* value);
-		public static SDLBool SDL_SetHint(string name, string value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var valueUTF8 = EncodeAsUTF8(value);
-			var result = INTERNAL_SDL_SetHint(nameUTF8, valueUTF8);
+		public static partial SDLBool SDL_SetHint(string name, string value);
 
-			SDL_free((IntPtr) nameUTF8);
-			SDL_free((IntPtr) valueUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_ResetHint")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_ResetHint(byte* name);
-		public static SDLBool SDL_ResetHint(string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_ResetHint(nameUTF8);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_ResetHint(string name);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial void SDL_ResetHints();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetHint")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetHint(byte* name);
-		public static string SDL_GetHint(string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = DecodeFromUTF8(INTERNAL_SDL_GetHint(nameUTF8));
+		public static partial string SDL_GetHint(string name);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetHintBoolean")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_GetHintBoolean(byte* name, SDLBool default_value);
-		public static SDLBool SDL_GetHintBoolean(string name, SDLBool default_value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_GetHintBoolean(nameUTF8, default_value);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_GetHintBoolean(string name, SDLBool default_value);
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void SDL_HintCallback(IntPtr userdata, byte* name, byte* oldValue, byte* newValue);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_AddHintCallback")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_AddHintCallback(byte* name, SDL_HintCallback callback, IntPtr userdata);
-		public static SDLBool SDL_AddHintCallback(string name, SDL_HintCallback callback, IntPtr userdata)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_AddHintCallback(nameUTF8, callback, userdata);
+		public static partial SDLBool SDL_AddHintCallback(string name, SDL_HintCallback callback, IntPtr userdata);
 
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_RemoveHintCallback")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_RemoveHintCallback(byte* name, SDL_HintCallback callback, IntPtr userdata);
-		public static void SDL_RemoveHintCallback(string name, SDL_HintCallback callback, IntPtr userdata)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			INTERNAL_SDL_RemoveHintCallback(nameUTF8, callback, userdata);
-
-			SDL_free((IntPtr) nameUTF8);
-		}
+		public static partial void SDL_RemoveHintCallback(string name, SDL_HintCallback callback, IntPtr userdata);
 
 		// /usr/local/include/SDL3/SDL_init.h
 
@@ -7609,73 +6818,27 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial void SDL_Quit();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetAppMetadata")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetAppMetadata(byte* appname, byte* appversion, byte* appidentifier);
-		public static SDLBool SDL_SetAppMetadata(string appname, string appversion, string appidentifier)
-		{
-			var appnameUTF8 = EncodeAsUTF8(appname);
-			var appversionUTF8 = EncodeAsUTF8(appversion);
-			var appidentifierUTF8 = EncodeAsUTF8(appidentifier);
-			var result = INTERNAL_SDL_SetAppMetadata(appnameUTF8, appversionUTF8, appidentifierUTF8);
+		public static partial SDLBool SDL_SetAppMetadata(string appname, string appversion, string appidentifier);
 
-			SDL_free((IntPtr) appnameUTF8);
-			SDL_free((IntPtr) appversionUTF8);
-			SDL_free((IntPtr) appidentifierUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetAppMetadataProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetAppMetadataProperty(byte* name, byte* value);
-		public static SDLBool SDL_SetAppMetadataProperty(string name, string value)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var valueUTF8 = EncodeAsUTF8(value);
-			var result = INTERNAL_SDL_SetAppMetadataProperty(nameUTF8, valueUTF8);
+		public static partial SDLBool SDL_SetAppMetadataProperty(string name, string value);
 
-			SDL_free((IntPtr) nameUTF8);
-			SDL_free((IntPtr) valueUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetAppMetadataProperty")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetAppMetadataProperty(byte* name);
-		public static string SDL_GetAppMetadataProperty(string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = DecodeFromUTF8(INTERNAL_SDL_GetAppMetadataProperty(nameUTF8));
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial string SDL_GetAppMetadataProperty(string name);
 
 		// /usr/local/include/SDL3/SDL_loadso.h
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LoadObject")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_LoadObject(byte* sofile);
-		public static IntPtr SDL_LoadObject(string sofile)
-		{
-			var sofileUTF8 = EncodeAsUTF8(sofile);
-			var result = INTERNAL_SDL_LoadObject(sofileUTF8);
+		public static partial IntPtr SDL_LoadObject(string sofile);
 
-			SDL_free((IntPtr) sofileUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LoadFunction")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_LoadFunction(IntPtr handle, byte* name);
-		public static IntPtr SDL_LoadFunction(IntPtr handle, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_LoadFunction(handle, nameUTF8);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_LoadFunction(IntPtr handle, string name);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7749,116 +6912,45 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial void SDL_ResetLogPriorities();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_SetLogPriorityPrefix")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_SetLogPriorityPrefix(SDL_LogPriority priority, byte* prefix);
-		public static SDLBool SDL_SetLogPriorityPrefix(SDL_LogPriority priority, string prefix)
-		{
-			var prefixUTF8 = EncodeAsUTF8(prefix);
-			var result = INTERNAL_SDL_SetLogPriorityPrefix(priority, prefixUTF8);
+		public static partial SDLBool SDL_SetLogPriorityPrefix(SDL_LogPriority priority, string prefix);
 
-			SDL_free((IntPtr) prefixUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_Log")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_Log(byte* fmt);
-		public static void SDL_Log(string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_Log(fmtUTF8);
+		public static partial void SDL_Log(string fmt);
 
-			SDL_free((IntPtr) fmtUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LogTrace")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_LogTrace(int category, byte* fmt);
-		public static void SDL_LogTrace(int category, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_LogTrace(category, fmtUTF8);
+		public static partial void SDL_LogTrace(int category, string fmt);
 
-			SDL_free((IntPtr) fmtUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LogVerbose")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_LogVerbose(int category, byte* fmt);
-		public static void SDL_LogVerbose(int category, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_LogVerbose(category, fmtUTF8);
+		public static partial void SDL_LogVerbose(int category, string fmt);
 
-			SDL_free((IntPtr) fmtUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LogDebug")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_LogDebug(int category, byte* fmt);
-		public static void SDL_LogDebug(int category, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_LogDebug(category, fmtUTF8);
+		public static partial void SDL_LogDebug(int category, string fmt);
 
-			SDL_free((IntPtr) fmtUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LogInfo")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_LogInfo(int category, byte* fmt);
-		public static void SDL_LogInfo(int category, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_LogInfo(category, fmtUTF8);
+		public static partial void SDL_LogInfo(int category, string fmt);
 
-			SDL_free((IntPtr) fmtUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LogWarn")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_LogWarn(int category, byte* fmt);
-		public static void SDL_LogWarn(int category, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_LogWarn(category, fmtUTF8);
+		public static partial void SDL_LogWarn(int category, string fmt);
 
-			SDL_free((IntPtr) fmtUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LogError")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_LogError(int category, byte* fmt);
-		public static void SDL_LogError(int category, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_LogError(category, fmtUTF8);
+		public static partial void SDL_LogError(int category, string fmt);
 
-			SDL_free((IntPtr) fmtUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LogCritical")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_LogCritical(int category, byte* fmt);
-		public static void SDL_LogCritical(int category, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_LogCritical(category, fmtUTF8);
+		public static partial void SDL_LogCritical(int category, string fmt);
 
-			SDL_free((IntPtr) fmtUTF8);
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_LogMessage")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial void INTERNAL_SDL_LogMessage(int category, SDL_LogPriority priority, byte* fmt);
-		public static void SDL_LogMessage(int category, SDL_LogPriority priority, string fmt)
-		{
-			var fmtUTF8 = EncodeAsUTF8(fmt);
-			INTERNAL_SDL_LogMessage(category, priority, fmtUTF8);
-
-			SDL_free((IntPtr) fmtUTF8);
-		}
+		public static partial void SDL_LogMessage(int category, SDL_LogPriority priority, string fmt);
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void SDL_LogOutputFunction(IntPtr userdata, int category, SDL_LogPriority priority, byte* message);
@@ -7942,19 +7034,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_ShowMessageBox(ref SDL_MessageBoxData messageboxdata, out int buttonid);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_ShowSimpleMessageBox")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags flags, byte* title, byte* message, IntPtr window);
-		public static SDLBool SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags flags, string title, string message, IntPtr window)
-		{
-			var titleUTF8 = EncodeAsUTF8(title);
-			var messageUTF8 = EncodeAsUTF8(message);
-			var result = INTERNAL_SDL_ShowSimpleMessageBox(flags, titleUTF8, messageUTF8, window);
-
-			SDL_free((IntPtr) titleUTF8);
-			SDL_free((IntPtr) messageUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags flags, string title, string message, IntPtr window);
 
 		// /usr/local/include/SDL3/SDL_metal.h
 
@@ -7972,27 +7054,15 @@ namespace SDL3
 
 		// /usr/local/include/SDL3/SDL_misc.h
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_OpenURL")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_OpenURL(byte* url);
-		public static SDLBool SDL_OpenURL(string url)
-		{
-			var urlUTF8 = EncodeAsUTF8(url);
-			var result = INTERNAL_SDL_OpenURL(urlUTF8);
-
-			SDL_free((IntPtr) urlUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_OpenURL(string url);
 
 		// /usr/local/include/SDL3/SDL_platform.h
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetPlatform")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetPlatform();
-		public static string SDL_GetPlatform()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetPlatform());
-		}
+		public static partial string SDL_GetPlatform();
 
 		// /usr/local/include/SDL3/SDL_process.h
 
@@ -8070,37 +7140,17 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial int SDL_GetNumRenderDrivers();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetRenderDriver")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetRenderDriver(int index);
-		public static string SDL_GetRenderDriver(int index)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetRenderDriver(index));
-		}
+		public static partial string SDL_GetRenderDriver(int index);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CreateWindowAndRenderer")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_CreateWindowAndRenderer(byte* title, int width, int height, SDL_WindowFlags window_flags, out IntPtr window, out IntPtr renderer);
-		public static SDLBool SDL_CreateWindowAndRenderer(string title, int width, int height, SDL_WindowFlags window_flags, out IntPtr window, out IntPtr renderer)
-		{
-			var titleUTF8 = EncodeAsUTF8(title);
-			var result = INTERNAL_SDL_CreateWindowAndRenderer(titleUTF8, width, height, window_flags, out window, out renderer);
+		public static partial SDLBool SDL_CreateWindowAndRenderer(string title, int width, int height, SDL_WindowFlags window_flags, out IntPtr window, out IntPtr renderer);
 
-			SDL_free((IntPtr) titleUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CreateRenderer")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_CreateRenderer(IntPtr window, byte* name);
-		public static IntPtr SDL_CreateRenderer(IntPtr window, string name)
-		{
-			var nameUTF8 = EncodeAsUTF8(name);
-			var result = INTERNAL_SDL_CreateRenderer(window, nameUTF8);
-
-			SDL_free((IntPtr) nameUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_CreateRenderer(IntPtr window, string name);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -8118,13 +7168,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial IntPtr SDL_GetRenderWindow(IntPtr renderer);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetRendererName")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetRendererName(IntPtr renderer);
-		public static string SDL_GetRendererName(IntPtr renderer)
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetRendererName(renderer));
-		}
+		public static partial string SDL_GetRendererName(IntPtr renderer);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -8453,43 +7499,17 @@ namespace SDL3
 			public IntPtr space_remaining; // WARN_ANONYMOUS_FUNCTION_POINTER
 		}
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_OpenTitleStorage")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_OpenTitleStorage(byte* @override, uint props);
-		public static IntPtr SDL_OpenTitleStorage(string @override, uint props)
-		{
-			var @overrideUTF8 = EncodeAsUTF8(@override);
-			var result = INTERNAL_SDL_OpenTitleStorage(@overrideUTF8, props);
+		public static partial IntPtr SDL_OpenTitleStorage(string @override, uint props);
 
-			SDL_free((IntPtr) @overrideUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_OpenUserStorage")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_OpenUserStorage(byte* org, byte* app, uint props);
-		public static IntPtr SDL_OpenUserStorage(string org, string app, uint props)
-		{
-			var orgUTF8 = EncodeAsUTF8(org);
-			var appUTF8 = EncodeAsUTF8(app);
-			var result = INTERNAL_SDL_OpenUserStorage(orgUTF8, appUTF8, props);
+		public static partial IntPtr SDL_OpenUserStorage(string org, string app, uint props);
 
-			SDL_free((IntPtr) orgUTF8);
-			SDL_free((IntPtr) appUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_OpenFileStorage")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_OpenFileStorage(byte* path);
-		public static IntPtr SDL_OpenFileStorage(string path)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_OpenFileStorage(pathUTF8);
-
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_OpenFileStorage(string path);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -8503,135 +7523,49 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial SDLBool SDL_StorageReady(IntPtr storage);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetStorageFileSize")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_GetStorageFileSize(IntPtr storage, byte* path, out ulong length);
-		public static SDLBool SDL_GetStorageFileSize(IntPtr storage, string path, out ulong length)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_GetStorageFileSize(storage, pathUTF8, out length);
+		public static partial SDLBool SDL_GetStorageFileSize(IntPtr storage, string path, out ulong length);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_ReadStorageFile")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_ReadStorageFile(IntPtr storage, byte* path, IntPtr destination, ulong length);
-		public static SDLBool SDL_ReadStorageFile(IntPtr storage, string path, IntPtr destination, ulong length)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_ReadStorageFile(storage, pathUTF8, destination, length);
+		public static partial SDLBool SDL_ReadStorageFile(IntPtr storage, string path, IntPtr destination, ulong length);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_WriteStorageFile")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_WriteStorageFile(IntPtr storage, byte* path, IntPtr source, ulong length);
-		public static SDLBool SDL_WriteStorageFile(IntPtr storage, string path, IntPtr source, ulong length)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_WriteStorageFile(storage, pathUTF8, source, length);
+		public static partial SDLBool SDL_WriteStorageFile(IntPtr storage, string path, IntPtr source, ulong length);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CreateStorageDirectory")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_CreateStorageDirectory(IntPtr storage, byte* path);
-		public static SDLBool SDL_CreateStorageDirectory(IntPtr storage, string path)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_CreateStorageDirectory(storage, pathUTF8);
+		public static partial SDLBool SDL_CreateStorageDirectory(IntPtr storage, string path);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_EnumerateStorageDirectory")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_EnumerateStorageDirectory(IntPtr storage, byte* path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata);
-		public static SDLBool SDL_EnumerateStorageDirectory(IntPtr storage, string path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_EnumerateStorageDirectory(storage, pathUTF8, callback, userdata);
+		public static partial SDLBool SDL_EnumerateStorageDirectory(IntPtr storage, string path, SDL_EnumerateDirectoryCallback callback, IntPtr userdata);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_RemoveStoragePath")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_RemoveStoragePath(IntPtr storage, byte* path);
-		public static SDLBool SDL_RemoveStoragePath(IntPtr storage, string path)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_RemoveStoragePath(storage, pathUTF8);
+		public static partial SDLBool SDL_RemoveStoragePath(IntPtr storage, string path);
 
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_RenameStoragePath")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_RenameStoragePath(IntPtr storage, byte* oldpath, byte* newpath);
-		public static SDLBool SDL_RenameStoragePath(IntPtr storage, string oldpath, string newpath)
-		{
-			var oldpathUTF8 = EncodeAsUTF8(oldpath);
-			var newpathUTF8 = EncodeAsUTF8(newpath);
-			var result = INTERNAL_SDL_RenameStoragePath(storage, oldpathUTF8, newpathUTF8);
+		public static partial SDLBool SDL_RenameStoragePath(IntPtr storage, string oldpath, string newpath);
 
-			SDL_free((IntPtr) oldpathUTF8);
-			SDL_free((IntPtr) newpathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_CopyStorageFile")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_CopyStorageFile(IntPtr storage, byte* oldpath, byte* newpath);
-		public static SDLBool SDL_CopyStorageFile(IntPtr storage, string oldpath, string newpath)
-		{
-			var oldpathUTF8 = EncodeAsUTF8(oldpath);
-			var newpathUTF8 = EncodeAsUTF8(newpath);
-			var result = INTERNAL_SDL_CopyStorageFile(storage, oldpathUTF8, newpathUTF8);
+		public static partial SDLBool SDL_CopyStorageFile(IntPtr storage, string oldpath, string newpath);
 
-			SDL_free((IntPtr) oldpathUTF8);
-			SDL_free((IntPtr) newpathUTF8);
-			return result;
-		}
-
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetStoragePathInfo")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial SDLBool INTERNAL_SDL_GetStoragePathInfo(IntPtr storage, byte* path, out SDL_PathInfo info);
-		public static SDLBool SDL_GetStoragePathInfo(IntPtr storage, string path, out SDL_PathInfo info)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var result = INTERNAL_SDL_GetStoragePathInfo(storage, pathUTF8, out info);
-
-			SDL_free((IntPtr) pathUTF8);
-			return result;
-		}
+		public static partial SDLBool SDL_GetStoragePathInfo(IntPtr storage, string path, out SDL_PathInfo info);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial ulong SDL_GetStorageSpaceRemaining(IntPtr storage);
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GlobStorageDirectory")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GlobStorageDirectory(IntPtr storage, byte* path, byte* pattern, SDL_GlobFlags flags, out int count);
-		public static IntPtr SDL_GlobStorageDirectory(IntPtr storage, string path, string pattern, SDL_GlobFlags flags, out int count)
-		{
-			var pathUTF8 = EncodeAsUTF8(path);
-			var patternUTF8 = EncodeAsUTF8(pattern);
-			var result = INTERNAL_SDL_GlobStorageDirectory(storage, pathUTF8, patternUTF8, flags, out count);
-
-			SDL_free((IntPtr) pathUTF8);
-			SDL_free((IntPtr) patternUTF8);
-			return result;
-		}
+		public static partial IntPtr SDL_GlobStorageDirectory(IntPtr storage, string path, string pattern, SDL_GlobFlags flags, out int count);
 
 		// /usr/local/include/SDL3/SDL_system.h
 
@@ -8793,13 +7727,9 @@ namespace SDL3
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
 		public static partial int SDL_GetVersion();
 
-		[LibraryImport(nativeLibName, EntryPoint = "SDL_GetRevision")]
+		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		private static partial IntPtr INTERNAL_SDL_GetRevision();
-		public static string SDL_GetRevision()
-		{
-			return DecodeFromUTF8(INTERNAL_SDL_GetRevision());
-		}
+		public static partial string SDL_GetRevision();
 
 		// /usr/local/include/SDL3/SDL_main.h
 

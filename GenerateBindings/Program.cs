@@ -99,9 +99,12 @@ internal static partial class Program
             UnusedUserProvidedTypes.Add(key.Item1);
         }
 
-        foreach (var key in UserProvidedData.ReturnedCharPtrMemoryOwners.Keys)
+        if (!CoreMode)
         {
-            UnusedUserProvidedTypes.Add(key);
+            foreach (var key in UserProvidedData.ReturnedCharPtrMemoryOwners.Keys)
+            {
+                UnusedUserProvidedTypes.Add(key);
+            }
         }
 
         foreach (var key in UserProvidedData.DelegateDefinitions.Keys)
@@ -441,29 +444,14 @@ internal static partial class Program
                     FunctionSignature.ParameterString.Append($"{type} {name}");
                 }
 
-                if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING"))
+                if (!CoreMode && ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING")))
                 {
-                    if (CoreMode)
-                    {
-                        definitions.Append(
-                            $"[LibraryImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\")]\n"
-                        );
-                        definitions.Append(
-                            $"[UnmanagedCallConv(CallConvs = new[] {{ typeof(CallConvCdecl) }})]\n"
-                        );
-                        definitions.Append(
-                            $"private static partial {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
-                        );
-                    }
-                    else
-                    {
-                        definitions.Append(
-                            $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
-                        );
-                        definitions.Append(
-                            $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
-                        );
-                    }
+                    definitions.Append(
+                        $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
+                    );
+                    definitions.Append(
+                        $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
+                    );
 
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "byte*"));
                     definitions.Append(");");
@@ -582,16 +570,23 @@ internal static partial class Program
                 {
                     if (CoreMode)
                     {
-                        definitions.Append("[LibraryImport(nativeLibName)]\n");
+                        if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING"))
+                        {
+                            definitions.Append("[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]");
+                        }
+                        else
+                        {
+                            definitions.Append("[LibraryImport(nativeLibName)]\n");
+                        }
                         definitions.Append($"[UnmanagedCallConv(CallConvs = new[] {{ typeof(CallConvCdecl) }})]\n");
-                        definitions.Append($"public static partial {FunctionSignature.ReturnType} {entry.Name}(");
+                        definitions.Append($"public static partial {FunctionSignature.ReturnType.ToString().Replace("UTF8_STRING", "string")} {entry.Name}(");
                     }
                     else
                     {
                         definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
                         definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
                     }
-                    definitions.Append(FunctionSignature.ParameterString);
+                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
 
                     definitions.Append("); ");
                     if (containsUnknownRef)
