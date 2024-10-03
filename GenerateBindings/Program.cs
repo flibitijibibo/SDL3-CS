@@ -61,13 +61,19 @@ internal static partial class Program
         return args.Contains("--core");
     }
 
+    private static DirectoryInfo GetSDL3Directory(string[] args)
+    {
+        return new DirectoryInfo(args[0]);
+    }
+
     private static int Main(string[] args)
     {
         // PARSE INPUT
-
-        if (args.Length > 1)
+        if (args.Length < 1)
         {
-            Console.WriteLine("usage: SDL3_CS_SDL_REPO_ROOT=<sdl-repo-root-dir> GenerateBindings");
+            Console.WriteLine("usage: GenerateBindings <sdl-repo-root-dir> [--core]");
+            Console.WriteLine("sdl-repo-root-dir: The root directory of SDL3 code.");
+            Console.WriteLine("--core: Bindgen for .NET Core. If this is not set, will bindgen for .NET Framework.");
             return 1;
         }
 
@@ -75,7 +81,7 @@ internal static partial class Program
 
         var sdlProjectName = CoreMode ? "SDL3.Core.csproj" : "SDL3.csproj";
 
-        var sdlDir = new DirectoryInfo(Environment.GetEnvironmentVariable("SDL3_CS_SDL_REPO_ROOT") ?? "MISSING_ENV_VAR");
+        var sdlDir = GetSDL3Directory(args);
         var sdlBindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../SDL3/"));
         var sdlBindingsProjectFile = new FileInfo(Path.Combine(sdlBindingsDir.FullName, sdlProjectName));
         var ffiJsonFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "ffi.json"));
