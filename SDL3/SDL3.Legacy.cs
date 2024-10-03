@@ -1,5 +1,4 @@
 // NOTE: This file is auto-generated.
-
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -9,8 +8,6 @@ namespace SDL3
 
 	public static unsafe class SDL
 	{
-		private const string nativeLibName = "SDL3";
-
 		private static byte* EncodeAsUTF8(string str)
 		{
 			if (str == null)
@@ -106,6 +103,8 @@ namespace SDL3
 				return value.GetHashCode();
 			}
 		}
+
+		private const string nativeLibName = "SDL3";
 
 		// /usr/local/include/SDL3/SDL_stdinc.h
 

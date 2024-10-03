@@ -54,19 +54,36 @@ internal static partial class Program
     private static readonly StructDefinitionType StructDefinition = new();
     private static readonly FunctionSignatureType FunctionSignature = new();
 
+    private static bool CoreMode = false;
+
+    private static bool CheckCoreMode(string[] args)
+    {
+        return args.Contains("--core");
+    }
+
+    private static DirectoryInfo GetSDL3Directory(string[] args)
+    {
+        return new DirectoryInfo(args[0]);
+    }
+
     private static int Main(string[] args)
     {
         // PARSE INPUT
-
-        if (args.Length > 0)
+        if (args.Length < 1)
         {
-            Console.WriteLine("usage: SDL3_CS_SDL_REPO_ROOT=<sdl-repo-root-dir> GenerateBindings");
+            Console.WriteLine("usage: GenerateBindings <sdl-repo-root-dir> [--core]");
+            Console.WriteLine("sdl-repo-root-dir: The root directory of SDL3 code.");
+            Console.WriteLine("--core: Bindgen for .NET Core. If this is not set, will bindgen for .NET Framework.");
             return 1;
         }
 
-        var sdlDir = new DirectoryInfo(Environment.GetEnvironmentVariable("SDL3_CS_SDL_REPO_ROOT") ?? "MISSING_ENV_VAR");
+        CoreMode = CheckCoreMode(args);
+
+        var sdlProjectName = CoreMode ? "SDL3.Core.csproj" : "SDL3.Legacy.csproj";
+
+        var sdlDir = GetSDL3Directory(args);
         var sdlBindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../SDL3/"));
-        var sdlBindingsProjectFile = new FileInfo(Path.Combine(sdlBindingsDir.FullName, "SDL3.csproj"));
+        var sdlBindingsProjectFile = new FileInfo(Path.Combine(sdlBindingsDir.FullName, sdlProjectName));
         var ffiJsonFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "ffi.json"));
 
 #if WINDOWS
@@ -374,7 +391,15 @@ internal static partial class Program
                                     typeName = $"out {subtypeName}";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Array:
-                                    typeName = $"{subtypeName}[]";
+                                    if (CoreMode)
+                                    {
+                                        // Marshalling arrays is slow, so let's just use pointers in non-legacy mode
+                                        typeName = $"{subtypeName}*";
+                                    }
+                                    else
+                                    {
+                                        typeName = $"{subtypeName}[]";
+                                    }
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Pointer:
                                     typeName = $"{subtypeName}*";
@@ -424,7 +449,7 @@ internal static partial class Program
                     FunctionSignature.ParameterString.Append($"{type} {name}");
                 }
 
-                if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING"))
+                if (!CoreMode && ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING")))
                 {
                     definitions.Append(
                         $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
@@ -432,6 +457,7 @@ internal static partial class Program
                     definitions.Append(
                         $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
                     );
+
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "byte*"));
                     definitions.Append(");");
 
@@ -547,10 +573,49 @@ internal static partial class Program
                 }
                 else
                 {
-                    definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
-                    definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
+                    if (CoreMode)
+                    {
+                        if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING"))
+                        {
+                            definitions.Append("[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]");
+                        }
+                        else
+                        {
+                            definitions.Append("[LibraryImport(nativeLibName)]\n");
+                        }
+                        definitions.Append($"[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\n");
 
-                    definitions.Append(FunctionSignature.ParameterString);
+                        // Handle string marshalling
+                        if (FunctionSignature.ReturnType == "UTF8_STRING")
+                        {
+                            if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
+                            {
+                                UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
+                                if (memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Caller)
+                                {
+                                    definitions.Append("[return: MarshalUsing(typeof(CallerOwnedStringMarshaller))]\n");
+                                }
+                                else
+                                {
+                                    definitions.Append("[return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]\n");
+                                }
+                            }
+                            else
+                            {
+                                unknownReturnedCharPtrMemoryOwners.Append(
+                                    $"{{ \"{FunctionSignature.Name!}\", ReturnedCharPtrMemoryOwner.Unknown }}, // {entry.Header}\n"
+                                );
+                            }
+                        }
+
+                        definitions.Append($"public static partial {FunctionSignature.ReturnType.ToString().Replace("UTF8_STRING", "string")} {entry.Name}(");
+                    }
+                    else
+                    {
+                        definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
+                        definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
+                    }
+                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
 
                     definitions.Append("); ");
                     if (containsUnknownRef)
@@ -563,8 +628,10 @@ internal static partial class Program
             }
         }
 
+        var outputFilename = CoreMode ? "SDL3.Core.cs" : "SDL3.Legacy.cs";
+
         File.WriteAllText(
-            path: Path.Combine(sdlBindingsDir.FullName, "SDL3.cs"),
+            path: Path.Combine(sdlBindingsDir.FullName, outputFilename),
             contents: CompileBindingsCSharp(definitions.ToString())
         );
 
@@ -601,9 +668,6 @@ internal static partial class Program
                 Console.Write($"{definition}\n");
             }
         }
-
-        // TODO: separate bindgen for Core
-        File.Copy(Path.Combine(sdlBindingsDir.FullName, "SDL3.cs"), Path.Combine(sdlBindingsDir.FullName, "SDL3.Core.cs"), true);
 
         return 0;
     }
@@ -649,48 +713,127 @@ internal static partial class Program
 
     private static string CompileBindingsCSharp(string definitions)
     {
-        return $@"// NOTE: This file is auto-generated.
+        string output;
+        if (CoreMode)
+        {
+            output = @"// NOTE: This file is auto-generated.
+using System;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
+using System.Runtime.CompilerServices;
+using System.Text;
 
+namespace SDL3;
+
+public static unsafe partial class SDL
+{
+    // Custom marshaller for SDL-owned strings returned by SDL.
+    [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(SDLOwnedStringMarshaller))]
+    private static unsafe class SDLOwnedStringMarshaller
+    {
+        /// <summary>
+        /// Converts an unmanaged string to a managed version.
+        /// </summary>
+        /// <returns>A managed string.</returns>
+        public static string? ConvertToManaged(byte* unmanaged)
+            => Marshal.PtrToStringUTF8((IntPtr)unmanaged);
+    }
+
+    // Custom marshaller for caller-owned strings returned by SDL.
+    [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(CallerOwnedStringMarshaller))]
+    private static unsafe class CallerOwnedStringMarshaller
+    {
+        /// <summary>
+        /// Converts an unmanaged string to a managed version.
+        /// </summary>
+        /// <returns>A managed string.</returns>
+        public static string? ConvertToManaged(byte* unmanaged)
+            => Marshal.PtrToStringUTF8((IntPtr)unmanaged);
+
+        /// <summary>
+        /// Free the memory for a specified unmanaged string.
+        /// </summary>
+        public static void Free(byte* unmanaged)
+            => SDL_free((IntPtr)unmanaged);
+    }
+
+    // Taken from https://github.com/ppy/SDL3-CS
+    // C# bools are not blittable, so we need this workaround
+    public readonly record struct SDLBool
+    {
+        private readonly byte value;
+
+        internal const byte FALSE_VALUE = 0;
+        internal const byte TRUE_VALUE = 1;
+
+        internal SDLBool(byte value)
+        {
+            this.value = value;
+        }
+
+        public static implicit operator bool(SDLBool b)
+        {
+            return b.value != FALSE_VALUE;
+        }
+
+        public static implicit operator SDLBool(bool b)
+        {
+            return new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+        }
+
+        public bool Equals(SDLBool other)
+        {
+            return other.value == value;
+        }
+
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
+    }
+";
+        }
+        else
+        {
+            output = @"// NOTE: This file is auto-generated.
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace SDL3
-{{
+{
 
 public static unsafe class SDL
-{{
-    private const string nativeLibName = ""SDL3"";
-
+{
     private static byte* EncodeAsUTF8(string str)
-    {{
+    {
         if (str == null)
-        {{
+        {
             return (byte*) 0;
-        }}
+        }
 
         var size = (str.Length * 4) + 1;
         var buffer = (byte*) SDL_malloc((UIntPtr) size);
         fixed (char* strPtr = str)
-        {{
+        {
             Encoding.UTF8.GetBytes(strPtr, str.Length + 1, buffer, size);
-        }}
+        }
 
         return buffer;
-    }}
+    }
 
     private static string DecodeFromUTF8(IntPtr ptr, bool shouldFree = false)
-    {{
+    {
         if (ptr == IntPtr.Zero)
-        {{
+        {
             return null;
-        }}
+        }
 
         var end = (byte*) ptr;
         while (*end != 0)
-        {{
+        {
             end++;
-        }}
+        }
 
         var result = new string(
             (sbyte*) ptr,
@@ -700,68 +843,79 @@ public static unsafe class SDL
         );
 
         if (shouldFree)
-        {{
+        {
             SDL_free(ptr);
-        }}
+        }
 
         return result;
-    }}
+    }
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
     public struct SDLBool
-    {{
+    {
         private readonly byte value;
 
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
         internal SDLBool(byte value)
-        {{
+        {
             this.value = value;
-        }}
+        }
 
         public static implicit operator bool(SDLBool b)
-        {{
+        {
             return b.value != FALSE_VALUE;
-        }}
+        }
 
         public static implicit operator SDLBool(bool b)
-        {{
+        {
             return new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
-        }}
+        }
 
         public bool Equals(SDLBool other)
-        {{
+        {
             return other.value == value;
-        }}
+        }
 
         public override bool Equals(object rhs)
-        {{
+        {
             if (rhs is bool)
-            {{
+            {
                 return Equals((SDLBool)(bool)rhs);
-            }}
+            }
             else if (rhs is SDLBool)
-            {{
+            {
                 return Equals((SDLBool)rhs);
-            }}
+            }
             else
-            {{
+            {
                 return false;
-            }}
-        }}
+            }
+        }
 
         public override int GetHashCode()
-        {{
+        {
             return value.GetHashCode();
-        }}
-    }}
+        }
+    }
+";
+        }
+
+        output += $@"
+    private const string nativeLibName = ""SDL3"";
 
     {definitions}
 }}
-}}
 ";
+
+		if (!CoreMode)
+		{
+			output += "}";
+		}
+
+		return output;
     }
 
     private static RawFFIEntry GetTypeFromTypedefMap(RawFFIEntry type)

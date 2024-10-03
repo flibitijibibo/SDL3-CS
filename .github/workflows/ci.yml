@@ -12,12 +12,12 @@ jobs:
     - name: dotnet build GenerateBindings
       run: |
         dotnet build GenerateBindings -c Debug
-        dotnet build  GenerateBindings -c Release
+        dotnet build GenerateBindings -c Release
 
     - name: msbuild SDL3
       run: |
-        msbuild -restore SDL3-CS.sln /p:Configuration=Debug
-        msbuild -restore SDL3-CS.sln /p:Configuration=Release
+        msbuild -restore SDL3-CS.Legacy.sln /p:Configuration=Debug
+        msbuild -restore SDL3-CS.Legacy.sln /p:Configuration=Release
 
     - name: dotnet build SDL3.Core
       run: |

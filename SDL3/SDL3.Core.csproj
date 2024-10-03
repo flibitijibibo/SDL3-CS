@@ -3,10 +3,11 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Nullable>enable</Nullable>
     </PropertyGroup>
 
     <PropertyGroup>
-        <DefaultItemExcludes>$(DefaultItemExcludes);SDL3.cs</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);SDL3.Legacy.cs</DefaultItemExcludes>
     </PropertyGroup>
 
 </Project>
