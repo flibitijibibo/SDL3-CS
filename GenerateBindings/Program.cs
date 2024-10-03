@@ -577,6 +577,7 @@ internal static partial class Program
                     if (CoreMode)
                     {
                         definitions.Append("[LibraryImport(nativeLibName)]\n");
+                        definitions.Append($"[UnmanagedCallConv(CallConvs = new[] {{ typeof(CallConvCdecl) }})]\n");
                         definitions.Append($"public static partial {FunctionSignature.ReturnType} {entry.Name}(");
                     }
                     else
