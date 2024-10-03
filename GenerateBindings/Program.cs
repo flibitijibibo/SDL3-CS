@@ -54,19 +54,30 @@ internal static partial class Program
     private static readonly StructDefinitionType StructDefinition = new();
     private static readonly FunctionSignatureType FunctionSignature = new();
 
+    private static bool CoreMode = false;
+
+    private static bool CheckCoreMode(string[] args)
+    {
+        return args.Contains("--core");
+    }
+
     private static int Main(string[] args)
     {
         // PARSE INPUT
 
-        if (args.Length > 0)
+        if (args.Length > 1)
         {
             Console.WriteLine("usage: SDL3_CS_SDL_REPO_ROOT=<sdl-repo-root-dir> GenerateBindings");
             return 1;
         }
 
+        CoreMode = CheckCoreMode(args);
+
+        var sdlProjectName = CoreMode ? "SDL3.Core.csproj" : "SDL3.csproj";
+
         var sdlDir = new DirectoryInfo(Environment.GetEnvironmentVariable("SDL3_CS_SDL_REPO_ROOT") ?? "MISSING_ENV_VAR");
         var sdlBindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../SDL3/"));
-        var sdlBindingsProjectFile = new FileInfo(Path.Combine(sdlBindingsDir.FullName, "SDL3.csproj"));
+        var sdlBindingsProjectFile = new FileInfo(Path.Combine(sdlBindingsDir.FullName, sdlProjectName));
         var ffiJsonFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "ffi.json"));
 
 #if WINDOWS
@@ -426,12 +437,28 @@ internal static partial class Program
 
                 if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING"))
                 {
-                    definitions.Append(
-                        $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
-                    );
-                    definitions.Append(
-                        $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
-                    );
+                    if (CoreMode)
+                    {
+                        definitions.Append(
+                            $"[LibraryImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\")]\n"
+                        );
+                        definitions.Append(
+                            $"[UnmanagedCallConv(CallConvs = new[] {{ typeof(CallConvCdecl) }})]\n"
+                        );
+                        definitions.Append(
+                            $"private static partial {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
+                        );
+                    }
+                    else
+                    {
+                        definitions.Append(
+                            $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
+                        );
+                        definitions.Append(
+                            $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
+                        );
+                    }
+
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "byte*"));
                     definitions.Append(");");
 
@@ -547,9 +574,16 @@ internal static partial class Program
                 }
                 else
                 {
-                    definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
-                    definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
-
+                    if (CoreMode)
+                    {
+                        definitions.Append("[LibraryImport(nativeLibName)]\n");
+                        definitions.Append($"public static partial {FunctionSignature.ReturnType} {entry.Name}(");
+                    }
+                    else
+                    {
+                        definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
+                        definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
+                    }
                     definitions.Append(FunctionSignature.ParameterString);
 
                     definitions.Append("); ");
@@ -563,8 +597,10 @@ internal static partial class Program
             }
         }
 
+        var outputFilename = CoreMode ? "SDL3.Core.cs" : "SDL3.cs";
+
         File.WriteAllText(
-            path: Path.Combine(sdlBindingsDir.FullName, "SDL3.cs"),
+            path: Path.Combine(sdlBindingsDir.FullName, outputFilename),
             contents: CompileBindingsCSharp(definitions.ToString())
         );
 
@@ -601,9 +637,6 @@ internal static partial class Program
                 Console.Write($"{definition}\n");
             }
         }
-
-        // TODO: separate bindgen for Core
-        File.Copy(Path.Combine(sdlBindingsDir.FullName, "SDL3.cs"), Path.Combine(sdlBindingsDir.FullName, "SDL3.Core.cs"), true);
 
         return 0;
     }
@@ -649,17 +682,38 @@ internal static partial class Program
 
     private static string CompileBindingsCSharp(string definitions)
     {
-        return $@"// NOTE: This file is auto-generated.
+        string header;
+        if (CoreMode)
+        {
+            header = @"// NOTE: This file is auto-generated.
+using System;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
+using System.Text;
 
+namespace SDL3
+{
+
+public static unsafe partial class SDL
+{
+";
+        }
+        else
+        {
+            header = @"// NOTE: This file is auto-generated.
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace SDL3
-{{
+{
 
 public static unsafe class SDL
-{{
+{
+";
+        }
+
+        return header + $@"
     private const string nativeLibName = ""SDL3"";
 
     private static byte* EncodeAsUTF8(string str)
