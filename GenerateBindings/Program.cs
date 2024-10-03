@@ -713,18 +713,17 @@ internal static partial class Program
 
     private static string CompileBindingsCSharp(string definitions)
     {
-        string header;
+        string output;
         if (CoreMode)
         {
-            header = @"// NOTE: This file is auto-generated.
+            output = @"// NOTE: This file is auto-generated.
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace SDL3
-{
+namespace SDL3;
 
 public static unsafe partial class SDL
 {
@@ -757,11 +756,46 @@ public static unsafe partial class SDL
         public static void Free(byte* unmanaged)
             => SDL_free((IntPtr)unmanaged);
     }
+
+    // Taken from https://github.com/ppy/SDL3-CS
+    // C# bools are not blittable, so we need this workaround
+    public readonly record struct SDLBool
+    {
+        private readonly byte value;
+
+        internal const byte FALSE_VALUE = 0;
+        internal const byte TRUE_VALUE = 1;
+
+        internal SDLBool(byte value)
+        {
+            this.value = value;
+        }
+
+        public static implicit operator bool(SDLBool b)
+        {
+            return b.value != FALSE_VALUE;
+        }
+
+        public static implicit operator SDLBool(bool b)
+        {
+            return new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
+        }
+
+        public bool Equals(SDLBool other)
+        {
+            return other.value == value;
+        }
+
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
+    }
 ";
         }
         else
         {
-            header = @"// NOTE: This file is auto-generated.
+            output = @"// NOTE: This file is auto-generated.
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -815,67 +849,73 @@ public static unsafe class SDL
 
         return result;
     }
-";
-        }
-
-        return header + $@"
-    private const string nativeLibName = ""SDL3"";
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
     public struct SDLBool
-    {{
+    {
         private readonly byte value;
 
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
         internal SDLBool(byte value)
-        {{
+        {
             this.value = value;
-        }}
+        }
 
         public static implicit operator bool(SDLBool b)
-        {{
+        {
             return b.value != FALSE_VALUE;
-        }}
+        }
 
         public static implicit operator SDLBool(bool b)
-        {{
+        {
             return new SDLBool(b ? TRUE_VALUE : FALSE_VALUE);
-        }}
+        }
 
         public bool Equals(SDLBool other)
-        {{
+        {
             return other.value == value;
-        }}
+        }
 
         public override bool Equals(object rhs)
-        {{
+        {
             if (rhs is bool)
-            {{
+            {
                 return Equals((SDLBool)(bool)rhs);
-            }}
+            }
             else if (rhs is SDLBool)
-            {{
+            {
                 return Equals((SDLBool)rhs);
-            }}
+            }
             else
-            {{
+            {
                 return false;
-            }}
-        }}
+            }
+        }
 
         public override int GetHashCode()
-        {{
+        {
             return value.GetHashCode();
-        }}
-    }}
+        }
+    }
+";
+        }
+
+        output += $@"
+    private const string nativeLibName = ""SDL3"";
 
     {definitions}
 }}
-}}
 ";
+
+		if (!CoreMode)
+		{
+			output += "}";
+		}
+
+		return output;
     }
 
     private static RawFFIEntry GetTypeFromTypedefMap(RawFFIEntry type)

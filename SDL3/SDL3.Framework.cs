@@ -53,8 +53,6 @@ namespace SDL3
 			return result;
 		}
 
-		private const string nativeLibName = "SDL3";
-
 		// Taken from https://github.com/ppy/SDL3-CS
 		// C# bools are not blittable, so we need this workaround
 		public struct SDLBool
@@ -105,6 +103,8 @@ namespace SDL3
 				return value.GetHashCode();
 			}
 		}
+
+		private const string nativeLibName = "SDL3";
 
 		// /usr/local/include/SDL3/SDL_stdinc.h
 
