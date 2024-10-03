@@ -79,7 +79,7 @@ internal static partial class Program
 
         CoreMode = CheckCoreMode(args);
 
-        var sdlProjectName = CoreMode ? "SDL3.Core.csproj" : "SDL3.csproj";
+        var sdlProjectName = CoreMode ? "SDL3.Core.csproj" : "SDL3.Framework.csproj";
 
         var sdlDir = GetSDL3Directory(args);
         var sdlBindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../SDL3/"));
@@ -607,7 +607,7 @@ internal static partial class Program
             }
         }
 
-        var outputFilename = CoreMode ? "SDL3.Core.cs" : "SDL3.cs";
+        var outputFilename = CoreMode ? "SDL3.Core.cs" : "SDL3.Framework.cs";
 
         File.WriteAllText(
             path: Path.Combine(sdlBindingsDir.FullName, outputFilename),
