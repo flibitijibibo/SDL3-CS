@@ -16,8 +16,8 @@ jobs:
 
     - name: msbuild SDL3
       run: |
-        msbuild -restore SDL3-CS.Framework.sln /p:Configuration=Debug
-        msbuild -restore SDL3-CS.Framework.sln /p:Configuration=Release
+        msbuild -restore SDL3-CS.Legacy.sln /p:Configuration=Debug
+        msbuild -restore SDL3-CS.Legacy.sln /p:Configuration=Release
 
     - name: dotnet build SDL3.Core
       run: |
