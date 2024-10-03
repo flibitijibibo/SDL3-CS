@@ -99,12 +99,9 @@ internal static partial class Program
             UnusedUserProvidedTypes.Add(key.Item1);
         }
 
-        if (!CoreMode)
+        foreach (var key in UserProvidedData.ReturnedCharPtrMemoryOwners.Keys)
         {
-            foreach (var key in UserProvidedData.ReturnedCharPtrMemoryOwners.Keys)
-            {
-                UnusedUserProvidedTypes.Add(key);
-            }
+            UnusedUserProvidedTypes.Add(key);
         }
 
         foreach (var key in UserProvidedData.DelegateDefinitions.Keys)
@@ -586,7 +583,31 @@ internal static partial class Program
                         {
                             definitions.Append("[LibraryImport(nativeLibName)]\n");
                         }
-                        definitions.Append($"[UnmanagedCallConv(CallConvs = new[] {{ typeof(CallConvCdecl) }})]\n");
+                        definitions.Append($"[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\n");
+
+                        // Handle string marshalling
+                        if (FunctionSignature.ReturnType == "UTF8_STRING")
+                        {
+                            if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
+                            {
+                                UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
+                                if (memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Caller)
+                                {
+                                    definitions.Append("[return: MarshalUsing(typeof(CallerOwnedStringMarshaller))]\n");
+                                }
+                                else
+                                {
+                                    definitions.Append("[return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]\n");
+                                }
+                            }
+                            else
+                            {
+                                unknownReturnedCharPtrMemoryOwners.Append(
+                                    $"{{ \"{FunctionSignature.Name!}\", ReturnedCharPtrMemoryOwner.Unknown }}, // {entry.Header}\n"
+                                );
+                            }
+                        }
+
                         definitions.Append($"public static partial {FunctionSignature.ReturnType.ToString().Replace("UTF8_STRING", "string")} {entry.Name}(");
                     }
                     else
@@ -698,6 +719,7 @@ internal static partial class Program
             header = @"// NOTE: This file is auto-generated.
 using System;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -706,6 +728,35 @@ namespace SDL3
 
 public static unsafe partial class SDL
 {
+    // Custom marshaller for SDL-owned strings returned by SDL.
+    [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(SDLOwnedStringMarshaller))]
+    private static unsafe class SDLOwnedStringMarshaller
+    {
+        /// <summary>
+        /// Converts an unmanaged string to a managed version.
+        /// </summary>
+        /// <returns>A managed string.</returns>
+        public static string? ConvertToManaged(byte* unmanaged)
+            => Marshal.PtrToStringUTF8((IntPtr)unmanaged);
+    }
+
+    // Custom marshaller for caller-owned strings returned by SDL.
+    [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(CallerOwnedStringMarshaller))]
+    private static unsafe class CallerOwnedStringMarshaller
+    {
+        /// <summary>
+        /// Converts an unmanaged string to a managed version.
+        /// </summary>
+        /// <returns>A managed string.</returns>
+        public static string? ConvertToManaged(byte* unmanaged)
+            => Marshal.PtrToStringUTF8((IntPtr)unmanaged);
+
+        /// <summary>
+        /// Free the memory for a specified unmanaged string.
+        /// </summary>
+        public static void Free(byte* unmanaged)
+            => SDL_free((IntPtr)unmanaged);
+    }
 ";
         }
         else
