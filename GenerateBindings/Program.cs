@@ -712,12 +712,6 @@ namespace SDL3
 
 public static unsafe class SDL
 {
-";
-        }
-
-        return header + $@"
-    private const string nativeLibName = ""SDL3"";
-
     private static byte* EncodeAsUTF8(string str)
     {{
         if (str == null)
@@ -762,6 +756,11 @@ public static unsafe class SDL
 
         return result;
     }}
+";
+        }
+
+        return header + $@"
+    private const string nativeLibName = ""SDL3"";
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
