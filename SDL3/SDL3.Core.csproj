@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <DefaultItemExcludes>$(DefaultItemExcludes);SDL3.Framework.cs</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);SDL3.Legacy.cs</DefaultItemExcludes>
     </PropertyGroup>
 
 </Project>

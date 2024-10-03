@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 #
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDL3", "SDL3\SDL3.Framework.csproj", "{879AE835-1F19-4BD4-ADCE-E0D17B9774F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDL3", "SDL3\SDL3.Legacy.csproj", "{879AE835-1F19-4BD4-ADCE-E0D17B9774F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
