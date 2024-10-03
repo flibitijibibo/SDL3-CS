@@ -662,7 +662,7 @@ internal static class UserProvidedData
                 "SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_READ",
                 "SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_WRITE",
             ]
-        }, // ./include/SDL3/SDL_gpu.h:231:16
+        }, // ./include/SDL3/SDL_gpu.h
         {
             "SDL_GPUBufferUsageFlags", [
                 "SDL_GPU_BUFFERUSAGE_VERTEX",
@@ -672,7 +672,7 @@ internal static class UserProvidedData
                 "SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_READ",
                 "SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_WRITE",
             ]
-        }, // ./include/SDL3/SDL_gpu.h:266:16
+        }, // ./include/SDL3/SDL_gpu.h
         {
             "SDL_GPUColorComponentFlags", [
                 "SDL_GPU_COLORCOMPONENT_R",
@@ -680,7 +680,18 @@ internal static class UserProvidedData
                 "SDL_GPU_COLORCOMPONENT_B",
                 "SDL_GPU_COLORCOMPONENT_A",
             ]
-        }, // ./include/SDL3/SDL_gpu.h:428:15
+        }, // ./include/SDL3/SDL_gpu.h
+        {
+            "SDL_GPUShaderFormat", [
+                "SDL_GPU_SHADERFORMAT_INVALID",
+                "SDL_GPU_SHADERFORMAT_PRIVATE",
+                "SDL_GPU_SHADERFORMAT_SPIRV",
+                "SDL_GPU_SHADERFORMAT_DXBC",
+                "SDL_GPU_SHADERFORMAT_DXIL",
+                "SDL_GPU_SHADERFORMAT_MSL",
+                "SDL_GPU_SHADERFORMAT_METALLIB"
+            ]
+        }, // ./include/SDL3/SDL_gpu.h:615
         {
             "SDL_InitFlags", [
                 "SDL_INIT_TIMER = 0x1",
@@ -731,6 +742,12 @@ internal static class UserProvidedData
             ]
         }, // ../SDL3/SDL_keycode.h:306:16
     };
+
+    internal static readonly HashSet<string> FlagTypes =
+    [
+        "SDL_Keymod",
+        "SDL_GPUShaderFormat"
+    ];
 
     internal static readonly string[] DeniedTypes = [];
 }

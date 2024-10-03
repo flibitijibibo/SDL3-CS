@@ -3958,15 +3958,15 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial ushort SDL_GetModState();
+	public static partial SDL_Keymod SDL_GetModState();
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial void SDL_SetModState(ushort modstate);
+	public static partial void SDL_SetModState(SDL_Keymod modstate);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial uint SDL_GetKeyFromScancode(SDL_Scancode scancode, ushort modstate, SDLBool key_event);
+	public static partial uint SDL_GetKeyFromScancode(SDL_Scancode scancode, SDL_Keymod modstate, SDLBool key_event);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4412,7 +4412,7 @@ public static unsafe partial class SDL
 		public uint which;
 		public SDL_Scancode scancode;
 		public uint key;
-		public ushort mod;
+		public SDL_Keymod mod;
 		public ushort raw;
 		public SDLBool down;
 		public SDLBool repeat;
@@ -5230,6 +5230,18 @@ public static unsafe partial class SDL
 		SDL_GPU_SHADERSTAGE_FRAGMENT = 1,
 	}
 
+	[Flags]
+	public enum SDL_GPUShaderFormat : uint
+	{
+		SDL_GPU_SHADERFORMAT_INVALID = 0x1,
+		SDL_GPU_SHADERFORMAT_PRIVATE = 0x2,
+		SDL_GPU_SHADERFORMAT_SPIRV = 0x4,
+		SDL_GPU_SHADERFORMAT_DXBC = 0x08,
+		SDL_GPU_SHADERFORMAT_DXIL = 0x10,
+		SDL_GPU_SHADERFORMAT_MSL = 0x20,
+		SDL_GPU_SHADERFORMAT_METALLIB = 0x40,
+	}
+
 	public enum SDL_GPUVertexElementFormat
 	{
 		SDL_GPU_VERTEXELEMENTFORMAT_INVALID = 0,
@@ -5572,7 +5584,7 @@ public static unsafe partial class SDL
 		public UIntPtr code_size;
 		public byte* code;
 		public byte* entrypoint;
-		public uint format;
+		public SDL_GPUShaderFormat format;
 		public SDL_GPUShaderStage stage;
 		public uint num_samplers;
 		public uint num_storage_textures;
@@ -5692,7 +5704,7 @@ public static unsafe partial class SDL
 		public UIntPtr code_size;
 		public byte* code;
 		public byte* entrypoint;
-		public uint format;
+		public SDL_GPUShaderFormat format;
 		public uint num_samplers;
 		public uint num_readonly_storage_textures;
 		public uint num_readonly_storage_buffers;
@@ -5791,7 +5803,7 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GPUSupportsShaderFormats(uint format_flags, string name);
+	public static partial SDLBool SDL_GPUSupportsShaderFormats(SDL_GPUShaderFormat format_flags, string name);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -5799,7 +5811,7 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_CreateGPUDevice(uint format_flags, SDLBool debug_mode, string name);
+	public static partial IntPtr SDL_CreateGPUDevice(SDL_GPUShaderFormat format_flags, SDLBool debug_mode, string name);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -5825,7 +5837,7 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial uint SDL_GetGPUShaderFormats(IntPtr device);
+	public static partial SDL_GPUShaderFormat SDL_GetGPUShaderFormats(IntPtr device);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

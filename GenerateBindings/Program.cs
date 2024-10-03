@@ -260,7 +260,7 @@ internal static partial class Program
 
                     definitions.Append("}\n\n");
                 }
-                else if ((entry.Name != null) && (entry.Name.EndsWith("Flags") || (entry.Name == "SDL_Keymod")))
+                else if (entry.Name != null && IsFlagType(entry.Name))
                 {
                     definitions.Append("[Flags]\n");
                     var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
@@ -923,7 +923,7 @@ public static unsafe class SDL
         if (type.Tag.StartsWith("SDL_"))
         {
             // preserve flag types
-            if (type.Tag.EndsWith("Flags"))
+			if (IsFlagType(type.Tag))
             {
                 return type;
             }
@@ -1137,6 +1137,11 @@ public static unsafe class SDL
             }
         }
     }
+
+	private static bool IsFlagType(string name)
+	{
+		return name.EndsWith("Flags") || UserProvidedData.FlagTypes.Contains(name);
+	}
 
     [GeneratedRegex(@"#define\s+(?<hintName>SDL_HINT_[A-Z0-9_]+)\s+""(?<value>.+)""")]
     private static partial Regex HintDefinitionRegex();
