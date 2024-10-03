@@ -394,7 +394,15 @@ internal static partial class Program
                                     typeName = $"out {subtypeName}";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Array:
-                                    typeName = $"{subtypeName}[]";
+                                    if (CoreMode)
+                                    {
+                                        // Marshalling arrays is slow, so let's just use pointers in non-legacy mode
+                                        typeName = $"{subtypeName}*";
+                                    }
+                                    else
+                                    {
+                                        typeName = $"{subtypeName}[]";
+                                    }
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Pointer:
                                     typeName = $"{subtypeName}*";

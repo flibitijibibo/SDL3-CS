@@ -812,7 +812,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_BindAudioStreams(uint devid, IntPtr[] streams, int num_streams);
+		public static partial SDLBool SDL_BindAudioStreams(uint devid, IntPtr* streams, int num_streams);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -820,7 +820,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_UnbindAudioStreams(IntPtr[] streams, int num_streams);
+		public static partial void SDL_UnbindAudioStreams(IntPtr* streams, int num_streams);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -872,11 +872,11 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_SetAudioStreamInputChannelMap(IntPtr stream, int[] chmap, int count);
+		public static partial SDLBool SDL_SetAudioStreamInputChannelMap(IntPtr stream, int* chmap, int count);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_SetAudioStreamOutputChannelMap(IntPtr stream, int[] chmap, int count);
+		public static partial SDLBool SDL_SetAudioStreamOutputChannelMap(IntPtr stream, int* chmap, int count);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1315,7 +1315,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_SetPaletteColors(IntPtr palette, SDL_Color[] colors, int firstcolor, int ncolors);
+		public static partial SDLBool SDL_SetPaletteColors(IntPtr palette, SDL_Color* colors, int firstcolor, int ncolors);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1401,7 +1401,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_GetRectEnclosingPoints(SDL_Point[] points, int count, ref SDL_Rect clip, out SDL_Rect result);
+		public static partial SDLBool SDL_GetRectEnclosingPoints(SDL_Point* points, int count, ref SDL_Rect clip, out SDL_Rect result);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1437,7 +1437,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_GetRectEnclosingPointsFloat(SDL_FPoint[] points, int count, ref SDL_FRect clip, out SDL_FRect result);
+		public static partial SDLBool SDL_GetRectEnclosingPointsFloat(SDL_FPoint* points, int count, ref SDL_FRect clip, out SDL_FRect result);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -1654,7 +1654,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_FillSurfaceRects(IntPtr dst, SDL_Rect[] rects, int count, uint color);
+		public static partial SDLBool SDL_FillSurfaceRects(IntPtr dst, SDL_Rect* rects, int count, uint color);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2318,7 +2318,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_UpdateWindowSurfaceRects(IntPtr window, SDL_Rect[] rects, int numrects);
+		public static partial SDLBool SDL_UpdateWindowSurfaceRects(IntPtr window, SDL_Rect* rects, int numrects);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -2515,11 +2515,11 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_ShowOpenFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location, SDLBool allow_many);
+		public static partial void SDL_ShowOpenFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter* filters, int nfilters, string default_location, SDLBool allow_many);
 
 		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_ShowSaveFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter[] filters, int nfilters, string default_location);
+		public static partial void SDL_ShowSaveFileDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, SDL_DialogFileFilter* filters, int nfilters, string default_location);
 
 		[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -4847,7 +4847,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial int SDL_PeepEvents(SDL_Event[] events, int numevents, SDL_EventAction action, uint minType, uint maxType);
+		public static partial int SDL_PeepEvents(SDL_Event* events, int numevents, SDL_EventAction action, uint minType, uint maxType);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -5861,7 +5861,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial IntPtr SDL_BeginGPURenderPass(IntPtr command_buffer, SDL_GPUColorTargetInfo[] color_target_infos, uint num_color_targets, ref SDL_GPUDepthStencilTargetInfo depth_stencil_target_info);
+		public static partial IntPtr SDL_BeginGPURenderPass(IntPtr command_buffer, SDL_GPUColorTargetInfo* color_target_infos, uint num_color_targets, ref SDL_GPUDepthStencilTargetInfo depth_stencil_target_info);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -5885,7 +5885,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUVertexBuffers(IntPtr render_pass, uint first_slot, SDL_GPUBufferBinding[] bindings, uint num_bindings);
+		public static partial void SDL_BindGPUVertexBuffers(IntPtr render_pass, uint first_slot, SDL_GPUBufferBinding* bindings, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -5893,27 +5893,27 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUVertexSamplers(IntPtr render_pass, uint first_slot, SDL_GPUTextureSamplerBinding[] texture_sampler_bindings, uint num_bindings);
+		public static partial void SDL_BindGPUVertexSamplers(IntPtr render_pass, uint first_slot, SDL_GPUTextureSamplerBinding* texture_sampler_bindings, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUVertexStorageTextures(IntPtr render_pass, uint first_slot, IntPtr[] storage_textures, uint num_bindings);
+		public static partial void SDL_BindGPUVertexStorageTextures(IntPtr render_pass, uint first_slot, IntPtr* storage_textures, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUVertexStorageBuffers(IntPtr render_pass, uint first_slot, IntPtr[] storage_buffers, uint num_bindings);
+		public static partial void SDL_BindGPUVertexStorageBuffers(IntPtr render_pass, uint first_slot, IntPtr* storage_buffers, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUFragmentSamplers(IntPtr render_pass, uint first_slot, SDL_GPUTextureSamplerBinding[] texture_sampler_bindings, uint num_bindings);
+		public static partial void SDL_BindGPUFragmentSamplers(IntPtr render_pass, uint first_slot, SDL_GPUTextureSamplerBinding* texture_sampler_bindings, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUFragmentStorageTextures(IntPtr render_pass, uint first_slot, IntPtr[] storage_textures, uint num_bindings);
+		public static partial void SDL_BindGPUFragmentStorageTextures(IntPtr render_pass, uint first_slot, IntPtr* storage_textures, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUFragmentStorageBuffers(IntPtr render_pass, uint first_slot, IntPtr[] storage_buffers, uint num_bindings);
+		public static partial void SDL_BindGPUFragmentStorageBuffers(IntPtr render_pass, uint first_slot, IntPtr* storage_buffers, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -5937,7 +5937,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial IntPtr SDL_BeginGPUComputePass(IntPtr command_buffer, SDL_GPUStorageTextureReadWriteBinding[] storage_texture_bindings, uint num_storage_texture_bindings, SDL_GPUStorageBufferReadWriteBinding[] storage_buffer_bindings, uint num_storage_buffer_bindings);
+		public static partial IntPtr SDL_BeginGPUComputePass(IntPtr command_buffer, SDL_GPUStorageTextureReadWriteBinding* storage_texture_bindings, uint num_storage_texture_bindings, SDL_GPUStorageBufferReadWriteBinding* storage_buffer_bindings, uint num_storage_buffer_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -5945,15 +5945,15 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUComputeSamplers(IntPtr compute_pass, uint first_slot, SDL_GPUTextureSamplerBinding[] texture_sampler_bindings, uint num_bindings);
+		public static partial void SDL_BindGPUComputeSamplers(IntPtr compute_pass, uint first_slot, SDL_GPUTextureSamplerBinding* texture_sampler_bindings, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUComputeStorageTextures(IntPtr compute_pass, uint first_slot, IntPtr[] storage_textures, uint num_bindings);
+		public static partial void SDL_BindGPUComputeStorageTextures(IntPtr compute_pass, uint first_slot, IntPtr* storage_textures, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial void SDL_BindGPUComputeStorageBuffers(IntPtr compute_pass, uint first_slot, IntPtr[] storage_buffers, uint num_bindings);
+		public static partial void SDL_BindGPUComputeStorageBuffers(IntPtr compute_pass, uint first_slot, IntPtr* storage_buffers, uint num_bindings);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -6057,7 +6057,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_WaitForGPUFences(IntPtr device, SDLBool wait_all, IntPtr[] fences, uint num_fences);
+		public static partial SDLBool SDL_WaitForGPUFences(IntPtr device, SDLBool wait_all, IntPtr* fences, uint num_fences);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7345,7 +7345,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_RenderPoints(IntPtr renderer, SDL_FPoint[] points, int count);
+		public static partial SDLBool SDL_RenderPoints(IntPtr renderer, SDL_FPoint* points, int count);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7353,7 +7353,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_RenderLines(IntPtr renderer, SDL_FPoint[] points, int count);
+		public static partial SDLBool SDL_RenderLines(IntPtr renderer, SDL_FPoint* points, int count);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7361,7 +7361,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_RenderRects(IntPtr renderer, SDL_FRect[] rects, int count);
+		public static partial SDLBool SDL_RenderRects(IntPtr renderer, SDL_FRect* rects, int count);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7369,7 +7369,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_RenderFillRects(IntPtr renderer, SDL_FRect[] rects, int count);
+		public static partial SDLBool SDL_RenderFillRects(IntPtr renderer, SDL_FRect* rects, int count);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -7389,7 +7389,7 @@ namespace SDL3
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-		public static partial SDLBool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, SDL_Vertex[] vertices, int num_vertices, int[] indices, int num_indices);
+		public static partial SDLBool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, SDL_Vertex* vertices, int num_vertices, int* indices, int num_indices);
 
 		[LibraryImport(nativeLibName)]
 		[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
