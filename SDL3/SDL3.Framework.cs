@@ -10,61 +10,47 @@ namespace SDL3
 	{
 		private static byte* EncodeAsUTF8(string str)
 		{
+			if (str == null)
 			{
-				if (str == null)
-				{
-					{
-						return (byte*) 0;
-					}
-				}
-
-				var size = (str.Length * 4) + 1;
-				var buffer = (byte*) SDL_malloc((UIntPtr) size);
-				fixed (char* strPtr = str)
-				{
-					{
-						Encoding.UTF8.GetBytes(strPtr, str.Length + 1, buffer, size);
-					}
-				}
-
-				return buffer;
+				return (byte*) 0;
 			}
+
+			var size = (str.Length * 4) + 1;
+			var buffer = (byte*) SDL_malloc((UIntPtr) size);
+			fixed (char* strPtr = str)
+			{
+				Encoding.UTF8.GetBytes(strPtr, str.Length + 1, buffer, size);
+			}
+
+			return buffer;
 		}
 
 		private static string DecodeFromUTF8(IntPtr ptr, bool shouldFree = false)
 		{
+			if (ptr == IntPtr.Zero)
 			{
-				if (ptr == IntPtr.Zero)
-				{
-					{
-						return null;
-					}
-				}
-
-				var end = (byte*) ptr;
-				while (*end != 0)
-				{
-					{
-						end++;
-					}
-				}
-
-				var result = new string(
-					(sbyte*) ptr,
-					0,
-					(int) (end - (byte*) ptr),
-					System.Text.Encoding.UTF8
-				);
-
-				if (shouldFree)
-				{
-					{
-						SDL_free(ptr);
-					}
-				}
-
-				return result;
+				return null;
 			}
+
+			var end = (byte*) ptr;
+			while (*end != 0)
+			{
+				end++;
+			}
+
+			var result = new string(
+				(sbyte*) ptr,
+				0,
+				(int) (end - (byte*) ptr),
+				System.Text.Encoding.UTF8
+			);
+
+			if (shouldFree)
+			{
+				SDL_free(ptr);
+			}
+
+			return result;
 		}
 
 		private const string nativeLibName = "SDL3";
