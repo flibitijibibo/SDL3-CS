@@ -489,6 +489,35 @@ internal static class UserProvidedData
         { ("SDL_RenderGeometryRaw", "uv"), PointerParameterIntent.IntPtr }, // /usr/local/include/SDL3/SDL_render.h:2166:34
         { ("SDL_RenderReadPixels", "rect"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_render.h:2193:43
         { ("SDL_GetRenderVSync", "vsync"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_render.h:2426:34
+        { ("SDL_GetTextureProperties", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:808:46
+        { ("SDL_GetRendererFromTexture", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:848:44
+        { ("SDL_GetTextureSize", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:865:34
+        { ("SDL_SetTextureColorMod", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:894:34
+        { ("SDL_SetTextureColorModFloat", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:924:34
+        { ("SDL_GetTextureColorMod", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:945:34
+        { ("SDL_GetTextureColorModFloat", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:965:34
+        { ("SDL_SetTextureAlphaMod", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:991:34
+        { ("SDL_SetTextureAlphaModFloat", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1017:34
+        { ("SDL_GetTextureAlphaMod", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1035:34
+        { ("SDL_GetTextureAlphaModFloat", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1053:34
+        { ("SDL_SetTextureBlendMode", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1072:34
+        { ("SDL_GetTextureBlendMode", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1088:34
+        { ("SDL_SetTextureScaleMode", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1108:34
+        { ("SDL_GetTextureScaleMode", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1124:34
+        { ("SDL_UpdateTexture", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1158:34
+        { ("SDL_UpdateYUVTexture", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1190:34
+        { ("SDL_UpdateNVTexture", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1222:34
+        { ("SDL_LockTexture", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1257:34
+        { ("SDL_LockTextureToSurface", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1295:34
+        { ("SDL_UnlockTexture", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1316:34
+        { ("SDL_SetRenderTarget", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1338:34
+        { ("SDL_RenderTexture", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:2057:34
+        { ("SDL_RenderTextureRotated", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:2085:34
+        { ("SDL_RenderTextureTiled", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:2115:34
+        { ("SDL_RenderTexture9Grid", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:2149:34
+        { ("SDL_RenderGeometry", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:2173:34
+        { ("SDL_RenderGeometryRaw", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:2205:34
+        { ("SDL_DestroyTexture", "texture"), PointerParameterIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:2299:34
         { ("SDL_OpenStorage", "iface"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_storage.h:215:43
         { ("SDL_GetStorageFileSize", "length"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_storage.h:263:34
         { ("SDL_GetStoragePathInfo", "info"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_storage.h:398:34

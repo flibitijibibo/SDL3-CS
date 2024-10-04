@@ -374,7 +374,7 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetThreadPriority(SDL_ThreadPriority priority);
+	public static partial SDLBool SDL_SetCurrentThreadPriority(SDL_ThreadPriority priority);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -1498,7 +1498,7 @@ public static unsafe partial class SDL
 		public int pitch;
 		public IntPtr pixels;
 		public int refcount;
-		public IntPtr @internal;
+		public IntPtr reserved;
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -2513,7 +2513,7 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial void SDL_EGL_SetAttributeCallbacks(SDL_EGLAttribArrayCallback platformAttribCallback, SDL_EGLIntArrayCallback surfaceAttribCallback, SDL_EGLIntArrayCallback contextAttribCallback);
+	public static partial void SDL_EGL_SetAttributeCallbacks(SDL_EGLAttribArrayCallback platformAttribCallback, SDL_EGLIntArrayCallback surfaceAttribCallback, SDL_EGLIntArrayCallback contextAttribCallback, IntPtr userdata);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -5573,8 +5573,8 @@ public static unsafe partial class SDL
 		public SDL_GPUColorComponentFlags color_write_mask;
 		public SDLBool enable_blend;
 		public SDLBool enable_color_write_mask;
+		public byte padding1;
 		public byte padding2;
-		public byte padding3;
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -7167,6 +7167,15 @@ public static unsafe partial class SDL
 		SDL_LOGICAL_PRESENTATION_INTEGER_SCALE = 4,
 	}
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct SDL_Texture
+	{
+		public SDL_PixelFormat format;
+		public int w;
+		public int h;
+		public int refcount;
+	}
+
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial int SDL_GetNumRenderDrivers();
@@ -7231,91 +7240,91 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial uint SDL_GetTextureProperties(IntPtr texture);
+	public static partial uint SDL_GetTextureProperties(IntPtr texture); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetRendererFromTexture(IntPtr texture);
+	public static partial IntPtr SDL_GetRendererFromTexture(IntPtr texture); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GetTextureSize(IntPtr texture, out float w, out float h);
+	public static partial SDLBool SDL_GetTextureSize(IntPtr texture, out float w, out float h); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetTextureColorMod(IntPtr texture, byte r, byte g, byte b);
+	public static partial SDLBool SDL_SetTextureColorMod(IntPtr texture, byte r, byte g, byte b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetTextureColorModFloat(IntPtr texture, float r, float g, float b);
+	public static partial SDLBool SDL_SetTextureColorModFloat(IntPtr texture, float r, float g, float b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GetTextureColorMod(IntPtr texture, out byte r, out byte g, out byte b);
+	public static partial SDLBool SDL_GetTextureColorMod(IntPtr texture, out byte r, out byte g, out byte b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GetTextureColorModFloat(IntPtr texture, out float r, out float g, out float b);
+	public static partial SDLBool SDL_GetTextureColorModFloat(IntPtr texture, out float r, out float g, out float b); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetTextureAlphaMod(IntPtr texture, byte alpha);
+	public static partial SDLBool SDL_SetTextureAlphaMod(IntPtr texture, byte alpha); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetTextureAlphaModFloat(IntPtr texture, float alpha);
+	public static partial SDLBool SDL_SetTextureAlphaModFloat(IntPtr texture, float alpha); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GetTextureAlphaMod(IntPtr texture, out byte alpha);
+	public static partial SDLBool SDL_GetTextureAlphaMod(IntPtr texture, out byte alpha); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GetTextureAlphaModFloat(IntPtr texture, out float alpha);
+	public static partial SDLBool SDL_GetTextureAlphaModFloat(IntPtr texture, out float alpha); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetTextureBlendMode(IntPtr texture, uint blendMode);
+	public static partial SDLBool SDL_SetTextureBlendMode(IntPtr texture, uint blendMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GetTextureBlendMode(IntPtr texture, IntPtr blendMode);
+	public static partial SDLBool SDL_GetTextureBlendMode(IntPtr texture, IntPtr blendMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetTextureScaleMode(IntPtr texture, SDL_ScaleMode scaleMode);
+	public static partial SDLBool SDL_SetTextureScaleMode(IntPtr texture, SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GetTextureScaleMode(IntPtr texture, out SDL_ScaleMode scaleMode);
+	public static partial SDLBool SDL_GetTextureScaleMode(IntPtr texture, out SDL_ScaleMode scaleMode); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_UpdateTexture(IntPtr texture, ref SDL_Rect rect, IntPtr pixels, int pitch);
+	public static partial SDLBool SDL_UpdateTexture(IntPtr texture, ref SDL_Rect rect, IntPtr pixels, int pitch); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_UpdateYUVTexture(IntPtr texture, ref SDL_Rect rect, IntPtr Yplane, int Ypitch, IntPtr Uplane, int Upitch, IntPtr Vplane, int Vpitch);
+	public static partial SDLBool SDL_UpdateYUVTexture(IntPtr texture, ref SDL_Rect rect, IntPtr Yplane, int Ypitch, IntPtr Uplane, int Upitch, IntPtr Vplane, int Vpitch); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_UpdateNVTexture(IntPtr texture, ref SDL_Rect rect, IntPtr Yplane, int Ypitch, IntPtr UVplane, int UVpitch);
+	public static partial SDLBool SDL_UpdateNVTexture(IntPtr texture, ref SDL_Rect rect, IntPtr Yplane, int Ypitch, IntPtr UVplane, int UVpitch); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_LockTexture(IntPtr texture, ref SDL_Rect rect, out IntPtr pixels, out int pitch);
+	public static partial SDLBool SDL_LockTexture(IntPtr texture, ref SDL_Rect rect, out IntPtr pixels, out int pitch); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_LockTextureToSurface(IntPtr texture, ref SDL_Rect rect, out IntPtr surface);
+	public static partial SDLBool SDL_LockTextureToSurface(IntPtr texture, ref SDL_Rect rect, out IntPtr surface); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial void SDL_UnlockTexture(IntPtr texture);
+	public static partial void SDL_UnlockTexture(IntPtr texture); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetRenderTarget(IntPtr renderer, IntPtr texture);
+	public static partial SDLBool SDL_SetRenderTarget(IntPtr renderer, IntPtr texture); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -7451,27 +7460,27 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RenderTexture(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, ref SDL_FRect dstrect);
+	public static partial SDLBool SDL_RenderTexture(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, ref SDL_FRect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RenderTextureRotated(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, ref SDL_FRect dstrect, double angle, ref SDL_FPoint center, SDL_FlipMode flip);
+	public static partial SDLBool SDL_RenderTextureRotated(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, ref SDL_FRect dstrect, double angle, ref SDL_FPoint center, SDL_FlipMode flip); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RenderTextureTiled(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float scale, ref SDL_FRect dstrect);
+	public static partial SDLBool SDL_RenderTextureTiled(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float scale, ref SDL_FRect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RenderTexture9Grid(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float left_width, float right_width, float top_height, float bottom_height, float scale, ref SDL_FRect dstrect);
+	public static partial SDLBool SDL_RenderTexture9Grid(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float left_width, float right_width, float top_height, float bottom_height, float scale, ref SDL_FRect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, Span<SDL_Vertex> vertices, int num_vertices, Span<int> indices, int num_indices);
+	public static partial SDLBool SDL_RenderGeometry(IntPtr renderer, IntPtr texture, Span<SDL_Vertex> vertices, int num_vertices, Span<int> indices, int num_indices); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RenderGeometryRaw(IntPtr renderer, IntPtr texture, IntPtr xy, int xy_stride, IntPtr color, int color_stride, IntPtr uv, int uv_stride, int num_vertices, IntPtr indices, int num_indices, int size_indices);
+	public static partial SDLBool SDL_RenderGeometryRaw(IntPtr renderer, IntPtr texture, IntPtr xy, int xy_stride, IntPtr color, int color_stride, IntPtr uv, int uv_stride, int num_vertices, IntPtr indices, int num_indices, int size_indices); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -7483,7 +7492,7 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial void SDL_DestroyTexture(IntPtr texture);
+	public static partial void SDL_DestroyTexture(IntPtr texture); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -7620,6 +7629,10 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_IsTablet();
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_IsTV();
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -7765,7 +7778,7 @@ public static unsafe partial class SDL
 	[return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
 	public static partial string SDL_GetRevision();
 
-	// /usr/local/include/SDL3/SDL_main.h
+	// ./SDL3/SDL_main.h
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate int SDL_main_func(int argc, IntPtr argv);
