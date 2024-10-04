@@ -387,22 +387,17 @@ internal static partial class Program
                                 case UserProvidedData.PointerParameterIntent.Ref:
                                     typeName = $"ref {subtypeName}";
                                     break;
+								case UserProvidedData.PointerParameterIntent.In:
+									typeName = CoreMode ? $"in {subtypeName}" : $"ref {subtypeName}";
+                                    break;
                                 case UserProvidedData.PointerParameterIntent.Out:
                                     typeName = $"out {subtypeName}";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Array:
-                                    if (CoreMode)
-                                    {
-                                        // Marshalling arrays is slow, so let's just use pointers in non-legacy mode
-                                        typeName = $"{subtypeName}*";
-                                    }
-                                    else
-                                    {
-                                        typeName = $"{subtypeName}[]";
-                                    }
+									typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Pointer:
-                                    typeName = $"{subtypeName}*";
+									typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}*";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Unknown:
                                 default:

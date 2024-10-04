@@ -10,6 +10,7 @@ internal static class UserProvidedData
         Out,
         Array,
         Pointer,
+        In,
     }
 
     internal enum ReturnedCharPtrMemoryOwner
@@ -348,19 +349,19 @@ internal static class UserProvidedData
         { ("SDL_GetWindowFromEvent", "event"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_events.h:1465:42
         { ("SDL_GetPathInfo", "info"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_filesystem.h:413:34
         { ("SDL_GlobDirectory", "count"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_filesystem.h:446:37
-        { ("SDL_CreateGPUComputePipeline", "createinfo"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:1946:53
-        { ("SDL_CreateGPUGraphicsPipeline", "createinfo"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:1965:54
-        { ("SDL_CreateGPUSampler", "createinfo"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:1984:45
-        { ("SDL_CreateGPUShader", "createinfo"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:2053:44
-        { ("SDL_CreateGPUTexture", "createinfo"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:2088:45
-        { ("SDL_CreateGPUBuffer", "createinfo"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:2122:44
-        { ("SDL_CreateGPUTransferBuffer", "createinfo"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:2144:52
+        { ("SDL_CreateGPUComputePipeline", "createinfo"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:1946:53
+        { ("SDL_CreateGPUGraphicsPipeline", "createinfo"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:1965:54
+        { ("SDL_CreateGPUSampler", "createinfo"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:1984:45
+        { ("SDL_CreateGPUShader", "createinfo"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2053:44
+        { ("SDL_CreateGPUTexture", "createinfo"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2088:45
+        { ("SDL_CreateGPUBuffer", "createinfo"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2122:44
+        { ("SDL_CreateGPUTransferBuffer", "createinfo"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2144:52
         { ("SDL_BeginGPURenderPass", "color_target_infos"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2493:48
-        { ("SDL_BeginGPURenderPass", "depth_stencil_target_info"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:2493:48
-        { ("SDL_SetGPUViewport", "viewport"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:2521:34
-        { ("SDL_SetGPUScissor", "scissor"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:2533:34
+        { ("SDL_BeginGPURenderPass", "depth_stencil_target_info"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2493:48
+        { ("SDL_SetGPUViewport", "viewport"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2521:34
+        { ("SDL_SetGPUScissor", "scissor"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2533:34
         { ("SDL_BindGPUVertexBuffers", "bindings"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2576:34
-        { ("SDL_BindGPUIndexBuffer", "binding"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:2593:34
+        { ("SDL_BindGPUIndexBuffer", "binding"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2593:34
         { ("SDL_BindGPUVertexSamplers", "texture_sampler_bindings"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2612:34
         { ("SDL_BindGPUVertexStorageTextures", "storage_textures"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2631:34
         { ("SDL_BindGPUVertexStorageBuffers", "storage_buffers"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2650:34
@@ -372,19 +373,19 @@ internal static class UserProvidedData
         { ("SDL_BindGPUComputeSamplers", "texture_sampler_bindings"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2899:34
         { ("SDL_BindGPUComputeStorageTextures", "storage_textures"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2918:34
         { ("SDL_BindGPUComputeStorageBuffers", "storage_buffers"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2937:34
-        { ("SDL_UploadToGPUTexture", "source"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3071:34
-        { ("SDL_UploadToGPUTexture", "destination"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3071:34
-        { ("SDL_UploadToGPUBuffer", "source"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3093:34
-        { ("SDL_UploadToGPUBuffer", "destination"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3093:34
-        { ("SDL_CopyGPUTextureToTexture", "source"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3116:34
-        { ("SDL_CopyGPUTextureToTexture", "destination"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3116:34
-        { ("SDL_CopyGPUBufferToBuffer", "source"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3142:34
-        { ("SDL_CopyGPUBufferToBuffer", "destination"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3142:34
-        { ("SDL_DownloadFromGPUTexture", "source"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3162:34
-        { ("SDL_DownloadFromGPUTexture", "destination"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3162:34
-        { ("SDL_DownloadFromGPUBuffer", "source"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3179:34
-        { ("SDL_DownloadFromGPUBuffer", "destination"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3179:34
-        { ("SDL_BlitGPUTexture", "info"), PointerParameterIntent.Ref }, // /usr/local/include/SDL3/SDL_gpu.h:3218:34
+        { ("SDL_UploadToGPUTexture", "source"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3071:34
+        { ("SDL_UploadToGPUTexture", "destination"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3071:34
+        { ("SDL_UploadToGPUBuffer", "source"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3093:34
+        { ("SDL_UploadToGPUBuffer", "destination"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3093:34
+        { ("SDL_CopyGPUTextureToTexture", "source"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3116:34
+        { ("SDL_CopyGPUTextureToTexture", "destination"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3116:34
+        { ("SDL_CopyGPUBufferToBuffer", "source"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3142:34
+        { ("SDL_CopyGPUBufferToBuffer", "destination"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3142:34
+        { ("SDL_DownloadFromGPUTexture", "source"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3162:34
+        { ("SDL_DownloadFromGPUTexture", "destination"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3162:34
+        { ("SDL_DownloadFromGPUBuffer", "source"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3179:34
+        { ("SDL_DownloadFromGPUBuffer", "destination"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3179:34
+        { ("SDL_BlitGPUTexture", "info"), PointerParameterIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:3218:34
         { ("SDL_AcquireGPUSwapchainTexture", "swapchain_texture"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_gpu.h:3380:34
         { ("SDL_AcquireGPUSwapchainTexture", "swapchain_texture_width"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_gpu.h:3380:34
         { ("SDL_AcquireGPUSwapchainTexture", "swapchain_texture_height"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_gpu.h:3380:34
