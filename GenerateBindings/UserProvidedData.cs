@@ -683,7 +683,6 @@ internal static class UserProvidedData
         }, // ./include/SDL3/SDL_gpu.h
         {
             "SDL_GPUShaderFormat", [
-                "SDL_GPU_SHADERFORMAT_INVALID",
                 "SDL_GPU_SHADERFORMAT_PRIVATE",
                 "SDL_GPU_SHADERFORMAT_SPIRV",
                 "SDL_GPU_SHADERFORMAT_DXBC",
