@@ -730,7 +730,7 @@ public static unsafe partial class SDL
         /// Converts an unmanaged string to a managed version.
         /// </summary>
         /// <returns>A managed string.</returns>
-        public static string? ConvertToManaged(byte* unmanaged)
+        public static string ConvertToManaged(byte* unmanaged)
             => Marshal.PtrToStringUTF8((IntPtr)unmanaged);
     }
 
@@ -742,7 +742,7 @@ public static unsafe partial class SDL
         /// Converts an unmanaged string to a managed version.
         /// </summary>
         /// <returns>A managed string.</returns>
-        public static string? ConvertToManaged(byte* unmanaged)
+        public static string ConvertToManaged(byte* unmanaged)
             => Marshal.PtrToStringUTF8((IntPtr)unmanaged);
 
         /// <summary>
