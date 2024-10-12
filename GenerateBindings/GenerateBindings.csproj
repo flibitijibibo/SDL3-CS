@@ -11,6 +11,10 @@
 		<DefineConstants Condition="$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))">WINDOWS</DefineConstants>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="Markdig" Version="0.37.0" />
+	</ItemGroup>
+
   <Import Project="./CopyDependencies.targets"/>
 
 </Project>
