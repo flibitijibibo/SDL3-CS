@@ -66,14 +66,35 @@ internal static partial class Program
         return new DirectoryInfo(args[0]);
     }
 
+    private static DirectoryInfo? GetSDLWikiDirectory(string[] args)
+    {
+        for (var i = 1; i < args.Length; i++)
+        {
+            if (args[i] == "--wiki-repo-root-dir")
+            {
+                return new DirectoryInfo(args[i + 1]);
+            }
+            if (args[i].StartsWith("--wiki-repo-root-dir="))
+            {
+                return new DirectoryInfo(args[i]["--wiki-repo-root-dir=".Length..]);
+            }
+        }
+
+        return null;
+    }
+
     private static int Main(string[] args)
     {
         // PARSE INPUT
         if (args.Length < 1)
         {
-            Console.WriteLine("usage: GenerateBindings <sdl-repo-root-dir> [--core]");
+            Console.WriteLine("usage: GenerateBindings <sdl-repo-root-dir> [--core] " +
+                              "[--wiki-repo-root-dir=<wiki-repo-root-dir>]");
             Console.WriteLine("sdl-repo-root-dir: The root directory of SDL3 code.");
             Console.WriteLine("--core: Bindgen for .NET Core. If this is not set, will bindgen for .NET Framework.");
+            Console.WriteLine(
+                "--wiki-repo-root-dir=<wiki-repo-root-dir>: The root directory of the libsdl-org/sdlwiki repository." +
+                " If set, this will be used to generate documentation comments.");
             return 1;
         }
 
@@ -91,6 +112,7 @@ internal static partial class Program
 #else
         var dotnetExe = FindInPath("dotnet");
 #endif
+        var wikiParser = new WikiDocsParser(GetSDLWikiDirectory(args));
 
         // PARSE FFI.JSON
 
@@ -173,7 +195,9 @@ internal static partial class Program
                         var match = HintDefinitionRegex().Match(line);
                         if (match.Success)
                         {
-                            definitions.Append($"public const string {match.Groups["hintName"].Value} = \"{match.Groups["value"].Value}\";\n");
+                            var hintName = match.Groups["hintName"].Value;
+                            wikiParser.Preload(hintName, definitions);
+                            definitions.Append($"public const string {hintName} = \"{match.Groups["value"].Value}\";\n");
                         }
                     }
 
@@ -183,11 +207,14 @@ internal static partial class Program
 
             if (entry.Tag == "enum")
             {
+                wikiParser.Preload(entry.Name, definitions);
                 definitions.Append($"public enum {entry.Name!}\n{{\n");
                 DefinedTypes.Add(entry.Name!);
 
                 foreach (var enumValue in entry.Fields!)
                 {
+                    wikiParser.RegisterContainingType(enumValue.Name, entry.Name);
+                    wikiParser.Preload(enumValue.Name, definitions, false);
                     definitions.Append($"{enumValue.Name} = {(int) enumValue.Value!},\n");
                 }
 
@@ -198,6 +225,7 @@ internal static partial class Program
             {
                 if (entry.Type!.Tag == "function-pointer")
                 {
+                    wikiParser.Preload(entry.Name, definitions);
                     if (UserProvidedData.DelegateDefinitions.TryGetValue(key: entry.Name!, value: out var delegateDefinition))
                     {
                         UnusedUserProvidedTypes.Remove(entry.Name!);
@@ -243,6 +271,7 @@ internal static partial class Program
                 }
                 else if (entry.Name == "SDL_Keycode")
                 {
+                    wikiParser.Preload(entry.Name, definitions);
                     var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
                     definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
                     definitions.Append("SDLK_SCANCODE_MASK = 0x40000000,\n");
@@ -254,7 +283,10 @@ internal static partial class Program
                         var match = KeycodeDefinitionRegex().Match(line);
                         if (match.Success)
                         {
-                            definitions.Append($"{match.Groups["keycodeName"].Value} = {match.Groups["value"].Value},\n");
+                            var enumEntry = match.Groups["keycodeName"].Value;
+                            wikiParser.RegisterContainingType(enumEntry, entry.Name);
+                            // wikiParser.Preload(enumEntry, definitions, false);
+                            definitions.Append($"{enumEntry} = {match.Groups["value"].Value},\n");
                         }
                     }
 
@@ -262,6 +294,7 @@ internal static partial class Program
                 }
                 else if (entry.Name != null && IsFlagType(entry.Name))
                 {
+                    wikiParser.Preload(entry.Name, definitions);
                     definitions.Append("[Flags]\n");
                     var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
                     definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
@@ -284,13 +317,15 @@ internal static partial class Program
                         for (var i = 0; i < enumValues.Length; i++)
                         {
                             var enumEntry = enumValues[i];
+                            wikiParser.RegisterContainingType(enumEntry, entry.Name);
+                            wikiParser.Preload(enumEntry, definitions, false);
                             if (enumEntry.Contains('='))
                             {
                                 definitions.Append($"{enumEntry},\n");
                             }
                             else
                             {
-                                definitions.Append($"{enumValues[i]} = 0x{BigInteger.Pow(value: 2, i):X},\n");
+                                definitions.Append($"{enumEntry} = 0x{BigInteger.Pow(value: 2, i):X},\n");
                             }
                         }
                     }
@@ -307,6 +342,7 @@ internal static partial class Program
                     continue;
                 }
 
+                wikiParser.Preload(entry.Name, definitions);
                 DefinedTypes.Add(entry.Name!);
                 ConstructStruct(structName: entry.Name!, entry, definitions);
 
@@ -463,6 +499,7 @@ internal static partial class Program
 
                     definitions.Append('\n');
 
+                    wikiParser.Preload(entry.Name, definitions);
                     definitions.Append($"public static {FunctionSignature.ReturnType.Replace("UTF8_STRING", "string")} {FunctionSignature.Name}(");
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
                     definitions.Append(")\n{\n");
@@ -570,6 +607,7 @@ internal static partial class Program
                 {
                     if (CoreMode)
                     {
+                        wikiParser.Preload(entry.Name, definitions);
                         if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING"))
                         {
                             definitions.Append("[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]");
@@ -607,6 +645,7 @@ internal static partial class Program
                     }
                     else
                     {
+                        wikiParser.Preload(entry.Name, definitions);
                         definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
                         definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
                     }
@@ -622,6 +661,8 @@ internal static partial class Program
                 }
             }
         }
+
+        wikiParser.ProcessDocComments(definitions);
 
         var outputFilename = CoreMode ? "SDL3.Core.cs" : "SDL3.Legacy.cs";
 
