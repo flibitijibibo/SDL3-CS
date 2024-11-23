@@ -179,6 +179,28 @@ internal static partial class Program
 
                     definitions.Append('\n');
                 }
+
+                // Extract SDL_PROP_ #define's.  Note that SDL_thread.h currently has some duplicate entries.
+                string headerName = currentSourceFile.Substring(currentSourceFile.LastIndexOf("/")+1);
+                IEnumerable<string> propFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, $"include/SDL3/{headerName}"));
+                Dictionary<String, String> props = new Dictionary<string, string>();
+                foreach (var line in propFileLines)
+                {
+                    var match = PropDefinitionRegex().Match(line);
+                    if (match.Success)
+                    {
+                        props[match.Groups["propName"].Value] = match.Groups["value"].Value;
+                    }
+                }
+
+                if (props.Count > 0)
+                {
+                    foreach (KeyValuePair<String, String> prop in props)
+                    {
+                        definitions.Append($"public const string {prop.Key} = \"{prop.Value}\";\n");
+                    }
+                    definitions.Append('\n');
+                }
             }
 
             if (entry.Tag == "enum")
@@ -1143,4 +1165,7 @@ public static unsafe class SDL
 
     [GeneratedRegex(@"#define\s+(?<keycodeName>SDLK_[A-Z0-9_]+)\s+(?<value>0x[0-9a-f]+u)")]
     private static partial Regex KeycodeDefinitionRegex();
+
+    [GeneratedRegex(@"#define\s+(?<propName>SDL_PROP_[A-Z0-9_]+)\s+""(?<value>[^""]*)""")]
+    private static partial Regex PropDefinitionRegex();
 }
