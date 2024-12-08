@@ -4886,7 +4886,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_PeepEvents(SDL_Event[] events, int numevents, SDL_EventAction action, uint minType, uint maxType);
+		public static extern int SDL_PeepEvents([Out] SDL_Event[] events, int numevents, SDL_EventAction action, uint minType, uint maxType);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_HasEvent(uint type);
