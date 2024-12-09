@@ -9,6 +9,7 @@ internal static class UserProvidedData
         Ref,
         Out,
         Array,
+        OutArray,
         Pointer,
         In,
     }
@@ -339,7 +340,7 @@ internal static class UserProvidedData
         { ("SDL_CreateColorCursor", "surface"), PointerParameterIntent.IntPtr }, // /usr/local/include/SDL3/SDL_mouse.h:460:42
         { ("SDL_GetTouchDevices", "count"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_touch.h:93:43
         { ("SDL_GetTouchFingers", "count"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_touch.h:129:43
-        { ("SDL_PeepEvents", "events"), PointerParameterIntent.Array }, // /usr/local/include/SDL3/SDL_events.h:1047:33
+        { ("SDL_PeepEvents", "events"), PointerParameterIntent.OutArray }, // /usr/local/include/SDL3/SDL_events.h:1047:33
         { ("SDL_PollEvent", "event"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_events.h:1178:34
         { ("SDL_WaitEvent", "event"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_events.h:1200:34
         { ("SDL_WaitEventTimeout", "event"), PointerParameterIntent.Out }, // /usr/local/include/SDL3/SDL_events.h:1228:34
