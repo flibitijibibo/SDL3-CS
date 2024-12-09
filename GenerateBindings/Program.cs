@@ -418,6 +418,9 @@ internal static partial class Program
                                 case UserProvidedData.PointerParameterIntent.Array:
 									typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
                                     break;
+                                case UserProvidedData.PointerParameterIntent.OutArray:
+									typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
+                                    break;
                                 case UserProvidedData.PointerParameterIntent.Pointer:
 									typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}*";
                                     break;
