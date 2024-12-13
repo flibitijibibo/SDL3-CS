@@ -229,9 +229,6 @@ namespace SDL3
 
 		// /usr/local/include/SDL3/SDL_endian.h
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern float SDL_SwapFloat(float x);
-
 		// /usr/local/include/SDL3/SDL_error.h
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetError", CallingConvention = CallingConvention.Cdecl)]
@@ -1041,12 +1038,6 @@ namespace SDL3
 
 		// /usr/local/include/SDL3/SDL_bits.h
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_MostSignificantBitIndex32(uint x);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_HasExactlyOneBitSet32(uint x);
-
 		// /usr/local/include/SDL3/SDL_blendmode.h
 
 		public enum SDL_BlendOperation
@@ -1433,18 +1424,6 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_RectToFRect(ref SDL_Rect rect, out SDL_FRect frect);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_PointInRect(ref SDL_Point p, ref SDL_Rect r);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_RectEmpty(ref SDL_Rect r);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_RectsEqual(ref SDL_Rect a, ref SDL_Rect b);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_HasRectIntersection(ref SDL_Rect A, ref SDL_Rect B);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1458,18 +1437,6 @@ namespace SDL3
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_GetRectAndLineIntersection(ref SDL_Rect rect, ref int X1, ref int Y1, ref int X2, ref int Y2);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_PointInRectFloat(ref SDL_FPoint p, ref SDL_FRect r);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_RectEmptyFloat(ref SDL_FRect r);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_RectsEqualEpsilon(ref SDL_FRect a, ref SDL_FRect b, float epsilon);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_RectsEqualFloat(ref SDL_FRect a, ref SDL_FRect b);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_HasRectIntersectionFloat(ref SDL_FRect A, ref SDL_FRect B);
@@ -8131,9 +8098,6 @@ namespace SDL3
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate int SDL_main_func(int argc, IntPtr argv);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_main(int argc, IntPtr argv);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetMainReady();

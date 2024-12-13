@@ -142,7 +142,7 @@ internal static partial class Program
         var currentSourceFile = "";
         var propsDefinitions = new Dictionary<string, string>();
         var hintsDefinitions = new Dictionary<string, string>();
-        var inlinedFunctions = new List<string>();
+        var inlinedFunctionNames = new List<string>();
 
         foreach (var entry in ffiData)
         {
@@ -167,6 +167,11 @@ internal static partial class Program
             {
                 definitions.Append($"// {headerFile}\n\n");
                 currentSourceFile = headerFile;
+
+                hintsDefinitions.Clear();
+                propsDefinitions.Clear();
+                inlinedFunctionNames.Clear();
+
                 var isHintsHeader = currentSourceFile.EndsWith("SDL_hints.h");
 
                 string headerName = currentSourceFile.Substring(currentSourceFile.LastIndexOf('/') + 1);
@@ -188,6 +193,12 @@ internal static partial class Program
                     {
                         propsDefinitions[propMatch.Groups["propName"].Value] = propMatch.Groups["value"].Value;
                     }
+
+                    var inlinedFunctionMatch = InlinedFunctionRegex().Match(line);
+                    if (inlinedFunctionMatch.Success)
+                    {
+                        inlinedFunctionNames.Add(inlinedFunctionMatch.Groups["functionName"].Value);
+                    }
                 }
 
                 if (hintsDefinitions.Count > 0)
@@ -198,7 +209,6 @@ internal static partial class Program
                     }
 
                     definitions.Append('\n');
-                    hintsDefinitions.Clear();
                 }
 
                 if (propsDefinitions.Count > 0)
@@ -209,7 +219,6 @@ internal static partial class Program
                     }
 
                     definitions.Append('\n');
-                    propsDefinitions.Clear();
                 }
             }
 
@@ -354,6 +363,11 @@ internal static partial class Program
 
             else if (entry.Tag == "function")
             {
+                if (inlinedFunctionNames.Contains(entry.Name!))
+                {
+                    continue;
+                }
+
                 var hasVarArgs = false;
                 foreach (var parameter in entry.Parameters!)
                 {
@@ -1183,4 +1197,7 @@ public static unsafe class SDL
 
     [GeneratedRegex(@"#define\s+(?<propName>SDL_PROP_[A-Z0-9_]+)\s+""(?<value>[^""]*)""")]
     private static partial Regex PropDefinitionRegex();
+
+    [GeneratedRegex(@"(SDL_FORCE_INLINE|SDLMAIN_DECLSPEC).*\s+(?<functionName>[a-zA-Z0-9_]+)\(.*\)")]
+    private static partial Regex InlinedFunctionRegex();
 }

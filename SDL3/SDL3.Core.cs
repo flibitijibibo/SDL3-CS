@@ -212,10 +212,6 @@ public static unsafe partial class SDL
 
 	// /usr/local/include/SDL3/SDL_endian.h
 
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial float SDL_SwapFloat(float x);
-
 	// /usr/local/include/SDL3/SDL_error.h
 
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
@@ -1004,14 +1000,6 @@ public static unsafe partial class SDL
 
 	// /usr/local/include/SDL3/SDL_bits.h
 
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial int SDL_MostSignificantBitIndex32(uint x);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_HasExactlyOneBitSet32(uint x);
-
 	// /usr/local/include/SDL3/SDL_blendmode.h
 
 	public enum SDL_BlendOperation
@@ -1408,22 +1396,6 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial void SDL_RectToFRect(ref SDL_Rect rect, out SDL_FRect frect);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_PointInRect(ref SDL_Point p, ref SDL_Rect r);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RectEmpty(ref SDL_Rect r);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RectsEqual(ref SDL_Rect a, ref SDL_Rect b);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_HasRectIntersection(ref SDL_Rect A, ref SDL_Rect B);
 
 	[LibraryImport(nativeLibName)]
@@ -1441,22 +1413,6 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_GetRectAndLineIntersection(ref SDL_Rect rect, ref int X1, ref int Y1, ref int X2, ref int Y2);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_PointInRectFloat(ref SDL_FPoint p, ref SDL_FRect r);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RectEmptyFloat(ref SDL_FRect r);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RectsEqualEpsilon(ref SDL_FRect a, ref SDL_FRect b, float epsilon);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_RectsEqualFloat(ref SDL_FRect a, ref SDL_FRect b);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -8068,10 +8024,6 @@ public static unsafe partial class SDL
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate int SDL_main_func(int argc, IntPtr argv);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial int SDL_main(int argc, IntPtr argv);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
