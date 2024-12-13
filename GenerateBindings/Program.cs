@@ -140,6 +140,9 @@ internal static partial class Program
         var undefinedFunctionPointers = new StringBuilder();
         var unpopulatedFlagDefinitions = new StringBuilder();
         var currentSourceFile = "";
+        var propsDefinitions = new Dictionary<string, string>();
+        var hintsDefinitions = new Dictionary<string, string>();
+        var inlinedFunctions = new List<string>();
 
         foreach (var entry in ffiData)
         {
@@ -164,42 +167,49 @@ internal static partial class Program
             {
                 definitions.Append($"// {headerFile}\n\n");
                 currentSourceFile = headerFile;
+                var isHintsHeader = currentSourceFile.EndsWith("SDL_hints.h");
 
-                if (currentSourceFile.EndsWith("SDL_hints.h"))
+                string headerName = currentSourceFile.Substring(currentSourceFile.LastIndexOf('/') + 1);
+                IEnumerable<string> fileLines = File.ReadLines(Path.Combine(sdlDir.FullName, $"include/SDL3/{headerName}"));
+                foreach (var line in fileLines)
                 {
-                    IEnumerable<string> hintsFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, "include/SDL3/SDL_hints.h"));
-                    foreach (var line in hintsFileLines)
+                    if (isHintsHeader)
                     {
-                        var match = HintDefinitionRegex().Match(line);
-                        if (match.Success)
+                        var hintMatch = HintDefinitionRegex().Match(line);
+                        if (hintMatch.Success)
                         {
-                            definitions.Append($"public const string {match.Groups["hintName"].Value} = \"{match.Groups["value"].Value}\";\n");
+                            hintsDefinitions[hintMatch.Groups["hintName"].Value] = hintMatch.Groups["value"].Value;
                         }
                     }
 
-                    definitions.Append('\n');
-                }
-
-                // Extract SDL_PROP_ #define's.  Note that SDL_thread.h currently has some duplicate entries.
-                string headerName = currentSourceFile.Substring(currentSourceFile.LastIndexOf("/")+1);
-                IEnumerable<string> propFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, $"include/SDL3/{headerName}"));
-                Dictionary<String, String> props = new Dictionary<string, string>();
-                foreach (var line in propFileLines)
-                {
-                    var match = PropDefinitionRegex().Match(line);
-                    if (match.Success)
+                    // Extract SDL_PROP_ #define's.  Note that SDL_thread.h currently has some duplicate entries.
+                    var propMatch = PropDefinitionRegex().Match(line);
+                    if (propMatch.Success)
                     {
-                        props[match.Groups["propName"].Value] = match.Groups["value"].Value;
+                        propsDefinitions[propMatch.Groups["propName"].Value] = propMatch.Groups["value"].Value;
                     }
                 }
 
-                if (props.Count > 0)
+                if (hintsDefinitions.Count > 0)
                 {
-                    foreach (KeyValuePair<String, String> prop in props)
+                    foreach (KeyValuePair<string, string> definition in hintsDefinitions)
                     {
-                        definitions.Append($"public const string {prop.Key} = \"{prop.Value}\";\n");
+                        definitions.Append($"public const string {definition.Key} = \"{definition.Value}\";\n");
                     }
+
                     definitions.Append('\n');
+                    hintsDefinitions.Clear();
+                }
+
+                if (propsDefinitions.Count > 0)
+                {
+                    foreach (KeyValuePair<string, string> definition in propsDefinitions)
+                    {
+                        definitions.Append($"public const string {definition.Key} = \"{definition.Value}\";\n");
+                    }
+
+                    definitions.Append('\n');
+                    propsDefinitions.Clear();
                 }
             }
 
@@ -409,20 +419,20 @@ internal static partial class Program
                                 case UserProvidedData.PointerParameterIntent.Ref:
                                     typeName = $"ref {subtypeName}";
                                     break;
-								case UserProvidedData.PointerParameterIntent.In:
-									typeName = CoreMode ? $"in {subtypeName}" : $"ref {subtypeName}";
+                                case UserProvidedData.PointerParameterIntent.In:
+                                    typeName = CoreMode ? $"in {subtypeName}" : $"ref {subtypeName}";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Out:
                                     typeName = $"out {subtypeName}";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Array:
-									typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
+                                    typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.OutArray:
-									typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
+                                    typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Pointer:
-									typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}*";
+                                    typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}*";
                                     break;
                                 case UserProvidedData.PointerParameterIntent.Unknown:
                                 default:
@@ -603,6 +613,7 @@ internal static partial class Program
                         {
                             definitions.Append("[LibraryImport(nativeLibName)]\n");
                         }
+
                         definitions.Append($"[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\n");
 
                         // Handle string marshalling
@@ -635,6 +646,7 @@ internal static partial class Program
                         definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
                         definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
                     }
+
                     definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
 
                     definitions.Append("); ");
@@ -930,12 +942,12 @@ public static unsafe class SDL
 }}
 ";
 
-		if (!CoreMode)
-		{
-			output += "}";
-		}
+        if (!CoreMode)
+        {
+            output += "}";
+        }
 
-		return output;
+        return output;
     }
 
     private static RawFFIEntry GetTypeFromTypedefMap(RawFFIEntry type)
@@ -943,7 +955,7 @@ public static unsafe class SDL
         if (type.Tag.StartsWith("SDL_"))
         {
             // preserve flag types
-			if (IsFlagType(type.Tag))
+            if (IsFlagType(type.Tag))
             {
                 return type;
             }
@@ -1158,10 +1170,10 @@ public static unsafe class SDL
         }
     }
 
-	private static bool IsFlagType(string name)
-	{
-		return name.EndsWith("Flags") || UserProvidedData.FlagTypes.Contains(name);
-	}
+    private static bool IsFlagType(string name)
+    {
+        return name.EndsWith("Flags") || UserProvidedData.FlagTypes.Contains(name);
+    }
 
     [GeneratedRegex(@"#define\s+(?<hintName>SDL_HINT_[A-Z0-9_]+)\s+""(?<value>.+)""")]
     private static partial Regex HintDefinitionRegex();
