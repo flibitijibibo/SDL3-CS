@@ -11,8 +11,7 @@ internal static partial class Program
     private enum TypeContext
     {
         StructField,
-        Return,
-        Parameter,
+        FunctionData,
     }
 
     private class StructDefinitionType
@@ -31,16 +30,27 @@ internal static partial class Program
 
     private class FunctionSignatureType
     {
+        public enum ReturnIntentType
+        {
+            None,
+            String,
+            Array,
+        }
+
         public string Name { get; set; } = "";
         public string ReturnType { get; set; } = "";
+        public ReturnIntentType ReturnIntent = ReturnIntentType.None;
         public List<(string, string)> ParameterTypesNames { get; } = new();
         public List<string> HeapAllocatedStringParams { get; } = new();
         public StringBuilder ParameterString { get; } = new();
+
+        public bool RequiresStringMarshalling => (ReturnIntent == ReturnIntentType.String) || (HeapAllocatedStringParams.Count > 0);
 
         public void Reset()
         {
             Name = "";
             ReturnType = "";
+            ReturnIntent = ReturnIntentType.None;
             ParameterTypesNames.Clear();
             HeapAllocatedStringParams.Clear();
             ParameterString.Clear();
@@ -92,14 +102,17 @@ internal static partial class Program
         var dotnetExe = FindInPath("dotnet");
 #endif
 
-        // PARSE FFI.JSON
-
-        foreach (var key in UserProvidedData.PointerParametersIntents.Keys)
+        foreach (var key in UserProvidedData.PointerFunctionDataIntents.Keys)
         {
             UnusedUserProvidedTypes.Add(key.Item1);
         }
 
         foreach (var key in UserProvidedData.ReturnedCharPtrMemoryOwners.Keys)
+        {
+            UnusedUserProvidedTypes.Add(key);
+        }
+
+        foreach (var key in UserProvidedData.ReturnedArrayCountParamNames.Keys)
         {
             UnusedUserProvidedTypes.Add(key);
         }
@@ -135,8 +148,9 @@ internal static partial class Program
         }
 
         var definitions = new StringBuilder();
-        var unknownPointerParameters = new StringBuilder();
+        var unknownPointerFunctionData = new StringBuilder();
         var unknownReturnedCharPtrMemoryOwners = new StringBuilder();
+        var unknownReturnedArrayCountParamNames = new StringBuilder();
         var undefinedFunctionPointers = new StringBuilder();
         var unpopulatedFlagDefinitions = new StringBuilder();
         var currentSourceFile = "";
@@ -387,25 +401,34 @@ internal static partial class Program
 
                 FunctionSignature.Name = entry.Name!;
 
-                var returnTypedef = GetTypeFromTypedefMap(type: entry.ReturnType!);
-                FunctionSignature.ReturnType = CSharpTypeFromFFI(returnTypedef, TypeContext.Return);
-                if (FunctionSignature.ReturnType == "FUNCTION_POINTER")
-                {
-                    FunctionSignature.ReturnType = "IntPtr";
-                }
+                var functionComponents = new RawFFIEntry[entry.Parameters!.Length + 1];
+                functionComponents[0] = entry.ReturnType!;
+                Array.Copy(entry.Parameters!, 0, functionComponents, 1, entry.Parameters!.Length);
 
                 var containsUnknownRef = false;
-                foreach (var parameter in entry.Parameters!)
-                {
-                    var parameterTypedef = GetTypeFromTypedefMap(type: parameter.Type!);
 
-                    var name = SanitizeName(parameter.Name!);
+                foreach (var component in functionComponents)
+                {
+                    var isReturn = component == entry.ReturnType!;
+                    var componentName = isReturn ? "__return" : component.Name!;
+                    var componentType = isReturn ? component : component.Type!;
                     string typeName;
 
-                    if ((parameter.Type!.Tag == "pointer") && IsDefinedType(parameter.Type!.Type!.Tag))
+                    if (!CoreMode && isReturn)
                     {
-                        var subtype = GetTypeFromTypedefMap(type: parameter.Type!.Type!);
-                        var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.Parameter);
+                        var returnTypedef = GetTypeFromTypedefMap(type: componentType);
+                        typeName = CSharpTypeFromFFI(returnTypedef, TypeContext.FunctionData);
+                        if (typeName == "UTF8_STRING")
+                        {
+                            FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.String;
+                        }
+
+                        UnusedUserProvidedTypes.Remove(entry.Name!); // assume the core bindings have some use for this definition
+                    }
+                    else if ((componentType.Tag == "pointer") && IsDefinedType(componentType.Type?.Tag))
+                    {
+                        var subtype = GetTypeFromTypedefMap(type: componentType.Type!);
+                        var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.FunctionData);
 
                         if (subtypeName == "UTF8_STRING") // pointer to an array; give up
                         {
@@ -414,73 +437,112 @@ internal static partial class Program
                         else if (subtypeName == "char")
                         {
                             typeName = "UTF8_STRING";
-                            FunctionSignature.HeapAllocatedStringParams.Add(name);
+                            if (isReturn)
+                            {
+                                FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.String;
+                            }
+                            else
+                            {
+                                FunctionSignature.HeapAllocatedStringParams.Add(SanitizeName(componentName));
+                            }
                         }
-                        else if (UserProvidedData.PointerParametersIntents.TryGetValue(key: (entry.Name!, parameter.Name!), value: out var intent))
+                        else if (UserProvidedData.PointerFunctionDataIntents.TryGetValue(key: (FunctionSignature.Name, componentName), value: out var intent))
                         {
                             if (subtypeName == "FUNCTION_POINTER")
                             {
-                                subtypeName = parameter.Type!.Type!.Tag;
+                                subtypeName = componentType.Type!.Tag;
                             }
 
                             UnusedUserProvidedTypes.Remove(entry.Name!);
 
-                            switch (intent)
+                            if (
+                                isReturn &&
+                                intent
+                                    is UserProvidedData.PointerFunctionDataIntent.Ref
+                                    or UserProvidedData.PointerFunctionDataIntent.In
+                                    or UserProvidedData.PointerFunctionDataIntent.Out
+                                    or UserProvidedData.PointerFunctionDataIntent.OutArray
+                            )
                             {
-                                case UserProvidedData.PointerParameterIntent.IntPtr:
-                                    typeName = "IntPtr";
-                                    break;
-                                case UserProvidedData.PointerParameterIntent.Ref:
-                                    typeName = $"ref {subtypeName}";
-                                    break;
-                                case UserProvidedData.PointerParameterIntent.In:
-                                    typeName = CoreMode ? $"in {subtypeName}" : $"ref {subtypeName}";
-                                    break;
-                                case UserProvidedData.PointerParameterIntent.Out:
-                                    typeName = $"out {subtypeName}";
-                                    break;
-                                case UserProvidedData.PointerParameterIntent.Array:
-                                    typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
-                                    break;
-                                case UserProvidedData.PointerParameterIntent.OutArray:
-                                    typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
-                                    break;
-                                case UserProvidedData.PointerParameterIntent.Pointer:
-                                    typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}*";
-                                    break;
-                                case UserProvidedData.PointerParameterIntent.Unknown:
-                                default:
-                                    typeName = "IntPtr";
-                                    containsUnknownRef = true;
-                                    break;
+                                Console.WriteLine($"{FunctionSignature.Name}: intent `{intent}` unsupported for return types; falling back to IntPtr");
+                                typeName = "IntPtr";
+                            }
+                            else
+                            {
+                                switch (intent)
+                                {
+                                    case UserProvidedData.PointerFunctionDataIntent.IntPtr:
+                                        typeName = "IntPtr";
+                                        break;
+                                    case UserProvidedData.PointerFunctionDataIntent.Ref:
+                                        typeName = $"ref {subtypeName}";
+                                        break;
+                                    case UserProvidedData.PointerFunctionDataIntent.In:
+                                        typeName = CoreMode ? $"in {subtypeName}" : $"ref {subtypeName}";
+                                        break;
+                                    case UserProvidedData.PointerFunctionDataIntent.Out:
+                                        typeName = $"out {subtypeName}";
+                                        break;
+                                    case UserProvidedData.PointerFunctionDataIntent.Array:
+                                        typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
+                                        break;
+                                    case UserProvidedData.PointerFunctionDataIntent.OutArray:
+                                        typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
+                                        break;
+                                    case UserProvidedData.PointerFunctionDataIntent.Pointer:
+                                        typeName = $"{subtypeName}*";
+                                        break;
+                                    case UserProvidedData.PointerFunctionDataIntent.Unknown:
+                                    default:
+                                        typeName = "IntPtr";
+                                        containsUnknownRef = true;
+                                        break;
+                                }
+                            }
+
+                            if (CoreMode && isReturn && (intent == UserProvidedData.PointerFunctionDataIntent.Array))
+                            {
+                                FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.Array;
                             }
                         }
                         else
                         {
-                            typeName = $"ref {subtypeName}";
+                            typeName = isReturn ? $"{subtypeName}*" : $"ref {subtypeName}";
                             containsUnknownRef = true;
-                            unknownPointerParameters.Append(
-                                $"{{ (\"{entry.Name!}\", \"{parameter.Name!}\"), PointerParameterIntent.Unknown }}, // {entry.Header}\n"
+                            unknownPointerFunctionData.Append(
+                                $"{{ (\"{entry.Name!}\", \"{componentName}\"), PointerFunctionDataIntent.Unknown }}, // {entry.Header}\n"
                             );
                         }
                     }
                     else
                     {
-                        typeName = CSharpTypeFromFFI(parameterTypedef, TypeContext.Parameter);
+                        var foundTypedef = GetTypeFromTypedefMap(componentType);
+                        typeName = CSharpTypeFromFFI(foundTypedef, TypeContext.FunctionData);
                         if (typeName == "FUNCTION_POINTER")
                         {
-                            if (parameter.Type!.Tag == "SDL_FunctionPointer")
+                            if (componentType.Tag == "SDL_FunctionPointer")
                             {
                                 typeName = "IntPtr";
                             }
                             else
                             {
-                                typeName = $"{parameter.Type!.Tag}";
+                                typeName = $"{componentType.Tag}";
                             }
                         }
                     }
 
-                    FunctionSignature.ParameterTypesNames.Add((typeName, name));
+                    if (isReturn)
+                    {
+                        FunctionSignature.ReturnType = typeName;
+                        if (FunctionSignature.ReturnType == "FUNCTION_POINTER")
+                        {
+                            FunctionSignature.ReturnType = "IntPtr";
+                        }
+                    }
+                    else
+                    {
+                        FunctionSignature.ParameterTypesNames.Add((typeName, SanitizeName(componentName)));
+                    }
                 }
 
                 foreach (var (type, name) in FunctionSignature.ParameterTypesNames)
@@ -493,7 +555,7 @@ internal static partial class Program
                     FunctionSignature.ParameterString.Append($"{type} {name}");
                 }
 
-                if (!CoreMode && ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING")))
+                if (!CoreMode && FunctionSignature.RequiresStringMarshalling)
                 {
                     definitions.Append(
                         $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
@@ -521,7 +583,6 @@ internal static partial class Program
                         definitions.Append($"var {stringParam}UTF8 = EncodeAsUTF8({stringParam});\n");
                     }
 
-                    var returnsCharPtr = FunctionSignature.ReturnType == "UTF8_STRING";
                     if (FunctionSignature.HeapAllocatedStringParams.Count == 0)
                     {
                         definitions.Append("return ");
@@ -531,7 +592,7 @@ internal static partial class Program
                         definitions.Append("var result = ");
                     }
 
-                    if (returnsCharPtr)
+                    if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
                     {
                         definitions.Append("DecodeFromUTF8(");
                     }
@@ -567,7 +628,7 @@ internal static partial class Program
                     }
 
                     var unknownMemoryOwner = false;
-                    if (returnsCharPtr)
+                    if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
                     {
                         definitions.Append(')');
 
@@ -619,7 +680,7 @@ internal static partial class Program
                 {
                     if (CoreMode)
                     {
-                        if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || (FunctionSignature.ReturnType == "UTF8_STRING"))
+                        if (FunctionSignature.RequiresStringMarshalling)
                         {
                             definitions.Append("[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]");
                         }
@@ -630,8 +691,24 @@ internal static partial class Program
 
                         definitions.Append($"[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\n");
 
+                        // Handle array marshalling
+                        if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.Array)
+                        {
+                            if (UserProvidedData.ReturnedArrayCountParamNames.TryGetValue(FunctionSignature.Name, value: out var countParamName))
+                            {
+                                UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
+                                definitions.Append($"[return: MarshalUsing(CountElementName = \"{countParamName}\")]\n");
+                            }
+                            else
+                            {
+                                unknownReturnedArrayCountParamNames.Append(
+                                    $"{{ \"{FunctionSignature.Name!}\", \"WARN_MISSING_COUNT_PARAM_NAME\" }}, // {entry.Header}\n"
+                                );
+                            }
+                        }
+
                         // Handle string marshalling
-                        if (FunctionSignature.ReturnType == "UTF8_STRING")
+                        else if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
                         {
                             if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
                             {
@@ -653,7 +730,7 @@ internal static partial class Program
                             }
                         }
 
-                        definitions.Append($"public static partial {FunctionSignature.ReturnType.ToString().Replace("UTF8_STRING", "string")} {entry.Name}(");
+                        definitions.Append($"public static partial {FunctionSignature.ReturnType.Replace("UTF8_STRING", "string")} {entry.Name}(");
                     }
                     else
                     {
@@ -682,15 +759,22 @@ internal static partial class Program
         );
 
         RunProcess(dotnetExe, args: $"format {sdlBindingsProjectFile}");
-        if (unknownPointerParameters.Length > 0)
+        if (unknownPointerFunctionData.Length > 0)
         {
-            Console.Write($"new pointer parameters (add these to `PointerParametersIntents` in UserProvidedData.cs:\n{unknownPointerParameters}\n");
+            Console.Write($"new pointer parameters (add these to `PointerFunctionDataIntents` in UserProvidedData.cs:\n{unknownPointerFunctionData}\n");
         }
 
         if (unknownReturnedCharPtrMemoryOwners.Length > 0)
         {
             Console.Write(
                 $"new returned char pointers (add these to `ReturnedCharPtrMemoryOwners` in UserProvidedData.cs:\n{unknownReturnedCharPtrMemoryOwners}\n"
+            );
+        }
+
+        if (unknownReturnedArrayCountParamNames.Length > 0)
+        {
+            Console.Write(
+                $"new returned arrays (add these to `ReturnedArrayCountParamNames` in UserProvidedData.cs and specify the name of the param that contains the element count:\n{unknownReturnedArrayCountParamNames}\n"
             );
         }
 
@@ -1049,8 +1133,10 @@ public static unsafe class SDL
         };
     }
 
-    private static bool IsDefinedType(string typeName)
+    private static bool IsDefinedType(string? typeName)
     {
+        if (typeName == null) return false;
+
         return
             (typeName != "void") && (
                 !typeName.StartsWith("SDL_") // assume no SDL prefix == std library or primitive typename
