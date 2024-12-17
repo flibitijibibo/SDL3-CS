@@ -616,6 +616,21 @@ internal static class UserProvidedData
         { "SDL_GlobStorageDirectory", ReturnedCharPtrMemoryOwner.Unknown }, // /usr/local/include/SDL3/SDL_storage.h:450:37
     };
 
+    internal static readonly Dictionary<string, string> ReturnedArrayCountParamNames = new()
+    {
+        { "SDL_GetAudioDeviceChannelMap", "count" },
+        { "SDL_GetAudioStreamInputChannelMap", "count" }, // /usr/local/include/SDL3/SDL_audio.h:1136:35
+        { "SDL_GetAudioStreamOutputChannelMap", "count" }, // /usr/local/include/SDL3/SDL_audio.h:1160:35
+        { "SDL_GetSurfaceImages", "count" }, // /usr/local/include/SDL3/SDL_surface.h:388:44
+        { "SDL_GetCameraSupportedFormats", "count" }, // /usr/local/include/SDL3/SDL_camera.h:222:47
+        { "SDL_GetFullscreenDisplayModes", "count" }, // /usr/local/include/SDL3/SDL_video.h:649:48
+        { "SDL_GetWindows", "count" }, // /usr/local/include/SDL3/SDL_video.h:885:43
+        { "SDL_GetGamepadBindings", "count" }, // /usr/local/include/SDL3/SDL_gamepad.h:1031:51
+        { "SDL_GetKeyboardState", "numkeys" }, // /usr/local/include/SDL3/SDL_keyboard.h:144:42
+        { "SDL_GetTouchFingers", "count" }, // /usr/local/include/SDL3/SDL_touch.h:129:43
+        { "SDL_GetPreferredLocales", "count" }, // /usr/local/include/SDL3/SDL_locale.h:101:43
+    };
+
     internal static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
     {
         {

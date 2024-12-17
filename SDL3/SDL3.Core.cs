@@ -809,7 +809,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetAudioDeviceChannelMap(uint devid, out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<int> SDL_GetAudioDeviceChannelMap(uint devid, out int count);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -893,11 +894,13 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetAudioStreamInputChannelMap(IntPtr stream, out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<int> SDL_GetAudioStreamInputChannelMap(IntPtr stream, out int count);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetAudioStreamOutputChannelMap(IntPtr stream, out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<int> SDL_GetAudioStreamOutputChannelMap(IntPtr stream, out int count);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -1521,7 +1524,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetSurfaceImages(IntPtr surface, out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<IntPtr> SDL_GetSurfaceImages(IntPtr surface, out int count);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -1743,7 +1747,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetCameraSupportedFormats(uint devid, out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<IntPtr> SDL_GetCameraSupportedFormats(uint devid, out int count);
 
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2150,7 +2155,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetFullscreenDisplayModes(uint displayID, out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<IntPtr> SDL_GetFullscreenDisplayModes(uint displayID, out int count);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2202,7 +2208,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetWindows(out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<IntPtr> SDL_GetWindows(out int count);
 
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3302,7 +3309,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetGamepadBindings(IntPtr gamepad, out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<IntPtr> SDL_GetGamepadBindings(IntPtr gamepad, out int count);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3981,7 +3989,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetKeyboardState(out int numkeys);
+	[return: MarshalUsing(CountElementName = "numkeys")]
+	public static partial Span<SDLBool> SDL_GetKeyboardState(out int numkeys);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4274,7 +4283,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetTouchFingers(ulong touchID, out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<IntPtr> SDL_GetTouchFingers(ulong touchID, out int count);
 
 	// /usr/local/include/SDL3/SDL_events.h
 
@@ -7002,7 +7012,8 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial IntPtr SDL_GetPreferredLocales(out int count);
+	[return: MarshalUsing(CountElementName = "count")]
+	public static partial Span<IntPtr> SDL_GetPreferredLocales(out int count);
 
 	// /usr/local/include/SDL3/SDL_log.h
 

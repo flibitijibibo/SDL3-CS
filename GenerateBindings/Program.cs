@@ -30,18 +30,27 @@ internal static partial class Program
 
     private class FunctionSignatureType
     {
+        public enum ReturnIntentType
+        {
+            None,
+            String,
+            Array,
+        }
+
         public string Name { get; set; } = "";
         public string ReturnType { get; set; } = "";
-        public bool HeapAllocatedStringReturn = false;
+        public ReturnIntentType ReturnIntent = ReturnIntentType.None;
         public List<(string, string)> ParameterTypesNames { get; } = new();
         public List<string> HeapAllocatedStringParams { get; } = new();
         public StringBuilder ParameterString { get; } = new();
+
+        public bool RequiresStringMarshalling => (ReturnIntent == ReturnIntentType.String) || (HeapAllocatedStringParams.Count > 0);
 
         public void Reset()
         {
             Name = "";
             ReturnType = "";
-            HeapAllocatedStringReturn = false;
+            ReturnIntent = ReturnIntentType.None;
             ParameterTypesNames.Clear();
             HeapAllocatedStringParams.Clear();
             ParameterString.Clear();
@@ -93,14 +102,17 @@ internal static partial class Program
         var dotnetExe = FindInPath("dotnet");
 #endif
 
-        // PARSE FFI.JSON
-
         foreach (var key in UserProvidedData.PointerFunctionDataIntents.Keys)
         {
             UnusedUserProvidedTypes.Add(key.Item1);
         }
 
         foreach (var key in UserProvidedData.ReturnedCharPtrMemoryOwners.Keys)
+        {
+            UnusedUserProvidedTypes.Add(key);
+        }
+
+        foreach (var key in UserProvidedData.ReturnedArrayCountParamNames.Keys)
         {
             UnusedUserProvidedTypes.Add(key);
         }
@@ -138,6 +150,7 @@ internal static partial class Program
         var definitions = new StringBuilder();
         var unknownPointerFunctionData = new StringBuilder();
         var unknownReturnedCharPtrMemoryOwners = new StringBuilder();
+        var unknownReturnedArrayCountParamNames = new StringBuilder();
         var undefinedFunctionPointers = new StringBuilder();
         var unpopulatedFlagDefinitions = new StringBuilder();
         var currentSourceFile = "";
@@ -407,7 +420,7 @@ internal static partial class Program
                         typeName = CSharpTypeFromFFI(returnTypedef, TypeContext.FunctionData);
                         if (typeName == "UTF8_STRING")
                         {
-                            FunctionSignature.HeapAllocatedStringReturn = true;
+                            FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.String;
                         }
 
                         UnusedUserProvidedTypes.Remove(entry.Name!); // assume the core bindings have some use for this definition
@@ -426,7 +439,7 @@ internal static partial class Program
                             typeName = "UTF8_STRING";
                             if (isReturn)
                             {
-                                FunctionSignature.HeapAllocatedStringReturn = true;
+                                FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.String;
                             }
                             else
                             {
@@ -452,11 +465,6 @@ internal static partial class Program
                             )
                             {
                                 Console.WriteLine($"{FunctionSignature.Name}: intent `{intent}` unsupported for return types; falling back to IntPtr");
-                                typeName = "IntPtr";
-                            }
-                            else if (isReturn && intent is UserProvidedData.PointerFunctionDataIntent.Array)
-                            {
-                                // defer the returned array marshalling problem for now
                                 typeName = "IntPtr";
                             }
                             else
@@ -490,6 +498,11 @@ internal static partial class Program
                                         containsUnknownRef = true;
                                         break;
                                 }
+                            }
+
+                            if (CoreMode && isReturn && (intent == UserProvidedData.PointerFunctionDataIntent.Array))
+                            {
+                                FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.Array;
                             }
                         }
                         else
@@ -542,7 +555,7 @@ internal static partial class Program
                     FunctionSignature.ParameterString.Append($"{type} {name}");
                 }
 
-                if (!CoreMode && ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || FunctionSignature.HeapAllocatedStringReturn))
+                if (!CoreMode && FunctionSignature.RequiresStringMarshalling)
                 {
                     definitions.Append(
                         $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
@@ -579,7 +592,7 @@ internal static partial class Program
                         definitions.Append("var result = ");
                     }
 
-                    if (FunctionSignature.HeapAllocatedStringReturn)
+                    if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
                     {
                         definitions.Append("DecodeFromUTF8(");
                     }
@@ -615,7 +628,7 @@ internal static partial class Program
                     }
 
                     var unknownMemoryOwner = false;
-                    if (FunctionSignature.HeapAllocatedStringReturn)
+                    if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
                     {
                         definitions.Append(')');
 
@@ -667,7 +680,7 @@ internal static partial class Program
                 {
                     if (CoreMode)
                     {
-                        if ((FunctionSignature.HeapAllocatedStringParams.Count > 0) || FunctionSignature.HeapAllocatedStringReturn)
+                        if (FunctionSignature.RequiresStringMarshalling)
                         {
                             definitions.Append("[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]");
                         }
@@ -678,8 +691,24 @@ internal static partial class Program
 
                         definitions.Append($"[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\n");
 
+                        // Handle array marshalling
+                        if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.Array)
+                        {
+                            if (UserProvidedData.ReturnedArrayCountParamNames.TryGetValue(FunctionSignature.Name, value: out var countParamName))
+                            {
+                                UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
+                                definitions.Append($"[return: MarshalUsing(CountElementName = \"{countParamName}\")]\n");
+                            }
+                            else
+                            {
+                                unknownReturnedArrayCountParamNames.Append(
+                                    $"{{ \"{FunctionSignature.Name!}\", \"WARN_MISSING_COUNT_PARAM_NAME\" }}, // {entry.Header}\n"
+                                );
+                            }
+                        }
+
                         // Handle string marshalling
-                        if (FunctionSignature.HeapAllocatedStringReturn)
+                        else if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
                         {
                             if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
                             {
@@ -739,6 +768,13 @@ internal static partial class Program
         {
             Console.Write(
                 $"new returned char pointers (add these to `ReturnedCharPtrMemoryOwners` in UserProvidedData.cs:\n{unknownReturnedCharPtrMemoryOwners}\n"
+            );
+        }
+
+        if (unknownReturnedArrayCountParamNames.Length > 0)
+        {
+            Console.Write(
+                $"new returned arrays (add these to `ReturnedArrayCountParamNames` in UserProvidedData.cs and specify the name of the param that contains the element count:\n{unknownReturnedArrayCountParamNames}\n"
             );
         }
 
