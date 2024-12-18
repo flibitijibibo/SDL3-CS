@@ -147,16 +147,22 @@ internal static partial class Program
             }
         }
 
-        var definitions = new StringBuilder();
+        var orderedHeaders = new List<string>();
+        var headersDefinitions = new Dictionary<string, StringBuilder>();
+        var headersDependencies = new Dictionary<string, List<string>>();
+
         var unknownPointerFunctionData = new StringBuilder();
         var unknownReturnedCharPtrMemoryOwners = new StringBuilder();
         var unknownReturnedArrayCountParamNames = new StringBuilder();
         var undefinedFunctionPointers = new StringBuilder();
         var unpopulatedFlagDefinitions = new StringBuilder();
-        var currentSourceFile = "";
+        var currentFilePath = "";
+        var currentFilename = "";
         var propsDefinitions = new Dictionary<string, string>();
         var hintsDefinitions = new Dictionary<string, string>();
         var inlinedFunctionNames = new List<string>();
+
+        StringBuilder definitions;
 
         foreach (var entry in ffiData)
         {
@@ -176,20 +182,27 @@ internal static partial class Program
                 continue;
             }
 
-            var headerFile = entry.Header.Split(":")[0];
-            if (currentSourceFile != headerFile)
+            var headerFilePath = entry.Header.Split(":")[0];
+            if (currentFilePath != headerFilePath)
             {
-                definitions.Append($"// {headerFile}\n\n");
-                currentSourceFile = headerFile;
+                currentFilePath = headerFilePath;
+                currentFilename = currentFilePath.Substring(currentFilePath.LastIndexOf('/') + 1);
+                orderedHeaders.Add(currentFilename);
+
+                definitions = new StringBuilder();
+                headersDefinitions[currentFilename] = definitions;
+                definitions.Append($"// include/SDL3/{currentFilename}\n\n");
+
+                var dependencies = new List<string>();
+                headersDependencies[currentFilename] = dependencies;
 
                 hintsDefinitions.Clear();
                 propsDefinitions.Clear();
                 inlinedFunctionNames.Clear();
 
-                var isHintsHeader = currentSourceFile.EndsWith("SDL_hints.h");
+                var isHintsHeader = currentFilename == "SDL_hints.h";
 
-                string headerName = currentSourceFile.Substring(currentSourceFile.LastIndexOf('/') + 1);
-                IEnumerable<string> fileLines = File.ReadLines(Path.Combine(sdlDir.FullName, $"include/SDL3/{headerName}"));
+                IEnumerable<string> fileLines = File.ReadLines(Path.Combine(sdlDir.FullName, $"include/SDL3/{currentFilename}"));
                 foreach (var line in fileLines)
                 {
                     if (isHintsHeader)
@@ -234,6 +247,10 @@ internal static partial class Program
 
                     definitions.Append('\n');
                 }
+            }
+            else
+            {
+                definitions = headersDefinitions[currentFilename];
             }
 
             if (entry.Tag == "enum")
@@ -749,6 +766,12 @@ internal static partial class Program
                     definitions.Append("\n\n");
                 }
             }
+        }
+
+        definitions = new StringBuilder();
+        foreach (var header in orderedHeaders)
+        {
+            definitions.Append(headersDefinitions[header]);
         }
 
         var outputFilename = CoreMode ? "SDL3.Core.cs" : "SDL3.Legacy.cs";
@@ -1286,4 +1309,7 @@ public static unsafe class SDL
 
     [GeneratedRegex(@"(SDL_FORCE_INLINE|SDLMAIN_DECLSPEC).*\s+(?<functionName>[a-zA-Z0-9_]+)\(.*\)")]
     private static partial Regex InlinedFunctionRegex();
+
+    [GeneratedRegex(@"(SDL_FORCE_INLINE|SDLMAIN_DECLSPEC).*\s+(?<functionName>[a-zA-Z0-9_]+)\(.*\)")]
+    private static partial Regex LibraryIncludeRegex();
 }
