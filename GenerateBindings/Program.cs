@@ -147,9 +147,12 @@ internal static partial class Program
             }
         }
 
-        var orderedHeaders = new List<string>();
         var headersDefinitions = new Dictionary<string, StringBuilder>();
-        var headersDependencies = new Dictionary<string, List<string>>();
+        var enumEntries = new List<RawFFIEntry>();
+        var typedefEntries = new List<RawFFIEntry>();
+        var structEntries = new List<RawFFIEntry>();
+        var functionEntries = new List<RawFFIEntry>();
+        var entryDefinitions = new Dictionary<RawFFIEntry, StringBuilder>();
 
         var unknownPointerFunctionData = new StringBuilder();
         var unknownReturnedCharPtrMemoryOwners = new StringBuilder();
@@ -187,18 +190,13 @@ internal static partial class Program
             {
                 currentFilePath = headerFilePath;
                 currentFilename = currentFilePath.Substring(currentFilePath.LastIndexOf('/') + 1);
-                orderedHeaders.Add(currentFilename);
 
                 definitions = new StringBuilder();
                 headersDefinitions[currentFilename] = definitions;
                 definitions.Append($"// include/SDL3/{currentFilename}\n\n");
 
-                var dependencies = new List<string>();
-                headersDependencies[currentFilename] = dependencies;
-
                 hintsDefinitions.Clear();
                 propsDefinitions.Clear();
-                inlinedFunctionNames.Clear();
 
                 var isHintsHeader = currentFilename == "SDL_hints.h";
 
@@ -248,530 +246,572 @@ internal static partial class Program
                     definitions.Append('\n');
                 }
             }
-            else
+
+            switch (entry.Tag)
             {
-                definitions = headersDefinitions[currentFilename];
+                case "enum":
+                    enumEntries.Add(entry);
+                    break;
+                case "typedef":
+                    typedefEntries.Add(entry);
+                    break;
+                case "struct":
+                case "union":
+                    structEntries.Add(entry);
+                    break;
+                case "function":
+                    functionEntries.Add(entry);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        foreach (var entry in enumEntries)
+        {
+            definitions = new StringBuilder();
+            entryDefinitions[entry] = definitions;
+
+            definitions.Append($"public enum {entry.Name!}\n{{\n");
+            DefinedTypes.Add(entry.Name!);
+
+            foreach (var enumValue in entry.Fields!)
+            {
+                definitions.Append($"{enumValue.Name} = {(int) enumValue.Value!},\n");
             }
 
-            if (entry.Tag == "enum")
-            {
-                definitions.Append($"public enum {entry.Name!}\n{{\n");
-                DefinedTypes.Add(entry.Name!);
+            definitions.Append("}\n\n");
+        }
 
-                foreach (var enumValue in entry.Fields!)
+        foreach (var entry in typedefEntries)
+        {
+            definitions = new StringBuilder();
+            entryDefinitions[entry] = definitions;
+
+            if (entry.Type!.Tag == "function-pointer")
+            {
+                if (UserProvidedData.DelegateDefinitions.TryGetValue(key: entry.Name!, value: out var delegateDefinition))
                 {
-                    definitions.Append($"{enumValue.Name} = {(int) enumValue.Value!},\n");
+                    UnusedUserProvidedTypes.Remove(entry.Name!);
+
+                    if (delegateDefinition.ReturnType == "WARN_PLACEHOLDER")
+                    {
+                        definitions.Append("// ");
+                    }
+                    else
+                    {
+                        definitions.Append("[UnmanagedFunctionPointer(CallingConvention.Cdecl)]\n");
+                        DefinedTypes.Add(entry.Name!);
+                    }
+
+                    definitions.Append($"public delegate {delegateDefinition.ReturnType} {entry.Name}(");
+
+                    var initialParam = true;
+                    foreach (var (paramType, paramName) in delegateDefinition.Parameters)
+                    {
+                        if (initialParam == false)
+                        {
+                            definitions.Append(", ");
+                        }
+                        else
+                        {
+                            initialParam = false;
+                        }
+
+                        definitions.Append($"{paramType} {paramName}");
+                    }
+
+                    definitions.Append(");\n\n");
+                }
+                else
+                {
+                    definitions.Append(
+                        $"// public static delegate RETURN {entry.Name}(PARAMS) // WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
+                    );
+                    undefinedFunctionPointers.Append(
+                        $"{{ \"{entry.Name}\", new DelegateDefinition {{ ReturnType = \"WARN_PLACEHOLDER\", Parameters = [] }} }}, // {entry.Header}\n"
+                    );
+                }
+            }
+            else if (entry.Name == "SDL_Keycode")
+            {
+                var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
+                definitions.Append($"public enum SDL_Keycode : {enumType}\n{{\n");
+                definitions.Append("SDLK_SCANCODE_MASK = 0x40000000,\n");
+
+                IEnumerable<string> hintsFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, "include/SDL3/SDL_keycode.h"));
+
+                foreach (var line in hintsFileLines)
+                {
+                    var match = KeycodeDefinitionRegex().Match(line);
+                    if (match.Success)
+                    {
+                        definitions.Append($"{match.Groups["keycodeName"].Value} = {match.Groups["value"].Value},\n");
+                    }
+                }
+
+                definitions.Append("}\n\n");
+                DefinedTypes.Add("SDL_Keycode");
+            }
+            else if (entry.Name != null && IsFlagType(entry.Name))
+            {
+                definitions.Append("[Flags]\n");
+                var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
+                definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
+
+                if (!UserProvidedData.FlagEnumDefinitions.TryGetValue(entry.Name, value: out var enumValues))
+                {
+                    unpopulatedFlagDefinitions.Append($"{{ \"{entry.Name}\", [ ] }}, // {entry.Header}\n");
+                    definitions.Append("// WARN_UNPOPULATED_FLAG_ENUM\n");
+                }
+                else if (enumValues.Length == 0)
+                {
+                    UnusedUserProvidedTypes.Remove(entry.Name!);
+
+                    definitions.Append("// WARN_UNPOPULATED_FLAG_ENUM\n");
+                }
+                else
+                {
+                    UnusedUserProvidedTypes.Remove(entry.Name!);
+
+                    for (var i = 0; i < enumValues.Length; i++)
+                    {
+                        var enumEntry = enumValues[i];
+                        if (enumEntry.Contains('='))
+                        {
+                            definitions.Append($"{enumEntry},\n");
+                        }
+                        else
+                        {
+                            definitions.Append($"{enumValues[i]} = 0x{BigInteger.Pow(value: 2, i):X},\n");
+                        }
+                    }
                 }
 
                 definitions.Append("}\n\n");
             }
+        }
 
-            else if (entry.Tag == "typedef")
+        foreach (var entry in structEntries)
+        {
+            definitions = new StringBuilder();
+            entryDefinitions[entry] = definitions;
+
+            TypedefMap[entry.Name!] = entry;
+            if (entry.Fields!.Length == 0)
             {
-                if (entry.Type!.Tag == "function-pointer")
+                continue;
+            }
+
+            DefinedTypes.Add(entry.Name!);
+            ConstructStruct(structName: entry.Name!, entry, definitions);
+
+            while (StructDefinition.InternalStructs.Count > 0)
+            {
+                var internalStructs = new Dictionary<string, RawFFIEntry>(StructDefinition.InternalStructs);
+                foreach (var (internalStructName, internalStructEntry) in internalStructs)
                 {
-                    if (UserProvidedData.DelegateDefinitions.TryGetValue(key: entry.Name!, value: out var delegateDefinition))
-                    {
-                        UnusedUserProvidedTypes.Remove(entry.Name!);
-
-                        if (delegateDefinition.ReturnType == "WARN_PLACEHOLDER")
-                        {
-                            definitions.Append("// ");
-                        }
-                        else
-                        {
-                            definitions.Append("[UnmanagedFunctionPointer(CallingConvention.Cdecl)]\n");
-                            DefinedTypes.Add(entry.Name!);
-                        }
-
-                        definitions.Append($"public delegate {delegateDefinition.ReturnType} {entry.Name}(");
-
-                        var initialParam = true;
-                        foreach (var (paramType, paramName) in delegateDefinition.Parameters)
-                        {
-                            if (initialParam == false)
-                            {
-                                definitions.Append(", ");
-                            }
-                            else
-                            {
-                                initialParam = false;
-                            }
-
-                            definitions.Append($"{paramType} {paramName}");
-                        }
-
-                        definitions.Append(");\n\n");
-                    }
-                    else
-                    {
-                        definitions.Append(
-                            $"// public static delegate RETURN {entry.Name}(PARAMS) // WARN_UNDEFINED_FUNCTION_POINTER: {entry.Header}\n\n"
-                        );
-                        undefinedFunctionPointers.Append(
-                            $"{{ \"{entry.Name}\", new DelegateDefinition {{ ReturnType = \"WARN_PLACEHOLDER\", Parameters = [] }} }}, // {entry.Header}\n"
-                        );
-                    }
+                    ConstructStruct(internalStructName, internalStructEntry, definitions);
                 }
-                else if (entry.Name == "SDL_Keycode")
+            }
+        }
+
+        foreach (var entry in functionEntries)
+        {
+            definitions = new StringBuilder();
+            entryDefinitions[entry] = definitions;
+
+            if (inlinedFunctionNames.Contains(entry.Name!))
+            {
+                continue;
+            }
+
+            var hasVarArgs = false;
+            foreach (var parameter in entry.Parameters!)
+            {
+                if (parameter.Type!.Tag == "va_list")
                 {
-                    var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
-                    definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
-                    definitions.Append("SDLK_SCANCODE_MASK = 0x40000000,\n");
-
-                    IEnumerable<string> hintsFileLines = File.ReadLines(Path.Combine(sdlDir.FullName, "include/SDL3/SDL_keycode.h"));
-
-                    foreach (var line in hintsFileLines)
-                    {
-                        var match = KeycodeDefinitionRegex().Match(line);
-                        if (match.Success)
-                        {
-                            definitions.Append($"{match.Groups["keycodeName"].Value} = {match.Groups["value"].Value},\n");
-                        }
-                    }
-
-                    definitions.Append("}\n\n");
-                }
-                else if (entry.Name != null && IsFlagType(entry.Name))
-                {
-                    definitions.Append("[Flags]\n");
-                    var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
-                    definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
-
-                    if (!UserProvidedData.FlagEnumDefinitions.TryGetValue(entry.Name, value: out var enumValues))
-                    {
-                        unpopulatedFlagDefinitions.Append($"{{ \"{entry.Name}\", [ ] }}, // {entry.Header}\n");
-                        definitions.Append("// WARN_UNPOPULATED_FLAG_ENUM\n");
-                    }
-                    else if (enumValues.Length == 0)
-                    {
-                        UnusedUserProvidedTypes.Remove(entry.Name!);
-
-                        definitions.Append("// WARN_UNPOPULATED_FLAG_ENUM\n");
-                    }
-                    else
-                    {
-                        UnusedUserProvidedTypes.Remove(entry.Name!);
-
-                        for (var i = 0; i < enumValues.Length; i++)
-                        {
-                            var enumEntry = enumValues[i];
-                            if (enumEntry.Contains('='))
-                            {
-                                definitions.Append($"{enumEntry},\n");
-                            }
-                            else
-                            {
-                                definitions.Append($"{enumValues[i]} = 0x{BigInteger.Pow(value: 2, i):X},\n");
-                            }
-                        }
-                    }
-
-                    definitions.Append("}\n\n");
+                    hasVarArgs = true;
+                    break;
                 }
             }
 
-            else if ((entry.Tag == "struct") || (entry.Tag == "union"))
+            if (hasVarArgs)
             {
-                TypedefMap[entry.Name!] = entry;
-                if (entry.Fields!.Length == 0)
-                {
-                    continue;
-                }
-
-                DefinedTypes.Add(entry.Name!);
-                ConstructStruct(structName: entry.Name!, entry, definitions);
-
-                while (StructDefinition.InternalStructs.Count > 0)
-                {
-                    var internalStructs = new Dictionary<string, RawFFIEntry>(StructDefinition.InternalStructs);
-                    foreach (var (internalStructName, internalStructEntry) in internalStructs)
-                    {
-                        ConstructStruct(internalStructName, internalStructEntry, definitions);
-                    }
-                }
+                continue;
             }
 
-            else if (entry.Tag == "function")
+            FunctionSignature.Reset();
+
+            FunctionSignature.Name = entry.Name!;
+
+            var functionComponents = new RawFFIEntry[entry.Parameters!.Length + 1];
+            functionComponents[0] = entry.ReturnType!;
+            Array.Copy(entry.Parameters!, 0, functionComponents, 1, entry.Parameters!.Length);
+
+            var containsUnknownRef = false;
+
+            foreach (var component in functionComponents)
             {
-                if (inlinedFunctionNames.Contains(entry.Name!))
-                {
-                    continue;
-                }
+                var isReturn = component == entry.ReturnType!;
+                var componentName = isReturn ? "__return" : component.Name!;
+                var componentType = isReturn ? component : component.Type!;
+                string typeName;
 
-                var hasVarArgs = false;
-                foreach (var parameter in entry.Parameters!)
+                if (!CoreMode && isReturn)
                 {
-                    if (parameter.Type!.Tag == "va_list")
+                    var returnTypedef = GetTypeFromTypedefMap(type: componentType);
+                    typeName = CSharpTypeFromFFI(returnTypedef, TypeContext.FunctionData);
+                    if (typeName == "UTF8_STRING")
                     {
-                        hasVarArgs = true;
-                        break;
+                        FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.String;
                     }
+
+                    UnusedUserProvidedTypes.Remove(entry.Name!); // assume the core bindings have some use for this definition
                 }
-
-                if (hasVarArgs)
+                else if ((componentType.Tag == "pointer") && IsDefinedType(componentType.Type?.Tag))
                 {
-                    continue;
-                }
+                    var subtype = GetTypeFromTypedefMap(type: componentType.Type!);
+                    var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.FunctionData);
 
-                FunctionSignature.Reset();
-
-                FunctionSignature.Name = entry.Name!;
-
-                var functionComponents = new RawFFIEntry[entry.Parameters!.Length + 1];
-                functionComponents[0] = entry.ReturnType!;
-                Array.Copy(entry.Parameters!, 0, functionComponents, 1, entry.Parameters!.Length);
-
-                var containsUnknownRef = false;
-
-                foreach (var component in functionComponents)
-                {
-                    var isReturn = component == entry.ReturnType!;
-                    var componentName = isReturn ? "__return" : component.Name!;
-                    var componentType = isReturn ? component : component.Type!;
-                    string typeName;
-
-                    if (!CoreMode && isReturn)
+                    if (subtypeName == "UTF8_STRING") // pointer to an array; give up
                     {
-                        var returnTypedef = GetTypeFromTypedefMap(type: componentType);
-                        typeName = CSharpTypeFromFFI(returnTypedef, TypeContext.FunctionData);
-                        if (typeName == "UTF8_STRING")
+                        typeName = "IntPtr";
+                    }
+                    else if (subtypeName == "char")
+                    {
+                        typeName = "UTF8_STRING";
+                        if (isReturn)
                         {
                             FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.String;
                         }
-
-                        UnusedUserProvidedTypes.Remove(entry.Name!); // assume the core bindings have some use for this definition
+                        else
+                        {
+                            FunctionSignature.HeapAllocatedStringParams.Add(SanitizeName(componentName));
+                        }
                     }
-                    else if ((componentType.Tag == "pointer") && IsDefinedType(componentType.Type?.Tag))
+                    else if (UserProvidedData.PointerFunctionDataIntents.TryGetValue(key: (FunctionSignature.Name, componentName), value: out var intent))
                     {
-                        var subtype = GetTypeFromTypedefMap(type: componentType.Type!);
-                        var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.FunctionData);
+                        if (subtypeName == "FUNCTION_POINTER")
+                        {
+                            subtypeName = componentType.Type!.Tag;
+                        }
 
-                        if (subtypeName == "UTF8_STRING") // pointer to an array; give up
+                        UnusedUserProvidedTypes.Remove(entry.Name!);
+
+                        if (
+                            isReturn &&
+                            intent
+                                is UserProvidedData.PointerFunctionDataIntent.Ref
+                                or UserProvidedData.PointerFunctionDataIntent.In
+                                or UserProvidedData.PointerFunctionDataIntent.Out
+                                or UserProvidedData.PointerFunctionDataIntent.OutArray
+                        )
+                        {
+                            Console.WriteLine($"{FunctionSignature.Name}: intent `{intent}` unsupported for return types; falling back to IntPtr");
+                            typeName = "IntPtr";
+                        }
+                        else
+                        {
+                            switch (intent)
+                            {
+                                case UserProvidedData.PointerFunctionDataIntent.IntPtr:
+                                    typeName = "IntPtr";
+                                    break;
+                                case UserProvidedData.PointerFunctionDataIntent.Ref:
+                                    typeName = $"ref {subtypeName}";
+                                    break;
+                                case UserProvidedData.PointerFunctionDataIntent.In:
+                                    typeName = CoreMode ? $"in {subtypeName}" : $"ref {subtypeName}";
+                                    break;
+                                case UserProvidedData.PointerFunctionDataIntent.Out:
+                                    typeName = $"out {subtypeName}";
+                                    break;
+                                case UserProvidedData.PointerFunctionDataIntent.Array:
+                                    typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
+                                    break;
+                                case UserProvidedData.PointerFunctionDataIntent.OutArray:
+                                    typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
+                                    break;
+                                case UserProvidedData.PointerFunctionDataIntent.Pointer:
+                                    typeName = $"{subtypeName}*";
+                                    break;
+                                case UserProvidedData.PointerFunctionDataIntent.Unknown:
+                                default:
+                                    typeName = "IntPtr";
+                                    containsUnknownRef = true;
+                                    break;
+                            }
+                        }
+
+                        if (CoreMode && isReturn && (intent == UserProvidedData.PointerFunctionDataIntent.Array))
+                        {
+                            FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.Array;
+                        }
+                    }
+                    else
+                    {
+                        typeName = isReturn ? $"{subtypeName}*" : $"ref {subtypeName}";
+                        containsUnknownRef = true;
+                        unknownPointerFunctionData.Append(
+                            $"{{ (\"{entry.Name!}\", \"{componentName}\"), PointerFunctionDataIntent.Unknown }}, // {entry.Header}\n"
+                        );
+                    }
+                }
+                else
+                {
+                    var foundTypedef = GetTypeFromTypedefMap(componentType);
+                    typeName = CSharpTypeFromFFI(foundTypedef, TypeContext.FunctionData);
+                    if (typeName == "FUNCTION_POINTER")
+                    {
+                        if (componentType.Tag == "SDL_FunctionPointer")
                         {
                             typeName = "IntPtr";
                         }
-                        else if (subtypeName == "char")
+                        else
                         {
-                            typeName = "UTF8_STRING";
-                            if (isReturn)
-                            {
-                                FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.String;
-                            }
-                            else
-                            {
-                                FunctionSignature.HeapAllocatedStringParams.Add(SanitizeName(componentName));
-                            }
+                            typeName = $"{componentType.Tag}";
                         }
-                        else if (UserProvidedData.PointerFunctionDataIntents.TryGetValue(key: (FunctionSignature.Name, componentName), value: out var intent))
+                    }
+                }
+
+                if (isReturn)
+                {
+                    FunctionSignature.ReturnType = typeName;
+                    if (FunctionSignature.ReturnType == "FUNCTION_POINTER")
+                    {
+                        FunctionSignature.ReturnType = "IntPtr";
+                    }
+                }
+                else
+                {
+                    FunctionSignature.ParameterTypesNames.Add((typeName, SanitizeName(componentName)));
+                }
+            }
+
+            foreach (var (type, name) in FunctionSignature.ParameterTypesNames)
+            {
+                if (FunctionSignature.ParameterString.Length > 0)
+                {
+                    FunctionSignature.ParameterString.Append(", ");
+                }
+
+                FunctionSignature.ParameterString.Append($"{type} {name}");
+            }
+
+            if (!CoreMode && FunctionSignature.RequiresStringMarshalling)
+            {
+                definitions.Append(
+                    $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
+                );
+                definitions.Append(
+                    $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
+                );
+
+                definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "byte*"));
+                definitions.Append(");");
+
+                if (containsUnknownRef)
+                {
+                    definitions.Append(" // WARN_UNKNOWN_POINTER_PARAMETER");
+                }
+
+                definitions.Append('\n');
+
+                definitions.Append($"public static {FunctionSignature.ReturnType.Replace("UTF8_STRING", "string")} {FunctionSignature.Name}(");
+                definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
+                definitions.Append(")\n{\n");
+
+                foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
+                {
+                    definitions.Append($"var {stringParam}UTF8 = EncodeAsUTF8({stringParam});\n");
+                }
+
+                if (FunctionSignature.HeapAllocatedStringParams.Count == 0)
+                {
+                    definitions.Append("return ");
+                }
+                else if (FunctionSignature.ReturnType != "void")
+                {
+                    definitions.Append("var result = ");
+                }
+
+                if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
+                {
+                    definitions.Append("DecodeFromUTF8(");
+                }
+
+                definitions.Append($"INTERNAL_{FunctionSignature.Name}(");
+                var isInitialParameter = true;
+                foreach (var (typeName, name) in FunctionSignature.ParameterTypesNames)
+                {
+                    if (!isInitialParameter)
+                    {
+                        definitions.Append(", ");
+                    }
+
+                    isInitialParameter = false;
+
+                    if (typeName.StartsWith("ref"))
+                    {
+                        definitions.Append("ref ");
+                    }
+                    else if (typeName.StartsWith("out"))
+                    {
+                        definitions.Append("out ");
+                    }
+
+                    if (FunctionSignature.HeapAllocatedStringParams.Contains(name))
+                    {
+                        definitions.Append($"{name}UTF8");
+                    }
+                    else
+                    {
+                        definitions.Append(name);
+                    }
+                }
+
+                var unknownMemoryOwner = false;
+                if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
+                {
+                    definitions.Append(')');
+
+                    if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
+                    {
+                        UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
+                        unknownMemoryOwner = memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Unknown;
+
+                        if (memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Caller)
                         {
-                            if (subtypeName == "FUNCTION_POINTER")
-                            {
-                                subtypeName = componentType.Type!.Tag;
-                            }
+                            definitions.Append(", shouldFree: true");
+                        }
+                    }
+                    else
+                    {
+                        unknownMemoryOwner = true;
+                        unknownReturnedCharPtrMemoryOwners.Append(
+                            $"{{ \"{FunctionSignature.Name!}\", ReturnedCharPtrMemoryOwner.Unknown }}, // {entry.Header}\n"
+                        );
+                    }
+                }
 
-                            UnusedUserProvidedTypes.Remove(entry.Name!);
+                definitions.Append(");");
 
-                            if (
-                                isReturn &&
-                                intent
-                                    is UserProvidedData.PointerFunctionDataIntent.Ref
-                                    or UserProvidedData.PointerFunctionDataIntent.In
-                                    or UserProvidedData.PointerFunctionDataIntent.Out
-                                    or UserProvidedData.PointerFunctionDataIntent.OutArray
-                            )
-                            {
-                                Console.WriteLine($"{FunctionSignature.Name}: intent `{intent}` unsupported for return types; falling back to IntPtr");
-                                typeName = "IntPtr";
-                            }
-                            else
-                            {
-                                switch (intent)
-                                {
-                                    case UserProvidedData.PointerFunctionDataIntent.IntPtr:
-                                        typeName = "IntPtr";
-                                        break;
-                                    case UserProvidedData.PointerFunctionDataIntent.Ref:
-                                        typeName = $"ref {subtypeName}";
-                                        break;
-                                    case UserProvidedData.PointerFunctionDataIntent.In:
-                                        typeName = CoreMode ? $"in {subtypeName}" : $"ref {subtypeName}";
-                                        break;
-                                    case UserProvidedData.PointerFunctionDataIntent.Out:
-                                        typeName = $"out {subtypeName}";
-                                        break;
-                                    case UserProvidedData.PointerFunctionDataIntent.Array:
-                                        typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
-                                        break;
-                                    case UserProvidedData.PointerFunctionDataIntent.OutArray:
-                                        typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
-                                        break;
-                                    case UserProvidedData.PointerFunctionDataIntent.Pointer:
-                                        typeName = $"{subtypeName}*";
-                                        break;
-                                    case UserProvidedData.PointerFunctionDataIntent.Unknown:
-                                    default:
-                                        typeName = "IntPtr";
-                                        containsUnknownRef = true;
-                                        break;
-                                }
-                            }
+                if (unknownMemoryOwner)
+                {
+                    definitions.Append(" // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER");
+                }
 
-                            if (CoreMode && isReturn && (intent == UserProvidedData.PointerFunctionDataIntent.Array))
-                            {
-                                FunctionSignature.ReturnIntent = FunctionSignatureType.ReturnIntentType.Array;
-                            }
+                definitions.Append('\n');
+
+                if (FunctionSignature.HeapAllocatedStringParams.Count > 0)
+                {
+                    definitions.Append('\n');
+                    foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
+                    {
+                        definitions.Append($"SDL_free((IntPtr){stringParam}UTF8);\n");
+                    }
+
+                    if (FunctionSignature.ReturnType != "void")
+                    {
+                        definitions.Append("return result;\n");
+                    }
+                }
+
+                definitions.Append("}\n\n");
+            }
+            else
+            {
+                if (CoreMode)
+                {
+                    if (FunctionSignature.RequiresStringMarshalling)
+                    {
+                        definitions.Append("[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]");
+                    }
+                    else
+                    {
+                        definitions.Append("[LibraryImport(nativeLibName)]\n");
+                    }
+
+                    definitions.Append($"[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\n");
+
+                    // Handle array marshalling
+                    if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.Array)
+                    {
+                        if (UserProvidedData.ReturnedArrayCountParamNames.TryGetValue(FunctionSignature.Name, value: out var countParamName))
+                        {
+                            UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
+                            definitions.Append($"[return: MarshalUsing(CountElementName = \"{countParamName}\")]\n");
                         }
                         else
                         {
-                            typeName = isReturn ? $"{subtypeName}*" : $"ref {subtypeName}";
-                            containsUnknownRef = true;
-                            unknownPointerFunctionData.Append(
-                                $"{{ (\"{entry.Name!}\", \"{componentName}\"), PointerFunctionDataIntent.Unknown }}, // {entry.Header}\n"
+                            unknownReturnedArrayCountParamNames.Append(
+                                $"{{ \"{FunctionSignature.Name!}\", \"WARN_MISSING_COUNT_PARAM_NAME\" }}, // {entry.Header}\n"
                             );
                         }
                     }
-                    else
+
+                    // Handle string marshalling
+                    else if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
                     {
-                        var foundTypedef = GetTypeFromTypedefMap(componentType);
-                        typeName = CSharpTypeFromFFI(foundTypedef, TypeContext.FunctionData);
-                        if (typeName == "FUNCTION_POINTER")
-                        {
-                            if (componentType.Tag == "SDL_FunctionPointer")
-                            {
-                                typeName = "IntPtr";
-                            }
-                            else
-                            {
-                                typeName = $"{componentType.Tag}";
-                            }
-                        }
-                    }
-
-                    if (isReturn)
-                    {
-                        FunctionSignature.ReturnType = typeName;
-                        if (FunctionSignature.ReturnType == "FUNCTION_POINTER")
-                        {
-                            FunctionSignature.ReturnType = "IntPtr";
-                        }
-                    }
-                    else
-                    {
-                        FunctionSignature.ParameterTypesNames.Add((typeName, SanitizeName(componentName)));
-                    }
-                }
-
-                foreach (var (type, name) in FunctionSignature.ParameterTypesNames)
-                {
-                    if (FunctionSignature.ParameterString.Length > 0)
-                    {
-                        FunctionSignature.ParameterString.Append(", ");
-                    }
-
-                    FunctionSignature.ParameterString.Append($"{type} {name}");
-                }
-
-                if (!CoreMode && FunctionSignature.RequiresStringMarshalling)
-                {
-                    definitions.Append(
-                        $"[DllImport(nativeLibName, EntryPoint = \"{FunctionSignature.Name}\", CallingConvention = CallingConvention.Cdecl)]\n"
-                    );
-                    definitions.Append(
-                        $"private static extern {FunctionSignature.ReturnType.Replace("UTF8_STRING", "IntPtr")} INTERNAL_{FunctionSignature.Name}("
-                    );
-
-                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "byte*"));
-                    definitions.Append(");");
-
-                    if (containsUnknownRef)
-                    {
-                        definitions.Append(" // WARN_UNKNOWN_POINTER_PARAMETER");
-                    }
-
-                    definitions.Append('\n');
-
-                    definitions.Append($"public static {FunctionSignature.ReturnType.Replace("UTF8_STRING", "string")} {FunctionSignature.Name}(");
-                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
-                    definitions.Append(")\n{\n");
-
-                    foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
-                    {
-                        definitions.Append($"var {stringParam}UTF8 = EncodeAsUTF8({stringParam});\n");
-                    }
-
-                    if (FunctionSignature.HeapAllocatedStringParams.Count == 0)
-                    {
-                        definitions.Append("return ");
-                    }
-                    else if (FunctionSignature.ReturnType != "void")
-                    {
-                        definitions.Append("var result = ");
-                    }
-
-                    if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
-                    {
-                        definitions.Append("DecodeFromUTF8(");
-                    }
-
-                    definitions.Append($"INTERNAL_{FunctionSignature.Name}(");
-                    var isInitialParameter = true;
-                    foreach (var (typeName, name) in FunctionSignature.ParameterTypesNames)
-                    {
-                        if (!isInitialParameter)
-                        {
-                            definitions.Append(", ");
-                        }
-
-                        isInitialParameter = false;
-
-                        if (typeName.StartsWith("ref"))
-                        {
-                            definitions.Append("ref ");
-                        }
-                        else if (typeName.StartsWith("out"))
-                        {
-                            definitions.Append("out ");
-                        }
-
-                        if (FunctionSignature.HeapAllocatedStringParams.Contains(name))
-                        {
-                            definitions.Append($"{name}UTF8");
-                        }
-                        else
-                        {
-                            definitions.Append(name);
-                        }
-                    }
-
-                    var unknownMemoryOwner = false;
-                    if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
-                    {
-                        definitions.Append(')');
-
                         if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
                         {
                             UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
-                            unknownMemoryOwner = memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Unknown;
-
                             if (memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Caller)
                             {
-                                definitions.Append(", shouldFree: true");
+                                definitions.Append("[return: MarshalUsing(typeof(CallerOwnedStringMarshaller))]\n");
+                            }
+                            else
+                            {
+                                definitions.Append("[return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]\n");
                             }
                         }
                         else
                         {
-                            unknownMemoryOwner = true;
                             unknownReturnedCharPtrMemoryOwners.Append(
                                 $"{{ \"{FunctionSignature.Name!}\", ReturnedCharPtrMemoryOwner.Unknown }}, // {entry.Header}\n"
                             );
                         }
                     }
 
-                    definitions.Append(");");
-
-                    if (unknownMemoryOwner)
-                    {
-                        definitions.Append(" // WARN_UNKNOWN_RETURNED_CHAR_PTR_MEMORY_OWNER");
-                    }
-
-                    definitions.Append('\n');
-
-                    if (FunctionSignature.HeapAllocatedStringParams.Count > 0)
-                    {
-                        definitions.Append('\n');
-                        foreach (var stringParam in FunctionSignature.HeapAllocatedStringParams)
-                        {
-                            definitions.Append($"SDL_free((IntPtr){stringParam}UTF8);\n");
-                        }
-
-                        if (FunctionSignature.ReturnType != "void")
-                        {
-                            definitions.Append("return result;\n");
-                        }
-                    }
-
-                    definitions.Append("}\n\n");
+                    definitions.Append($"public static partial {FunctionSignature.ReturnType.Replace("UTF8_STRING", "string")} {entry.Name}(");
                 }
                 else
                 {
-                    if (CoreMode)
-                    {
-                        if (FunctionSignature.RequiresStringMarshalling)
-                        {
-                            definitions.Append("[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]");
-                        }
-                        else
-                        {
-                            definitions.Append("[LibraryImport(nativeLibName)]\n");
-                        }
-
-                        definitions.Append($"[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\n");
-
-                        // Handle array marshalling
-                        if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.Array)
-                        {
-                            if (UserProvidedData.ReturnedArrayCountParamNames.TryGetValue(FunctionSignature.Name, value: out var countParamName))
-                            {
-                                UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
-                                definitions.Append($"[return: MarshalUsing(CountElementName = \"{countParamName}\")]\n");
-                            }
-                            else
-                            {
-                                unknownReturnedArrayCountParamNames.Append(
-                                    $"{{ \"{FunctionSignature.Name!}\", \"WARN_MISSING_COUNT_PARAM_NAME\" }}, // {entry.Header}\n"
-                                );
-                            }
-                        }
-
-                        // Handle string marshalling
-                        else if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
-                        {
-                            if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
-                            {
-                                UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
-                                if (memoryOwner == UserProvidedData.ReturnedCharPtrMemoryOwner.Caller)
-                                {
-                                    definitions.Append("[return: MarshalUsing(typeof(CallerOwnedStringMarshaller))]\n");
-                                }
-                                else
-                                {
-                                    definitions.Append("[return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]\n");
-                                }
-                            }
-                            else
-                            {
-                                unknownReturnedCharPtrMemoryOwners.Append(
-                                    $"{{ \"{FunctionSignature.Name!}\", ReturnedCharPtrMemoryOwner.Unknown }}, // {entry.Header}\n"
-                                );
-                            }
-                        }
-
-                        definitions.Append($"public static partial {FunctionSignature.ReturnType.Replace("UTF8_STRING", "string")} {entry.Name}(");
-                    }
-                    else
-                    {
-                        definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
-                        definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
-                    }
-
-                    definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
-
-                    definitions.Append("); ");
-                    if (containsUnknownRef)
-                    {
-                        definitions.Append("// WARN_UNKNOWN_POINTER_PARAMETER");
-                    }
-
-                    definitions.Append("\n\n");
+                    definitions.Append("[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n");
+                    definitions.Append($"public static extern {FunctionSignature.ReturnType} {entry.Name!}(");
                 }
+
+                definitions.Append(FunctionSignature.ParameterString.ToString().Replace("UTF8_STRING", "string"));
+
+                definitions.Append("); ");
+                if (containsUnknownRef)
+                {
+                    definitions.Append("// WARN_UNKNOWN_POINTER_PARAMETER");
+                }
+
+                definitions.Append("\n\n");
             }
         }
 
         definitions = new StringBuilder();
-        foreach (var header in orderedHeaders)
+
+        currentFilePath = "";
+        foreach (var entry in ffiData)
         {
-            definitions.Append(headersDefinitions[header]);
+            if (entryDefinitions.TryGetValue(entry, out var definition))
+            {
+                var headerFilePath = entry.Header!.Split(":")[0];
+                if (currentFilePath != headerFilePath)
+                {
+                    currentFilePath = headerFilePath;
+                    currentFilename = currentFilePath.Substring(currentFilePath.LastIndexOf('/') + 1);
+
+                    definitions.Append(headersDefinitions[currentFilename]);
+                }
+
+                definitions.Append(definition);
+            }
         }
 
         var outputFilename = CoreMode ? "SDL3.Core.cs" : "SDL3.Legacy.cs";
@@ -1075,6 +1115,9 @@ public static unsafe class SDL
     {
         if (type.Tag.StartsWith("SDL_"))
         {
+            if (CoreMode && IsDefinedType(type.Tag))
+                return type;
+
             // preserve flag types
             if (IsFlagType(type.Tag))
             {

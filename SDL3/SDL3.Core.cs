@@ -4006,11 +4006,11 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial uint SDL_GetKeyFromScancode(SDL_Scancode scancode, SDL_Keymod modstate, SDLBool key_event);
+	public static partial SDL_Keycode SDL_GetKeyFromScancode(SDL_Scancode scancode, SDL_Keymod modstate, SDLBool key_event);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDL_Scancode SDL_GetScancodeFromKey(uint key, IntPtr modstate);
+	public static partial SDL_Scancode SDL_GetScancodeFromKey(SDL_Keycode key, IntPtr modstate);
 
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4028,11 +4028,11 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	[return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
-	public static partial string SDL_GetKeyName(uint key);
+	public static partial string SDL_GetKeyName(SDL_Keycode key);
 
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial uint SDL_GetKeyFromName(string name);
+	public static partial SDL_Keycode SDL_GetKeyFromName(string name);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4457,7 +4457,7 @@ public static unsafe partial class SDL
 		public uint windowID;
 		public uint which;
 		public SDL_Scancode scancode;
-		public uint key;
+		public SDL_Keycode key;
 		public SDL_Keymod mod;
 		public ushort raw;
 		public SDLBool down;
