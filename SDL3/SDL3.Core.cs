@@ -903,7 +903,7 @@ public static unsafe partial class SDL
 	public static Span<int> SDL_GetAudioDeviceChannelMap(uint devid)
 	{
 		var result = SDL_GetAudioDeviceChannelMap(devid, out var count);
-		return new Span<int>(result, count);
+		return new Span<int>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -1001,7 +1001,7 @@ public static unsafe partial class SDL
 	public static Span<int> SDL_GetAudioStreamInputChannelMap(IntPtr stream)
 	{
 		var result = SDL_GetAudioStreamInputChannelMap(stream, out var count);
-		return new Span<int>(result, count);
+		return new Span<int>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -1011,7 +1011,7 @@ public static unsafe partial class SDL
 	public static Span<int> SDL_GetAudioStreamOutputChannelMap(IntPtr stream)
 	{
 		var result = SDL_GetAudioStreamOutputChannelMap(stream, out var count);
-		return new Span<int>(result, count);
+		return new Span<int>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -1645,7 +1645,7 @@ public static unsafe partial class SDL
 	public static Span<IntPtr> SDL_GetSurfaceImages(IntPtr surface)
 	{
 		var result = SDL_GetSurfaceImages(surface, out var count);
-		return new Span<IntPtr>(result, count);
+		return new Span<IntPtr>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -1873,7 +1873,7 @@ public static unsafe partial class SDL
 	public static Span<IntPtr> SDL_GetCameraSupportedFormats(uint devid)
 	{
 		var result = SDL_GetCameraSupportedFormats(devid, out var count);
-		return new Span<IntPtr>(result, count);
+		return new Span<IntPtr>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -2287,7 +2287,7 @@ public static unsafe partial class SDL
 	public static Span<IntPtr> SDL_GetFullscreenDisplayModes(uint displayID)
 	{
 		var result = SDL_GetFullscreenDisplayModes(displayID, out var count);
-		return new Span<IntPtr>(result, count);
+		return new Span<IntPtr>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -2345,7 +2345,7 @@ public static unsafe partial class SDL
 	public static Span<IntPtr> SDL_GetWindows()
 	{
 		var result = SDL_GetWindows(out var count);
-		return new Span<IntPtr>(result, count);
+		return new Span<IntPtr>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -3471,7 +3471,7 @@ public static unsafe partial class SDL
 	public static Span<IntPtr> SDL_GetGamepadBindings(IntPtr gamepad)
 	{
 		var result = SDL_GetGamepadBindings(gamepad, out var count);
-		return new Span<IntPtr>(result, count);
+		return new Span<IntPtr>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -4163,7 +4163,7 @@ public static unsafe partial class SDL
 	public static Span<SDLBool> SDL_GetKeyboardState()
 	{
 		var result = SDL_GetKeyboardState(out var numkeys);
-		return new Span<SDLBool>(result, numkeys);
+		return new Span<SDLBool>((void*) result, numkeys);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -4462,7 +4462,7 @@ public static unsafe partial class SDL
 	public static Span<IntPtr> SDL_GetTouchFingers(ulong touchID)
 	{
 		var result = SDL_GetTouchFingers(touchID, out var count);
-		return new Span<IntPtr>(result, count);
+		return new Span<IntPtr>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]
@@ -7239,7 +7239,7 @@ public static unsafe partial class SDL
 	public static Span<IntPtr> SDL_GetPreferredLocales()
 	{
 		var result = SDL_GetPreferredLocales(out var count);
-		return new Span<IntPtr>(result, count);
+		return new Span<IntPtr>((void*) result, count);
 	}
 
 	[LibraryImport(nativeLibName)]

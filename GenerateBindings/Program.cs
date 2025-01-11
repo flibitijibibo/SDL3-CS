@@ -741,7 +741,7 @@ internal static partial class Program
                                 definitions.Append($"public static Span<{subtypeName}> {FunctionSignature.Name}{signatureArgs}\n");
                                 definitions.Append("{\n");
                                 definitions.Append($"var result = {FunctionSignature.Name}{arguments};\n");
-                                definitions.Append($"return new Span<{subtypeName}>(result, {countParamName});\n");
+                                definitions.Append($"return new Span<{subtypeName}>((void*) result, {countParamName});\n");
                                 definitions.Append("}\n\n");
                             }
                             else
