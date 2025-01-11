@@ -488,7 +488,15 @@ internal static partial class Program
                                         typeName = $"out {subtypeName}";
                                         break;
                                     case UserProvidedData.PointerFunctionDataIntent.Array:
-                                        typeName = CoreMode ? "IntPtr" : $"{subtypeName}[]";
+                                        if (CoreMode) {
+                                            if (isReturn) {
+                                                typeName = "IntPtr";
+                                            } else {
+                                                typeName = $"Span<{subtypeName}>";
+                                            }
+                                        } else {
+                                            typeName = $"{subtypeName}[]";
+                                        }
                                         break;
                                     case UserProvidedData.PointerFunctionDataIntent.OutArray:
                                         typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
