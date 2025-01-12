@@ -8303,10 +8303,15 @@ public static unsafe partial class SDL
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial IntPtr SDL_GetTraySubmenu(IntPtr entry);
 
+	public static Span<IntPtr> SDL_GetTrayEntries(IntPtr menu)
+	{
+		var result = SDL_GetTrayEntries(menu, out var size);
+		return new Span<IntPtr>((void*) result, size);
+	}
+
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	[return: MarshalUsing(CountElementName = "size")]
-	public static partial Span<IntPtr> SDL_GetTrayEntries(IntPtr menu, out int size);
+	public static partial IntPtr SDL_GetTrayEntries(IntPtr menu, out int size);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
