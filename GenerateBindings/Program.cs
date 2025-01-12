@@ -60,6 +60,10 @@ internal static partial class Program
     private static readonly List<string> DefinedTypes = new();
     private static readonly Dictionary<string, RawFFIEntry> TypedefMap = new();
     private static readonly HashSet<string> UnusedUserProvidedTypes = new();
+    private static readonly Dictionary<string, string> ReservedWords = new()
+    {
+        { "checked", "check" }
+    };
 
     private static readonly StructDefinitionType StructDefinition = new();
     private static readonly FunctionSignatureType FunctionSignature = new();
@@ -552,7 +556,13 @@ internal static partial class Program
                         FunctionSignature.ParameterString.Append(", ");
                     }
 
-                    FunctionSignature.ParameterString.Append($"{type} {name}");
+                    var outputName = name;
+                    if (ReservedWords.TryGetValue(name, out var replacementName))
+                    {
+                        outputName = replacementName;
+                    }
+
+                    FunctionSignature.ParameterString.Append($"{type} {outputName}");
                 }
 
                 if (!CoreMode && FunctionSignature.RequiresStringMarshalling)

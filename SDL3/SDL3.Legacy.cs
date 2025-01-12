@@ -8364,7 +8364,7 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetTrayEntryChecked(IntPtr entry, SDLBool checked);
+		public static extern void SDL_SetTrayEntryChecked(IntPtr entry, SDLBool check);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_GetTrayEntryChecked(IntPtr entry);

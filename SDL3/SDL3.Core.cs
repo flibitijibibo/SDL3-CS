@@ -8272,7 +8272,7 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial void SDL_SetTrayEntryChecked(IntPtr entry, SDLBool checked);
+	public static partial void SDL_SetTrayEntryChecked(IntPtr entry, SDLBool check);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
