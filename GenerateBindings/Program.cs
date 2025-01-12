@@ -488,7 +488,15 @@ internal static partial class Program
                                         typeName = $"out {subtypeName}";
                                         break;
                                     case UserProvidedData.PointerFunctionDataIntent.Array:
-                                        typeName = CoreMode ? $"Span<{subtypeName}>" : $"{subtypeName}[]";
+                                        if (CoreMode) {
+                                            if (isReturn) {
+                                                typeName = "IntPtr";
+                                            } else {
+                                                typeName = $"Span<{subtypeName}>";
+                                            }
+                                        } else {
+                                            typeName = $"{subtypeName}[]";
+                                        }
                                         break;
                                     case UserProvidedData.PointerFunctionDataIntent.OutArray:
                                         typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";
@@ -690,6 +698,60 @@ internal static partial class Program
                 {
                     if (CoreMode)
                     {
+                        // Handle array -> span marshalling by generating a helper function
+                        if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.Array)
+                        {
+                            if (UserProvidedData.ReturnedArrayCountParamNames.TryGetValue(FunctionSignature.Name, value: out var countParamName))
+                            {
+                                UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
+
+                                var stringList = new List<string>();
+                                foreach (var (typeName, name) in FunctionSignature.ParameterTypesNames)
+                                {
+                                    if (countParamName != name) {
+                                        stringList.Add($"{typeName} {name}");
+                                    }
+                                }
+                                var signatureArgs = $"({string.Join(", ", stringList)})";
+
+                                stringList.Clear();
+                                foreach (var (typeName, name) in FunctionSignature.ParameterTypesNames)
+                                {
+                                    if (countParamName != name) {
+                                        stringList.Add($"{name}");
+                                    } else {
+                                        stringList.Add($"out var {name}");
+                                    }
+                                }
+                                var arguments = $"({string.Join(", ", stringList)})";
+
+                                stringList.Clear();
+                                foreach (var (typeName, name) in FunctionSignature.ParameterTypesNames)
+                                {
+                                    if (countParamName != name) {
+                                        stringList.Add($"{name}");
+                                    }
+                                }
+                                var argumentsWithoutCount = string.Join(", ", stringList);
+
+                                var componentType = entry.ReturnType!;
+                                var subtype = GetTypeFromTypedefMap(type: componentType.Type!);
+                                var subtypeName = CSharpTypeFromFFI(subtype, TypeContext.FunctionData);
+
+                                definitions.Append($"public static Span<{subtypeName}> {FunctionSignature.Name}{signatureArgs}\n");
+                                definitions.Append("{\n");
+                                definitions.Append($"var result = {FunctionSignature.Name}{arguments};\n");
+                                definitions.Append($"return new Span<{subtypeName}>((void*) result, {countParamName});\n");
+                                definitions.Append("}\n\n");
+                            }
+                            else
+                            {
+                                unknownReturnedArrayCountParamNames.Append(
+                                    $"{{ \"{FunctionSignature.Name!}\", \"WARN_MISSING_COUNT_PARAM_NAME\" }}, // {entry.Header}\n"
+                                );
+                            }
+                        }
+
                         if (FunctionSignature.RequiresStringMarshalling)
                         {
                             definitions.Append("[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]");
@@ -701,24 +763,8 @@ internal static partial class Program
 
                         definitions.Append($"[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\n");
 
-                        // Handle array marshalling
-                        if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.Array)
-                        {
-                            if (UserProvidedData.ReturnedArrayCountParamNames.TryGetValue(FunctionSignature.Name, value: out var countParamName))
-                            {
-                                UnusedUserProvidedTypes.Remove(FunctionSignature.Name);
-                                definitions.Append($"[return: MarshalUsing(CountElementName = \"{countParamName}\")]\n");
-                            }
-                            else
-                            {
-                                unknownReturnedArrayCountParamNames.Append(
-                                    $"{{ \"{FunctionSignature.Name!}\", \"WARN_MISSING_COUNT_PARAM_NAME\" }}, // {entry.Header}\n"
-                                );
-                            }
-                        }
-
                         // Handle string marshalling
-                        else if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
+                        if (FunctionSignature.ReturnIntent == FunctionSignatureType.ReturnIntentType.String)
                         {
                             if (UserProvidedData.ReturnedCharPtrMemoryOwners.TryGetValue(FunctionSignature.Name, value: out var memoryOwner))
                             {
