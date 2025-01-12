@@ -552,6 +552,21 @@ internal static class UserProvidedData
         { ("SDL_hid_read_timeout", "data"), PointerFunctionDataIntent.Unknown }, // /usr/local/include/SDL3/SDL_hidapi.h:332:33
         { ("SDL_hid_send_feature_report", "data"), PointerFunctionDataIntent.Unknown }, // /usr/local/include/SDL3/SDL_hidapi.h:397:33
         { ("SDL_hid_write", "data"), PointerFunctionDataIntent.Unknown }, // /usr/local/include/SDL3/SDL_hidapi.h:311:33
+        { ("SDL_GetAsyncIOResult", "outcome"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_asyncio.h:438:34
+        { ("SDL_WaitAsyncIOResult", "outcome"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_asyncio.h:482:34
+        { ("SDL_GetClosestFullscreenDisplayMode", "closest"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_video.h:800:34
+        { ("SDL_WaitAndAcquireGPUSwapchainTexture", "swapchain_texture"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_gpu.h:3800:34
+        { ("SDL_WaitAndAcquireGPUSwapchainTexture", "swapchain_texture_width"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_gpu.h:3800:34
+        { ("SDL_WaitAndAcquireGPUSwapchainTexture", "swapchain_texture_height"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_gpu.h:3800:34
+        { ("SDL_RenderTextureAffine", "texture"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_render.h:2117:34
+        { ("SDL_RenderTextureAffine", "srcrect"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_render.h:2117:34
+        { ("SDL_RenderTextureAffine", "origin"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_render.h:2117:34
+        { ("SDL_RenderTextureAffine", "right"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_render.h:2117:34
+        { ("SDL_RenderTextureAffine", "down"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_render.h:2117:34
+        { ("SDL_CreateTray", "icon"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_tray.h:115:39
+        { ("SDL_SetTrayIcon", "icon"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_tray.h:127:34
+        { ("SDL_GetTrayEntries", "__return"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_tray.h:240:51
+        { ("SDL_GetTrayEntries", "size"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_tray.h:240:51
     };
 
     internal static readonly Dictionary<string, ReturnedCharPtrMemoryOwner> ReturnedCharPtrMemoryOwners = new()
@@ -614,6 +629,8 @@ internal static class UserProvidedData
         { "SDL_GetGamepadMappings", ReturnedCharPtrMemoryOwner.Unknown }, // /usr/local/include/SDL3/SDL_gamepad.h:423:37
         { "SDL_GlobDirectory", ReturnedCharPtrMemoryOwner.Unknown }, // /usr/local/include/SDL3/SDL_filesystem.h:448:37
         { "SDL_GlobStorageDirectory", ReturnedCharPtrMemoryOwner.Unknown }, // /usr/local/include/SDL3/SDL_storage.h:450:37
+        { "SDL_GetCurrentDirectory", ReturnedCharPtrMemoryOwner.Caller }, // /usr/local/include/SDL3/SDL_filesystem.h:489:36
+        { "SDL_GetTrayEntryLabel", ReturnedCharPtrMemoryOwner.SDL }, // /usr/local/include/SDL3/SDL_tray.h:312:41
     };
 
     internal static readonly Dictionary<string, string> ReturnedArrayCountParamNames = new()
@@ -629,6 +646,7 @@ internal static class UserProvidedData
         { "SDL_GetKeyboardState", "numkeys" }, // /usr/local/include/SDL3/SDL_keyboard.h:144:42
         { "SDL_GetTouchFingers", "count" }, // /usr/local/include/SDL3/SDL_touch.h:129:43
         { "SDL_GetPreferredLocales", "count" }, // /usr/local/include/SDL3/SDL_locale.h:101:43
+        { "SDL_GetTrayEntries", "size" }, // /usr/local/include/SDL3/SDL_tray.h:240:51
     };
 
     internal static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
@@ -721,6 +739,12 @@ internal static class UserProvidedData
         {
             "SDL_main_func", new DelegateDefinition { ReturnType = "int", Parameters = [("int", "argc"), ("IntPtr", "argv")] }
         }, // /usr/local/include/SDL3/SDL_main.h:399:23
+        {
+            "SDL_MainThreadCallback", new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata")] }
+        }, // /usr/local/include/SDL3/SDL_init.h:331:24
+        {
+            "SDL_TrayCallback", new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "entry")] }
+        }, // /usr/local/include/SDL3/SDL_tray.h:93:24
     };
 
     internal static readonly Dictionary<string, string[]> FlagEnumDefinitions = new()
@@ -875,6 +899,15 @@ internal static class UserProvidedData
                 "SDL_KMOD_GUI = SDL_KMOD_RGUI | SDL_KMOD_LGUI",
             ]
         }, // ../SDL3/SDL_keycode.h:306:16
+        {
+            "SDL_TrayEntryFlags", [
+                "SDL_TRAYENTRY_BUTTON = 0x00000001u",
+                "SDL_TRAYENTRY_CHECKBOX = 0x00000002u",
+                "SDL_TRAYENTRY_SUBMENU = 0x00000004u",
+                "SDL_TRAYENTRY_DISABLED = 0x80000000u",
+                "SDL_TRAYENTRY_CHECKED = 0x40000000u"
+            ]
+        }, // /usr/local/include/SDL3/SDL_tray.h:74:16
     };
 
     internal static readonly HashSet<string> FlagTypes =

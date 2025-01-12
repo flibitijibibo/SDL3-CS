@@ -168,6 +168,86 @@ namespace SDL3
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_ResetAssertionReport();
 
+		// /usr/local/include/SDL3/SDL_asyncio.h
+
+		public enum SDL_AsyncIOTaskType
+		{
+			SDL_ASYNCIO_TASK_READ = 0,
+			SDL_ASYNCIO_TASK_WRITE = 1,
+			SDL_ASYNCIO_TASK_CLOSE = 2,
+		}
+
+		public enum SDL_AsyncIOResult
+		{
+			SDL_ASYNCIO_COMPLETE = 0,
+			SDL_ASYNCIO_FAILURE = 1,
+			SDL_ASYNCIO_CANCELED = 2,
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_AsyncIOOutcome
+		{
+			public IntPtr asyncio;
+			public SDL_AsyncIOTaskType type;
+			public SDL_AsyncIOResult result;
+			public IntPtr buffer;
+			public ulong offset;
+			public ulong bytes_requested;
+			public ulong bytes_transferred;
+			public IntPtr userdata;
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_AsyncIOFromFile", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_AsyncIOFromFile(byte* file, byte* mode);
+		public static IntPtr SDL_AsyncIOFromFile(string file, string mode)
+		{
+			var fileUTF8 = EncodeAsUTF8(file);
+			var modeUTF8 = EncodeAsUTF8(mode);
+			var result = INTERNAL_SDL_AsyncIOFromFile(fileUTF8, modeUTF8);
+
+			SDL_free((IntPtr) fileUTF8);
+			SDL_free((IntPtr) modeUTF8);
+			return result;
+		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_GetAsyncIOSize(IntPtr asyncio);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_ReadAsyncIO(IntPtr asyncio, IntPtr ptr, ulong offset, ulong size, IntPtr queue, IntPtr userdata);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_WriteAsyncIO(IntPtr asyncio, IntPtr ptr, ulong offset, ulong size, IntPtr queue, IntPtr userdata);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_CloseAsyncIO(IntPtr asyncio, SDLBool flush, IntPtr queue, IntPtr userdata);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_CreateAsyncIOQueue();
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_DestroyAsyncIOQueue(IntPtr queue);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_GetAsyncIOResult(IntPtr queue, out SDL_AsyncIOOutcome outcome);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_WaitAsyncIOResult(IntPtr queue, out SDL_AsyncIOOutcome outcome, int timeoutMS);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SignalAsyncIOQueue(IntPtr queue);
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_LoadFileAsync", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDLBool INTERNAL_SDL_LoadFileAsync(byte* file, IntPtr queue, IntPtr userdata);
+		public static SDLBool SDL_LoadFileAsync(string file, IntPtr queue, IntPtr userdata)
+		{
+			var fileUTF8 = EncodeAsUTF8(file);
+			var result = INTERNAL_SDL_LoadFileAsync(fileUTF8, queue, userdata);
+
+			SDL_free((IntPtr) fileUTF8);
+			return result;
+		}
+
 		// /usr/local/include/SDL3/SDL_atomic.h
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -467,6 +547,14 @@ namespace SDL3
 			SDL_THREAD_PRIORITY_TIME_CRITICAL = 3,
 		}
 
+		public enum SDL_ThreadState
+		{
+			SDL_THREAD_UNKNOWN = 0,
+			SDL_THREAD_ALIVE = 1,
+			SDL_THREAD_DETACHED = 2,
+			SDL_THREAD_COMPLETE = 3,
+		}
+
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate int SDL_ThreadFunction(IntPtr data);
 
@@ -502,6 +590,9 @@ namespace SDL3
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_WaitThread(IntPtr thread, IntPtr status);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_ThreadState SDL_GetThreadState(IntPtr thread);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DetachThread(IntPtr thread);
@@ -738,6 +829,20 @@ namespace SDL3
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_SaveFile_IO(IntPtr src, IntPtr data, UIntPtr datasize, SDLBool closeio);
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_SaveFile", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDLBool INTERNAL_SDL_SaveFile(byte* file, IntPtr data, UIntPtr datasize);
+		public static SDLBool SDL_SaveFile(string file, IntPtr data, UIntPtr datasize)
+		{
+			var fileUTF8 = EncodeAsUTF8(file);
+			var result = INTERNAL_SDL_SaveFile(fileUTF8, data, datasize);
+
+			SDL_free((IntPtr) fileUTF8);
+			return result;
+		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_ReadU8(IntPtr src, out byte value);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -887,6 +992,12 @@ namespace SDL3
 		public static extern uint SDL_OpenAudioDevice(uint devid, ref SDL_AudioSpec spec);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_IsAudioDevicePhysical(uint devid);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_IsAudioDevicePlayback(uint devid);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_PauseAudioDevice(uint dev);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -978,6 +1089,9 @@ namespace SDL3
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_ResumeAudioStreamDevice(IntPtr stream);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_AudioStreamDevicePaused(IntPtr stream);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_LockAudioStream(IntPtr stream);
@@ -1959,6 +2073,7 @@ namespace SDL3
 		public const string SDL_PROP_WINDOW_WIN32_INSTANCE_POINTER = "SDL.window.win32.instance";
 		public const string SDL_PROP_WINDOW_WAYLAND_DISPLAY_POINTER = "SDL.window.wayland.display";
 		public const string SDL_PROP_WINDOW_WAYLAND_SURFACE_POINTER = "SDL.window.wayland.surface";
+		public const string SDL_PROP_WINDOW_WAYLAND_VIEWPORT_POINTER = "SDL.window.wayland.viewport";
 		public const string SDL_PROP_WINDOW_WAYLAND_EGL_WINDOW_POINTER = "SDL.window.wayland.egl_window";
 		public const string SDL_PROP_WINDOW_WAYLAND_XDG_SURFACE_POINTER = "SDL.window.wayland.xdg_surface";
 		public const string SDL_PROP_WINDOW_WAYLAND_XDG_TOPLEVEL_POINTER = "SDL.window.wayland.xdg_toplevel";
@@ -2129,7 +2244,7 @@ namespace SDL3
 		public static extern IntPtr SDL_GetFullscreenDisplayModes(uint displayID, out int count);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_GetClosestFullscreenDisplayMode(uint displayID, int w, int h, float refresh_rate, SDLBool include_high_density_modes, out SDL_DisplayMode mode);
+		public static extern SDLBool SDL_GetClosestFullscreenDisplayMode(uint displayID, int w, int h, float refresh_rate, SDLBool include_high_density_modes, out SDL_DisplayMode closest);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetDesktopDisplayMode(uint displayID);
@@ -2484,6 +2599,15 @@ namespace SDL3
 
 		// /usr/local/include/SDL3/SDL_dialog.h
 
+		public const string SDL_PROP_FILE_DIALOG_FILTERS_POINTER = "SDL.filedialog.filters";
+		public const string SDL_PROP_FILE_DIALOG_NFILTERS_NUMBER = "SDL.filedialog.nfilters";
+		public const string SDL_PROP_FILE_DIALOG_WINDOW_POINTER = "SDL.filedialog.window";
+		public const string SDL_PROP_FILE_DIALOG_LOCATION_STRING = "SDL.filedialog.location";
+		public const string SDL_PROP_FILE_DIALOG_MANY_BOOLEAN = "SDL.filedialog.many";
+		public const string SDL_PROP_FILE_DIALOG_TITLE_STRING = "SDL.filedialog.title";
+		public const string SDL_PROP_FILE_DIALOG_ACCEPT_STRING = "SDL.filedialog.accept";
+		public const string SDL_PROP_FILE_DIALOG_CANCEL_STRING = "SDL.filedialog.cancel";
+
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_DialogFileFilter
 		{
@@ -2523,6 +2647,16 @@ namespace SDL3
 
 			SDL_free((IntPtr) default_locationUTF8);
 		}
+
+		public enum SDL_FileDialogType
+		{
+			SDL_FILEDIALOG_OPENFILE = 0,
+			SDL_FILEDIALOG_SAVEFILE = 1,
+			SDL_FILEDIALOG_OPENFOLDER = 2,
+		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_ShowFileDialogWithProperties(SDL_FileDialogType type, SDL_DialogFileCallback callback, IntPtr userdata, uint props);
 
 		// /usr/local/include/SDL3/SDL_guid.h
 
@@ -3855,6 +3989,13 @@ namespace SDL3
 			SDLK_SOFTRIGHT = 0x40000120u,
 			SDLK_CALL = 0x40000121u,
 			SDLK_ENDCALL = 0x40000122u,
+			SDLK_LEFT_TAB = 0x20000001u,
+			SDLK_LEVEL5_SHIFT = 0x20000002u,
+			SDLK_MULTI_KEY_COMPOSE = 0x20000003u,
+			SDLK_LMETA = 0x20000004u,
+			SDLK_RMETA = 0x20000005u,
+			SDLK_LHYPER = 0x20000006u,
+			SDLK_RHYPER = 0x20000007u,
 		}
 
 		[Flags]
@@ -4278,6 +4419,7 @@ namespace SDL3
 			SDL_EVENT_FINGER_DOWN = 1792,
 			SDL_EVENT_FINGER_UP = 1793,
 			SDL_EVENT_FINGER_MOTION = 1794,
+			SDL_EVENT_FINGER_CANCELED = 1795,
 			SDL_EVENT_CLIPBOARD_UPDATE = 2304,
 			SDL_EVENT_DROP_FILE = 4096,
 			SDL_EVENT_DROP_TEXT = 4097,
@@ -4623,6 +4765,15 @@ namespace SDL3
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_RenderEvent
+		{
+			public SDL_EventType type;
+			public uint reserved;
+			public ulong timestamp;
+			public uint windowID;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_TouchFingerEvent
 		{
 			public SDL_EventType type;
@@ -4726,7 +4877,7 @@ namespace SDL3
 			public uint reserved;
 			public ulong timestamp;
 			public SDLBool owner;
-			public int n_mime_types;
+			public int num_mime_types;
 			public byte** mime_types;
 		}
 
@@ -4834,6 +4985,8 @@ namespace SDL3
 			public SDL_PenButtonEvent pbutton;
 			[FieldOffset(0)]
 			public SDL_PenAxisEvent paxis;
+			[FieldOffset(0)]
+			public SDL_RenderEvent render;
 			[FieldOffset(0)]
 			public SDL_DropEvent drop;
 			[FieldOffset(0)]
@@ -5071,14 +5224,15 @@ namespace SDL3
 			return result;
 		}
 
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentDirectory", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetCurrentDirectory();
+		public static string SDL_GetCurrentDirectory()
+		{
+			return DecodeFromUTF8(INTERNAL_SDL_GetCurrentDirectory(), shouldFree: true);
+		}
+
 		// /usr/local/include/SDL3/SDL_gpu.h
 
-		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.createtexture.d3d12.clear.r";
-		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.createtexture.d3d12.clear.g";
-		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_B_FLOAT = "SDL.gpu.createtexture.d3d12.clear.b";
-		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_A_FLOAT = "SDL.gpu.createtexture.d3d12.clear.a";
-		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.createtexture.d3d12.clear.depth";
-		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.createtexture.d3d12.clear.stencil";
 		public const string SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN = "SDL.gpu.device.create.debugmode";
 		public const string SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN = "SDL.gpu.device.create.preferlowpower";
 		public const string SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING = "SDL.gpu.device.create.name";
@@ -5089,6 +5243,12 @@ namespace SDL3
 		public const string SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN = "SDL.gpu.device.create.shaders.msl";
 		public const string SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN = "SDL.gpu.device.create.shaders.metallib";
 		public const string SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING = "SDL.gpu.device.create.d3d12.semantic";
+		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.createtexture.d3d12.clear.r";
+		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.createtexture.d3d12.clear.g";
+		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_B_FLOAT = "SDL.gpu.createtexture.d3d12.clear.b";
+		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_A_FLOAT = "SDL.gpu.createtexture.d3d12.clear.a";
+		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.createtexture.d3d12.clear.depth";
+		public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.createtexture.d3d12.clear.stencil";
 
 		public enum SDL_GPUPrimitiveType
 		{
@@ -5455,7 +5615,7 @@ namespace SDL3
 			SDL_GPU_SWAPCHAINCOMPOSITION_SDR = 0,
 			SDL_GPU_SWAPCHAINCOMPOSITION_SDR_LINEAR = 1,
 			SDL_GPU_SWAPCHAINCOMPOSITION_HDR_EXTENDED_LINEAR = 2,
-			SDL_GPU_SWAPCHAINCOMPOSITION_HDR10_ST2048 = 3,
+			SDL_GPU_SWAPCHAINCOMPOSITION_HDR10_ST2084 = 3,
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -6141,10 +6301,19 @@ namespace SDL3
 		public static extern SDLBool SDL_SetGPUSwapchainParameters(IntPtr device, IntPtr window, SDL_GPUSwapchainComposition swapchain_composition, SDL_GPUPresentMode present_mode);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_SetGPUAllowedFramesInFlight(IntPtr device, uint allowed_frames_in_flight);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_GPUTextureFormat SDL_GetGPUSwapchainTextureFormat(IntPtr device, IntPtr window);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_AcquireGPUSwapchainTexture(IntPtr command_buffer, IntPtr window, out IntPtr swapchain_texture, out uint swapchain_texture_width, out uint swapchain_texture_height);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_WaitForGPUSwapchain(IntPtr device, IntPtr window);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_WaitAndAcquireGPUSwapchainTexture(IntPtr command_buffer, IntPtr window, out IntPtr swapchain_texture, out uint swapchain_texture_width, out uint swapchain_texture_height);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_SubmitGPUCommandBuffer(IntPtr command_buffer);
@@ -6555,12 +6724,15 @@ namespace SDL3
 		public const string SDL_HINT_ALLOW_ALT_TAB_WHILE_GRABBED = "SDL_ALLOW_ALT_TAB_WHILE_GRABBED";
 		public const string SDL_HINT_ANDROID_ALLOW_RECREATE_ACTIVITY = "SDL_ANDROID_ALLOW_RECREATE_ACTIVITY";
 		public const string SDL_HINT_ANDROID_BLOCK_ON_PAUSE = "SDL_ANDROID_BLOCK_ON_PAUSE";
+		public const string SDL_HINT_ANDROID_LOW_LATENCY_AUDIO = "SDL_ANDROID_LOW_LATENCY_AUDIO";
 		public const string SDL_HINT_ANDROID_TRAP_BACK_BUTTON = "SDL_ANDROID_TRAP_BACK_BUTTON";
 		public const string SDL_HINT_APP_ID = "SDL_APP_ID";
 		public const string SDL_HINT_APP_NAME = "SDL_APP_NAME";
 		public const string SDL_HINT_APPLE_TV_CONTROLLER_UI_EVENTS = "SDL_APPLE_TV_CONTROLLER_UI_EVENTS";
 		public const string SDL_HINT_APPLE_TV_REMOTE_ALLOW_ROTATION = "SDL_APPLE_TV_REMOTE_ALLOW_ROTATION";
 		public const string SDL_HINT_AUDIO_ALSA_DEFAULT_DEVICE = "SDL_AUDIO_ALSA_DEFAULT_DEVICE";
+		public const string SDL_HINT_AUDIO_ALSA_DEFAULT_PLAYBACK_DEVICE = "SDL_AUDIO_ALSA_DEFAULT_PLAYBACK_DEVICE";
+		public const string SDL_HINT_AUDIO_ALSA_DEFAULT_RECORDING_DEVICE = "SDL_AUDIO_ALSA_DEFAULT_RECORDING_DEVICE";
 		public const string SDL_HINT_AUDIO_CATEGORY = "SDL_AUDIO_CATEGORY";
 		public const string SDL_HINT_AUDIO_CHANNELS = "SDL_AUDIO_CHANNELS";
 		public const string SDL_HINT_AUDIO_DEVICE_APP_ICON_NAME = "SDL_AUDIO_DEVICE_APP_ICON_NAME";
@@ -6616,6 +6788,7 @@ namespace SDL3
 		public const string SDL_HINT_JOYSTICK_BLACKLIST_DEVICES = "SDL_JOYSTICK_BLACKLIST_DEVICES";
 		public const string SDL_HINT_JOYSTICK_BLACKLIST_DEVICES_EXCLUDED = "SDL_JOYSTICK_BLACKLIST_DEVICES_EXCLUDED";
 		public const string SDL_HINT_JOYSTICK_DEVICE = "SDL_JOYSTICK_DEVICE";
+		public const string SDL_HINT_JOYSTICK_ENHANCED_REPORTS = "SDL_JOYSTICK_ENHANCED_REPORTS";
 		public const string SDL_HINT_JOYSTICK_FLIGHTSTICK_DEVICES = "SDL_JOYSTICK_FLIGHTSTICK_DEVICES";
 		public const string SDL_HINT_JOYSTICK_FLIGHTSTICK_DEVICES_EXCLUDED = "SDL_JOYSTICK_FLIGHTSTICK_DEVICES_EXCLUDED";
 		public const string SDL_HINT_JOYSTICK_GAMEINPUT = "SDL_JOYSTICK_GAMEINPUT";
@@ -6633,13 +6806,12 @@ namespace SDL3
 		public const string SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER = "SDL_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_PS4 = "SDL_JOYSTICK_HIDAPI_PS4";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_PS4_REPORT_INTERVAL = "SDL_JOYSTICK_HIDAPI_PS4_REPORT_INTERVAL";
-		public const string SDL_HINT_JOYSTICK_HIDAPI_PS4_RUMBLE = "SDL_JOYSTICK_HIDAPI_PS4_RUMBLE";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_PS5 = "SDL_JOYSTICK_HIDAPI_PS5";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_PS5_PLAYER_LED = "SDL_JOYSTICK_HIDAPI_PS5_PLAYER_LED";
-		public const string SDL_HINT_JOYSTICK_HIDAPI_PS5_RUMBLE = "SDL_JOYSTICK_HIDAPI_PS5_RUMBLE";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_SHIELD = "SDL_JOYSTICK_HIDAPI_SHIELD";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_STADIA = "SDL_JOYSTICK_HIDAPI_STADIA";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_STEAM = "SDL_JOYSTICK_HIDAPI_STEAM";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_STEAM_HOME_LED = "SDL_JOYSTICK_HIDAPI_STEAM_HOME_LED";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_STEAMDECK = "SDL_JOYSTICK_HIDAPI_STEAMDECK";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_STEAM_HORI = "SDL_JOYSTICK_HIDAPI_STEAM_HORI";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_SWITCH = "SDL_JOYSTICK_HIDAPI_SWITCH";
@@ -6682,20 +6854,20 @@ namespace SDL3
 		public const string SDL_HINT_MOUSE_AUTO_CAPTURE = "SDL_MOUSE_AUTO_CAPTURE";
 		public const string SDL_HINT_MOUSE_DOUBLE_CLICK_RADIUS = "SDL_MOUSE_DOUBLE_CLICK_RADIUS";
 		public const string SDL_HINT_MOUSE_DOUBLE_CLICK_TIME = "SDL_MOUSE_DOUBLE_CLICK_TIME";
+		public const string SDL_HINT_MOUSE_DEFAULT_SYSTEM_CURSOR = "SDL_MOUSE_DEFAULT_SYSTEM_CURSOR";
 		public const string SDL_HINT_MOUSE_EMULATE_WARP_WITH_RELATIVE = "SDL_MOUSE_EMULATE_WARP_WITH_RELATIVE";
 		public const string SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH = "SDL_MOUSE_FOCUS_CLICKTHROUGH";
 		public const string SDL_HINT_MOUSE_NORMAL_SPEED_SCALE = "SDL_MOUSE_NORMAL_SPEED_SCALE";
 		public const string SDL_HINT_MOUSE_RELATIVE_MODE_CENTER = "SDL_MOUSE_RELATIVE_MODE_CENTER";
-		public const string SDL_HINT_MOUSE_RELATIVE_MODE_WARP = "SDL_MOUSE_RELATIVE_MODE_WARP";
 		public const string SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE = "SDL_MOUSE_RELATIVE_SPEED_SCALE";
 		public const string SDL_HINT_MOUSE_RELATIVE_SYSTEM_SCALE = "SDL_MOUSE_RELATIVE_SYSTEM_SCALE";
 		public const string SDL_HINT_MOUSE_RELATIVE_WARP_MOTION = "SDL_MOUSE_RELATIVE_WARP_MOTION";
 		public const string SDL_HINT_MOUSE_RELATIVE_CURSOR_VISIBLE = "SDL_MOUSE_RELATIVE_CURSOR_VISIBLE";
-		public const string SDL_HINT_MOUSE_RELATIVE_CLIP_INTERVAL = "SDL_MOUSE_RELATIVE_CLIP_INTERVAL";
 		public const string SDL_HINT_MOUSE_TOUCH_EVENTS = "SDL_MOUSE_TOUCH_EVENTS";
 		public const string SDL_HINT_MUTE_CONSOLE_KEYBOARD = "SDL_MUTE_CONSOLE_KEYBOARD";
 		public const string SDL_HINT_NO_SIGNAL_HANDLERS = "SDL_NO_SIGNAL_HANDLERS";
 		public const string SDL_HINT_OPENGL_LIBRARY = "SDL_OPENGL_LIBRARY";
+		public const string SDL_HINT_EGL_LIBRARY = "SDL_EGL_LIBRARY";
 		public const string SDL_HINT_OPENGL_ES_DRIVER = "SDL_OPENGL_ES_DRIVER";
 		public const string SDL_HINT_OPENVR_LIBRARY = "SDL_OPENVR_LIBRARY";
 		public const string SDL_HINT_ORIENTATIONS = "SDL_ORIENTATIONS";
@@ -6932,6 +7104,15 @@ namespace SDL3
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_Quit();
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_IsMainThread();
+
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate void SDL_MainThreadCallback(IntPtr userdata);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_RunOnMainThread(SDL_MainThreadCallback callback, IntPtr userdata, SDLBool wait_complete);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetAppMetadata", CallingConvention = CallingConvention.Cdecl)]
 		private static extern SDLBool INTERNAL_SDL_SetAppMetadata(byte* appname, byte* appversion, byte* appidentifier);
@@ -7380,6 +7561,7 @@ namespace SDL3
 		public const string SDL_PROP_RENDERER_VULKAN_GRAPHICS_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.vulkan.graphics_queue_family_index";
 		public const string SDL_PROP_RENDERER_VULKAN_PRESENT_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.vulkan.present_queue_family_index";
 		public const string SDL_PROP_RENDERER_VULKAN_SWAPCHAIN_IMAGE_COUNT_NUMBER = "SDL.renderer.vulkan.swapchain_image_count";
+		public const string SDL_PROP_RENDERER_GPU_DEVICE_POINTER = "SDL.renderer.gpu.device";
 		public const string SDL_PROP_TEXTURE_CREATE_COLORSPACE_NUMBER = "SDL.texture.create.colorspace";
 		public const string SDL_PROP_TEXTURE_CREATE_FORMAT_NUMBER = "SDL.texture.create.format";
 		public const string SDL_PROP_TEXTURE_CREATE_ACCESS_NUMBER = "SDL.texture.create.access";
@@ -7704,6 +7886,9 @@ namespace SDL3
 		public static extern SDLBool SDL_RenderTextureRotated(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, ref SDL_FRect dstrect, double angle, ref SDL_FPoint center, SDL_FlipMode flip); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_RenderTextureAffine(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, ref SDL_FPoint origin, ref SDL_FPoint right, ref SDL_FPoint down);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_RenderTextureTiled(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float scale, ref SDL_FRect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -7753,6 +7938,17 @@ namespace SDL3
 			var result = INTERNAL_SDL_RenderDebugText(renderer, x, y, strUTF8);
 
 			SDL_free((IntPtr) strUTF8);
+			return result;
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_RenderDebugTextFormat", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDLBool INTERNAL_SDL_RenderDebugTextFormat(IntPtr renderer, float x, float y, byte* fmt);
+		public static SDLBool SDL_RenderDebugTextFormat(IntPtr renderer, float x, float y, string fmt)
+		{
+			var fmtUTF8 = EncodeAsUTF8(fmt);
+			var result = INTERNAL_SDL_RenderDebugTextFormat(renderer, x, y, fmtUTF8);
+
+			SDL_free((IntPtr) fmtUTF8);
 			return result;
 		}
 
@@ -8081,6 +8277,121 @@ namespace SDL3
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_RemoveTimer(uint id);
+
+		// /usr/local/include/SDL3/SDL_tray.h
+
+		[Flags]
+		public enum SDL_TrayEntryFlags : uint
+		{
+			SDL_TRAYENTRY_BUTTON = 0x00000001u,
+			SDL_TRAYENTRY_CHECKBOX = 0x00000002u,
+			SDL_TRAYENTRY_SUBMENU = 0x00000004u,
+			SDL_TRAYENTRY_DISABLED = 0x80000000u,
+			SDL_TRAYENTRY_CHECKED = 0x40000000u,
+		}
+
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate void SDL_TrayCallback(IntPtr userdata, IntPtr entry);
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_CreateTray", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_CreateTray(IntPtr icon, byte* tooltip);
+		public static IntPtr SDL_CreateTray(IntPtr icon, string tooltip)
+		{
+			var tooltipUTF8 = EncodeAsUTF8(tooltip);
+			var result = INTERNAL_SDL_CreateTray(icon, tooltipUTF8);
+
+			SDL_free((IntPtr) tooltipUTF8);
+			return result;
+		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetTrayIcon(IntPtr tray, IntPtr icon);
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_SetTrayTooltip", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_SetTrayTooltip(IntPtr tray, byte* tooltip);
+		public static void SDL_SetTrayTooltip(IntPtr tray, string tooltip)
+		{
+			var tooltipUTF8 = EncodeAsUTF8(tooltip);
+			INTERNAL_SDL_SetTrayTooltip(tray, tooltipUTF8);
+
+			SDL_free((IntPtr) tooltipUTF8);
+		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_CreateTrayMenu(IntPtr tray);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_CreateTraySubmenu(IntPtr entry);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetTrayMenu(IntPtr tray);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetTraySubmenu(IntPtr entry);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetTrayEntries(IntPtr menu, out int size);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_RemoveTrayEntry(IntPtr entry);
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_InsertTrayEntryAt", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_InsertTrayEntryAt(IntPtr menu, int pos, byte* label, SDL_TrayEntryFlags flags);
+		public static IntPtr SDL_InsertTrayEntryAt(IntPtr menu, int pos, string label, SDL_TrayEntryFlags flags)
+		{
+			var labelUTF8 = EncodeAsUTF8(label);
+			var result = INTERNAL_SDL_InsertTrayEntryAt(menu, pos, labelUTF8, flags);
+
+			SDL_free((IntPtr) labelUTF8);
+			return result;
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_SetTrayEntryLabel", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_SetTrayEntryLabel(IntPtr entry, byte* label);
+		public static void SDL_SetTrayEntryLabel(IntPtr entry, string label)
+		{
+			var labelUTF8 = EncodeAsUTF8(label);
+			INTERNAL_SDL_SetTrayEntryLabel(entry, labelUTF8);
+
+			SDL_free((IntPtr) labelUTF8);
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetTrayEntryLabel", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetTrayEntryLabel(IntPtr entry);
+		public static string SDL_GetTrayEntryLabel(IntPtr entry)
+		{
+			return DecodeFromUTF8(INTERNAL_SDL_GetTrayEntryLabel(entry));
+		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetTrayEntryChecked(IntPtr entry, SDLBool checked);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_GetTrayEntryChecked(IntPtr entry);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetTrayEntryEnabled(IntPtr entry, SDLBool enabled);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDLBool SDL_GetTrayEntryEnabled(IntPtr entry);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetTrayEntryCallback(IntPtr entry, SDL_TrayCallback callback, IntPtr userdata);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_ClickTrayEntry(IntPtr entry);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_DestroyTray(IntPtr tray);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetTrayEntryParent(IntPtr entry);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetTrayMenuParentEntry(IntPtr menu);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetTrayMenuParentTray(IntPtr menu);
 
 		// /usr/local/include/SDL3/SDL_version.h
 

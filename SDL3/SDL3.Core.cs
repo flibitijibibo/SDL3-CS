@@ -136,6 +136,79 @@ public static unsafe partial class SDL
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial void SDL_ResetAssertionReport();
 
+	// /usr/local/include/SDL3/SDL_asyncio.h
+
+	public enum SDL_AsyncIOTaskType
+	{
+		SDL_ASYNCIO_TASK_READ = 0,
+		SDL_ASYNCIO_TASK_WRITE = 1,
+		SDL_ASYNCIO_TASK_CLOSE = 2,
+	}
+
+	public enum SDL_AsyncIOResult
+	{
+		SDL_ASYNCIO_COMPLETE = 0,
+		SDL_ASYNCIO_FAILURE = 1,
+		SDL_ASYNCIO_CANCELED = 2,
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct SDL_AsyncIOOutcome
+	{
+		public IntPtr asyncio;
+		public SDL_AsyncIOTaskType type;
+		public SDL_AsyncIOResult result;
+		public IntPtr buffer;
+		public ulong offset;
+		public ulong bytes_requested;
+		public ulong bytes_transferred;
+		public IntPtr userdata;
+	}
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_AsyncIOFromFile(string file, string mode);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial long SDL_GetAsyncIOSize(IntPtr asyncio);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_ReadAsyncIO(IntPtr asyncio, IntPtr ptr, ulong offset, ulong size, IntPtr queue, IntPtr userdata);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_WriteAsyncIO(IntPtr asyncio, IntPtr ptr, ulong offset, ulong size, IntPtr queue, IntPtr userdata);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_CloseAsyncIO(IntPtr asyncio, SDLBool flush, IntPtr queue, IntPtr userdata);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_CreateAsyncIOQueue();
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_DestroyAsyncIOQueue(IntPtr queue);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_GetAsyncIOResult(IntPtr queue, out SDL_AsyncIOOutcome outcome);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_WaitAsyncIOResult(IntPtr queue, out SDL_AsyncIOOutcome outcome, int timeoutMS);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_SignalAsyncIOQueue(IntPtr queue);
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_LoadFileAsync(string file, IntPtr queue, IntPtr userdata);
+
 	// /usr/local/include/SDL3/SDL_atomic.h
 
 	[LibraryImport(nativeLibName)]
@@ -349,6 +422,14 @@ public static unsafe partial class SDL
 		SDL_THREAD_PRIORITY_TIME_CRITICAL = 3,
 	}
 
+	public enum SDL_ThreadState
+	{
+		SDL_THREAD_UNKNOWN = 0,
+		SDL_THREAD_ALIVE = 1,
+		SDL_THREAD_DETACHED = 2,
+		SDL_THREAD_COMPLETE = 3,
+	}
+
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate int SDL_ThreadFunction(IntPtr data);
 
@@ -380,6 +461,10 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial void SDL_WaitThread(IntPtr thread, IntPtr status);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDL_ThreadState SDL_GetThreadState(IntPtr thread);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -640,6 +725,14 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_SaveFile_IO(IntPtr src, IntPtr data, UIntPtr datasize, SDLBool closeio);
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_SaveFile(string file, IntPtr data, UIntPtr datasize);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_ReadU8(IntPtr src, out byte value);
 
 	[LibraryImport(nativeLibName)]
@@ -818,6 +911,14 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_IsAudioDevicePhysical(uint devid);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_IsAudioDevicePlayback(uint devid);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_PauseAudioDevice(uint dev);
 
 	[LibraryImport(nativeLibName)]
@@ -941,6 +1042,10 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_ResumeAudioStreamDevice(IntPtr stream);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_AudioStreamDevicePaused(IntPtr stream);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -1983,6 +2088,7 @@ public static unsafe partial class SDL
 	public const string SDL_PROP_WINDOW_WIN32_INSTANCE_POINTER = "SDL.window.win32.instance";
 	public const string SDL_PROP_WINDOW_WAYLAND_DISPLAY_POINTER = "SDL.window.wayland.display";
 	public const string SDL_PROP_WINDOW_WAYLAND_SURFACE_POINTER = "SDL.window.wayland.surface";
+	public const string SDL_PROP_WINDOW_WAYLAND_VIEWPORT_POINTER = "SDL.window.wayland.viewport";
 	public const string SDL_PROP_WINDOW_WAYLAND_EGL_WINDOW_POINTER = "SDL.window.wayland.egl_window";
 	public const string SDL_PROP_WINDOW_WAYLAND_XDG_SURFACE_POINTER = "SDL.window.wayland.xdg_surface";
 	public const string SDL_PROP_WINDOW_WAYLAND_XDG_TOPLEVEL_POINTER = "SDL.window.wayland.xdg_toplevel";
@@ -2160,7 +2266,7 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_GetClosestFullscreenDisplayMode(uint displayID, int w, int h, float refresh_rate, SDLBool include_high_density_modes, out SDL_DisplayMode mode);
+	public static partial SDLBool SDL_GetClosestFullscreenDisplayMode(uint displayID, int w, int h, float refresh_rate, SDLBool include_high_density_modes, out SDL_DisplayMode closest);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2559,6 +2665,15 @@ public static unsafe partial class SDL
 
 	// /usr/local/include/SDL3/SDL_dialog.h
 
+	public const string SDL_PROP_FILE_DIALOG_FILTERS_POINTER = "SDL.filedialog.filters";
+	public const string SDL_PROP_FILE_DIALOG_NFILTERS_NUMBER = "SDL.filedialog.nfilters";
+	public const string SDL_PROP_FILE_DIALOG_WINDOW_POINTER = "SDL.filedialog.window";
+	public const string SDL_PROP_FILE_DIALOG_LOCATION_STRING = "SDL.filedialog.location";
+	public const string SDL_PROP_FILE_DIALOG_MANY_BOOLEAN = "SDL.filedialog.many";
+	public const string SDL_PROP_FILE_DIALOG_TITLE_STRING = "SDL.filedialog.title";
+	public const string SDL_PROP_FILE_DIALOG_ACCEPT_STRING = "SDL.filedialog.accept";
+	public const string SDL_PROP_FILE_DIALOG_CANCEL_STRING = "SDL.filedialog.cancel";
+
 	[StructLayout(LayoutKind.Sequential)]
 	public struct SDL_DialogFileFilter
 	{
@@ -2580,6 +2695,17 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial void SDL_ShowOpenFolderDialog(SDL_DialogFileCallback callback, IntPtr userdata, IntPtr window, string default_location, SDLBool allow_many);
+
+	public enum SDL_FileDialogType
+	{
+		SDL_FILEDIALOG_OPENFILE = 0,
+		SDL_FILEDIALOG_SAVEFILE = 1,
+		SDL_FILEDIALOG_OPENFOLDER = 2,
+	}
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_ShowFileDialogWithProperties(SDL_FileDialogType type, SDL_DialogFileCallback callback, IntPtr userdata, uint props);
 
 	// /usr/local/include/SDL3/SDL_guid.h
 
@@ -3938,6 +4064,13 @@ public static unsafe partial class SDL
 		SDLK_SOFTRIGHT = 0x40000120u,
 		SDLK_CALL = 0x40000121u,
 		SDLK_ENDCALL = 0x40000122u,
+		SDLK_LEFT_TAB = 0x20000001u,
+		SDLK_LEVEL5_SHIFT = 0x20000002u,
+		SDLK_MULTI_KEY_COMPOSE = 0x20000003u,
+		SDLK_LMETA = 0x20000004u,
+		SDLK_RMETA = 0x20000005u,
+		SDLK_LHYPER = 0x20000006u,
+		SDLK_RHYPER = 0x20000007u,
 	}
 
 	[Flags]
@@ -4374,6 +4507,7 @@ public static unsafe partial class SDL
 		SDL_EVENT_FINGER_DOWN = 1792,
 		SDL_EVENT_FINGER_UP = 1793,
 		SDL_EVENT_FINGER_MOTION = 1794,
+		SDL_EVENT_FINGER_CANCELED = 1795,
 		SDL_EVENT_CLIPBOARD_UPDATE = 2304,
 		SDL_EVENT_DROP_FILE = 4096,
 		SDL_EVENT_DROP_TEXT = 4097,
@@ -4719,6 +4853,15 @@ public static unsafe partial class SDL
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
+	public struct SDL_RenderEvent
+	{
+		public SDL_EventType type;
+		public uint reserved;
+		public ulong timestamp;
+		public uint windowID;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
 	public struct SDL_TouchFingerEvent
 	{
 		public SDL_EventType type;
@@ -4822,7 +4965,7 @@ public static unsafe partial class SDL
 		public uint reserved;
 		public ulong timestamp;
 		public SDLBool owner;
-		public int n_mime_types;
+		public int num_mime_types;
 		public byte** mime_types;
 	}
 
@@ -4930,6 +5073,8 @@ public static unsafe partial class SDL
 		public SDL_PenButtonEvent pbutton;
 		[FieldOffset(0)]
 		public SDL_PenAxisEvent paxis;
+		[FieldOffset(0)]
+		public SDL_RenderEvent render;
 		[FieldOffset(0)]
 		public SDL_DropEvent drop;
 		[FieldOffset(0)]
@@ -5119,14 +5264,13 @@ public static unsafe partial class SDL
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial IntPtr SDL_GlobDirectory(string path, string pattern, SDL_GlobFlags flags, out int count);
 
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	[return: MarshalUsing(typeof(CallerOwnedStringMarshaller))]
+	public static partial string SDL_GetCurrentDirectory();
+
 	// /usr/local/include/SDL3/SDL_gpu.h
 
-	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.createtexture.d3d12.clear.r";
-	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.createtexture.d3d12.clear.g";
-	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_B_FLOAT = "SDL.gpu.createtexture.d3d12.clear.b";
-	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_A_FLOAT = "SDL.gpu.createtexture.d3d12.clear.a";
-	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.createtexture.d3d12.clear.depth";
-	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.createtexture.d3d12.clear.stencil";
 	public const string SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN = "SDL.gpu.device.create.debugmode";
 	public const string SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN = "SDL.gpu.device.create.preferlowpower";
 	public const string SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING = "SDL.gpu.device.create.name";
@@ -5137,6 +5281,12 @@ public static unsafe partial class SDL
 	public const string SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN = "SDL.gpu.device.create.shaders.msl";
 	public const string SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN = "SDL.gpu.device.create.shaders.metallib";
 	public const string SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING = "SDL.gpu.device.create.d3d12.semantic";
+	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_R_FLOAT = "SDL.gpu.createtexture.d3d12.clear.r";
+	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_G_FLOAT = "SDL.gpu.createtexture.d3d12.clear.g";
+	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_B_FLOAT = "SDL.gpu.createtexture.d3d12.clear.b";
+	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_A_FLOAT = "SDL.gpu.createtexture.d3d12.clear.a";
+	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_DEPTH_FLOAT = "SDL.gpu.createtexture.d3d12.clear.depth";
+	public const string SDL_PROP_GPU_CREATETEXTURE_D3D12_CLEAR_STENCIL_UINT8 = "SDL.gpu.createtexture.d3d12.clear.stencil";
 
 	public enum SDL_GPUPrimitiveType
 	{
@@ -5503,7 +5653,7 @@ public static unsafe partial class SDL
 		SDL_GPU_SWAPCHAINCOMPOSITION_SDR = 0,
 		SDL_GPU_SWAPCHAINCOMPOSITION_SDR_LINEAR = 1,
 		SDL_GPU_SWAPCHAINCOMPOSITION_HDR_EXTENDED_LINEAR = 2,
-		SDL_GPU_SWAPCHAINCOMPOSITION_HDR10_ST2048 = 3,
+		SDL_GPU_SWAPCHAINCOMPOSITION_HDR10_ST2084 = 3,
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -6216,11 +6366,23 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_SetGPUAllowedFramesInFlight(IntPtr device, uint allowed_frames_in_flight);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDL_GPUTextureFormat SDL_GetGPUSwapchainTextureFormat(IntPtr device, IntPtr window);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_AcquireGPUSwapchainTexture(IntPtr command_buffer, IntPtr window, out IntPtr swapchain_texture, out uint swapchain_texture_width, out uint swapchain_texture_height);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_WaitForGPUSwapchain(IntPtr device, IntPtr window);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_WaitAndAcquireGPUSwapchainTexture(IntPtr command_buffer, IntPtr window, out IntPtr swapchain_texture, out uint swapchain_texture_width, out uint swapchain_texture_height);
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -6641,12 +6803,15 @@ public static unsafe partial class SDL
 	public const string SDL_HINT_ALLOW_ALT_TAB_WHILE_GRABBED = "SDL_ALLOW_ALT_TAB_WHILE_GRABBED";
 	public const string SDL_HINT_ANDROID_ALLOW_RECREATE_ACTIVITY = "SDL_ANDROID_ALLOW_RECREATE_ACTIVITY";
 	public const string SDL_HINT_ANDROID_BLOCK_ON_PAUSE = "SDL_ANDROID_BLOCK_ON_PAUSE";
+	public const string SDL_HINT_ANDROID_LOW_LATENCY_AUDIO = "SDL_ANDROID_LOW_LATENCY_AUDIO";
 	public const string SDL_HINT_ANDROID_TRAP_BACK_BUTTON = "SDL_ANDROID_TRAP_BACK_BUTTON";
 	public const string SDL_HINT_APP_ID = "SDL_APP_ID";
 	public const string SDL_HINT_APP_NAME = "SDL_APP_NAME";
 	public const string SDL_HINT_APPLE_TV_CONTROLLER_UI_EVENTS = "SDL_APPLE_TV_CONTROLLER_UI_EVENTS";
 	public const string SDL_HINT_APPLE_TV_REMOTE_ALLOW_ROTATION = "SDL_APPLE_TV_REMOTE_ALLOW_ROTATION";
 	public const string SDL_HINT_AUDIO_ALSA_DEFAULT_DEVICE = "SDL_AUDIO_ALSA_DEFAULT_DEVICE";
+	public const string SDL_HINT_AUDIO_ALSA_DEFAULT_PLAYBACK_DEVICE = "SDL_AUDIO_ALSA_DEFAULT_PLAYBACK_DEVICE";
+	public const string SDL_HINT_AUDIO_ALSA_DEFAULT_RECORDING_DEVICE = "SDL_AUDIO_ALSA_DEFAULT_RECORDING_DEVICE";
 	public const string SDL_HINT_AUDIO_CATEGORY = "SDL_AUDIO_CATEGORY";
 	public const string SDL_HINT_AUDIO_CHANNELS = "SDL_AUDIO_CHANNELS";
 	public const string SDL_HINT_AUDIO_DEVICE_APP_ICON_NAME = "SDL_AUDIO_DEVICE_APP_ICON_NAME";
@@ -6702,6 +6867,7 @@ public static unsafe partial class SDL
 	public const string SDL_HINT_JOYSTICK_BLACKLIST_DEVICES = "SDL_JOYSTICK_BLACKLIST_DEVICES";
 	public const string SDL_HINT_JOYSTICK_BLACKLIST_DEVICES_EXCLUDED = "SDL_JOYSTICK_BLACKLIST_DEVICES_EXCLUDED";
 	public const string SDL_HINT_JOYSTICK_DEVICE = "SDL_JOYSTICK_DEVICE";
+	public const string SDL_HINT_JOYSTICK_ENHANCED_REPORTS = "SDL_JOYSTICK_ENHANCED_REPORTS";
 	public const string SDL_HINT_JOYSTICK_FLIGHTSTICK_DEVICES = "SDL_JOYSTICK_FLIGHTSTICK_DEVICES";
 	public const string SDL_HINT_JOYSTICK_FLIGHTSTICK_DEVICES_EXCLUDED = "SDL_JOYSTICK_FLIGHTSTICK_DEVICES_EXCLUDED";
 	public const string SDL_HINT_JOYSTICK_GAMEINPUT = "SDL_JOYSTICK_GAMEINPUT";
@@ -6719,13 +6885,12 @@ public static unsafe partial class SDL
 	public const string SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER = "SDL_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_PS4 = "SDL_JOYSTICK_HIDAPI_PS4";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_PS4_REPORT_INTERVAL = "SDL_JOYSTICK_HIDAPI_PS4_REPORT_INTERVAL";
-	public const string SDL_HINT_JOYSTICK_HIDAPI_PS4_RUMBLE = "SDL_JOYSTICK_HIDAPI_PS4_RUMBLE";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_PS5 = "SDL_JOYSTICK_HIDAPI_PS5";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_PS5_PLAYER_LED = "SDL_JOYSTICK_HIDAPI_PS5_PLAYER_LED";
-	public const string SDL_HINT_JOYSTICK_HIDAPI_PS5_RUMBLE = "SDL_JOYSTICK_HIDAPI_PS5_RUMBLE";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_SHIELD = "SDL_JOYSTICK_HIDAPI_SHIELD";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_STADIA = "SDL_JOYSTICK_HIDAPI_STADIA";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_STEAM = "SDL_JOYSTICK_HIDAPI_STEAM";
+	public const string SDL_HINT_JOYSTICK_HIDAPI_STEAM_HOME_LED = "SDL_JOYSTICK_HIDAPI_STEAM_HOME_LED";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_STEAMDECK = "SDL_JOYSTICK_HIDAPI_STEAMDECK";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_STEAM_HORI = "SDL_JOYSTICK_HIDAPI_STEAM_HORI";
 	public const string SDL_HINT_JOYSTICK_HIDAPI_SWITCH = "SDL_JOYSTICK_HIDAPI_SWITCH";
@@ -6768,20 +6933,20 @@ public static unsafe partial class SDL
 	public const string SDL_HINT_MOUSE_AUTO_CAPTURE = "SDL_MOUSE_AUTO_CAPTURE";
 	public const string SDL_HINT_MOUSE_DOUBLE_CLICK_RADIUS = "SDL_MOUSE_DOUBLE_CLICK_RADIUS";
 	public const string SDL_HINT_MOUSE_DOUBLE_CLICK_TIME = "SDL_MOUSE_DOUBLE_CLICK_TIME";
+	public const string SDL_HINT_MOUSE_DEFAULT_SYSTEM_CURSOR = "SDL_MOUSE_DEFAULT_SYSTEM_CURSOR";
 	public const string SDL_HINT_MOUSE_EMULATE_WARP_WITH_RELATIVE = "SDL_MOUSE_EMULATE_WARP_WITH_RELATIVE";
 	public const string SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH = "SDL_MOUSE_FOCUS_CLICKTHROUGH";
 	public const string SDL_HINT_MOUSE_NORMAL_SPEED_SCALE = "SDL_MOUSE_NORMAL_SPEED_SCALE";
 	public const string SDL_HINT_MOUSE_RELATIVE_MODE_CENTER = "SDL_MOUSE_RELATIVE_MODE_CENTER";
-	public const string SDL_HINT_MOUSE_RELATIVE_MODE_WARP = "SDL_MOUSE_RELATIVE_MODE_WARP";
 	public const string SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE = "SDL_MOUSE_RELATIVE_SPEED_SCALE";
 	public const string SDL_HINT_MOUSE_RELATIVE_SYSTEM_SCALE = "SDL_MOUSE_RELATIVE_SYSTEM_SCALE";
 	public const string SDL_HINT_MOUSE_RELATIVE_WARP_MOTION = "SDL_MOUSE_RELATIVE_WARP_MOTION";
 	public const string SDL_HINT_MOUSE_RELATIVE_CURSOR_VISIBLE = "SDL_MOUSE_RELATIVE_CURSOR_VISIBLE";
-	public const string SDL_HINT_MOUSE_RELATIVE_CLIP_INTERVAL = "SDL_MOUSE_RELATIVE_CLIP_INTERVAL";
 	public const string SDL_HINT_MOUSE_TOUCH_EVENTS = "SDL_MOUSE_TOUCH_EVENTS";
 	public const string SDL_HINT_MUTE_CONSOLE_KEYBOARD = "SDL_MUTE_CONSOLE_KEYBOARD";
 	public const string SDL_HINT_NO_SIGNAL_HANDLERS = "SDL_NO_SIGNAL_HANDLERS";
 	public const string SDL_HINT_OPENGL_LIBRARY = "SDL_OPENGL_LIBRARY";
+	public const string SDL_HINT_EGL_LIBRARY = "SDL_EGL_LIBRARY";
 	public const string SDL_HINT_OPENGL_ES_DRIVER = "SDL_OPENGL_ES_DRIVER";
 	public const string SDL_HINT_OPENVR_LIBRARY = "SDL_OPENVR_LIBRARY";
 	public const string SDL_HINT_ORIENTATIONS = "SDL_ORIENTATIONS";
@@ -6973,6 +7138,17 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial void SDL_Quit();
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_IsMainThread();
+
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	public delegate void SDL_MainThreadCallback(IntPtr userdata);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_RunOnMainThread(SDL_MainThreadCallback callback, IntPtr userdata, SDLBool wait_complete);
 
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -7325,6 +7501,7 @@ public static unsafe partial class SDL
 	public const string SDL_PROP_RENDERER_VULKAN_GRAPHICS_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.vulkan.graphics_queue_family_index";
 	public const string SDL_PROP_RENDERER_VULKAN_PRESENT_QUEUE_FAMILY_INDEX_NUMBER = "SDL.renderer.vulkan.present_queue_family_index";
 	public const string SDL_PROP_RENDERER_VULKAN_SWAPCHAIN_IMAGE_COUNT_NUMBER = "SDL.renderer.vulkan.swapchain_image_count";
+	public const string SDL_PROP_RENDERER_GPU_DEVICE_POINTER = "SDL.renderer.gpu.device";
 	public const string SDL_PROP_TEXTURE_CREATE_COLORSPACE_NUMBER = "SDL.texture.create.colorspace";
 	public const string SDL_PROP_TEXTURE_CREATE_FORMAT_NUMBER = "SDL.texture.create.format";
 	public const string SDL_PROP_TEXTURE_CREATE_ACCESS_NUMBER = "SDL.texture.create.access";
@@ -7700,6 +7877,10 @@ public static unsafe partial class SDL
 
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_RenderTextureAffine(IntPtr renderer, IntPtr texture, in SDL_FRect srcrect, in SDL_FPoint origin, in SDL_FPoint right, in SDL_FPoint down);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_RenderTextureTiled(IntPtr renderer, IntPtr texture, ref SDL_FRect srcrect, float scale, ref SDL_FRect dstrect); // WARN_UNKNOWN_POINTER_PARAMETER
 
 	[LibraryImport(nativeLibName)]
@@ -7757,6 +7938,10 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_RenderDebugText(IntPtr renderer, float x, float y, string str);
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_RenderDebugTextFormat(IntPtr renderer, float x, float y, string fmt);
 
 	// /usr/local/include/SDL3/SDL_storage.h
 
@@ -8020,6 +8205,111 @@ public static unsafe partial class SDL
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_RemoveTimer(uint id);
 
+	// /usr/local/include/SDL3/SDL_tray.h
+
+	[Flags]
+	public enum SDL_TrayEntryFlags : uint
+	{
+		SDL_TRAYENTRY_BUTTON = 0x00000001u,
+		SDL_TRAYENTRY_CHECKBOX = 0x00000002u,
+		SDL_TRAYENTRY_SUBMENU = 0x00000004u,
+		SDL_TRAYENTRY_DISABLED = 0x80000000u,
+		SDL_TRAYENTRY_CHECKED = 0x40000000u,
+	}
+
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	public delegate void SDL_TrayCallback(IntPtr userdata, IntPtr entry);
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_CreateTray(IntPtr icon, string tooltip);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_SetTrayIcon(IntPtr tray, IntPtr icon);
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_SetTrayTooltip(IntPtr tray, string tooltip);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_CreateTrayMenu(IntPtr tray);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_CreateTraySubmenu(IntPtr entry);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_GetTrayMenu(IntPtr tray);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_GetTraySubmenu(IntPtr entry);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	[return: MarshalUsing(CountElementName = "size")]
+	public static partial Span<IntPtr> SDL_GetTrayEntries(IntPtr menu, out int size);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_RemoveTrayEntry(IntPtr entry);
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_InsertTrayEntryAt(IntPtr menu, int pos, string label, SDL_TrayEntryFlags flags);
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_SetTrayEntryLabel(IntPtr entry, string label);
+
+	[LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	[return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
+	public static partial string SDL_GetTrayEntryLabel(IntPtr entry);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_SetTrayEntryChecked(IntPtr entry, SDLBool checked);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_GetTrayEntryChecked(IntPtr entry);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_SetTrayEntryEnabled(IntPtr entry, SDLBool enabled);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial SDLBool SDL_GetTrayEntryEnabled(IntPtr entry);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_SetTrayEntryCallback(IntPtr entry, SDL_TrayCallback callback, IntPtr userdata);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_ClickTrayEntry(IntPtr entry);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_DestroyTray(IntPtr tray);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_GetTrayEntryParent(IntPtr entry);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_GetTrayMenuParentEntry(IntPtr menu);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial IntPtr SDL_GetTrayMenuParentTray(IntPtr menu);
+
 	// /usr/local/include/SDL3/SDL_version.h
 
 	[LibraryImport(nativeLibName)]
@@ -8047,6 +8337,10 @@ public static unsafe partial class SDL
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial int SDL_EnterAppMainCallbacks(int argc, IntPtr argv, SDL_AppInit_func appinit, SDL_AppIterate_func appiter, SDL_AppEvent_func appevent, SDL_AppQuit_func appquit);
+
+	[LibraryImport(nativeLibName)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	public static partial void SDL_GDKSuspendComplete();
 
 
 }
