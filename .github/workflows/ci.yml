@@ -1,18 +1,150 @@
-name: CI
+name: Generate bindings
 
-on: [push, pull_request]
+on: [push,]
 
 jobs:
+  generate-bindings:
+    env:
+      C2FFI_HASH: 0de81efb64acc82c08c5eee4a7108ddcb1b00d86
+    name: Generate Bindings
+    runs-on: ubuntu-latest
+    steps:
+      # We have many repos to clone, that's why we divide then all into 
+      # separate paths, including our own.
+      # Actually it's for my sanity, but alas
+      - name: Clone repo
+        uses: actions/checkout@v3
+        with:
+          path: main/
+
+      - name: Read file with SDL3 repository tag
+        uses: satya-500/read-file-github-action@v1.0.0
+        id: read_file
+        with:
+          path: main/.github/workflows/sdl3_repo_tag
+
+      # Cache compiled things so we don't need to compile it all the time
+      - id: cache-c2ffi
+        uses: actions/cache@v4
+        with:
+            path: c2ffi/build/bin
+            key: ${{ env.C2FFI_HASH }}-c2ffi
+      # We also need to cache the entire SDL repo, because ninja needs to rerun
+      # cmake when installing, for some reason
+      # But hey, does it need to rebuild things? Nope
+      # Does it even check for compiler differences? Nope
+      # It does check if apt dependencies are there, for some reason.
+      - id: cache-sdl
+        uses: actions/cache@v4
+        with:
+          path: sdl3/
+          key: ${{ steps.read_file.outputs.contents }}-sdl3
+  
+      - name: Clone SDL3
+        uses: actions/checkout@v3
+        if: steps.cache-sdl.outputs.cache-hit != 'true'
+        with:
+          repository: libsdl-org/SDL
+          ref: ${{ steps.read_file.outputs.contents }}
+          path: sdl3/
+
+      # If there's something not compiled, we need to setup the compiler
+      # c2ffi REQUIRES llvm and a specific version of it
+      - name: Setup buildsystem
+        uses: aminya/setup-cpp@v1
+        if: steps.cache-c2ffi.outputs.cache-hit != 'true' || steps.cache-sdl.outputs.cache-hit != 'true'
+        with:
+          compiler: llvm-18.1
+      # We still need to install sdl dependencies into the system, even if 
+      # there's a cache hit
+      - name: Build deps
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: |
+              libasound2-dev libpulse-dev ninja-build cmake \
+              libaudio-dev libjack-dev libsndio-dev libx11-dev libxext-dev \
+              libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev \
+              libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev \
+              libgles2-mesa-dev libegl1-mesa-dev libdbus-1-dev \
+              libibus-1.0-dev libudev-dev fcitx-libs-dev libpipewire-0.3-dev \
+              libwayland-dev liburing-dev dotnet-sdk-8.0
+          version: 1.2
+
+      - name: Build SDL3
+        if: steps.cache-sdl.outputs.cache-hit != 'true'
+        run: |
+          cd $GITHUB_WORKSPACE/sdl3/
+          mkdir build
+          cd build
+          cmake -G Ninja ..
+          ninja
+      # We NEED to install SDL into the path for c2ffi to find the headers
+      # I tried to just pass the includes of the repository to c2ffi,
+      # without success. It worked locally, but not in the actions
+      # TODO: find a way to install the headers without any compilation, it 
+      # would be nice
+      - name: Run SDL Install
+        run: |
+          cd $GITHUB_WORKSPACE/sdl3/build/
+          sudo ninja install
+
+      # c2ffi related
+      - name: Clone c2ffi
+        uses: actions/checkout@v3
+        if: steps.cache-c2ffi.outputs.cache-hit != 'true'
+        with:
+          repository: rpav/c2ffi
+          # I am using a specific commit hash just in case.
+          ref: ${{env.C2FFI_HASH}}
+          path: c2ffi/
+      - name: Run c2ffi cmake
+        if: steps.cache-c2ffi.outputs.cache-hit != 'true'
+        run: |
+          cd $GITHUB_WORKSPACE/c2ffi/
+          mkdir build
+          cd build
+          cmake -G Ninja ..
+          ninja
+
+      # Finally something actually related to binding generation
+      - name: Generate ffi.json
+        run: |
+          c2ffi=$GITHUB_WORKSPACE/c2ffi/build/bin/c2ffi
+          cd $GITHUB_WORKSPACE/main/
+          chmod +x ./generate_json.sh
+          chmod +x $c2ffi
+          ./generate_json.sh $c2ffi
+
+      - name: Generate Bindings
+        run: |
+          generator=GenerateBindings/bin/Release/net8.0/GenerateBindings
+
+          cd $GITHUB_WORKSPACE/main/
+          dotnet build GenerateBindings.sln -c Release
+
+          $generator $GITHUB_WORKSPACE/sdl3/
+          $generator $GITHUB_WORKSPACE/sdl3/ --core
+
+      - name: Commit bindings
+        run: |
+          cd $GITHUB_WORKSPACE/main/
+
+          # we need to check for changes first because git push returns an 
+          # error code if there are no changes
+          if [ -n "$(git status -s)" ]; then
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git commit -a -m "[skip ci] Update bindings"
+            git push
+          fi
+
   linux:
     name: Linux
     runs-on: ubuntu-22.04
+    needs:
+      - generate-bindings
     steps:
     - uses: actions/checkout@v3
-
-    - name: dotnet build GenerateBindings
-      run: |
-        dotnet build GenerateBindings -c Debug
-        dotnet build GenerateBindings -c Release
 
     - name: msbuild SDL3
       run: |
