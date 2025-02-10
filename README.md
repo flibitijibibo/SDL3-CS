@@ -30,6 +30,9 @@ If you update the bindings, search "WARN_" in generated files for unhandled defi
 You need to have a bash compatible terminal (like gitbash), the SDL3 repository
 and [c2ffi](https://github.com/rpav/c2ffi).
 
+Also, the SDL3 includes needs to be available trough the environment variable
+`INCLUDE` so `c2ffi` can find them.
+
 You might need to compile c2ffi, so first keep note of the branch that you 
 need, it needs to match a installed LLVM version, the compilation will fail
 with linker errors if you use a LLVM version different than the branch you are
