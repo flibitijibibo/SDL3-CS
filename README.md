@@ -24,3 +24,40 @@ You are encouraged to write your own wrapper objects if you care about "appropri
 
 The SDL headers themselves do not provide enough information to generate complete C# bindings.
 If you update the bindings, search "WARN_" in generated files for unhandled definitions or those that require manual intervention.
+
+## Bindings Generation Instructions
+### Generate ffi.json
+You need to have a bash compatible terminal (like gitbash), the SDL3 repository
+and [c2ffi](https://github.com/rpav/c2ffi).
+
+You might need to compile c2ffi, so first keep note of the branch that you 
+need, it needs to match a installed LLVM version, the compilation will fail
+with linker errors if you use a LLVM version different than the branch you are
+using.
+
+All commands assume your working dir is the root of this repository.
+The SDL3 repo and c2ffi binary can be anywhere.
+
+After installing or compiling c2ffi, you can use the command
+
+```
+./generate_json.sh /path/to/c2ffi
+```
+
+Path to c2ffi is optional if it is available in your `PATH`
+
+### Generate the Bindings
+Once the json file is updated, you may compile `GenerateBindings` with
+```
+dotnet build GenerateBindings.sln
+```
+Once you compile `GenerateBindings` you can run it with the belwo command to update SDL3-CS.Core.
+```
+GenerateBindings/bin/Debug/net8.0/GenerateBindings /path/to/the/root/of/sdl3/repo/ --core
+```
+
+If you want to update SDL3-CS.Legacy, just remove the `--core` argument.
+
+```
+GenerateBindings/bin/Debug/net8.0/GenerateBindings /path/to/the/root/of/sdl3/repo/
+```
