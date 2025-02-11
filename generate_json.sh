@@ -1,4 +1,4 @@
-#!env sh
+#!/bin/bash
 if [ ! -z $1 ]; then
     c2ffi_executable=$1
 elif ! command -v c2ffi 2>&1 >/dev/null; then
@@ -14,5 +14,5 @@ cat > tmp.c <<- EOM
 #include <SDL3/SDL_vulkan.h>
 EOM
 
-$c2ffi_executable tmp.c -o GenerateBindings/assets/ffi.json
+$c2ffi_executable tmp.c "${@:2}" -o GenerateBindings/assets/ffi.json
 rm tmp.c
