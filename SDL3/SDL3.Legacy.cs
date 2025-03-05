@@ -8150,18 +8150,6 @@ namespace SDL3
 
 		// /usr/local/include/SDL3/SDL_system.h
 
-		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-		public delegate bool SDL_X11EventHook(IntPtr userdata, IntPtr xevent);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetX11EventHook(SDL_X11EventHook callback, IntPtr userdata);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_SetLinuxThreadPriority(long threadID, int priority);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDLBool SDL_SetLinuxThreadPriorityAndPolicy(long threadID, int sdlPriority, int schedPolicy);
-
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDLBool SDL_IsTablet();
 

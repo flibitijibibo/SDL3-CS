@@ -175,6 +175,22 @@ internal static partial class Program
                 continue;
             }
 
+            if (Path.GetFileName(entry.Header).StartsWith("SDL_system.h"))
+            {
+                // Ignore SDL_system exports for PC platforms that generate the json
+                if (entry.Name == "SDL_WindowsMessageHook" ||
+                    entry.Name == "SDL_SetWindowsMessageHook" ||
+                    entry.Name == "SDL_GetDirect3D9AdapterIndex" ||
+                    entry.Name == "SDL_GetDXGIOutputInfo" ||
+                    entry.Name == "SDL_X11EventHook" ||
+                    entry.Name == "SDL_SetX11EventHook" ||
+                    entry.Name == "SDL_SetLinuxThreadPriority" ||
+                    entry.Name == "SDL_SetLinuxThreadPriorityAndPolicy")
+                {
+                    continue;
+                }
+            }
+
             if (UserProvidedData.DeniedTypes.Contains(entry.Name))
             {
                 continue;

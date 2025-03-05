@@ -726,9 +726,6 @@ internal static class UserProvidedData
                 { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("int", "category"), ("SDL_LogPriority", "priority"), ("byte*", "message")] }
         }, // /usr/local/include/SDL3/SDL_log.h:474:24
         {
-            "SDL_X11EventHook", new DelegateDefinition { ReturnType = "bool", Parameters = [("IntPtr", "userdata"), ("IntPtr", "xevent")] }
-        }, // /usr/local/include/SDL3/SDL_system.h:133:24
-        {
             "SDL_TimerCallback",
             new DelegateDefinition { ReturnType = "uint", Parameters = [("IntPtr", "userdata"), ("uint", "timerID"), ("uint", "interval")] }
         }, // /usr/local/include/SDL3/SDL_timer.h:158:26

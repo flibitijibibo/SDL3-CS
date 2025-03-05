@@ -8101,21 +8101,6 @@ public static unsafe partial class SDL
 
 	// /usr/local/include/SDL3/SDL_system.h
 
-	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	public delegate bool SDL_X11EventHook(IntPtr userdata, IntPtr xevent);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial void SDL_SetX11EventHook(SDL_X11EventHook callback, IntPtr userdata);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetLinuxThreadPriority(long threadID, int priority);
-
-	[LibraryImport(nativeLibName)]
-	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-	public static partial SDLBool SDL_SetLinuxThreadPriorityAndPolicy(long threadID, int sdlPriority, int schedPolicy);
-
 	[LibraryImport(nativeLibName)]
 	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 	public static partial SDLBool SDL_IsTablet();
