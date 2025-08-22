@@ -41,7 +41,7 @@ internal static class UserProvidedData
         { ("SDL_BeginGPUComputePass", "storage_buffer_bindings"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2866:49
         { ("SDL_BeginGPUComputePass", "storage_texture_bindings"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2866:49
         { ("SDL_BeginGPURenderPass", "color_target_infos"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2493:48
-        { ("SDL_BeginGPURenderPass", "depth_stencil_target_info"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_gpu.h:2493:48
+        { ("SDL_BeginGPURenderPass", "depth_stencil_target_info"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_gpu.h:2493:48
         { ("SDL_BindAudioStreams", "streams"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_audio.h:838:34
         { ("SDL_BindGPUComputeSamplers", "texture_sampler_bindings"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2899:34
         { ("SDL_BindGPUComputeStorageBuffers", "storage_buffers"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_gpu.h:2937:34
