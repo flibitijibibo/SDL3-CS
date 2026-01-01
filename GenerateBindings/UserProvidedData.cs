@@ -566,7 +566,36 @@ internal static class UserProvidedData
         { ("SDL_CreateTray", "icon"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_tray.h:115:39
         { ("SDL_SetTrayIcon", "icon"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_tray.h:127:34
         { ("SDL_GetTrayEntries", "__return"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_tray.h:240:51
-        { ("SDL_GetTrayEntries", "size"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_tray.h:240:51
+        { ("SDL_GetTrayEntries", "count"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_tray.h:267:52
+
+        // 3.4.0
+        { ("SDL_AddAtomicU32", "a"), PointerFunctionDataIntent.Ref }, // /usr/local/include/SDL3/SDL_atomic.h:615:36
+        { ("SDL_PutAudioStreamPlanarData", "channel_buffers"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_audio.h:1572:34
+        { ("SDL_SavePNG_IO", "surface"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_surface.h:712:34
+        { ("SDL_SavePNG", "surface"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_surface.h:730:34
+        { ("SDL_RotateSurface", "surface"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_surface.h:1048:43
+        { ("SDL_StretchSurface", "src"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_surface.h:1498:34
+        { ("SDL_StretchSurface", "srcrect"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_surface.h:1498:34
+        { ("SDL_StretchSurface", "dst"), PointerFunctionDataIntent.IntPtr }, // /usr/local/include/SDL3/SDL_surface.h:1498:34
+        { ("SDL_StretchSurface", "dstrect"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_surface.h:1498:34
+        { ("SDL_CreateAnimatedCursor", "frames"), PointerFunctionDataIntent.Array }, // /usr/local/include/SDL3/SDL_mouse.h:672:41
+        { ("SDL_GetEventDescription", "event"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_events.h:1639:33
+        { ("SDL_SetTexturePalette", "texture"), PointerFunctionDataIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1018:34
+        { ("SDL_SetTexturePalette", "palette"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_render.h:1018:34
+        { ("SDL_GetTexturePalette", "texture"), PointerFunctionDataIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:1033:43
+        { ("SDL_RenderTexture9GridTiled", "texture"), PointerFunctionDataIntent.Unknown }, // /usr/local/include/SDL3/SDL_render.h:2435:34
+        { ("SDL_RenderTexture9GridTiled", "srcrect"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_render.h:2435:34
+        { ("SDL_RenderTexture9GridTiled", "dstrect"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_render.h:2435:34
+        { ("SDL_GetRenderTextureAddressMode", "u_mode"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_render.h:2537:34
+        { ("SDL_GetRenderTextureAddressMode", "v_mode"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_render.h:2537:34
+        { ("SDL_GetDefaultTextureScaleMode", "scale_mode"), PointerFunctionDataIntent.Out }, // /usr/local/include/SDL3/SDL_render.h:2912:34
+        { ("SDL_CreateGPURenderState", "createinfo"), PointerFunctionDataIntent.In }, // /usr/local/include/SDL3/SDL_render.h:2966:50
+        { ("SDL_LoadSurface_IO", "__return"), PointerFunctionDataIntent.Pointer }, // /usr/local/include/SDL3/SDL_surface.h:531:43
+        { ("SDL_LoadSurface", "__return"), PointerFunctionDataIntent.Pointer }, // /usr/local/include/SDL3/SDL_surface.h:550:43
+        { ("SDL_LoadPNG_IO", "__return"), PointerFunctionDataIntent.Pointer }, // /usr/local/include/SDL3/SDL_surface.h:668:43
+        { ("SDL_LoadPNG", "__return"), PointerFunctionDataIntent.Pointer }, // /usr/local/include/SDL3/SDL_surface.h:692:43
+        { ("SDL_RotateSurface", "__return"), PointerFunctionDataIntent.Pointer }, // /usr/local/include/SDL3/SDL_surface.h:1048:43
+        { ("SDL_GetTexturePalette", "__return"), PointerFunctionDataIntent.Pointer }, // /usr/local/include/SDL3/SDL_render.h:1033:43
     };
 
     internal static readonly Dictionary<string, ReturnedCharPtrMemoryOwner> ReturnedCharPtrMemoryOwners = new()
@@ -646,7 +675,7 @@ internal static class UserProvidedData
         { "SDL_GetKeyboardState", "numkeys" }, // /usr/local/include/SDL3/SDL_keyboard.h:144:42
         { "SDL_GetTouchFingers", "count" }, // /usr/local/include/SDL3/SDL_touch.h:129:43
         { "SDL_GetPreferredLocales", "count" }, // /usr/local/include/SDL3/SDL_locale.h:101:43
-        { "SDL_GetTrayEntries", "size" }, // /usr/local/include/SDL3/SDL_tray.h:240:51
+        { "SDL_GetTrayEntries", "count" }, // /usr/local/include/SDL3/SDL_tray.h:240:51
     };
 
     internal static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
@@ -742,6 +771,14 @@ internal static class UserProvidedData
         {
             "SDL_TrayCallback", new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "entry")] }
         }, // /usr/local/include/SDL3/SDL_tray.h:93:24
+
+        // 3.4.0
+        {
+            "SDL_AudioStreamDataCompleteCallback", new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("IntPtr", "buf"), ("int", "buflen")] }
+        }, // /usr/local/include/SDL3/SDL_audio.h:1472:24
+        {
+            "SDL_MouseMotionTransformCallback", new DelegateDefinition { ReturnType = "void", Parameters = [("IntPtr", "userdata"), ("ulong", "timestamp"), ("IntPtr", "window"), ("uint", "mouseID"), ("float*", "x"), ("float*", "y")] }
+        }, // /usr/local/include/SDL3/SDL_mouse.h:205:24
     };
 
     internal static readonly Dictionary<string, string[]> FlagEnumDefinitions = new()
