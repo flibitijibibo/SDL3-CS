@@ -170,7 +170,7 @@ internal static partial class Program
             }
 
             if (Path.GetFileName(entry.Header).StartsWith("SDL_stdinc.h") &&
-                !((entry.Name == "SDL_malloc") || (entry.Name == "SDL_free")))
+                !((entry.Name == "SDL_malloc") || (entry.Name == "SDL_free") || (entry.Name == "SDL_memcpy")))
             {
                 continue;
             }

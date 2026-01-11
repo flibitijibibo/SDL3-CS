@@ -114,6 +114,9 @@ namespace SDL3
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_free(IntPtr mem);
 
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_memcpy(IntPtr dst, IntPtr src, UIntPtr len);
+
 		// /usr/local/include/SDL3/SDL_assert.h
 
 		public enum SDL_AssertState
