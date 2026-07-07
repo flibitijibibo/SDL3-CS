@@ -854,6 +854,7 @@ internal static class UserProvidedData
                 "SDL_GPU_TEXTUREUSAGE_GRAPHICS_STORAGE_READ",
                 "SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_READ",
                 "SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_WRITE",
+                "SDL_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_SIMULTANEOUS_READ_WRITE",
             ]
         }, // ./include/SDL3/SDL_gpu.h
         {
