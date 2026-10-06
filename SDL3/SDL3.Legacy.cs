@@ -6,7 +6,7 @@ using System.Text;
 namespace SDL3
 {
 
-	public static unsafe class SDL
+	public static unsafe class FNA_SDL
 	{
 		private static byte* EncodeAsUTF8(string str)
 		{
